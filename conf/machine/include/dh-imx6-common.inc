@@ -57,6 +57,7 @@ PREFERRED_RPROVIDER_virtual/wpebackend ?= "wpebackend-fdo"
 MACHINE_ESSENTIAL_EXTRA_RDEPENDS += " \
 	kernel-modules kernel-devicetree \
 	firmware-imx-sdma-imx6q u-boot-default-env \
+	vpu-firmware \
 	"
 
 # List of images to be built
