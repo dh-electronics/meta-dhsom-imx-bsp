@@ -1,10 +1,25 @@
-From e9e8af071d29b7d0ea0ff3e20e70c4b93ff8901e Mon Sep 17 00:00:00 2001
+From 8b06ce9b9b6badc75460b7fb52b06fb138cb129d Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
 Date: Wed, 13 Jan 2021 19:08:18 +0100
-Subject: [PATCH 1/3] Revert "dh_imx6: Switch to full DM-aware"
+Subject: [PATCH 1/4] ARM: imx: Revert "dh_imx6: Switch to full DM-aware"
 
-Upstream-Status: WIP
-This reverts commit 03a673cf49e8d2b1a3314f0f51390198e27b6d71.
+This reverts commit 03a673cf49e ("dh_imx6: Switch to full DM-aware").
+According to discussion [1], the patch is known to break the dh_imx6
+board, however it made it upstream just before 2021.01-rc4, likely by
+mistake. Revert this patch to put the board back into working order.
+
+Also note that this board has no DM SPL support due to OCRAM size
+limitations, but that is fine, as SPL DM support is optional.
+
+[1] https://lists.denx.de/pipermail/u-boot/2020-June/417986.html
+
+Upstream-Status: Posted [https://patchwork.ozlabs.org/project/uboot/patch/20210203213633.59145-1-marex@denx.de/]
+Signed-off-by: Marek Vasut <marex@denx.de>
+Cc: Andreas Geisreiter <ageisreiter@dh-electronics.de>
+Cc: Jagan Teki <jagan@amarulasolutions.com>
+Cc: Ludwig Zenz <lzenz@dh-electronics.de>
+Cc: Stefano Babic <sbabic@denx.de>
+Cc: Tom Rini <trini@konsulko.com>
 ---
  configs/dh_imx6_defconfig | 3 ---
  include/configs/dh_imx6.h | 6 ++++++

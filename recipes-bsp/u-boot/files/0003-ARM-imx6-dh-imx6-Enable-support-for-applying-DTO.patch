@@ -1,0 +1,45 @@
+From 876dae64614e4cb75b4cea08d5ad982e932a114e Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Sat, 15 Aug 2020 17:38:56 +0200
+Subject: [PATCH 3/4] ARM: imx6: dh-imx6: Enable support for applying DTO
+
+Enable DTO support to make it possible to boot fitImage with DTOs
+embedded in them.
+
+Upstream-Status: Posted [https://patchwork.ozlabs.org/project/uboot/patch/20210203222217.137981-1-marex@denx.de/]
+Signed-off-by: Marek Vasut <marex@denx.de>
+Cc: Stefano Babic <sbabic@denx.de>
+---
+ configs/dh_imx6_defconfig | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/configs/dh_imx6_defconfig b/configs/dh_imx6_defconfig
+index 0a667fbae97..b8c0f86876a 100644
+--- a/configs/dh_imx6_defconfig
++++ b/configs/dh_imx6_defconfig
+@@ -4,6 +4,7 @@ CONFIG_SYS_TEXT_BASE=0x17800000
+ CONFIG_SPL_GPIO_SUPPORT=y
+ CONFIG_SPL_LIBCOMMON_SUPPORT=y
+ CONFIG_SPL_LIBGENERIC_SUPPORT=y
++CONFIG_SYS_MALLOC_F_LEN=0x1000
+ CONFIG_NR_DRAM_BANKS=1
+ CONFIG_SYS_MEMTEST_START=0x10000000
+ CONFIG_SYS_MEMTEST_END=0x20000000
+@@ -28,8 +29,8 @@ CONFIG_SPL_SPI_SUPPORT=y
+ CONFIG_DEFAULT_DEVICE_TREE="imx6q-dhcom-pdk2"
+ CONFIG_AHCI=y
+ CONFIG_DISTRO_DEFAULTS=y
+-# CONFIG_SYS_MALLOC_F is not set
+ CONFIG_FIT=y
++CONFIG_FIT_VERBOSE=y
+ CONFIG_SPL_FIT=y
+ # CONFIG_USE_SPL_FIT_GENERATOR is not set
+ CONFIG_SYS_EXTRA_OPTIONS="IMX_CONFIG=arch/arm/mach-imx/spl_sd.cfg"
+@@ -107,3 +108,4 @@ CONFIG_USB_GADGET_DOWNLOAD=y
+ CONFIG_WATCHDOG_TIMEOUT_MSECS=60000
+ CONFIG_IMX_WATCHDOG=y
+ CONFIG_BZIP2=y
++CONFIG_OF_LIBFDT_OVERLAY=y
+-- 
+2.29.2
+

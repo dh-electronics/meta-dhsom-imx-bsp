@@ -1,11 +1,11 @@
-From 0e1242754faca61ee8b4cbe4460decfac864988b Mon Sep 17 00:00:00 2001
+From 4c0fac7796bd80413eda87ef95aa2ab257dd3a7f Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
 Date: Sun, 30 Sep 2018 18:07:19 +0200
-Subject: [PATCH 2/3] ARM: imx6: dh-imx6: Move bootcounter to SNVS_LPGDR
+Subject: [PATCH 2/4] ARM: imx6: dh-imx6: Move bootcounter to SNVS_LPGDR
 
 Move the bootcounter to SVNS_LPGDR to free up OCRAM for usage by the VPU.
 
-Upstream-Status: Posted [https://patchwork.ozlabs.org/project/uboot/patch/20210113232122.484109-1-marex@denx.de/]
+Upstream-Status: Backport [0004027cd4ed7b3185287f9824dc5580227066e6]
 Signed-off-by: Marek Vasut <marex@denx.de>
 Cc: Stefano Babic <sbabic@denx.de>
 ---

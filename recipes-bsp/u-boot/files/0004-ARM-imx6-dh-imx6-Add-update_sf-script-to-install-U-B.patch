@@ -1,7 +1,7 @@
-From 84e0d0341595a210a39072ef5f1447f6193cf243 Mon Sep 17 00:00:00 2001
+From 9ff40d11ff4da5fc6aae168761d646e85665c237 Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
 Date: Thu, 14 Jan 2021 00:28:59 +0100
-Subject: [PATCH 3/3] ARM: imx6: dh-imx6: Add update_sf script to install
+Subject: [PATCH 4/4] ARM: imx6: dh-imx6: Add update_sf script to install
  U-Boot into SF
 
 Add script to read U-Boot from SD card and write it to matching
