@@ -20,6 +20,8 @@ UBOOT_SUFFIX ?= "imx"
 UBOOT_MACHINE = "dh_imx6_defconfig"
 UBOOT_ENV = "boot"
 UBOOT_ENV_SUFFIX = "scr"
+UBOOT_DTB_LOADADDRESS = "0x1ff00000"
+UBOOT_DTBO_LOADADDRESS = "0x1ff80000"
 
 PREFERRED_PROVIDER_virtual/bootloader = "u-boot-mainline"
 PREFERRED_PROVIDER_u-boot = "u-boot-mainline"
