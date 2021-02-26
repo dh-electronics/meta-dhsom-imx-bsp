@@ -44,9 +44,9 @@ if test -n "${loaddtoscustom}" ; then
   # Pull DTOs from fitImage and manually apply them to base DT
   if test -n "${loaddtos}" ; then
     # Matches UBOOT_DTB_LOADADDRESS in OE layer machine config
-    setexpr loadaddrdtb 0xcff00000
+    setexpr loadaddrdtb 0x1ff00000
     # Matches UBOOT_DTBO_LOADADDRESS in OE layer machine config
-    setexpr loadaddrdtbo 0xcff80000
+    setexpr loadaddrdtbo 0x1ff80000
 
     setexpr loaddtossep gsub '#conf' ' fdt' "${loaddtos}"
     setexpr loaddtb 1
