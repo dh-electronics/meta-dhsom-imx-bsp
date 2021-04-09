@@ -1,0 +1,498 @@
+From a74bb2da92227d3cce911ed5ca54a1da60c97278 Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Fri, 9 Apr 2021 15:17:29 +0200
+Subject: [PATCH 3/3] ARM: dts: stm32: Add DT overlays for iMX6QDL DHCOM PDK2
+
+Add DT overlays to support:
+ - DH 497-200 Display board in edge connector X12
+ - DH 505-200 Display board in edge connector X12
+ - DH 531-100 SPI/I2C board in header X21
+ - DH 531-200 SPI/I2C board in header X22
+ - DH 560-200 Display board in edge connector X12
+
+Upstream-Status: Inappropriate
+Signed-off-by: Marek Vasut <marex@denx.de>
+---
+NOTE: DH 460-200 SRAM board in header X11 is not supported yet
+---
+ arch/arm/boot/dts/Makefile                    |   5 +
+ arch/arm/boot/dts/imx6q-dhcom-pdk2.dts        |  60 ---------
+ ...imx6qdl-dhcom-pdk2-overlay-497-200-x12.dts |  72 +++++++++++
+ ...m-pdk2-overlay-505-200-x12-ch101olhlwh.dts | 114 ++++++++++++++++++
+ ...imx6qdl-dhcom-pdk2-overlay-531-100-x21.dts |  33 +++++
+ ...imx6qdl-dhcom-pdk2-overlay-531-100-x22.dts |  33 +++++
+ ...imx6qdl-dhcom-pdk2-overlay-560-200-x12.dts |  81 +++++++++++++
+ 7 files changed, 338 insertions(+), 60 deletions(-)
+ create mode 100644 arch/arm/boot/dts/imx6qdl-dhcom-pdk2-overlay-497-200-x12.dts
+ create mode 100644 arch/arm/boot/dts/imx6qdl-dhcom-pdk2-overlay-505-200-x12-ch101olhlwh.dts
+ create mode 100644 arch/arm/boot/dts/imx6qdl-dhcom-pdk2-overlay-531-100-x21.dts
+ create mode 100644 arch/arm/boot/dts/imx6qdl-dhcom-pdk2-overlay-531-100-x22.dts
+ create mode 100644 arch/arm/boot/dts/imx6qdl-dhcom-pdk2-overlay-560-200-x12.dts
+
+diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+index fa898cdc198b..014fe72288b6 100644
+--- a/arch/arm/boot/dts/Makefile
++++ b/arch/arm/boot/dts/Makefile
+@@ -505,6 +505,11 @@ dtb-$(CONFIG_SOC_IMX6Q) += \
+ 	imx6q-cubox-i-som-v15.dtb \
+ 	imx6q-dfi-fs700-m60.dtb \
+ 	imx6q-dhcom-pdk2.dtb \
++	imx6qdl-dhcom-pdk2-overlay-497-200-x12.dtbo \
++	imx6qdl-dhcom-pdk2-overlay-505-200-x12-ch101olhlwh.dtbo \
++	imx6qdl-dhcom-pdk2-overlay-531-100-x21.dtbo \
++	imx6qdl-dhcom-pdk2-overlay-531-100-x22.dtbo \
++	imx6qdl-dhcom-pdk2-overlay-560-200-x12.dtbo \
+ 	imx6q-display5-tianma-tm070-1280x768.dtb \
+ 	imx6q-dmo-edmqmx6.dtb \
+ 	imx6q-dms-ba16.dtb \
+diff --git a/arch/arm/boot/dts/imx6q-dhcom-pdk2.dts b/arch/arm/boot/dts/imx6q-dhcom-pdk2.dts
+index a685b1c3208f..f26764d17f25 100644
+--- a/arch/arm/boot/dts/imx6q-dhcom-pdk2.dts
++++ b/arch/arm/boot/dts/imx6q-dhcom-pdk2.dts
+@@ -22,53 +22,6 @@ clk_ext_audio_codec: clock-codec {
+ 		clock-frequency = <24000000>;
+ 	};
+ 
+-	display_bl: display-bl {
+-		compatible = "pwm-backlight";
+-		pwms = <&pwm1 0 50000 PWM_POLARITY_INVERTED>;
+-		brightness-levels = <0 16 22 30 40 55 75 102 138 188 255>;
+-		default-brightness-level = <8>;
+-		enable-gpios = <&gpio3 27 GPIO_ACTIVE_HIGH>;
+-		status = "okay";
+-	};
+-
+-	lcd_display: disp0 {
+-		compatible = "fsl,imx-parallel-display";
+-		#address-cells = <1>;
+-		#size-cells = <0>;
+-		interface-pix-fmt = "rgb24";
+-		pinctrl-names = "default";
+-		pinctrl-0 = <&pinctrl_ipu1_lcdif>;
+-		status = "okay";
+-
+-		port@0 {
+-			reg = <0>;
+-
+-			lcd_display_in: endpoint {
+-				remote-endpoint = <&ipu1_di0_disp0>;
+-			};
+-		};
+-
+-		port@1 {
+-			reg = <1>;
+-
+-			lcd_display_out: endpoint {
+-				remote-endpoint = <&lcd_panel_in>;
+-			};
+-		};
+-	};
+-
+-	panel {
+-		compatible = "edt,etm0700g0edh6";
+-		ddc-i2c-bus = <&i2c2>;
+-		backlight = <&display_bl>;
+-
+-		port {
+-			lcd_panel_in: endpoint {
+-				remote-endpoint = <&lcd_display_out>;
+-			};
+-		};
+-	};
+-
+ 	sound {
+ 		compatible = "fsl,imx-audio-sgtl5000";
+ 		model = "imx-sgtl5000";
+@@ -112,15 +65,6 @@ sgtl5000: codec@a {
+ 		VDDA-supply = <&reg_3p3v>;
+ 		VDDIO-supply = <&sw2_reg>;
+ 	};
+-
+-	touchscreen@38 {
+-		pinctrl-names = "default";
+-		pinctrl-0 = <&pinctrl_touchscreen>;
+-		compatible = "edt,edt-ft5406";
+-		reg = <0x38>;
+-		interrupt-parent = <&gpio4>;
+-		interrupts = <5 IRQ_TYPE_EDGE_FALLING>; /* GPIO E */
+-	};
+ };
+ 
+ &iomuxc {
+@@ -239,10 +183,6 @@ MX6QDL_PAD_CSI0_DATA_EN__GPIO5_IO20	0x1b0b1
+ 	};
+ };
+ 
+-&ipu1_di0_disp0 {
+-	remote-endpoint = <&lcd_display_in>;
+-};
+-
+ &pcie {
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&pinctrl_pcie>;
+diff --git a/arch/arm/boot/dts/imx6qdl-dhcom-pdk2-overlay-497-200-x12.dts b/arch/arm/boot/dts/imx6qdl-dhcom-pdk2-overlay-497-200-x12.dts
+new file mode 100644
+index 000000000000..bb8e01d9c2b2
+--- /dev/null
++++ b/arch/arm/boot/dts/imx6qdl-dhcom-pdk2-overlay-497-200-x12.dts
+@@ -0,0 +1,72 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
++/*
++ * Copyright (C) 2021 Marek Vasut <marex@denx.de>
++ */
++#include <dt-bindings/gpio/gpio.h>
++#include <dt-bindings/input/input.h>
++#include <dt-bindings/interrupt-controller/arm-gic.h>
++#include <dt-bindings/pwm/pwm.h>
++
++/dts-v1/;
++/plugin/;
++
++&{/} {
++	#address-cells = <1>;
++	#size-cells = <1>;
++
++	display_bl: display-bl {
++		compatible = "pwm-backlight";
++		pwms = <&pwm1 0 50000 PWM_POLARITY_INVERTED>;
++		brightness-levels = <0 16 22 30 40 55 75 102 138 188 255>;
++		default-brightness-level = <8>;
++		enable-gpios = <&gpio3 27 GPIO_ACTIVE_HIGH>;
++		status = "okay";
++	};
++
++	lcd_display: disp0 {
++		compatible = "fsl,imx-parallel-display";
++		#address-cells = <1>;
++		#size-cells = <0>;
++		interface-pix-fmt = "rgb24";
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_ipu1_lcdif>;
++		status = "okay";
++
++		port@0 {
++			reg = <0>;
++
++			lcd_display_in: endpoint {
++				remote-endpoint = <&ipu1_di0_disp0>;
++			};
++		};
++
++		port@1 {
++			reg = <1>;
++
++			lcd_display_out: endpoint {
++				remote-endpoint = <&lcd_panel_in>;
++			};
++		};
++	};
++
++	panel {
++		compatible = "edt,etm0700g0edh6";
++		backlight = <&display_bl>;
++
++		port {
++			lcd_panel_in: endpoint {
++				remote-endpoint = <&lcd_display_out>;
++			};
++		};
++	};
++};
++
++&ipu1_di0_disp0 {
++	remote-endpoint = <&lcd_display_in>;
++};
++
++&i2c3 {
++	touchscreen@49 {	/* TSC2004 */
++		status = "okay";
++	};
++};
+diff --git a/arch/arm/boot/dts/imx6qdl-dhcom-pdk2-overlay-505-200-x12-ch101olhlwh.dts b/arch/arm/boot/dts/imx6qdl-dhcom-pdk2-overlay-505-200-x12-ch101olhlwh.dts
+new file mode 100644
+index 000000000000..0fad7ce9a84f
+--- /dev/null
++++ b/arch/arm/boot/dts/imx6qdl-dhcom-pdk2-overlay-505-200-x12-ch101olhlwh.dts
+@@ -0,0 +1,114 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
++/*
++ * Copyright (C) 2021 Marek Vasut <marex@denx.de>
++ */
++#include <dt-bindings/gpio/gpio.h>
++#include <dt-bindings/interrupt-controller/arm-gic.h>
++#include <dt-bindings/pwm/pwm.h>
++
++/dts-v1/;
++/plugin/;
++
++&{/} {
++	#address-cells = <1>;
++	#size-cells = <1>;
++
++	display_bl: display-bl {
++		compatible = "pwm-backlight";
++		pwms = <&pwm1 0 5000000 0>;
++		brightness-levels = <0 16 22 30 40 55 75 102 138 188 255>;
++		default-brightness-level = <8>;
++		enable-gpios = <&gpio3 27 GPIO_ACTIVE_HIGH>;
++		status = "okay";
++	};
++
++	lcd_display: disp0 {
++		compatible = "fsl,imx-parallel-display";
++		#address-cells = <1>;
++		#size-cells = <0>;
++		interface-pix-fmt = "rgb24";
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_ipu1_lcdif>;
++		status = "okay";
++
++		port@0 {
++			reg = <0>;
++
++			lcd_display_in: endpoint {
++				remote-endpoint = <&ipu1_di0_disp0>;
++			};
++		};
++
++		port@1 {
++			reg = <1>;
++
++			lcd_display_out: endpoint {
++				remote-endpoint = <&lvds_bridge_in>;
++			};
++		};
++	};
++
++	lvds-encoder {
++		compatible = "onsemi,fin3385", "lvds-encoder";
++		pixelclk-active = <0>;
++
++		ports {
++			#address-cells = <1>;
++			#size-cells = <0>;
++
++			port@0 {
++				reg = <0>;
++
++				lvds_bridge_in: endpoint {
++					remote-endpoint = <&lcd_display_out>;
++				};
++			};
++
++			port@1 {
++				reg = <1>;
++
++				lvds_bridge_out: endpoint {
++					remote-endpoint = <&lvds_panel_in>;
++				};
++			};
++		};
++	};
++
++	panel {
++		compatible = "chefree,ch101olhlwh-002";
++		backlight = <&display_bl>;
++
++		port {
++			lvds_panel_in: endpoint {
++				remote-endpoint = <&lvds_bridge_out>;
++			};
++		};
++	};
++};
++
++&ipu1_di0_disp0 {
++	remote-endpoint = <&lcd_display_in>;
++};
++
++&i2c2 {
++	#address-cells = <1>;
++	#size-cells = <0>;
++
++	ili251x@41 {
++		compatible = "ilitek,ili251x";
++		reg = <0x41>;
++		interrupt-parent = <&gpio4>;
++		interrupts = <7 IRQ_TYPE_EDGE_FALLING>;
++		reset-gpios = <&gpio1 4 GPIO_ACTIVE_LOW>;
++		touchscreen-size-x = <16384>;
++		touchscreen-size-y = <9600>;
++		touchscreen-inverted-x;
++		touchscreen-inverted-y;
++	};
++
++	eeprom@50 {
++		compatible = "atmel,24c04";
++		reg = <0x50>;
++		pagesize = <16>;
++	};
++};
+diff --git a/arch/arm/boot/dts/imx6qdl-dhcom-pdk2-overlay-531-100-x21.dts b/arch/arm/boot/dts/imx6qdl-dhcom-pdk2-overlay-531-100-x21.dts
+new file mode 100644
+index 000000000000..c3ed42101d6f
+--- /dev/null
++++ b/arch/arm/boot/dts/imx6qdl-dhcom-pdk2-overlay-531-100-x21.dts
+@@ -0,0 +1,33 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
++/*
++ * Copyright (C) 2021 Marek Vasut <marex@denx.de>
++ */
++/dts-v1/;
++/plugin/;
++
++&i2c2 {
++	#address-cells = <1>;
++	#size-cells = <0>;
++
++	eeprom@56 {
++		compatible = "atmel,24c04";
++		reg = <0x56>;
++		pagesize = <16>;
++	};
++};
++
++&ecspi1 {
++	status = "okay";
++	#address-cells = <1>;
++	#size-cells = <0>;
++
++	at25@1 {
++		compatible = "microchip,25aa010a", "atmel,at25";
++		reg = <1>;
++		spi-max-frequency = <5000000>;
++
++		at25,byte-len = <128>;
++		at25,addr-mode = <1>;
++		at25,page-size = <16>;
++	};
++};
+diff --git a/arch/arm/boot/dts/imx6qdl-dhcom-pdk2-overlay-531-100-x22.dts b/arch/arm/boot/dts/imx6qdl-dhcom-pdk2-overlay-531-100-x22.dts
+new file mode 100644
+index 000000000000..cdfa9125d50a
+--- /dev/null
++++ b/arch/arm/boot/dts/imx6qdl-dhcom-pdk2-overlay-531-100-x22.dts
+@@ -0,0 +1,33 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
++/*
++ * Copyright (C) 2021 Marek Vasut <marex@denx.de>
++ */
++/dts-v1/;
++/plugin/;
++
++&i2c1 {
++	#address-cells = <1>;
++	#size-cells = <0>;
++
++	eeprom@56 {
++		compatible = "atmel,24c04";
++		reg = <0x56>;
++		pagesize = <16>;
++	};
++};
++
++&ecspi2 {
++	status = "okay";
++	#address-cells = <1>;
++	#size-cells = <0>;
++
++	at25@0 {
++		compatible = "microchip,25aa010a", "atmel,at25";
++		reg = <0>;
++		spi-max-frequency = <5000000>;
++
++		at25,byte-len = <128>;
++		at25,addr-mode = <1>;
++		at25,page-size = <16>;
++	};
++};
+diff --git a/arch/arm/boot/dts/imx6qdl-dhcom-pdk2-overlay-560-200-x12.dts b/arch/arm/boot/dts/imx6qdl-dhcom-pdk2-overlay-560-200-x12.dts
+new file mode 100644
+index 000000000000..d1fd113fc79f
+--- /dev/null
++++ b/arch/arm/boot/dts/imx6qdl-dhcom-pdk2-overlay-560-200-x12.dts
+@@ -0,0 +1,81 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
++/*
++ * Copyright (C) 2021 Marek Vasut <marex@denx.de>
++ */
++#include <dt-bindings/gpio/gpio.h>
++#include <dt-bindings/input/input.h>
++#include <dt-bindings/interrupt-controller/arm-gic.h>
++#include <dt-bindings/pwm/pwm.h>
++
++/dts-v1/;
++/plugin/;
++
++&{/} {
++	#address-cells = <1>;
++	#size-cells = <1>;
++
++	display_bl: display-bl {
++		compatible = "pwm-backlight";
++		pwms = <&pwm1 0 50000 PWM_POLARITY_INVERTED>;
++		brightness-levels = <0 16 22 30 40 55 75 102 138 188 255>;
++		default-brightness-level = <8>;
++		enable-gpios = <&gpio3 27 GPIO_ACTIVE_HIGH>;
++		status = "okay";
++	};
++
++	lcd_display: disp0 {
++		compatible = "fsl,imx-parallel-display";
++		#address-cells = <1>;
++		#size-cells = <0>;
++		interface-pix-fmt = "rgb24";
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_ipu1_lcdif>;
++		status = "okay";
++
++		port@0 {
++			reg = <0>;
++
++			lcd_display_in: endpoint {
++				remote-endpoint = <&ipu1_di0_disp0>;
++			};
++		};
++
++		port@1 {
++			reg = <1>;
++
++			lcd_display_out: endpoint {
++				remote-endpoint = <&lcd_panel_in>;
++			};
++		};
++	};
++
++	panel {
++		compatible = "edt,etm0700g0edh6";
++		backlight = <&display_bl>;
++
++		port {
++			lcd_panel_in: endpoint {
++				remote-endpoint = <&lcd_display_out>;
++			};
++		};
++	};
++};
++
++&ipu1_di0_disp0 {
++	remote-endpoint = <&lcd_display_in>;
++};
++
++&i2c2 {
++	#address-cells = <1>;
++	#size-cells = <0>;
++
++	touchscreen@38 {
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_touchscreen>;
++		compatible = "edt,edt-ft5406";
++		reg = <0x38>;
++		/* Touchscreen IRQ GPIO-E conflicts with LED5 GPIO */
++		interrupt-parent = <&gpio4>;
++		interrupts = <5 IRQ_TYPE_EDGE_FALLING>; /* GPIO E */
++	};
++};
+-- 
+2.30.2
+
