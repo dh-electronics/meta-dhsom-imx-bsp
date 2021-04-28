@@ -53,7 +53,7 @@ according to MACHINE.
 Both local.conf and bblayers.conf are included verbatim in full at the end
 of this readme.
 
-Once the configuration is complete, a Qt5 demo system image suitable for
+Once the configuration is complete, a basic demo system image suitable for
 evaluation can be built using:
 
   $ bitbake core-image-minimal
