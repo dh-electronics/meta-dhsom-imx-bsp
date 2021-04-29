@@ -110,7 +110,3 @@ BBLAYERS ?= " \
 	/path/to/OE/meta-mainline-common \
 	/path/to/OE/meta-dhsom-imx-bsp \
 	"
-
-BBLAYERS_NON_REMOVABLE ?= " \
-	/path/to/OE/poky/meta \
-	"
