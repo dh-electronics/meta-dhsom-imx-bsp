@@ -1,7 +1,7 @@
 From a74bb2da92227d3cce911ed5ca54a1da60c97278 Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
 Date: Fri, 9 Apr 2021 15:17:29 +0200
-Subject: [PATCH 3/3] ARM: dts: stm32: Add DT overlays for iMX6QDL DHCOM PDK2
+Subject: [PATCH 3/3] ARM: dts: imx6: Add DT overlays for iMX6QDL DHCOM PDK2
 
 Add DT overlays to support:
  - DH 497-200 Display board in edge connector X12
