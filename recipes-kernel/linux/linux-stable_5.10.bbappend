@@ -1,10 +1,11 @@
 FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}:"
 
-KBRANCH_dh-imx6-dhsom ?= "linux-5.10.y"
+BPV := "${@'.'.join(d.getVar('PV').split('.')[0:2])}"
+KBRANCH_dh-imx6-dhsom ?= "linux-${BPV}.y"
 COMPATIBLE_MACHINE = "(dh-imx6-dhsom)"
 
 SRC_URI_append_dh-imx6-dhsom = " \
-	file://5.10/dh-imx6-common;type=kmeta;destsuffix=5.10/dh-imx6-common \
+	file://${BPV}/dh-imx6-common;type=kmeta;destsuffix=${BPV}/dh-imx6-common \
 	"
 
 SRC_URI_append_dh-imx6-dhcom-pdk2 = " \
