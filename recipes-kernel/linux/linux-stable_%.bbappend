@@ -5,7 +5,7 @@ KBRANCH_dh-imx6-dhsom ?= "linux-${BPV}.y"
 COMPATIBLE_MACHINE = "(dh-imx6-dhsom)"
 
 SRC_URI_append_dh-imx6-dhsom = " \
-	file://${BPV}/dh-imx6-common;type=kmeta;destsuffix=${BPV}/dh-imx6-common \
+	file://${BPV}/dh-imx6-dhsom;type=kmeta;destsuffix=${BPV}/dh-imx6-dhsom \
 	"
 
 SRC_URI_append_dh-imx6-dhcom-pdk2 = " \

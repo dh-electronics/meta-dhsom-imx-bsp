@@ -2,7 +2,7 @@ define KMACHINE dh-imx6-dhcom-pdk2
 define KTYPE standard
 define KARCH arm
 branch dh-imx6-dhcom-pdk2
-kconf hardware dh-imx6-dhsom-common.cfg
-kconf non-hardware dh-imx6-dhsom-common-non_hardware.cfg
+kconf hardware dh-imx6-dhsom.cfg
+kconf non-hardware dh-imx6-dhsom-non_hardware.cfg
 
-include dh-imx6-common-patches.scc
+include dh-imx6-dhsom-patches.scc
