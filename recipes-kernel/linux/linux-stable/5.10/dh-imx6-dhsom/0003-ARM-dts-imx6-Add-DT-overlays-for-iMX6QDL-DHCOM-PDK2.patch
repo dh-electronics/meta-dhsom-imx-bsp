@@ -188,7 +188,7 @@ index 000000000000..bb8e01d9c2b2
 +	};
 +
 +	panel {
-+		compatible = "edt,etm0700g0edh6";
++		compatible = "dataimage,scf0700c48ggu18";
 +		backlight = <&display_bl>;
 +
 +		port {
