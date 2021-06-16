@@ -13,7 +13,7 @@ limitations, but that is fine, as SPL DM support is optional.
 
 [1] https://lists.denx.de/pipermail/u-boot/2020-June/417986.html
 
-Upstream-Status: Posted [https://patchwork.ozlabs.org/project/uboot/patch/20210203213633.59145-1-marex@denx.de/]
+Upstream-Status: Submitted [https://patchwork.ozlabs.org/project/uboot/patch/20210203213633.59145-1-marex@denx.de/]
 Signed-off-by: Marek Vasut <marex@denx.de>
 Cc: Andreas Geisreiter <ageisreiter@dh-electronics.de>
 Cc: Jagan Teki <jagan@amarulasolutions.com>

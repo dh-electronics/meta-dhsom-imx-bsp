@@ -6,7 +6,7 @@ Subject: [PATCH 3/4] ARM: imx6: dh-imx6: Enable support for applying DTO
 Enable DTO support to make it possible to boot fitImage with DTOs
 embedded in them.
 
-Upstream-Status: Posted [https://patchwork.ozlabs.org/project/uboot/patch/20210203222217.137981-1-marex@denx.de/]
+Upstream-Status: Submitted [https://patchwork.ozlabs.org/project/uboot/patch/20210203222217.137981-1-marex@denx.de/]
 Signed-off-by: Marek Vasut <marex@denx.de>
 Cc: Stefano Babic <sbabic@denx.de>
 ---
