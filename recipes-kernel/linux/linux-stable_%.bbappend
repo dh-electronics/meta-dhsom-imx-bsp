@@ -10,3 +10,4 @@ SRC_URI_append_dh-imx6-dhsom = " \
 	file://common/dh-imx6-dhsom;type=kmeta;destsuffix=common/dh-imx6-dhsom \
 	"
 KERNEL_FEATURES_dh-imx6-dhsom = " dh-imx6-dhsom-standard.scc "
+DEPENDS_append_dh-imx6-dhsom = " lzop-native "
