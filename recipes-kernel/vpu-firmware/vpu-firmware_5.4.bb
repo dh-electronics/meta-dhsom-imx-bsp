@@ -28,4 +28,4 @@ do_install() {
 	cp -r ${S}/firmware-imx-${PV}/firmware/vpu/vpu_fw_imx6q.bin ${D}/lib/firmware/vpu_fw_imx6q.bin
 }
 
-FILES_${PN} += "/lib/firmware/imx/vpu/* /lib/firmware/vpu_fw_imx6q.bin"
+FILES:${PN} += "/lib/firmware/imx/vpu/* /lib/firmware/vpu_fw_imx6q.bin"
