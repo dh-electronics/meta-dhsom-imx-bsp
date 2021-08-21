@@ -1,7 +1,7 @@
 DEFAULTTUNE ?= "cortexa9thf-neon"
 SOC_FAMILY ?= "imx6"
 
-MACHINEOVERRIDES =. "dh-imx6-dhsom:"
+MACHINEOVERRIDES =. "dh-imx6-dhsom:dh-dhsom:"
 
 ARM_INSTRUCTION_SET = "thumb"
 
