@@ -20,12 +20,12 @@ do_compile() {
 }
 
 do_install() {
-	install -d  ${D}/lib/firmware/
-	install -d  ${D}/lib/firmware/imx/
-	install -d  ${D}/lib/firmware/imx/vpu/
-	cp -r ${S}/firmware-imx-${PV}/firmware/vpu/*.bin ${D}/lib/firmware/imx/vpu/
+	install -d  ${D}${nonarch_base_libdir}/firmware/
+	install -d  ${D}${nonarch_base_libdir}/firmware/imx/
+	install -d  ${D}${nonarch_base_libdir}/firmware/imx/vpu/
+	cp -r ${S}/firmware-imx-${PV}/firmware/vpu/*.bin ${D}${nonarch_base_libdir}/firmware/imx/vpu/
 	# FIXME: Linux 4.4 expects this filename
-	cp -r ${S}/firmware-imx-${PV}/firmware/vpu/vpu_fw_imx6q.bin ${D}/lib/firmware/vpu_fw_imx6q.bin
+	cp -r ${S}/firmware-imx-${PV}/firmware/vpu/vpu_fw_imx6q.bin ${D}${nonarch_base_libdir}/firmware/vpu_fw_imx6q.bin
 }
 
-FILES:${PN} += "/lib/firmware/imx/vpu/* /lib/firmware/vpu_fw_imx6q.bin"
+FILES:${PN} += "${nonarch_base_libdir}/firmware/imx/vpu/* ${nonarch_base_libdir}/firmware/vpu_fw_imx6q.bin"
