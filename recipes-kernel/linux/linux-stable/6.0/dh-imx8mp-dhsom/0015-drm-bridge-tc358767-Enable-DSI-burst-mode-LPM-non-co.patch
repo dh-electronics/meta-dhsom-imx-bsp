@@ -1,0 +1,50 @@
+From fe8e5797c42889c63d2bce9ff788f70313220eb6 Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Sun, 16 Oct 2022 02:25:43 +0200
+Subject: [PATCH 15/49] drm/bridge: tc358767: Enable DSI burst mode, LPM,
+ non-continuous clock
+
+The TC358767/TC358867/TC9595 are capable of DSI burst mode, which
+is more energy efficient than the non-burst modes. Make use of it.
+
+The TC358767/TC358867/TC9595 are capable of DSI non-continuous clock,
+since it sources the internal PLL clock from external clock source.
+The DSI non-continuous clock further reduces power utilization.
+
+The TC358767/TC358867/TC9595 may use DSI LPM for command transmissions,
+make sure this is configured correctly in the DSI mode flags.
+
+Upstream-Status: Submitted [https://patchwork.freedesktop.org/patch/507168/]
+Signed-off-by: Marek Vasut <marex@denx.de>
+---
+Cc: Jonas Karlman <jonas@kwiboo.se>
+Cc: Laurent Pinchart <Laurent.pinchart@ideasonboard.com>
+Cc: Lucas Stach <l.stach@pengutronix.de>
+Cc: Maxime Ripard <maxime@cerno.tech>
+Cc: Neil Armstrong <narmstrong@baylibre.com>
+Cc: Robert Foss <robert.foss@linaro.org>
+Cc: Sam Ravnborg <sam@ravnborg.org>
+---
+ drivers/gpu/drm/bridge/tc358767.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/gpu/drm/bridge/tc358767.c b/drivers/gpu/drm/bridge/tc358767.c
+index 745034a106666..6a27db2411476 100644
+--- a/drivers/gpu/drm/bridge/tc358767.c
++++ b/drivers/gpu/drm/bridge/tc358767.c
+@@ -1908,10 +1908,10 @@ static int tc_mipi_dsi_host_attach(struct tc_data *tc)
+ 				     "failed to create dsi device\n");
+ 
+ 	tc->dsi = dsi;
+-
+ 	dsi->lanes = dsi_lanes;
+ 	dsi->format = MIPI_DSI_FMT_RGB888;
+-	dsi->mode_flags = MIPI_DSI_MODE_VIDEO | MIPI_DSI_MODE_VIDEO_SYNC_PULSE;
++	dsi->mode_flags = MIPI_DSI_MODE_VIDEO | MIPI_DSI_MODE_VIDEO_BURST |
++			  MIPI_DSI_MODE_LPM | MIPI_DSI_CLOCK_NON_CONTINUOUS;
+ 
+ 	ret = mipi_dsi_attach(dsi);
+ 	if (ret < 0) {
+-- 
+2.35.1
+

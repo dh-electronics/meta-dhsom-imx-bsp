@@ -1,0 +1,163 @@
+From 16b022a77190198577e0e90f43768ae8ee7b4c9a Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Sat, 15 Oct 2022 23:31:07 +0200
+Subject: [PATCH 11/49] drm: bridge: samsung-dsim: Add i.MX8M Plus support
+
+Add extras to support i.MX8M Plus. The main change is the removal of
+HS/VS/DE signal inversion in the LCDIFv3-DSIM glue logic, otherwise
+the implementation of this IP in i.MX8M Plus is very much compatible
+with the i.MX8M Mini/Nano one.
+
+Upstream-Status: Submitted [https://patchwork.freedesktop.org/patch/507166/?series=109738&rev=1]
+Signed-off-by: Marek Vasut <marex@denx.de>
+---
+Cc: Adam Ford <aford173@gmail.com>
+Cc: Andrzej Hajda <andrzej.hajda@intel.com>
+Cc: Frieder Schrempf <frieder.schrempf@kontron.de>
+Cc: Inki Dae <inki.dae@samsung.com>
+Cc: Jagan Teki <jagan@amarulasolutions.com>
+Cc: Kyungmin Park <kyungmin.park@samsung.com>
+Cc: Laurent Pinchart <Laurent.pinchart@ideasonboard.com>
+Cc: Marek Szyprowski <m.szyprowski@samsung.com>
+Cc: Matteo Lisi <matteo.lisi@engicam.com>
+Cc: Michael Nazzareno Trimarchi <michael@amarulasolutions.com>
+Cc: NXP Linux Team <linux-imx@nxp.com>
+Cc: Robert Foss <robert.foss@linaro.org>
+Cc: Seung-Woo Kim <sw0312.kim@samsung.com>
+Cc: Tim Harvey <tharvey@gateworks.com>
+Cc: Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
+Cc: linux-amarula <linux-amarula@amarulasolutions.com>
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-samsung-soc@vger.kernel.org
+To: dri-devel@lists.freedesktop.org
+---
+ drivers/gpu/drm/bridge/samsung-dsim.c | 55 +++++++++++++++++++++------
+ include/drm/bridge/samsung-dsim.h     |  1 +
+ 2 files changed, 44 insertions(+), 12 deletions(-)
+
+diff --git a/drivers/gpu/drm/bridge/samsung-dsim.c b/drivers/gpu/drm/bridge/samsung-dsim.c
+index 1b5ba33dc6350..f0ae50b39f861 100644
+--- a/drivers/gpu/drm/bridge/samsung-dsim.c
++++ b/drivers/gpu/drm/bridge/samsung-dsim.c
+@@ -464,6 +464,7 @@ samsung_dsim_types[SAMSUNG_DSIM_TYPE_COUNT] = {
+ 	[SAMSUNG_DSIM_TYPE_EXYNOS5422] = &exynos5422_dsi_driver_data,
+ 	[SAMSUNG_DSIM_TYPE_EXYNOS5433] = &exynos5433_dsi_driver_data,
+ 	[SAMSUNG_DSIM_TYPE_IMX8MM] = &imx8mm_dsi_driver_data,
++	[SAMSUNG_DSIM_TYPE_IMX8MP] = &imx8mm_dsi_driver_data,
+ };
+ 
+ static inline struct samsung_dsim *host_to_dsi(struct mipi_dsi_host *h)
+@@ -1392,18 +1393,26 @@ static int samsung_dsim_atomic_check(struct drm_bridge *bridge,
+ 	struct samsung_dsim *dsi = bridge_to_dsi(bridge);
+ 	struct drm_display_mode *adjusted_mode = &crtc_state->adjusted_mode;
+ 
++	/*
++	 * The i.MX8M Mini/Nano glue logic between LCDIF and DSIM
++	 * inverts HS/VS/DE sync signals polarity, therefore, while
++	 * i.MX 8M Mini Applications Processor Reference Manual Rev. 3, 11/2020
++	 * 13.6.3.5.2 RGB interface
++	 * i.MX 8M Nano Applications Processor Reference Manual Rev. 2, 07/2022
++	 * 13.6.2.7.2 RGB interface
++	 * both claim "Vsync, Hsync, and VDEN are active high signals.", the
++	 * LCDIF must generate inverted HS/VS/DE signals, i.e. active LOW.
++	 *
++	 * The i.MX8M Plus glue logic between LCDIFv3 and DSIM does not
++	 * implement the same behavior, therefore LCDIFv3 must generate
++	 * HS/VS/DE signals active HIGH.
++	 */
+ 	if (dsi->plat_data->hw_type == SAMSUNG_DSIM_TYPE_IMX8MM) {
+-		/**
+-		 * FIXME:
+-		 * At least LCDIF + DSIM needs active low sync,
+-		 * but i.MX 8M Mini Applications Processor Reference Manual,
+-		 * Rev. 3, 11/2020 says
+-		 *
+-		 * 13.6.3.5.2 RGB interface
+-		 * Vsync, Hsync, and VDEN are active high signals.
+-		 */
+ 		adjusted_mode->flags |= (DRM_MODE_FLAG_NHSYNC | DRM_MODE_FLAG_NVSYNC);
+ 		adjusted_mode->flags &= ~(DRM_MODE_FLAG_PHSYNC | DRM_MODE_FLAG_PVSYNC);
++	} else if (dsi->plat_data->hw_type == SAMSUNG_DSIM_TYPE_IMX8MP) {
++		adjusted_mode->flags &= ~(DRM_MODE_FLAG_NHSYNC | DRM_MODE_FLAG_NVSYNC);
++		adjusted_mode->flags |= (DRM_MODE_FLAG_PHSYNC | DRM_MODE_FLAG_PVSYNC);
+ 	}
+ 
+ 	return 0;
+@@ -1436,7 +1445,8 @@ static int samsung_dsim_attach(struct drm_bridge *bridge,
+ 	 * Passing NULL to the previous bridge makes Exynos DSI drivers
+ 	 * work which is exactly done before.
+ 	 */
+-	if (!(dsi->plat_data->hw_type == SAMSUNG_DSIM_TYPE_IMX8MM))
++	if (dsi->plat_data->hw_type != SAMSUNG_DSIM_TYPE_IMX8MM &&
++	    dsi->plat_data->hw_type != SAMSUNG_DSIM_TYPE_IMX8MP)
+ 		previous = NULL;
+ 
+ 	return drm_bridge_attach(bridge->encoder, dsi->out_bridge, previous,
+@@ -1637,7 +1647,11 @@ static const struct samsung_dsim_host_ops samsung_dsim_generic_host_ops = {
+ 	.unregister_host = samsung_dsim_unregister_host,
+ };
+ 
+-static const struct drm_bridge_timings samsung_dsim_bridge_timings = {
++static const struct drm_bridge_timings samsung_dsim_bridge_timings_de_high = {
++	.input_bus_flags = DRM_BUS_FLAG_DE_HIGH,
++};
++
++static const struct drm_bridge_timings samsung_dsim_bridge_timings_de_low = {
+ 	.input_bus_flags = DRM_BUS_FLAG_DE_LOW,
+ };
+ 
+@@ -1721,9 +1735,17 @@ int samsung_dsim_probe(struct platform_device *pdev)
+ 
+ 	dsi->bridge.funcs = &samsung_dsim_bridge_funcs;
+ 	dsi->bridge.of_node = dev->of_node;
+-	dsi->bridge.timings = &samsung_dsim_bridge_timings;
+ 	dsi->bridge.type = DRM_MODE_CONNECTOR_DSI;
+ 
++	/*
++	 * The i.MX8M Mini/Nano LCDIF-DSIM glue logic inverts DE signal
++	 * polarity, see comment in samsung_dsim_atomic_check().
++	 */
++	if (dsi->plat_data->hw_type == SAMSUNG_DSIM_TYPE_IMX8MM)
++		dsi->bridge.timings = &samsung_dsim_bridge_timings_de_low;
++	else
++		dsi->bridge.timings = &samsung_dsim_bridge_timings_de_high;
++
+ 	if (dsi->plat_data->host_ops && dsi->plat_data->host_ops->register_host)
+ 		ret = dsi->plat_data->host_ops->register_host(dsi);
+ 
+@@ -1829,11 +1851,20 @@ static const struct samsung_dsim_plat_data samsung_dsim_imx8mm_pdata = {
+ 	.host_ops = &samsung_dsim_generic_host_ops,
+ };
+ 
++static const struct samsung_dsim_plat_data samsung_dsim_imx8mp_pdata = {
++	.hw_type = SAMSUNG_DSIM_TYPE_IMX8MP,
++	.host_ops = &samsung_dsim_generic_host_ops,
++};
++
+ static const struct of_device_id samsung_dsim_of_match[] = {
+ 	{
+ 		.compatible = "fsl,imx8mm-mipi-dsim",
+ 		.data = &samsung_dsim_imx8mm_pdata,
+ 	},
++	{
++		.compatible = "fsl,imx8mp-mipi-dsim",
++		.data = &samsung_dsim_imx8mp_pdata,
++	},
+ 	{ /* sentinel. */ }
+ };
+ MODULE_DEVICE_TABLE(of, samsung_dsim_of_match);
+diff --git a/include/drm/bridge/samsung-dsim.h b/include/drm/bridge/samsung-dsim.h
+index df3d030daec6a..3789f9dbb238b 100644
+--- a/include/drm/bridge/samsung-dsim.h
++++ b/include/drm/bridge/samsung-dsim.h
+@@ -28,6 +28,7 @@ enum samsung_dsim_type {
+ 	SAMSUNG_DSIM_TYPE_EXYNOS5422,
+ 	SAMSUNG_DSIM_TYPE_EXYNOS5433,
+ 	SAMSUNG_DSIM_TYPE_IMX8MM,
++	SAMSUNG_DSIM_TYPE_IMX8MP,
+ 	SAMSUNG_DSIM_TYPE_COUNT,
+ };
+ 
+-- 
+2.35.1
+

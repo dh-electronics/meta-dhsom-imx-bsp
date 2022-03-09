@@ -1,0 +1,97 @@
+From 731cae2c1591411f1fdb3ee6ae194dbc0680758d Mon Sep 17 00:00:00 2001
+From: Jagan Teki <jagan@amarulasolutions.com>
+Date: Wed, 5 Oct 2022 20:43:04 +0530
+Subject: [PATCH 05/49] drm: bridge: samsung-dsim: Add atomic_check
+
+Look like an explicit fixing up of mode_flags is required for DSIM IP
+present in i.MX8M Mini/Nano SoCs.
+
+At least the LCDIF + DSIM needs active low sync polarities in order
+to correlate the correct sync flags of the surrounding components in
+the chain to make sure the whole pipeline can work properly.
+
+On the other hand the i.MX 8M Mini Applications Processor Reference Manual,
+Rev. 3, 11/2020 says.
+"13.6.3.5.2 RGB interface
+ Vsync, Hsync, and VDEN are active high signals."
+
+No clear evidence about whether it can be documentation issues or
+something, so added a comment FIXME for this and updated the active low
+sync polarities using SAMSUNG_DSIM_TYPE_IMX8MM hw_type.
+
+v7:
+* fix the hw_type checking logic
+
+v6:
+* none
+
+v5:
+* rebase based new bridge changes [mszyprow]
+* remove DSIM_QUIRK_FIXUP_SYNC_POL
+* add hw_type check for sync polarities change.
+
+v4:
+* none
+
+v3:
+* add DSIM_QUIRK_FIXUP_SYNC_POL to handle mode_flasg fixup
+
+v2:
+* none
+
+v1:
+* fix mode flags in atomic_check instead of mode_fixup
+
+Upstream-Status: Submitted [https://patchwork.freedesktop.org/patch/506054/?series=106546&rev=5]
+Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
+---
+ drivers/gpu/drm/bridge/samsung-dsim.c | 26 ++++++++++++++++++++++++++
+ 1 file changed, 26 insertions(+)
+
+diff --git a/drivers/gpu/drm/bridge/samsung-dsim.c b/drivers/gpu/drm/bridge/samsung-dsim.c
+index 563781bb27c41..b46346232c528 100644
+--- a/drivers/gpu/drm/bridge/samsung-dsim.c
++++ b/drivers/gpu/drm/bridge/samsung-dsim.c
+@@ -1315,6 +1315,31 @@ static void samsung_dsim_atomic_post_disable(struct drm_bridge *bridge,
+ 	pm_runtime_put_sync(dsi->dev);
+ }
+ 
++static int samsung_dsim_atomic_check(struct drm_bridge *bridge,
++				     struct drm_bridge_state *bridge_state,
++				     struct drm_crtc_state *crtc_state,
++				     struct drm_connector_state *conn_state)
++{
++	struct samsung_dsim *dsi = bridge_to_dsi(bridge);
++	struct drm_display_mode *adjusted_mode = &crtc_state->adjusted_mode;
++
++	if (dsi->plat_data->hw_type == SAMSUNG_DSIM_TYPE_IMX8MM) {
++		/**
++		 * FIXME:
++		 * At least LCDIF + DSIM needs active low sync,
++		 * but i.MX 8M Mini Applications Processor Reference Manual,
++		 * Rev. 3, 11/2020 says
++		 *
++		 * 13.6.3.5.2 RGB interface
++		 * Vsync, Hsync, and VDEN are active high signals.
++		 */
++		adjusted_mode->flags |= (DRM_MODE_FLAG_NHSYNC | DRM_MODE_FLAG_NVSYNC);
++		adjusted_mode->flags &= ~(DRM_MODE_FLAG_PHSYNC | DRM_MODE_FLAG_PVSYNC);
++	}
++
++	return 0;
++}
++
+ static void samsung_dsim_mode_set(struct drm_bridge *bridge,
+ 				  const struct drm_display_mode *mode,
+ 				  const struct drm_display_mode *adjusted_mode)
+@@ -1353,6 +1378,7 @@ static const struct drm_bridge_funcs samsung_dsim_bridge_funcs = {
+ 	.atomic_duplicate_state		= drm_atomic_helper_bridge_duplicate_state,
+ 	.atomic_destroy_state		= drm_atomic_helper_bridge_destroy_state,
+ 	.atomic_reset			= drm_atomic_helper_bridge_reset,
++	.atomic_check			= samsung_dsim_atomic_check,
+ 	.atomic_pre_enable		= samsung_dsim_atomic_pre_enable,
+ 	.atomic_enable			= samsung_dsim_atomic_enable,
+ 	.atomic_disable			= samsung_dsim_atomic_disable,
+-- 
+2.35.1
+

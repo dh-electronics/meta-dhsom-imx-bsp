@@ -1,0 +1,36 @@
+From 5814aca6e8687dc7ea73354a16c868c246877196 Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Tue, 23 Aug 2022 18:56:02 +0200
+Subject: [PATCH 25/49] arm64: dts: imx8mp: Add SNVS LPGPR
+
+Add SNVS LPGPR bindings to MX8M Plus, the LPGPR is used to store
+e.g. boot counter.
+
+Upstream-Status: Backport [4dcb6c0fef5daf0127652ededde7391a4b07e58f]
+Signed-off-by: Marek Vasut <marex@denx.de>
+Reviewed-by: Fabio Estevam <festevam@denx.de>
+Reviewed-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+Signed-off-by: Shawn Guo <shawnguo@kernel.org>
+---
+ arch/arm64/boot/dts/freescale/imx8mp.dtsi | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp.dtsi b/arch/arm64/boot/dts/freescale/imx8mp.dtsi
+index 1677afd6a6d01..86ba7e020736f 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mp.dtsi
++++ b/arch/arm64/boot/dts/freescale/imx8mp.dtsi
+@@ -469,6 +469,11 @@ snvs_pwrkey: snvs-powerkey {
+ 					wakeup-source;
+ 					status = "disabled";
+ 				};
++
++				snvs_lpgpr: snvs-lpgpr {
++					compatible = "fsl,imx8mp-snvs-lpgpr",
++						     "fsl,imx7d-snvs-lpgpr";
++				};
+ 			};
+ 
+ 			clk: clock-controller@30380000 {
+-- 
+2.35.1
+

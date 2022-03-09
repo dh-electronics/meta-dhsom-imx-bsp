@@ -1,0 +1,132 @@
+From 06d42da6d9f611756ecae92ac27dfa2a04c41bae Mon Sep 17 00:00:00 2001
+From: Jagan Teki <jagan@amarulasolutions.com>
+Date: Wed, 5 Oct 2022 20:43:03 +0530
+Subject: [PATCH 04/49] drm: bridge: samsung-dsim: Handle proper DSI host
+ initialization
+
+DSI host initialization handling in previous exynos dsi driver has
+some pitfalls. It initializes the host during host transfer() hook
+that is indeed not the desired call flow for I2C and any other DSI
+configured downstream bridges.
+
+Host transfer() is usually triggered for downstream DSI panels or
+bridges and I2C-configured-DSI bridges miss these host initialization
+as these downstream bridges use bridge operations hooks like pre_enable,
+and enable in order to initialize or set up the host.
+
+This patch is trying to handle the host init handler to satisfy all
+downstream panels and bridges. Added the DSIM_STATE_REINITIALIZED state
+flag to ensure that host init is also done on first cmd transfer, this
+helps existing DSI panels work on exynos platform (form Marek
+Szyprowski).
+
+v7, v6, v5:
+* none
+
+v4:
+* update init handling to ensure host init done on first cmd transfer
+
+v3:
+* none
+
+v2:
+* check initialized state in samsung_dsim_init
+
+v1:
+* keep DSI init in host transfer
+
+Upstream-Status: Submitted [https://patchwork.freedesktop.org/patch/506055/?series=106546&rev=5]
+Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
+Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
+---
+ drivers/gpu/drm/bridge/samsung-dsim.c | 25 +++++++++++++++++--------
+ include/drm/bridge/samsung-dsim.h     |  5 +++--
+ 2 files changed, 20 insertions(+), 10 deletions(-)
+
+diff --git a/drivers/gpu/drm/bridge/samsung-dsim.c b/drivers/gpu/drm/bridge/samsung-dsim.c
+index 1bae3673151b0..563781bb27c41 100644
+--- a/drivers/gpu/drm/bridge/samsung-dsim.c
++++ b/drivers/gpu/drm/bridge/samsung-dsim.c
+@@ -1234,12 +1234,17 @@ static void samsung_dsim_disable_irq(struct samsung_dsim *dsi)
+ 	disable_irq(dsi->irq);
+ }
+ 
+-static int samsung_dsim_init(struct samsung_dsim *dsi)
++static int samsung_dsim_init(struct samsung_dsim *dsi, unsigned int flag)
+ {
+ 	const struct samsung_dsim_driver_data *driver_data = dsi->driver_data;
+ 
++	if (dsi->state & flag)
++		return 0;
++
+ 	samsung_dsim_reset(dsi);
+-	samsung_dsim_enable_irq(dsi);
++
++	if (!(dsi->state & DSIM_STATE_INITIALIZED))
++		samsung_dsim_enable_irq(dsi);
+ 
+ 	if (driver_data->reg_values[RESET_TYPE] == DSIM_FUNCRST)
+ 		samsung_dsim_enable_lane(dsi, BIT(dsi->lanes) - 1);
+@@ -1250,6 +1255,8 @@ static int samsung_dsim_init(struct samsung_dsim *dsi)
+ 	samsung_dsim_set_phy_ctrl(dsi);
+ 	samsung_dsim_init_link(dsi);
+ 
++	dsi->state |= flag;
++
+ 	return 0;
+ }
+ 
+@@ -1269,6 +1276,10 @@ static void samsung_dsim_atomic_pre_enable(struct drm_bridge *bridge,
+ 	}
+ 
+ 	dsi->state |= DSIM_STATE_ENABLED;
++
++	ret = samsung_dsim_init(dsi, DSIM_STATE_INITIALIZED);
++	if (ret)
++		return;
+ }
+ 
+ static void samsung_dsim_atomic_enable(struct drm_bridge *bridge,
+@@ -1458,12 +1469,9 @@ static ssize_t samsung_dsim_host_transfer(struct mipi_dsi_host *host,
+ 	if (!(dsi->state & DSIM_STATE_ENABLED))
+ 		return -EINVAL;
+ 
+-	if (!(dsi->state & DSIM_STATE_INITIALIZED)) {
+-		ret = samsung_dsim_init(dsi);
+-		if (ret)
+-			return ret;
+-		dsi->state |= DSIM_STATE_INITIALIZED;
+-	}
++	ret = samsung_dsim_init(dsi, DSIM_STATE_REINITIALIZED);
++	if (ret)
++		return ret;
+ 
+ 	ret = mipi_dsi_create_packet(&xfer.packet, msg);
+ 	if (ret < 0)
+@@ -1653,6 +1661,7 @@ static int __maybe_unused samsung_dsim_suspend(struct device *dev)
+ 
+ 	if (dsi->state & DSIM_STATE_INITIALIZED) {
+ 		dsi->state &= ~DSIM_STATE_INITIALIZED;
++		dsi->state &= ~DSIM_STATE_REINITIALIZED;
+ 
+ 		samsung_dsim_disable_clock(dsi);
+ 
+diff --git a/include/drm/bridge/samsung-dsim.h b/include/drm/bridge/samsung-dsim.h
+index b8132bf8e36f7..0c5a905f3de71 100644
+--- a/include/drm/bridge/samsung-dsim.h
++++ b/include/drm/bridge/samsung-dsim.h
+@@ -17,8 +17,9 @@ struct samsung_dsim;
+ 
+ #define DSIM_STATE_ENABLED		BIT(0)
+ #define DSIM_STATE_INITIALIZED		BIT(1)
+-#define DSIM_STATE_CMD_LPM		BIT(2)
+-#define DSIM_STATE_VIDOUT_AVAILABLE	BIT(3)
++#define DSIM_STATE_REINITIALIZED	BIT(2)
++#define DSIM_STATE_CMD_LPM		BIT(3)
++#define DSIM_STATE_VIDOUT_AVAILABLE	BIT(4)
+ 
+ enum samsung_dsim_type {
+ 	SAMSUNG_DSIM_TYPE_EXYNOS3250,
+-- 
+2.35.1
+

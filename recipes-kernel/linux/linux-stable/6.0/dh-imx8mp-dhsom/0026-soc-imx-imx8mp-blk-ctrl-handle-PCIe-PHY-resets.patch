@@ -1,0 +1,54 @@
+From 8d5e00b481609ed142f4fdbf81b03bbb0218ec18 Mon Sep 17 00:00:00 2001
+From: Lucas Stach <l.stach@pengutronix.de>
+Date: Fri, 2 Sep 2022 16:58:04 +0800
+Subject: [PATCH 26/49] soc: imx: imx8mp-blk-ctrl: handle PCIe PHY resets
+
+Dessert the PHY reset when powering up the domain and put it back
+into reset when the domain is powered down.
+
+Upstream-Status: Backport [5506018d3dec41e6678efb92b836586e9ee1d628]
+Signed-off-by: Lucas Stach <l.stach@pengutronix.de>
+Signed-off-by: Richard Zhu <hongxing.zhu@nxp.com>
+Signed-off-by: Shawn Guo <shawnguo@kernel.org>
+---
+ drivers/soc/imx/imx8mp-blk-ctrl.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+
+diff --git a/drivers/soc/imx/imx8mp-blk-ctrl.c b/drivers/soc/imx/imx8mp-blk-ctrl.c
+index 4ca2ede6871bd..6c939d68ba9a3 100644
+--- a/drivers/soc/imx/imx8mp-blk-ctrl.c
++++ b/drivers/soc/imx/imx8mp-blk-ctrl.c
+@@ -18,6 +18,8 @@
+ #define GPR_REG0		0x0
+ #define  PCIE_CLOCK_MODULE_EN	BIT(0)
+ #define  USB_CLOCK_MODULE_EN	BIT(1)
++#define  PCIE_PHY_APB_RST	BIT(4)
++#define  PCIE_PHY_INIT_RST	BIT(5)
+ 
+ struct imx8mp_blk_ctrl_domain;
+ 
+@@ -75,6 +77,10 @@ static void imx8mp_hsio_blk_ctrl_power_on(struct imx8mp_blk_ctrl *bc,
+ 	case IMX8MP_HSIOBLK_PD_PCIE:
+ 		regmap_set_bits(bc->regmap, GPR_REG0, PCIE_CLOCK_MODULE_EN);
+ 		break;
++	case IMX8MP_HSIOBLK_PD_PCIE_PHY:
++		regmap_set_bits(bc->regmap, GPR_REG0,
++				PCIE_PHY_APB_RST | PCIE_PHY_INIT_RST);
++		break;
+ 	default:
+ 		break;
+ 	}
+@@ -90,6 +96,10 @@ static void imx8mp_hsio_blk_ctrl_power_off(struct imx8mp_blk_ctrl *bc,
+ 	case IMX8MP_HSIOBLK_PD_PCIE:
+ 		regmap_clear_bits(bc->regmap, GPR_REG0, PCIE_CLOCK_MODULE_EN);
+ 		break;
++	case IMX8MP_HSIOBLK_PD_PCIE_PHY:
++		regmap_clear_bits(bc->regmap, GPR_REG0,
++				  PCIE_PHY_APB_RST | PCIE_PHY_INIT_RST);
++		break;
+ 	default:
+ 		break;
+ 	}
+-- 
+2.35.1
+

@@ -1,0 +1,62 @@
+From 2909f403a62900ab17388593cd5871baff88fab0 Mon Sep 17 00:00:00 2001
+From: Marco Felsch <m.felsch@pengutronix.de>
+Date: Tue, 26 Jul 2022 11:43:02 +0200
+Subject: [PATCH 16/49] drm: lcdif: change burst size to 256B
+
+FIFO underruns are seen if a AXI bus master with a higher priority do a
+lot of memory access. Increase the burst size to 256B to avoid such
+underruns and to improve the memory access efficiency.
+
+Upstream-Status: Submitted [https://patchwork.freedesktop.org/patch/495524/]
+Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
+Reviewed-by: Marek Vasut <marex@denx.de>
+---
+ drivers/gpu/drm/mxsfb/lcdif_kms.c  | 16 ++++++++++++++--
+ drivers/gpu/drm/mxsfb/lcdif_regs.h |  4 ++++
+ 2 files changed, 18 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/gpu/drm/mxsfb/lcdif_kms.c b/drivers/gpu/drm/mxsfb/lcdif_kms.c
+index 1bec1279c8b56..1f22ea5896d5f 100644
+--- a/drivers/gpu/drm/mxsfb/lcdif_kms.c
++++ b/drivers/gpu/drm/mxsfb/lcdif_kms.c
+@@ -143,8 +143,20 @@ static void lcdif_set_mode(struct lcdif_drm_private *lcdif, u32 bus_flags)
+ 	       CTRLDESCL0_1_WIDTH(m->crtc_hdisplay),
+ 	       lcdif->base + LCDC_V8_CTRLDESCL0_1);
+ 
+-	writel(CTRLDESCL0_3_PITCH(lcdif->crtc.primary->state->fb->pitches[0]),
+-	       lcdif->base + LCDC_V8_CTRLDESCL0_3);
++	/*
++	 * Undocumented P_SIZE and T_SIZE bit fields but according the
++	 * downstream kernel they control the AXI burst size. As of now there
++	 * are two known values:
++	 *  1 - 128Byte
++	 *  2 - 256Byte
++	 *
++	 * Downstream has set the burst size to 256Byte to improve the memory
++	 * efficiency so set it here too. This also reduces the FIFO underrun
++	 * possibility.
++	 */
++	ctrl = CTRLDESCL0_3_P_SIZE(2) | CTRLDESCL0_3_T_SIZE(2) |
++	       CTRLDESCL0_3_PITCH(lcdif->crtc.primary->state->fb->pitches[0]);
++	writel(ctrl, lcdif->base + LCDC_V8_CTRLDESCL0_3);
+ }
+ 
+ static void lcdif_enable_controller(struct lcdif_drm_private *lcdif)
+diff --git a/drivers/gpu/drm/mxsfb/lcdif_regs.h b/drivers/gpu/drm/mxsfb/lcdif_regs.h
+index c70220651e3a5..8e8bef175bf27 100644
+--- a/drivers/gpu/drm/mxsfb/lcdif_regs.h
++++ b/drivers/gpu/drm/mxsfb/lcdif_regs.h
+@@ -190,6 +190,10 @@
+ #define CTRLDESCL0_1_WIDTH(n)		((n) & 0xffff)
+ #define CTRLDESCL0_1_WIDTH_MASK		GENMASK(15, 0)
+ 
++#define CTRLDESCL0_3_P_SIZE(n)		(((n) << 20) & CTRLDESCL0_3_P_SIZE_MASK)
++#define CTRLDESCL0_3_P_SIZE_MASK	GENMASK(22, 20)
++#define CTRLDESCL0_3_T_SIZE(n)		(((n) << 16) & CTRLDESCL0_3_T_SIZE_MASK)
++#define CTRLDESCL0_3_T_SIZE_MASK	GENMASK(17, 16)
+ #define CTRLDESCL0_3_PITCH(n)		((n) & 0xffff)
+ #define CTRLDESCL0_3_PITCH_MASK		GENMASK(15, 0)
+ 
+-- 
+2.35.1
+

@@ -1,0 +1,54 @@
+From 7004d9a94c7c57476d1a1c428bd903afa1f20187 Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Sat, 23 Jul 2022 21:28:13 +0200
+Subject: [PATCH 38/49] gpio: mxc: Always set GPIOs used as interrupt source to
+ INPUT mode
+
+Always configure GPIO pins which are used as interrupt source as INPUTs.
+In case the default pin configuration is OUTPUT, or the prior stage does
+configure the pins as OUTPUT, then Linux will not reconfigure the pin as
+INPUT and no interrupts are received.
+
+Always configure the interrupt source GPIO pin as input to fix the above case.
+
+Upstream-Status: Submitted [https://lore.kernel.org/linux-gpio/20221013215946.216184-2-marex@denx.de/]
+Fixes: 07bd1a6cc7cbb ("MXC arch: Add gpio support for the whole platform")
+Signed-off-by: Marek Vasut <marex@denx.de>
+---
+Cc: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Cc: Linus Walleij <linus.walleij@linaro.org>
+Cc: Loic Poulain <loic.poulain@linaro.org>
+Cc: Marc Zyngier <maz@kernel.org>
+Cc: NXP Linux Team <linux-imx@nxp.com>
+Cc: Peng Fan <peng.fan@nxp.com>
+Cc: Shawn Guo <shawnguo@kernel.org>
+---
+V2: Actually update and clear bits in GDIR register
+V3: Rebase on top of new patch 1/2, expand CC list, add Fixes tag
+V4: No change
+V5: No change
+V6: - Call gc->direction_input() to set direction, instead of GDIR register
+      poking. The bgpio (gpio-mmio) may cache the content of direction
+      register, so updating the HW GDIR register is not enough. Calling
+      the gc->direction() assures the cache is updated.
+    - Drop RBs since this is updated patch.
+---
+ drivers/gpio/gpio-mxc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/gpio/gpio-mxc.c b/drivers/gpio/gpio-mxc.c
+index 6cc98a5684ae1..dd91908c72f19 100644
+--- a/drivers/gpio/gpio-mxc.c
++++ b/drivers/gpio/gpio-mxc.c
+@@ -210,7 +210,7 @@ static int gpio_set_irq_type(struct irq_data *d, u32 type)
+ 
+ 	raw_spin_unlock_irqrestore(&port->gc.bgpio_lock, flags);
+ 
+-	return 0;
++	return port->gc.direction_input(&port->gc, gpio_idx);
+ }
+ 
+ static void mxc_flip_edge(struct mxc_gpio_port *port, u32 gpio)
+-- 
+2.35.1
+
