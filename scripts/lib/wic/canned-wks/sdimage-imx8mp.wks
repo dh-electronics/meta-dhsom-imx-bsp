@@ -1,0 +1,6 @@
+# short-description: Create DH IMX8MP SD card image with a boot partition
+# long-description: Creates a partitioned SD card image. Boot files
+# are located in the first ext4 partition.
+
+part --source rawcopy --sourceparams="file=flash.bin" --ondisk mmcblk --no-table --align 32 --size 8192k
+part / --source rootfs --ondisk mmcblk0 --fstype=ext4 --label root --active --align 4096
