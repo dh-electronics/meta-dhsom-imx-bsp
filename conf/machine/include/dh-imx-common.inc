@@ -1,4 +1,4 @@
-MACHINEOVERRIDES =. "dh-dhsom:"
+MACHINEOVERRIDES =. "dh-imx-dhsom:dh-dhsom:"
 
 MACHINE_FEATURES ?= "apm alsa ext2 keyboard screen serial touchscreen usbgadget usbhost"
 
@@ -26,7 +26,6 @@ KERNEL_CLASSES += " kernel-fitimage "
 KERNEL_MODULES_AUTOLOAD += " etnaviv "
 
 PREFERRED_PROVIDER_virtual/kernel ?= "linux-stable"
-PREFERRED_VERSION_linux-stable ?= "5.10%"
 
 # Mesa
 PREFERRED_PROVIDER_virtual/egl ?= "mesa-mainline"

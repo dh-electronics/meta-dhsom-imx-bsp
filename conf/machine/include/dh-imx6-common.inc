@@ -12,12 +12,14 @@ require conf/machine/include/soc-family.inc
 
 SERIAL_CONSOLE = "115200 ttymxc0"
 
+# Linux kernel
+PREFERRED_VERSION_linux-stable ?= "5.10%"
+
 # U-Boot bootloader
 UBOOT_ENTRYPOINT := "0x17800000"
 UBOOT_MAKE_TARGET := "u-boot-with-spl.imx"
 UBOOT_BINARY := "u-boot-with-spl.imx"
 UBOOT_SUFFIX ?= "imx"
-UBOOT_MACHINE = "dh_imx6_defconfig"
 UBOOT_DTB_LOADADDRESS = "0x1ff00000"
 UBOOT_DTBO_LOADADDRESS = "0x1ff80000"
 
