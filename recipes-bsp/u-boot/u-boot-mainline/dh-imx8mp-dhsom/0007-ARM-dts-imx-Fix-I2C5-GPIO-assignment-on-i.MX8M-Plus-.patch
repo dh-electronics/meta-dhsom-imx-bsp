@@ -1,0 +1,37 @@
+From 7fd126f83384dc7cb6514765bbb9d27ffd14a759 Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Fri, 12 Aug 2022 14:06:43 +0200
+Subject: [PATCH 7/7] ARM: dts: imx: Fix I2C5 GPIO assignment on i.MX8M Plus
+ DHCOM
+
+Fix copy-paste error of the I2C5 bus recovery GPIO assignment,
+the I2C5 GPIOs are on gpio3 instead of gpio5.
+
+Upstream-Status: Submitted [https://patchwork.ozlabs.org/project/uboot/patch/20220812204155.489092-7-marex@denx.de/]
+Signed-off-by: Marek Vasut <marex@denx.de>
+Cc: Fabio Estevam <festevam@denx.de>
+Cc: Peng Fan <peng.fan@nxp.com>
+Cc: Stefano Babic <sbabic@denx.de>
+Cc: uboot-imx <uboot-imx@nxp.com>
+---
+ arch/arm/dts/imx8mp-dhcom-som.dtsi | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/arch/arm/dts/imx8mp-dhcom-som.dtsi b/arch/arm/dts/imx8mp-dhcom-som.dtsi
+index 0960c238871..197840d1a6a 100644
+--- a/arch/arm/dts/imx8mp-dhcom-som.dtsi
++++ b/arch/arm/dts/imx8mp-dhcom-som.dtsi
+@@ -415,8 +415,8 @@
+ 	pinctrl-names = "default", "gpio";
+ 	pinctrl-0 = <&pinctrl_i2c5>;
+ 	pinctrl-1 = <&pinctrl_i2c5_gpio>;
+-	scl-gpios = <&gpio5 26 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
+-	sda-gpios = <&gpio5 27 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
++	scl-gpios = <&gpio3 26 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
++	sda-gpios = <&gpio3 27 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
+ 	status = "okay";
+ };
+ 
+-- 
+2.35.1
+

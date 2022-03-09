@@ -1,0 +1,37 @@
+From f99ac1597cf8b6b73b3a0dd8ad927a183c8db102 Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Sun, 24 Jul 2022 20:42:46 +0200
+Subject: [PATCH 2/7] ARM: dts: imx: Add HW variant details to i.MX8M Plus
+ DHCOM PDK2
+
+Add information about which exact SoM variant is used on which PDK2 variant.
+
+Upstream-Status: Submitted [https://patchwork.ozlabs.org/project/uboot/patch/20220812204155.489092-2-marex@denx.de/]
+Signed-off-by: Marek Vasut <marex@denx.de>
+Cc: Fabio Estevam <festevam@denx.de>
+Cc: Peng Fan <peng.fan@nxp.com>
+Cc: Stefano Babic <sbabic@denx.de>
+Cc: uboot-imx <uboot-imx@nxp.com>
+---
+ arch/arm/dts/imx8mp-dhcom-pdk2.dts | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/arch/arm/dts/imx8mp-dhcom-pdk2.dts b/arch/arm/dts/imx8mp-dhcom-pdk2.dts
+index e95abfb3e89..7148234a4f1 100644
+--- a/arch/arm/dts/imx8mp-dhcom-pdk2.dts
++++ b/arch/arm/dts/imx8mp-dhcom-pdk2.dts
+@@ -1,6 +1,11 @@
+ // SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+ /*
+  * Copyright (C) 2022 Marek Vasut <marex@denx.de>
++ *
++ * DHCOM iMX8MP variant:
++ * DHCM-iMX8ML8-C160-R409-F1638-SPI16-GE-CAN2-SD-RTC-WBTA-ADC-T-RGB-CSI2-HS-I-01D2
++ * DHCOM PCB number: 660-100 or newer
++ * PDK2 PCB number: 516-400 or newer
+  */
+ 
+ /dts-v1/;
+-- 
+2.35.1
+

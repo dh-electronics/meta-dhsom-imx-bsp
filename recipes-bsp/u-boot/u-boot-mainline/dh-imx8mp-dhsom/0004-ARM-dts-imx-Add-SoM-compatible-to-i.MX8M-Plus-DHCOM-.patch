@@ -1,0 +1,35 @@
+From c704a241173fc14c9ba74f682bcd4af6ccb8b7ac Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Sun, 24 Jul 2022 20:46:09 +0200
+Subject: [PATCH 4/7] ARM: dts: imx: Add SoM compatible to i.MX8M Plus DHCOM
+ PDK2
+
+Add SoM compatible string into i.MX8MP DHCOM PDK2 compatible strings.
+
+Upstream-Status: Submitted [https://patchwork.ozlabs.org/project/uboot/patch/20220812204155.489092-4-marex@denx.de/]
+Signed-off-by: Marek Vasut <marex@denx.de>
+Cc: Fabio Estevam <festevam@denx.de>
+Cc: Peng Fan <peng.fan@nxp.com>
+Cc: Stefano Babic <sbabic@denx.de>
+Cc: uboot-imx <uboot-imx@nxp.com>
+---
+ arch/arm/dts/imx8mp-dhcom-pdk2.dts | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/arch/arm/dts/imx8mp-dhcom-pdk2.dts b/arch/arm/dts/imx8mp-dhcom-pdk2.dts
+index 0fcead35879..c9a481ac9a8 100644
+--- a/arch/arm/dts/imx8mp-dhcom-pdk2.dts
++++ b/arch/arm/dts/imx8mp-dhcom-pdk2.dts
+@@ -16,7 +16,8 @@
+ 
+ / {
+ 	model = "DH electronics i.MX8M Plus DHCOM Premium Developer Kit (2)";
+-	compatible = "dh,imx8mp-dhcom-pdk2", "fsl,imx8mp";
++	compatible = "dh,imx8mp-dhcom-pdk2", "dh,imx8mp-dhcom-som",
++	             "fsl,imx8mp";
+ 
+ 	chosen {
+ 		stdout-path = &uart1;
+-- 
+2.35.1
+
