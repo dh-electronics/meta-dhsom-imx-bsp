@@ -61,10 +61,12 @@ PACKAGES = " \
 FILES:${PN}-sdma-imx6q = " ${nonarch_base_libdir}/firmware/imx/sdma/sdma-imx6q.bin "
 LICENSE:${PN}-sdma-imx6q = "Firmware-nxp-imx-firmware"
 RDEPENDS:${PN}-sdma-imx6q += "${PN}-nxp-imx-license"
+RREPLACES:${PN}-sdma-imx6q = "linux-firmware-imx-sdma-imx6q"
 
 FILES:${PN}-sdma-imx7d = " ${nonarch_base_libdir}/firmware/imx/sdma/sdma-imx7d.bin "
 LICENSE:${PN}-sdma-imx7d = "Firmware-nxp-imx-firmware"
 RDEPENDS:${PN}-sdma-imx7d += "${PN}-nxp-imx-license"
+RREPLACES:${PN}-sdma-imx7d = "linux-firmware-imx-sdma-imx7d"
 
 FILES:${PN}-vpu-imx6d = " ${nonarch_base_libdir}/firmware/imx/vpu/vpu_fw_imx6d.bin "
 LICENSE:${PN}-vpu-imx6d = "Firmware-nxp-imx-firmware"
