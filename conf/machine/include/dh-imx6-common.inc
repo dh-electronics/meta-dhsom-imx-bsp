@@ -7,7 +7,7 @@ MACHINEOVERRIDES =. "dh-imx6-dhsom:"
 
 ARM_INSTRUCTION_SET = "thumb"
 
-require conf/machine/include/${@'arm/armv7a/' if (d.getVar('LAYERSERIES_CORENAMES') in ["honister"]) else ''}tune-cortexa9.inc
+require conf/machine/include/${@'arm/armv7a/' if (d.getVar('LAYERSERIES_CORENAMES') in ["kirkstone"]) else ''}tune-cortexa9.inc
 require conf/machine/include/soc-family.inc
 
 SERIAL_CONSOLE = "115200 ttymxc0"
