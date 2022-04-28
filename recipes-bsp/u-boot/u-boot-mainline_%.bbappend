@@ -1,4 +1,5 @@
-FILESEXTRAPATHS:prepend := "${THISDIR}/files/common:${THISDIR}/files/${MACHINE}:${THISDIR}/files:"
+FILESEXTRAPATHS:prepend := "${THISDIR}/${PN}/common:${THISDIR}/${PN}/${MACHINE}:${THISDIR}/${PN}:"
+RPROVIDES:${PN} = "virtual/bootloader"
 
 DEPENDS:append:dh-imx-dhsom = " u-boot-mainline-tools-native "
 do_compile:append:dh-imx-dhsom () {
