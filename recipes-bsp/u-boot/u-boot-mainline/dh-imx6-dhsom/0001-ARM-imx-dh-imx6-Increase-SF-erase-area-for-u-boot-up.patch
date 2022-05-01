@@ -1,0 +1,34 @@
+From eb6af56eb3a5dc269cce51407d8303c87e905a2f Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Fri, 12 Aug 2022 12:01:11 +0200
+Subject: [PATCH] ARM: imx: dh-imx6: Increase SF erase area for u-boot update
+
+Erase the entire U-Boot area during U-Boot update instead of just
+a subset of it. This way, in case u-boot-with-spl.imx grows, the
+sf write won't write over non-erased part of the SPI NOR.
+
+Upstream-Status: Submitted [https://patchwork.ozlabs.org/project/uboot/patch/20220812205910.538301-1-marex@denx.de/]
+Signed-off-by: Marek Vasut <marex@denx.de>
+Cc: Christoph Niedermaier <cniedermaier@dh-electronics.com>
+Cc: Fabio Estevam <festevam@denx.de>
+Cc: Stefano Babic <sbabic@denx.de>
+---
+ include/configs/dh_imx6.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/include/configs/dh_imx6.h b/include/configs/dh_imx6.h
+index 79424647f61..0f7e1c5c451 100644
+--- a/include/configs/dh_imx6.h
++++ b/include/configs/dh_imx6.h
+@@ -60,7 +60,7 @@
+ 	"fdtfile=imx6q-dhcom-pdk2.dtb\0"\
+ 	"update_sf=" /* Erase SPI NOR and install U-Boot from SD */	\
+ 		"load mmc 0:1 ${loadaddr} /boot/u-boot-with-spl.imx && "\
+-		"sf probe && sf erase 0x0 0xa0000 && "			\
++		"sf probe && sf erase 0x0 0x100000 && "			\
+ 		"sf write ${loadaddr} 0x400 ${filesize}\0"		\
+ 	BOOTENV
+ 
+-- 
+2.35.1
+

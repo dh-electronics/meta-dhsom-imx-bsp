@@ -10,6 +10,7 @@ do_compile:append:dh-imx-dhsom () {
 }
 
 SRC_URI:append:dh-imx6-dhsom = " \
+	file://0001-ARM-imx-dh-imx6-Increase-SF-erase-area-for-u-boot-up.patch \
 	file://boot.cmd \
 	file://fw_env.config \
 	"
