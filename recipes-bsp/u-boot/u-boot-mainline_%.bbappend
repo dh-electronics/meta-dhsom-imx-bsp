@@ -10,6 +10,7 @@ do_compile:append:dh-imx-dhsom () {
 }
 
 SRC_URI:append:dh-imx6-dhsom = " \
+	file://0001-usb-ehci-mx6-Enable-OTG-detection-on-imx8mm-and-imx8.patch \
 	file://boot.cmd \
 	file://fw_env.config \
 	"
