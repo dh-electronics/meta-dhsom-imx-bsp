@@ -21,4 +21,4 @@ repos:
 
   meta-dhsom-imx-bsp:
     url: https://github.com/dh-electronics/meta-dhsom-imx-bsp.git
-    refspec: dunfell-3.1
+    refspec: dunfell
