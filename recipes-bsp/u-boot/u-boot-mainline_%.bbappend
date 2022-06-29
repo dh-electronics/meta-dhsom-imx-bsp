@@ -1,4 +1,4 @@
-FILESEXTRAPATHS:prepend := "${THISDIR}/files/common:${THISDIR}/files/${MACHINE}:${THISDIR}/files:"
+FILESEXTRAPATHS:prepend := "${THISDIR}/${BPN}:${THISDIR}/files/common:${THISDIR}/files/${MACHINE}:${THISDIR}/files:"
 
 DEPENDS:append:dh-imx-dhsom = " u-boot-mainline-tools-native "
 do_compile:append:dh-imx-dhsom () {
