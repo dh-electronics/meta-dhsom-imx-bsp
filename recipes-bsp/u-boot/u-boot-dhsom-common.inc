@@ -15,4 +15,5 @@ do_compile:append:dh-imx-dhsom () {
 
 SRC_URI:append:dh-imx6-dhsom = " \
 	file://boot.cmd \
+	file://fw_env.config \
 	"
