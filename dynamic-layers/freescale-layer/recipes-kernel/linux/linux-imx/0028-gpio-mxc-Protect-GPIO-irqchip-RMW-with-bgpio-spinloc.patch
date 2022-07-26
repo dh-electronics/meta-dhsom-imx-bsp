@@ -1,0 +1,89 @@
+From 83e46a22da0e725ef7fb906e5047873b10bf20db Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Sun, 24 Jul 2022 19:01:44 +0200
+Subject: [PATCH 28/60] gpio: mxc: Protect GPIO irqchip RMW with bgpio spinlock
+
+The driver currently performs register read-modify-write without locking
+in its irqchip part, this could lead to a race condition when configuring
+interrupt mode setting. Add the missing bgpio spinlock lock/unlock around
+the register read-modify-write.
+
+Upstream-Status: Submitted [https://lore.kernel.org/linux-gpio/20220724224943.294057-1-marex@denx.de/]
+Fixes: 07bd1a6cc7cbb ("MXC arch: Add gpio support for the whole platform")
+Signed-off-by: Marek Vasut <marex@denx.de>
+Cc: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Cc: Linus Walleij <linus.walleij@linaro.org>
+Cc: Loic Poulain <loic.poulain@linaro.org>
+Cc: Marc Zyngier <maz@kernel.org>
+Cc: NXP Linux Team <linux-imx@nxp.com>
+Cc: Peng Fan <peng.fan@nxp.com>
+Cc: Shawn Guo <shawnguo@kernel.org>
+---
+V3: New patch
+V4: Include linux/spinlock.h
+---
+ drivers/gpio/gpio-mxc.c | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
+
+diff --git a/drivers/gpio/gpio-mxc.c b/drivers/gpio/gpio-mxc.c
+index 2d71e66781ff7..8a6f412a46a89 100644
+--- a/drivers/gpio/gpio-mxc.c
++++ b/drivers/gpio/gpio-mxc.c
+@@ -19,6 +19,7 @@
+ #include <linux/platform_device.h>
+ #include <linux/pm_runtime.h>
+ #include <linux/slab.h>
++#include <linux/spinlock.h>
+ #include <linux/syscore_ops.h>
+ #include <linux/gpio/driver.h>
+ #include <linux/of.h>
+@@ -191,6 +192,7 @@ static int gpio_set_irq_type(struct irq_data *d, u32 type)
+ {
+ 	struct irq_chip_generic *gc = irq_data_get_irq_chip_data(d);
+ 	struct mxc_gpio_port *port = gc->private;
++	unsigned long flags;
+ 	u32 bit, val;
+ 	u32 gpio_idx = d->hwirq;
+ 	int edge;
+@@ -229,6 +231,8 @@ static int gpio_set_irq_type(struct irq_data *d, u32 type)
+ 		return -EINVAL;
+ 	}
+ 
++	spin_lock_irqsave(&port->gc.bgpio_lock, flags);
++
+ 	if (GPIO_EDGE_SEL >= 0) {
+ 		val = readl(port->base + GPIO_EDGE_SEL);
+ 		if (edge == GPIO_INT_BOTH_EDGES)
+@@ -248,15 +252,20 @@ static int gpio_set_irq_type(struct irq_data *d, u32 type)
+ 
+ 	writel(1 << gpio_idx, port->base + GPIO_ISR);
+ 
++	spin_unlock_irqrestore(&port->gc.bgpio_lock, flags);
++
+ 	return 0;
+ }
+ 
+ static void mxc_flip_edge(struct mxc_gpio_port *port, u32 gpio)
+ {
+ 	void __iomem *reg = port->base;
++	unsigned long flags;
+ 	u32 bit, val;
+ 	int edge;
+ 
++	spin_lock_irqsave(&port->gc.bgpio_lock, flags);
++
+ 	reg += GPIO_ICR1 + ((gpio & 0x10) >> 2); /* lower or upper register */
+ 	bit = gpio & 0xf;
+ 	val = readl(reg);
+@@ -274,6 +283,8 @@ static void mxc_flip_edge(struct mxc_gpio_port *port, u32 gpio)
+ 		return;
+ 	}
+ 	writel(val | (edge << (bit << 1)), reg);
++
++	spin_unlock_irqrestore(&port->gc.bgpio_lock, flags);
+ }
+ 
+ /* handle 32 interrupts in one status register */
+-- 
+2.35.1
+

@@ -1,0 +1,41 @@
+From 4fd88d24ac20688035848bfe7d69ed3cd336be4c Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Tue, 26 Jul 2022 02:26:18 +0200
+Subject: [PATCH 30/60] gpio: mxc: Always set GPIOs requested as interrupt
+ source to INPUT mode
+
+Always configure GPIO pins which are used as interrupt source as INPUTs.
+This is an addendum to previous patch backported from upstream to make it
+work with downstream kernel fork customizations.
+
+Upstream-Status: Inappropriate
+Signed-off-by: Marek Vasut <marex@denx.de>
+---
+ drivers/gpio/gpio-mxc.c | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
+
+diff --git a/drivers/gpio/gpio-mxc.c b/drivers/gpio/gpio-mxc.c
+index 39947ebd4fa07..e464a32190dd9 100644
+--- a/drivers/gpio/gpio-mxc.c
++++ b/drivers/gpio/gpio-mxc.c
+@@ -458,6 +458,17 @@ static int mxc_gpio_irq_reqres(struct irq_data *d)
+ {
+ 	struct irq_chip_generic *gc = irq_data_get_irq_chip_data(d);
+ 	struct mxc_gpio_port *port = gc->private;
++	u32 gpio_idx = d->hwirq;
++	unsigned long flags;
++	u32 dir;
++
++	spin_lock_irqsave(&port->gc.bgpio_lock, flags);
++
++	dir = readl(port->base + GPIO_GDIR);
++	dir &= ~BIT(gpio_idx);
++	writel(dir, port->base + GPIO_GDIR);
++
++	spin_unlock_irqrestore(&port->gc.bgpio_lock, flags);
+ 
+ 	if (gpiochip_lock_as_irq(&port->gc, d->hwirq)) {
+ 		dev_err(port->gc.parent,
+-- 
+2.35.1
+

@@ -1,6 +1,8 @@
 MACHINEOVERRIDES =. "dh-imx8m-dhsom:dh-imx8mp-dhsom:"
 
-require conf/machine/include/dh-imx-mainline.inc
+# Include downstream BSP extras only if enabled by setting
+# IMX_DEFAULT_BSP = "nxp" in local.conf
+include conf/machine/include/dh-imx${@'8mp-downstream' if (d.getVar('IMX_DEFAULT_BSP') in ["nxp"]) else '-mainline'}.inc
 require conf/machine/include/dh-imx-common.inc
 
 DEFAULTTUNE ?= "cortexa53-crypto"

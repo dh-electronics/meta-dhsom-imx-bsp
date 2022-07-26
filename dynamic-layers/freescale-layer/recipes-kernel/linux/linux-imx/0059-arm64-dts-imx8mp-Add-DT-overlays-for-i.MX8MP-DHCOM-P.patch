@@ -1,0 +1,368 @@
+From 0a0f3bf5335b4cca420fa777455342870318c066 Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Sat, 12 Mar 2022 16:32:28 +0100
+Subject: [PATCH 59/60] arm64: dts: imx8mp: Add DT overlays for i.MX8MP DHCOM
+ PDK2
+
+Add DT overlays to support:
+- DH 505-200 Display board in edge connector X12 via direct LVDS
+- DH 531-100 SPI/I2C board in header X21
+- DH 531-200 SPI/I2C board in header X22
+- DH 560-200 Display board in edge connector X12
+
+Upstream-Status: Inappropriate
+Signed-off-by: Marek Vasut <marex@denx.de>
+---
+ arch/arm64/boot/dts/freescale/Makefile        |  6 +-
+ ...mx8mp-dhcom-overlay-panel-ch101olhlwh.dtsi | 43 ++++++++++++
+ .../imx8mp-dhcom-overlay-panel-dpi.dtsi       | 45 +++++++++++++
+ ...m-pdk2-overlay-505-200-x12-ch101olhlwh.dts | 45 +++++++++++++
+ .../imx8mp-dhcom-pdk2-overlay-531-100-x21.dts | 33 ++++++++++
+ .../imx8mp-dhcom-pdk2-overlay-531-100-x22.dts | 33 ++++++++++
+ .../imx8mp-dhcom-pdk2-overlay-560-200-x12.dts | 65 +++++++++++++++++++
+ .../boot/dts/freescale/imx8mp-dhcom-som.dtsi  |  6 --
+ 8 files changed, 269 insertions(+), 7 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-dhcom-overlay-panel-ch101olhlwh.dtsi
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-dhcom-overlay-panel-dpi.dtsi
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk2-overlay-505-200-x12-ch101olhlwh.dts
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk2-overlay-531-100-x21.dts
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk2-overlay-531-100-x22.dts
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk2-overlay-560-200-x12.dts
+
+diff --git a/arch/arm64/boot/dts/freescale/Makefile b/arch/arm64/boot/dts/freescale/Makefile
+index 6a7e1cbe1a3bf..93e57e12180a8 100644
+--- a/arch/arm64/boot/dts/freescale/Makefile
++++ b/arch/arm64/boot/dts/freescale/Makefile
+@@ -128,7 +128,11 @@ dtb-$(CONFIG_ARCH_MXC) += imx8mp-evk.dtb imx8mp-evk-rm67191.dtb imx8mp-evk-it626
+ 			  imx8mp-evk-hifiberry-dac2.dtb \
+ 			  imx8mp-evk-usdhc1-m2.dtb imx8mp-evk-rm67199.dtb \
+ 			  imx8mp-evk-dpdk.dtb imx8mp-evk-8mic-swpdm.dtb imx8mp-evk-rpmsg-lpv.dtb
+-dtb-$(CONFIG_ARCH_MXC) += imx8mp-dhcom-pdk2.dtb
++dtb-$(CONFIG_ARCH_MXC) += imx8mp-dhcom-pdk2.dtb \
++			  imx8mp-dhcom-pdk2-overlay-505-200-x12-ch101olhlwh.dtbo \
++			  imx8mp-dhcom-pdk2-overlay-531-100-x21.dtbo \
++			  imx8mp-dhcom-pdk2-overlay-531-100-x22.dtbo \
++			  imx8mp-dhcom-pdk2-overlay-560-200-x12.dtbo
+ dtb-$(CONFIG_ARCH_MXC) += imx8mp-phyboard-pollux-rdk.dtb
+ dtb-$(CONFIG_ARCH_MXC) += imx8mq-evk.dtb imx8mq-evk-rpmsg.dtb imx8mp-ab2.dtb
+ dtb-$(CONFIG_ARCH_MXC) += imx8mp-ddr4-evk.dtb
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-overlay-panel-ch101olhlwh.dtsi b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-overlay-panel-ch101olhlwh.dtsi
+new file mode 100644
+index 0000000000000..5a924e348effe
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-overlay-panel-ch101olhlwh.dtsi
+@@ -0,0 +1,43 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Copyright (C) 2022 Marek Vasut <marex@denx.de>
++ */
++
++#include "imx8mp-dhcom-overlay-panel-dpi.dtsi"
++
++&display_bl {
++	pwms = <&pwm1 0 5000000 0>;
++};
++
++&i2c5 {
++	#address-cells = <1>;
++	#size-cells = <0>;
++
++	touchscreen@41 {
++		compatible = "ilitek,ili251x";
++		pinctrl-0 = <&pinctrl_dhcom_b &pinctrl_dhcom_h>;
++		pinctrl-names = "default";
++		reg = <0x41>;
++		interrupt-parent = <&gpio1>;
++		interrupts = <11 IRQ_TYPE_EDGE_FALLING>;
++		reset-gpios = <&gpio1 8 GPIO_ACTIVE_LOW>;
++		touchscreen-size-x = <16384>;
++		touchscreen-size-y = <9600>;
++		touchscreen-inverted-x;
++		touchscreen-inverted-y;
++	};
++
++	eeprom@50 {
++		compatible = "atmel,24c04";
++		reg = <0x50>;
++		pagesize = <16>;
++	};
++};
++
++&panel {
++	compatible = "chefree,ch101olhlwh-002";
++};
++
++&pwm1 {
++	status = "okay";
++};
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-overlay-panel-dpi.dtsi b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-overlay-panel-dpi.dtsi
+new file mode 100644
+index 0000000000000..b6af865a091da
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-overlay-panel-dpi.dtsi
+@@ -0,0 +1,45 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Copyright (C) 2022 Marek Vasut <marex@denx.de>
++ */
++
++#include <dt-bindings/gpio/gpio.h>
++#include <dt-bindings/input/input.h>
++#include <dt-bindings/interrupt-controller/arm-gic.h>
++#include <dt-bindings/pwm/pwm.h>
++
++&{/} {
++	#address-cells = <2>;
++	#size-cells = <2>;
++
++	display_bl: display-bl {
++		compatible = "pwm-backlight";
++		brightness-levels = <0 16 22 30 40 55 75 102 138 188 255>;
++		default-brightness-level = <8>;
++		enable-gpios = <&gpio1 0 GPIO_ACTIVE_HIGH>;	/* GPIO G */
++		status = "okay";
++	};
++
++	panel: panel {
++		backlight = <&display_bl>;
++
++		port {
++			panel_in: endpoint {
++				remote-endpoint = <&tc_bridge_out>;
++			};
++		};
++	};
++};
++
++&tc_bridge {
++	ports {
++		#address-cells = <1>;
++		#size-cells = <0>;
++
++		port@1 {
++			reg = <1>;
++			tc_bridge_out: endpoint {
++			};
++		};
++	};
++};
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk2-overlay-505-200-x12-ch101olhlwh.dts b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk2-overlay-505-200-x12-ch101olhlwh.dts
+new file mode 100644
+index 0000000000000..19a35fb317ffb
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk2-overlay-505-200-x12-ch101olhlwh.dts
+@@ -0,0 +1,45 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Copyright (C) 2022 Marek Vasut <marex@denx.de>
++ */
++/dts-v1/;
++/plugin/;
++
++#include "imx8mp-dhcom-overlay-panel-ch101olhlwh.dtsi"
++
++&{/} {
++	gpio-keys {
++		button-1 {
++			/* BUTTON1 GPIO conflicts with Touchscreen RESET GPIO-B */
++			status = "disabled";
++		};
++	};
++
++	led {
++		led-2 {
++			/* LED7 GPIO conflicts with Touchscreen IRQ GPIO-H */
++			status = "disabled";
++		};
++	};
++};
++
++&lcdif2 {
++	assigned-clock-rates = <500000000>, <500000000>, <200000000>;
++	status = "okay";
++};
++
++&ldb_lvds_ch0 {
++	remote-endpoint = <&panel_in>;
++};
++
++&lvds_ldb {
++	status = "okay";
++};
++
++&media_blk_ctrl {
++	assigned-clock-rates = <0>, <0>, <500000000>;
++};
++
++&panel_in {
++	remote-endpoint = <&ldb_lvds_ch0>;
++};
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk2-overlay-531-100-x21.dts b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk2-overlay-531-100-x21.dts
+new file mode 100644
+index 0000000000000..cd66752ac2e85
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk2-overlay-531-100-x21.dts
+@@ -0,0 +1,33 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
++/*
++ * Copyright (C) 2022 Marek Vasut <marex@denx.de>
++ */
++/dts-v1/;
++/plugin/;
++
++&i2c5 {
++	#address-cells = <1>;
++	#size-cells = <0>;
++
++	eeprom@56 {
++		compatible = "atmel,24c04";
++		reg = <0x56>;
++		pagesize = <16>;
++	};
++};
++
++&ecspi1 {
++	status = "okay";
++	#address-cells = <1>;
++	#size-cells = <0>;
++
++	at25@0 {
++		compatible = "microchip,25aa010a", "atmel,at25";
++		reg = <0>;
++		spi-max-frequency = <5000000>;
++
++		at25,byte-len = <128>;
++		at25,addr-mode = <1>;
++		at25,page-size = <16>;
++	};
++};
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk2-overlay-531-100-x22.dts b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk2-overlay-531-100-x22.dts
+new file mode 100644
+index 0000000000000..754806e6e844e
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk2-overlay-531-100-x22.dts
+@@ -0,0 +1,33 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
++/*
++ * Copyright (C) 2022 Marek Vasut <marex@denx.de>
++ */
++/dts-v1/;
++/plugin/;
++
++&i2c4 {
++	#address-cells = <1>;
++	#size-cells = <0>;
++
++	eeprom@56 {
++		compatible = "atmel,24c04";
++		reg = <0x56>;
++		pagesize = <16>;
++	};
++};
++
++&ecspi2 {
++	status = "okay";
++	#address-cells = <1>;
++	#size-cells = <0>;
++
++	at25@0 {
++		compatible = "microchip,25aa010a", "atmel,at25";
++		reg = <0>;
++		spi-max-frequency = <5000000>;
++
++		at25,byte-len = <128>;
++		at25,addr-mode = <1>;
++		at25,page-size = <16>;
++	};
++};
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk2-overlay-560-200-x12.dts b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk2-overlay-560-200-x12.dts
+new file mode 100644
+index 0000000000000..0d5736e898b5e
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk2-overlay-560-200-x12.dts
+@@ -0,0 +1,65 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
++/*
++ * Copyright (C) 2022 Marek Vasut <marex@denx.de>
++ */
++/dts-v1/;
++/plugin/;
++
++#include "imx8mp-dhcom-overlay-panel-dpi.dtsi"
++
++&{/} {
++	led {
++		led-0 {
++			/* LED5 GPIO conflicts with Touchscreen IRQ GPIO-E */
++			status = "disabled";
++		};
++	};
++};
++
++&display_bl {
++	pwms = <&pwm1 0 5000000 0>;
++};
++
++&i2c5 {
++	#address-cells = <1>;
++	#size-cells = <0>;
++
++	touchscreen@38 {
++		compatible = "edt,edt-ft5406";
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_dhcom_e>;
++		reg = <0x38>;
++		/* Touchscreen IRQ GPIO-E conflicts with LED5 GPIO */
++		interrupt-parent = <&gpio5>;
++		interrupts = <22 IRQ_TYPE_EDGE_FALLING>; /* GPIO E */
++	};
++};
++
++&lcdif1 {
++	status = "okay";
++};
++
++&mipi_dsi {
++	samsung,burst-clock-frequency = <160000000>;
++	status = "okay";
++};
++
++&panel {
++	compatible = "edt,etm0700g0edh6";
++};
++
++&panel_in {
++	remote-endpoint = <&tc_bridge_out>;
++};
++
++&pwm1 {
++	status = "okay";
++};
++
++&tc_bridge {
++	status = "okay";
++};
++
++&tc_bridge_out {
++       remote-endpoint = <&panel_in>;
++};
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-som.dtsi b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-som.dtsi
+index f466b6f9e9fb7..dd7f5b20a0857 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-som.dtsi
++++ b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-som.dtsi
+@@ -260,12 +260,6 @@ tc_bridge_in: endpoint {
+ 					remote-endpoint = <&dsi_out>;
+ 				};
+ 			};
+-
+-			port@1 {
+-				reg = <1>;
+-				tc_bridge_out: endpoint {
+-				};
+-			};
+ 		};
+ 	};
+ 
+-- 
+2.35.1
+

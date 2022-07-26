@@ -1,0 +1,43 @@
+From 5184d3698d3a6b8aba7192fccfc7182bb20b29f8 Mon Sep 17 00:00:00 2001
+From: Sascha Hauer <s.hauer@pengutronix.de>
+Date: Fri, 4 Mar 2022 13:52:54 +0100
+Subject: [PATCH 24/60] clk: imx: pll14xx: explicitly return lowest rate
+
+clk_pll14xx_round_rate() returns the lowest rate by indexing into
+the rate table with the variable i. i is actually pll->rate_count
+as this is the value we come out of the loop with. Use pll->rate_count
+explicitly to make it a bit more clear what is being done. While at
+it fix a typo in the comment. No functional change.
+
+Upstream-Status: Backport [5ff50031cb8852bfcf587d003ba6bad3c2336852]
+Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
+Reviewed-by: Abel Vesa <abel.vesa@nxp.com>
+Link: https://lore.kernel.org/r/20220304125256.2125023-7-s.hauer@pengutronix.de
+Signed-off-by: Abel Vesa <abel.vesa@nxp.com>
+---
+ drivers/clk/imx/clk-pll14xx.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/clk/imx/clk-pll14xx.c b/drivers/clk/imx/clk-pll14xx.c
+index 4d5e26058b6d3..9e84ea574aacd 100644
+--- a/drivers/clk/imx/clk-pll14xx.c
++++ b/drivers/clk/imx/clk-pll14xx.c
+@@ -118,13 +118,13 @@ static long clk_pll14xx_round_rate(struct clk_hw *hw, unsigned long rate,
+ 	const struct imx_pll14xx_rate_table *rate_table = pll->rate_table;
+ 	int i;
+ 
+-	/* Assumming rate_table is in descending order */
++	/* Assuming rate_table is in descending order */
+ 	for (i = 0; i < pll->rate_count; i++)
+ 		if (rate >= rate_table[i].rate)
+ 			return rate_table[i].rate;
+ 
+ 	/* return minimum supported value */
+-	return rate_table[i - 1].rate;
++	return rate_table[pll->rate_count - 1].rate;
+ }
+ 
+ static unsigned long clk_pll14xx_recalc_rate(struct clk_hw *hw,
+-- 
+2.35.1
+
