@@ -1,5 +1,6 @@
 MACHINEOVERRIDES =. "dh-imx6-dhsom:"
 
+require conf/machine/include/dh-imx-mainline.inc
 require conf/machine/include/dh-imx-common.inc
 
 DEFAULTTUNE ?= "cortexa9thf-neon"

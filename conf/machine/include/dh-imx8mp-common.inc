@@ -1,5 +1,6 @@
 MACHINEOVERRIDES =. "dh-imx8m-dhsom:dh-imx8mp-dhsom:"
 
+require conf/machine/include/dh-imx-mainline.inc
 require conf/machine/include/dh-imx-common.inc
 
 DEFAULTTUNE ?= "cortexa53-crypto"
@@ -21,11 +22,6 @@ UBOOT_BINARY := "flash.bin"
 UBOOT_SUFFIX ?= "bin"
 UBOOT_DTB_LOADADDRESS = "0x5c000000"
 UBOOT_DTBO_LOADADDRESS = "0x5c080000"
-
-# Ship kernel modules
-MACHINE_ESSENTIAL_EXTRA_RDEPENDS += " \
-	imx-firmware-sdma-imx7d \
-	"
 
 WKS_FILE = "sdimage-imx8mp.wks"
 
