@@ -11,6 +11,8 @@ do_compile:append:dh-imx-dhsom () {
 
 SRC_URI:append:dh-imx-dhsom = " \
 	file://0001-gpio-fix-incorrect-depends-on-for-SPL_GPIO_HOG.patch \
+	file://0002-Revert-i2c-fix-stack-buffer-overflow-vulnerability-i.patch \
+	file://0003-i2c-fix-stack-buffer-overflow-vulnerability-in-i2c-m.patch \
 	"
 
 SRC_URI:append:dh-imx6-dhsom = " \
