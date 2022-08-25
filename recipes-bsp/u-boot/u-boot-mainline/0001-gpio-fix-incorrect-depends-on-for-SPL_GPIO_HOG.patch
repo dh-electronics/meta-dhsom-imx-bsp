@@ -1,0 +1,36 @@
+From 7afcef3d37530cf951f7ff76cac0394d574b0ea3 Mon Sep 17 00:00:00 2001
+From: Quentin Schulz <quentin.schulz@theobroma-systems.com>
+Date: Tue, 12 Jul 2022 17:44:19 +0200
+Subject: [PATCH] gpio: fix incorrect depends on for SPL_GPIO_HOG
+
+Since commit 83061dbd1c89 ("Rename GPIO_SUPPORT to GPIO"),
+SPL_GPIO_SUPPORT has been renamed to SPL_GPIO, meaning that SPL_GPIO_HOG
+can never be enabled.
+
+Let's fix this by using the proper name for the Kconfig option.
+
+Upstream-Status: Backport [5536a5f4ac12f4f14e31c85305c2fc7647d5fc03]
+Fixes: 1d99e673c752 ("gpio: Enable hogging support in SPL")
+Cc: Quentin Schulz <foss+uboot@0leil.net>
+Signed-off-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
+Reviewed-by: Simon Glass <sjg@chromium.org>
+---
+ drivers/gpio/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/gpio/Kconfig b/drivers/gpio/Kconfig
+index d7f37f0471c..7b99bd6539f 100644
+--- a/drivers/gpio/Kconfig
++++ b/drivers/gpio/Kconfig
+@@ -70,7 +70,7 @@ config GPIO_HOG
+ 
+ config SPL_GPIO_HOG
+ 	bool "Enable GPIO hog support in SPL"
+-	depends on SPL_GPIO_SUPPORT
++	depends on SPL_GPIO
+ 	help
+ 	  Enable gpio hog support in SPL
+ 	  The GPIO chip may contain GPIO hog definitions. GPIO hogging
+-- 
+2.35.1
+

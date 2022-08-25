@@ -9,6 +9,10 @@ do_compile:append:dh-imx-dhsom () {
 		-d ${WORKDIR}/boot.cmd ${WORKDIR}/boot.scr
 }
 
+SRC_URI:append:dh-imx-dhsom = " \
+	file://0001-gpio-fix-incorrect-depends-on-for-SPL_GPIO_HOG.patch \
+	"
+
 SRC_URI:append:dh-imx6-dhsom = " \
 	file://0001-ARM-imx-dh-imx6-Increase-SF-erase-area-for-u-boot-up.patch \
 	file://boot.cmd \
