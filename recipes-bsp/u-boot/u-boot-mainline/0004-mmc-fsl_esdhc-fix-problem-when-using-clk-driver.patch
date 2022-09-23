@@ -1,0 +1,50 @@
+From ee17f0455622b28540e9844405840f8eb18a3683 Mon Sep 17 00:00:00 2001
+From: Ye Li <ye.li@nxp.com>
+Date: Thu, 25 Apr 2019 18:39:12 -0700
+Subject: [PATCH] mmc: fsl_esdhc: fix problem when using clk driver
+
+Move init_clk_usdhc to non-clk driver case, since assigned-clocks properties
+will initialize the clocks by clk driver.
+
+Upstream-Status: Submitted [https://patchwork.ozlabs.org/project/uboot/patch/20220923222933.640838-1-marex@denx.de/]
+Signed-off-by: Ye Li <ye.li@nxp.com>
+Signed-off-by: Marek Vasut <marex@denx.de>
+---
+NOTE: Was MLK-21848-5 fsl_esdhc: fix problem when using clk driver
+NOTE: Fixes SD SDR104 mode instability on MX8MP
+---
+Cc: Fabio Estevam <festevam@denx.de>
+Cc: Jaehoon Chung <jh80.chung@samsung.com>
+Cc: Marcel Ziswiler <marcel.ziswiler@toradex.com>
+Cc: Max Krummenacher <max.krummenacher@toradex.com>
+Cc: Peng Fan <peng.fan@nxp.com>
+Cc: Stefano Babic <sbabic@denx.de>
+---
+ drivers/mmc/fsl_esdhc_imx.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/mmc/fsl_esdhc_imx.c b/drivers/mmc/fsl_esdhc_imx.c
+index 9befb190bdf..92b152fc979 100644
+--- a/drivers/mmc/fsl_esdhc_imx.c
++++ b/drivers/mmc/fsl_esdhc_imx.c
+@@ -1519,8 +1519,6 @@ static int fsl_esdhc_probe(struct udevice *dev)
+ 	 * work as expected.
+ 	 */
+ 
+-	init_clk_usdhc(dev_seq(dev));
+-
+ #if CONFIG_IS_ENABLED(CLK)
+ 	/* Assigned clock already set clock */
+ 	ret = clk_get_by_name(dev, "per", &priv->per_clk);
+@@ -1536,6 +1534,8 @@ static int fsl_esdhc_probe(struct udevice *dev)
+ 
+ 	priv->sdhc_clk = clk_get_rate(&priv->per_clk);
+ #else
++	init_clk_usdhc(dev_seq(dev));
++
+ 	priv->sdhc_clk = mxc_get_clock(MXC_ESDHC_CLK + dev_seq(dev));
+ 	if (priv->sdhc_clk <= 0) {
+ 		dev_err(dev, "Unable to get clk for %s\n", dev->name);
+-- 
+2.35.1
+

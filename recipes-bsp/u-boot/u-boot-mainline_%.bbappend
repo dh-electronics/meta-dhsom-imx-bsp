@@ -13,6 +13,7 @@ SRC_URI:append:dh-imx-dhsom = " \
 	file://0001-gpio-fix-incorrect-depends-on-for-SPL_GPIO_HOG.patch \
 	file://0002-Revert-i2c-fix-stack-buffer-overflow-vulnerability-i.patch \
 	file://0003-i2c-fix-stack-buffer-overflow-vulnerability-in-i2c-m.patch \
+	file://0004-mmc-fsl_esdhc-fix-problem-when-using-clk-driver.patch \
 	"
 
 SRC_URI:append:dh-imx6-dhsom = " \
