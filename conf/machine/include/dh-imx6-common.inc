@@ -1,9 +1,9 @@
+MACHINEOVERRIDES =. "dh-imx6-dhsom:"
+
 require conf/machine/include/dh-imx-common.inc
 
 DEFAULTTUNE ?= "cortexa9thf-neon"
 SOC_FAMILY ?= "imx6"
-
-MACHINEOVERRIDES =. "dh-imx6-dhsom:"
 
 ARM_INSTRUCTION_SET = "thumb"
 

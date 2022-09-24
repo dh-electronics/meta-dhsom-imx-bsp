@@ -1,4 +1,4 @@
-MACHINEOVERRIDES =. "dh-imx-dhsom:dh-dhsom:"
+MACHINEOVERRIDES =. "dh-dhsom:dh-imx-dhsom:"
 
 MACHINE_FEATURES ?= "apm alsa ext2 keyboard screen serial touchscreen usbgadget usbhost"
 
