@@ -7,7 +7,7 @@ Erase the entire U-Boot area during U-Boot update instead of just
 a subset of it. This way, in case u-boot-with-spl.imx grows, the
 sf write won't write over non-erased part of the SPI NOR.
 
-Upstream-Status: Submitted [https://patchwork.ozlabs.org/project/uboot/patch/20220812205910.538301-1-marex@denx.de/]
+Upstream-Status: Backport [7b90229ebadea2455cb39f40d07e00393015fe78]
 Signed-off-by: Marek Vasut <marex@denx.de>
 Cc: Christoph Niedermaier <cniedermaier@dh-electronics.com>
 Cc: Fabio Estevam <festevam@denx.de>
