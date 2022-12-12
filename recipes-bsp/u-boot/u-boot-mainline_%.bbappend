@@ -20,6 +20,7 @@ SRC_URI:append:dh-imx6-dhsom = " \
 	"
 
 SRC_URI:append:dh-imx8mp-dhsom = " \
+	file://default-device-tree.cfg \
 	file://0001-ARM-imx-bootaux-Fix-macro-misuse.patch \
 	file://0002-ARM-imx-bootaux-Fix-LTO-Wlto-type-mismatch.patch \
 	file://0003-ARM-imx-Enable-LTO-for-DH-electronics-i.MX8M-Plus-DH.patch \
@@ -45,6 +46,7 @@ SRC_URI:append:dh-imx8mp-dhsom = " \
 	file://0023-arm64-dts-imx8mp-Add-FEC-RMII-pin-mux-on-i.MX8MP-DHC.patch \
 	file://0024-arm64-dts-imx8mp-Do-not-delete-PHY-nodes-on-i.MX8MP-.patch \
 	file://0025-arm64-imx8mp-Auto-detect-PHY-on-i.MX8MP-DHCOM.patch \
+	file://0026-ARM-dts-imx-Add-support-for-DH-electronics-i.MX8M-Pl.patch \
 	"
 
 EXTRA_OEMAKE:append:dh-imx8mp-dhsom = " ATF_LOAD_ADDR=0x970000"
@@ -61,4 +63,4 @@ do_compile:prepend:dh-imx8mp-dhsom () {
 # format is -${MACHINE}-date.extraversion. The date is in the
 # format YYYYMMDD, the extraversion is used in case there are
 # multiple releases during a single day, which is unlikely.
-UBOOT_LOCALVERSION:dh-imx-dhsom ?= "-${MACHINE}-20230306.01"
+UBOOT_LOCALVERSION:dh-imx-dhsom ?= "-${MACHINE}-20230306.02"
