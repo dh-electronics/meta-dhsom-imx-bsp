@@ -1,6 +1,0 @@
-header:
-  version: 2
-  includes:
-    - include/common-meta-dhsom-imx-bsp.yml
-
-machine: dh-imx6-dhcom-pdk2
