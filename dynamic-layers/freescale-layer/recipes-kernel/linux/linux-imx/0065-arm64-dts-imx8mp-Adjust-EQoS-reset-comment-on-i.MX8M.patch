@@ -1,0 +1,46 @@
+From 7e0faaf8952fc665015fc5642e35c5cc6c0054f0 Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Sat, 11 Feb 2023 22:16:11 +0100
+Subject: [PATCH 65/73] arm64: dts: imx8mp: Adjust EQoS reset comment on
+ i.MX8MP DHCOM
+
+Fix copy-paste error in the EQoS reset comment, align with SoM schematic.
+No functional change.
+
+Upstream-Status: Submitted [https://patchwork.kernel.org/project/linux-arm-kernel/patch/20230217192647.61733-2-marex@denx.de/]
+Signed-off-by: Marek Vasut <marex@denx.de>
+---
+Cc: Fabio Estevam <festevam@gmail.com>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc: Marek Vasut <marex@denx.de>
+Cc: NXP Linux Team <linux-imx@nxp.com>
+Cc: Pengutronix Kernel Team <kernel@pengutronix.de>
+Cc: Rob Herring <robh+dt@kernel.org>
+Cc: Sascha Hauer <s.hauer@pengutronix.de>
+Cc: Shawn Guo <shawnguo@kernel.org>
+Cc: devicetree@vger.kernel.org
+Cc: kernel@dh-electronics.com
+Cc: linux-arm-kernel@lists.infradead.org
+---
+ arch/arm64/boot/dts/freescale/imx8mp-dhcom-som.dtsi | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-som.dtsi b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-som.dtsi
+index 1ae78ba5f1956..98d95dd4fc8bd 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-som.dtsi
++++ b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-som.dtsi
+@@ -749,9 +749,9 @@ MX8MP_IOMUXC_SD1_RESET_B__GPIO2_IO10		0x22
+ 
+ 	pinctrl_ethphy0: dhcom-ethphy0-grp {
+ 		fsl,pins = <
+-			/* ENET1_#RST Reset */
++			/* ENET_QOS_#RST Reset */
+ 			MX8MP_IOMUXC_SAI5_RXC__GPIO3_IO20		0x22
+-			/* ENET1_#INT Interrupt */
++			/* ENET_QOS_#INT Interrupt */
+ 			MX8MP_IOMUXC_SAI5_RXFS__GPIO3_IO19		0x22
+ 		>;
+ 	};
+-- 
+2.39.1
+

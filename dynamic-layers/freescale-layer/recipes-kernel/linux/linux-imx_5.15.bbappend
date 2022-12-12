@@ -63,6 +63,17 @@ SRC_URI:append:dh-imx8mp-dhsom = " \
 	file://0060-arm64-dts-imx8mp-Add-DT-overlays-for-i.MX8MP-DHCOM-P.patch \
 	file://0061-arm64-dts-imx8mp-Adjust-DT-to-match-downstream-DTSI.patch \
 	file://0062-arm64-dts-imx8mp-Add-DT-overlays-for-i.MX8MP-DHCOM-S.patch \
+	file://0063-extcon-ptn5150-Add-usb-role-class-support.patch \
+	file://0064-arm64-dts-imx8mp-Do-not-delete-PHY-nodes-on-i.MX8MP-.patch \
+	file://0065-arm64-dts-imx8mp-Adjust-EQoS-reset-comment-on-i.MX8M.patch \
+	file://0066-arm64-dts-imx8mp-Adjust-EQoS-PHY-address-on-i.MX8MP-.patch \
+	file://0067-arm64-dts-imx8mp-Add-EQoS-RMII-pin-mux-on-i.MX8MP-DH.patch \
+	file://0068-arm64-dts-imx8mp-Add-FEC-RMII-pin-mux-on-i.MX8MP-DHC.patch \
+	file://0069-arm64-dts-imx8mp-Add-support-for-DH-electronics-i.MX.patch \
+	file://0070-arm64-dts-imx8mp-Enable-SAI-audio-on-MX8MP-DHCOM-PDK.patch \
+	file://0071-arm64-dts-imx8mp-Enable-HDMI-on-MX8MP-DHCOM-PDK3.patch \
+	file://0072-arm64-dts-imx8mp-Add-DT-overlays-for-i.MX8MP-DHCOM-P.patch \
+	file://0073-arm64-dts-imx8mp-Adjust-PDK3-DT-to-match-downstream-.patch \
 	"
 
 # Inject extra config options into kernel config this way,
@@ -89,4 +100,12 @@ do_copy_defconfig:append:dh-imx8mp-dhsom () {
     echo "CONFIG_BT_HCIUART_H4=y" >> ${B}/.config
     echo "CONFIG_BRCMFMAC=m" >> ${B}/.config
     echo "CONFIG_DRM_TOSHIBA_TC358767=y" >> ${B}/.config
+    echo "CONFIG_I2C_MUX=y" >> ${B}/.config
+    echo "CONFIG_I2C_MUX_PCA954x=y" >> ${B}/.config
+    echo "CONFIG_SENSORS_INA238=y" >> ${B}/.config
+    echo "CONFIG_VIDEO_IMX8_ISI=y" >> ${B}/.config
+    echo "CONFIG_VIDEO_IMX8_ISI_M2M=y" >> ${B}/.config
+    echo "CONFIG_VIDEO_IMX_MIPI_CSIS=y" >> ${B}/.config
+    echo "CONFIG_VIDEO_OV5640=y" >> ${B}/.config
+    echo "CONFIG_COMMON_CLK_SI521XX=y" >> ${B}/.config
 }

@@ -1,0 +1,42 @@
+From 82cd71a67f95c8dc2cf4cfab2768bbc241bc57b0 Mon Sep 17 00:00:00 2001
+From: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Date: Thu, 29 Jul 2021 15:02:04 +0200
+Subject: [PATCH 56/85] media: add V4L2_SUBDEV_FL_STREAMS
+
+Add subdev flag V4L2_SUBDEV_FL_STREAMS. It is used to indicate that the
+subdev supports the new API with multiplexed streams (routing, stream
+configs).
+
+Upstream-Status: Backport [d6cc9c7c1a34dab83c94179ae91ab0582f2f9774]
+Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+---
+ include/media/v4l2-subdev.h | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
+
+diff --git a/include/media/v4l2-subdev.h b/include/media/v4l2-subdev.h
+index ccac82e0ad1e1..6345a5321ce35 100644
+--- a/include/media/v4l2-subdev.h
++++ b/include/media/v4l2-subdev.h
+@@ -881,6 +881,17 @@ struct v4l2_subdev_internal_ops {
+  * should set this flag.
+  */
+ #define V4L2_SUBDEV_FL_HAS_EVENTS		(1U << 3)
++/*
++ * Set this flag if this subdev supports multiplexed streams. This means
++ * that the driver supports routing and handles the stream parameter in its
++ * v4l2_subdev_pad_ops handlers. More specifically, this means:
++ *
++ * - Centrally managed subdev active state is enabled
++ * - Legacy pad config is _not_ supported (state->pads is NULL)
++ * - Routing ioctls are available
++ * - Multiple streams per pad are supported
++ */
++#define V4L2_SUBDEV_FL_STREAMS			(1U << 4)
+ 
+ struct regulator_bulk_data;
+ 
+-- 
+2.39.1
+

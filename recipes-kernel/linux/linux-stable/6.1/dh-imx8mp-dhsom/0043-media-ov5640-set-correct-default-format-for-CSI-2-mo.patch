@@ -1,0 +1,82 @@
+From 05257db7094867ceedf7623f92049082f366ebda Mon Sep 17 00:00:00 2001
+From: "Guoniu.zhou" <guoniu.zhou@nxp.com>
+Date: Mon, 12 Dec 2022 05:05:26 +0100
+Subject: [PATCH 43/85] media: ov5640: set correct default format for CSI-2
+ mode
+
+In commit a89f14bbcfa5 ("media: ov5640: Split DVP and CSI-2 formats"),
+it splits format list for DVP and CSI-2 mode, but the default format
+defined in commit 90b0f355c5a3 ("media: ov5640: Implement init_cfg")
+is only supported by DVP mode, so define a new default format for
+CSI-2 mode.
+
+Upstream-Status: Backport [68453b02e422ff42fc73a9469979ff301661dcdd]
+Signed-off-by: Guoniu.zhou <guoniu.zhou@nxp.com>
+Reviewed-by: Jai Luthra <j-luthra@ti.com>
+Reviewed-by: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+---
+ drivers/media/i2c/ov5640.c | 21 ++++++++++++++++++---
+ 1 file changed, 18 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/media/i2c/ov5640.c b/drivers/media/i2c/ov5640.c
+index e0f908af581b8..2c37ed7b75d37 100644
+--- a/drivers/media/i2c/ov5640.c
++++ b/drivers/media/i2c/ov5640.c
+@@ -520,7 +520,18 @@ static u32 ov5640_code_to_bpp(struct ov5640_dev *sensor, u32 code)
+  */
+ /* YUV422 UYVY VGA@30fps */
+ 
+-static const struct v4l2_mbus_framefmt ov5640_default_fmt = {
++static const struct v4l2_mbus_framefmt ov5640_csi2_default_fmt = {
++	.code = MEDIA_BUS_FMT_UYVY8_1X16,
++	.width = 640,
++	.height = 480,
++	.colorspace = V4L2_COLORSPACE_SRGB,
++	.ycbcr_enc = V4L2_MAP_YCBCR_ENC_DEFAULT(V4L2_COLORSPACE_SRGB),
++	.quantization = V4L2_QUANTIZATION_FULL_RANGE,
++	.xfer_func = V4L2_MAP_XFER_FUNC_DEFAULT(V4L2_COLORSPACE_SRGB),
++	.field = V4L2_FIELD_NONE,
++};
++
++static const struct v4l2_mbus_framefmt ov5640_dvp_default_fmt = {
+ 	.code = MEDIA_BUS_FMT_UYVY8_2X8,
+ 	.width = 640,
+ 	.height = 480,
+@@ -3719,11 +3730,13 @@ static int ov5640_s_stream(struct v4l2_subdev *sd, int enable)
+ static int ov5640_init_cfg(struct v4l2_subdev *sd,
+ 			   struct v4l2_subdev_state *state)
+ {
++	struct ov5640_dev *sensor = to_ov5640_dev(sd);
+ 	struct v4l2_mbus_framefmt *fmt =
+ 				v4l2_subdev_get_try_format(sd, state, 0);
+ 	struct v4l2_rect *crop = v4l2_subdev_get_try_crop(sd, state, 0);
+ 
+-	*fmt = ov5640_default_fmt;
++	*fmt = ov5640_is_csi2(sensor) ? ov5640_csi2_default_fmt :
++					ov5640_dvp_default_fmt;
+ 
+ 	crop->left = OV5640_PIXEL_ARRAY_LEFT;
+ 	crop->top = OV5640_PIXEL_ARRAY_TOP;
+@@ -3812,7 +3825,6 @@ static int ov5640_probe(struct i2c_client *client)
+ 	 * default init sequence initialize sensor to
+ 	 * YUV422 UYVY VGA@30fps
+ 	 */
+-	sensor->fmt = ov5640_default_fmt;
+ 	sensor->frame_interval.numerator = 1;
+ 	sensor->frame_interval.denominator = ov5640_framerates[OV5640_30_FPS];
+ 	sensor->current_fr = OV5640_30_FPS;
+@@ -3845,6 +3857,9 @@ static int ov5640_probe(struct i2c_client *client)
+ 		return -EINVAL;
+ 	}
+ 
++	sensor->fmt = ov5640_is_csi2(sensor) ? ov5640_csi2_default_fmt :
++					       ov5640_dvp_default_fmt;
++
+ 	/* get system clock (xclk) */
+ 	sensor->xclk = devm_clk_get(dev, "xclk");
+ 	if (IS_ERR(sensor->xclk)) {
+-- 
+2.39.1
+

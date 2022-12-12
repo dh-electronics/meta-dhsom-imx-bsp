@@ -1,0 +1,437 @@
+From 631dfcb0060562ce1f46339a05d1d2f38f722386 Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Sat, 12 Mar 2022 16:32:28 +0100
+Subject: [PATCH 85/85] arm64: dts: imx8mp: Add DT overlays for i.MX8MP DHCOM
+ PDK3
+
+Add DT overlays to support:
+- DH 505-200 Display board in edge connector X12 via direct LVDS
+- DH 531-100 SPI/I2C board in header X21
+- DH 531-200 SPI/I2C board in header X22
+- DH 560-300 Display board in edge connector X12
+- EA muRata 2AE M.2 A/E-Key card in connector X20
+- NXP SPF-29678-C1 MINISASTOCSI with OV5640 sensor in connector X31
+- NXP SPF-29678-C1 MINISASTOCSI with OV5640 sensor in connector X29
+
+Upstream-Status: Inappropriate
+Signed-off-by: Marek Vasut <marex@denx.de>
+---
+ arch/arm64/boot/dts/freescale/Makefile        |  9 ++-
+ ...mx8mp-dhcom-overlay-panel-ch101olhlwh.dtsi | 10 ++--
+ ...m-pdk2-overlay-505-200-x12-ch101olhlwh.dts |  7 +++
+ ...m-pdk3-overlay-505-200-x36-ch101olhlwh.dts | 46 +++++++++++++++
+ .../imx8mp-dhcom-pdk3-overlay-531-100-x40.dts | 33 +++++++++++
+ .../imx8mp-dhcom-pdk3-overlay-531-100-x41.dts | 33 +++++++++++
+ .../imx8mp-dhcom-pdk3-overlay-560-300-x36.dts | 26 +++++++++
+ ...p-dhcom-pdk3-overlay-ea-murata-2ae-x20.dts | 56 +++++++++++++++++++
+ ...k3-overlay-nxp-spf-29678-c1-ov5640-x29.dts | 25 +++++++++
+ ...k3-overlay-nxp-spf-29678-c1-ov5640-x31.dts | 25 +++++++++
+ ...-pdk3-overlay-nxp-spf-29678-c1-ov5640.dtsi | 37 ++++++++++++
+ 11 files changed, 301 insertions(+), 6 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-overlay-505-200-x36-ch101olhlwh.dts
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-overlay-531-100-x40.dts
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-overlay-531-100-x41.dts
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-overlay-560-300-x36.dts
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-overlay-ea-murata-2ae-x20.dts
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-overlay-nxp-spf-29678-c1-ov5640-x29.dts
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-overlay-nxp-spf-29678-c1-ov5640-x31.dts
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-overlay-nxp-spf-29678-c1-ov5640.dtsi
+
+diff --git a/arch/arm64/boot/dts/freescale/Makefile b/arch/arm64/boot/dts/freescale/Makefile
+index 373134e8e0818..dee4cf88c883f 100644
+--- a/arch/arm64/boot/dts/freescale/Makefile
++++ b/arch/arm64/boot/dts/freescale/Makefile
+@@ -90,7 +90,14 @@ dtb-$(CONFIG_ARCH_MXC) += imx8mp-dhcom-pdk2.dtb \
+ 			  imx8mp-dhcom-pdk2-overlay-531-100-x21.dtbo \
+ 			  imx8mp-dhcom-pdk2-overlay-531-100-x22.dtbo \
+ 			  imx8mp-dhcom-pdk2-overlay-560-300-x12.dtbo
+-dtb-$(CONFIG_ARCH_MXC) += imx8mp-dhcom-pdk3.dtb
++dtb-$(CONFIG_ARCH_MXC) += imx8mp-dhcom-pdk3.dtb \
++			  imx8mp-dhcom-pdk3-overlay-505-200-x36-ch101olhlwh.dtbo \
++			  imx8mp-dhcom-pdk3-overlay-531-100-x40.dtbo \
++			  imx8mp-dhcom-pdk3-overlay-531-100-x41.dtbo \
++			  imx8mp-dhcom-pdk3-overlay-560-300-x36.dtbo \
++			  imx8mp-dhcom-pdk3-overlay-ea-murata-2ae-x20.dtbo \
++			  imx8mp-dhcom-pdk3-overlay-nxp-spf-29678-c1-ov5640-x29.dtbo \
++			  imx8mp-dhcom-pdk3-overlay-nxp-spf-29678-c1-ov5640-x31.dtbo
+ dtb-$(CONFIG_ARCH_MXC) += imx8mp-evk.dtb
+ dtb-$(CONFIG_ARCH_MXC) += imx8mp-icore-mx8mp-edimm2.2.dtb
+ dtb-$(CONFIG_ARCH_MXC) += imx8mp-msc-sm2s-ep1.dtb
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-overlay-panel-ch101olhlwh.dtsi b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-overlay-panel-ch101olhlwh.dtsi
+index 99a923f17b1f3..3159bacfbedd5 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-overlay-panel-ch101olhlwh.dtsi
++++ b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-overlay-panel-ch101olhlwh.dtsi
+@@ -9,18 +9,18 @@ &display_bl {
+ 	pwms = <&pwm1 0 5000000 0>;
+ };
+ 
+-&i2c5 {
++&DH_OVERLAY_PANEL_I2C_BUS {
+ 	#address-cells = <1>;
+ 	#size-cells = <0>;
+ 
+ 	touchscreen@41 {
+ 		compatible = "ilitek,ili251x";
+-		pinctrl-0 = <&pinctrl_dhcom_b &pinctrl_dhcom_h>;
++		pinctrl-0 = <DH_OVERLAY_PANEL_I2C_TOUCHSCREEN_PINCTRL>;
+ 		pinctrl-names = "default";
+ 		reg = <0x41>;
+-		interrupt-parent = <&gpio1>;
+-		interrupts = <11 IRQ_TYPE_EDGE_FALLING>;
+-		reset-gpios = <&gpio1 8 GPIO_ACTIVE_LOW>;
++		interrupt-parent = <&DH_OVERLAY_PANEL_I2C_TOUCHSCREEN_IRQ_PARENT>;
++		interrupts = <DH_OVERLAY_PANEL_I2C_TOUCHSCREEN_IRQ_PIN IRQ_TYPE_EDGE_FALLING>;
++		reset-gpios = <&DH_OVERLAY_PANEL_I2C_TOUCHSCREEN_RESET_GPIO DH_OVERLAY_PANEL_I2C_TOUCHSCREEN_RESET_PIN GPIO_ACTIVE_LOW>;
+ 		touchscreen-size-x = <16384>;
+ 		touchscreen-size-y = <9600>;
+ 		touchscreen-inverted-x;
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk2-overlay-505-200-x12-ch101olhlwh.dts b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk2-overlay-505-200-x12-ch101olhlwh.dts
+index 9bfd914fe938b..d5068e7571a89 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk2-overlay-505-200-x12-ch101olhlwh.dts
++++ b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk2-overlay-505-200-x12-ch101olhlwh.dts
+@@ -5,6 +5,13 @@
+ /dts-v1/;
+ /plugin/;
+ 
++#define DH_OVERLAY_PANEL_I2C_BUS			i2c5
++#define DH_OVERLAY_PANEL_I2C_TOUCHSCREEN_PINCTRL	&pinctrl_dhcom_b &pinctrl_dhcom_h
++#define DH_OVERLAY_PANEL_I2C_TOUCHSCREEN_IRQ_PARENT	gpio1
++#define DH_OVERLAY_PANEL_I2C_TOUCHSCREEN_IRQ_PIN	11
++#define DH_OVERLAY_PANEL_I2C_TOUCHSCREEN_RESET_GPIO	gpio1
++#define DH_OVERLAY_PANEL_I2C_TOUCHSCREEN_RESET_PIN	8
++
+ #include "imx8mp-dhcom-overlay-panel-ch101olhlwh.dtsi"
+ 
+ &{/} {
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-overlay-505-200-x36-ch101olhlwh.dts b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-overlay-505-200-x36-ch101olhlwh.dts
+new file mode 100644
+index 0000000000000..287e5d2366c42
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-overlay-505-200-x36-ch101olhlwh.dts
+@@ -0,0 +1,46 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Copyright (C) 2022 Marek Vasut <marex@denx.de>
++ */
++/dts-v1/;
++/plugin/;
++
++#define DH_OVERLAY_PANEL_I2C_BUS			i2cmuxed0
++#define DH_OVERLAY_PANEL_I2C_TOUCHSCREEN_PINCTRL	&pinctrl_dhcom_b &pinctrl_dhcom_c
++/* GPIO C - X21 */
++#define DH_OVERLAY_PANEL_I2C_TOUCHSCREEN_IRQ_PARENT	gpio5
++#define DH_OVERLAY_PANEL_I2C_TOUCHSCREEN_IRQ_PIN	2
++/* GPIO B - X25 */
++#define DH_OVERLAY_PANEL_I2C_TOUCHSCREEN_RESET_GPIO	gpio1
++#define DH_OVERLAY_PANEL_I2C_TOUCHSCREEN_RESET_PIN	8
++
++#include "imx8mp-dhcom-overlay-panel-ch101olhlwh.dtsi"
++#include "imx8mp-pinfunc.h"
++
++&{/} {
++	gpio-keys {
++		button-1 {
++			/* TA2 GPIO conflicts with Touchscreen RESET GPIO-B */
++			status = "disabled";
++		};
++
++		button-2 {
++			/* TA3 GPIO conflicts with Touchscreen IRQ GPIO-C */
++			status = "disabled";
++		};
++	};
++
++	led {
++		led-2 {
++			/* LED2 GPIO conflicts with BL-ON1 GPIO-G */
++			status = "disabled";
++		};
++	};
++};
++
++&pinctrl_dhcom_c {
++	fsl,pins = <
++		/* GPIO_C */
++		MX8MP_IOMUXC_SAI3_MCLK__GPIO5_IO02		0x40000000
++	>;
++};
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-overlay-531-100-x40.dts b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-overlay-531-100-x40.dts
+new file mode 100644
+index 0000000000000..89f4c42e72a47
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-overlay-531-100-x40.dts
+@@ -0,0 +1,33 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
++/*
++ * Copyright (C) 2023 Marek Vasut <marex@denx.de>
++ */
++/dts-v1/;
++/plugin/;
++
++&i2cmuxed0 {
++	#address-cells = <1>;
++	#size-cells = <0>;
++
++	eeprom@56 {
++		compatible = "atmel,24c04";
++		reg = <0x56>;
++		pagesize = <16>;
++	};
++};
++
++&ecspi1 {
++	status = "okay";
++	#address-cells = <1>;
++	#size-cells = <0>;
++
++	at25@0 {
++		compatible = "microchip,25aa010a", "atmel,at25";
++		reg = <0>;
++		spi-max-frequency = <5000000>;
++
++		at25,byte-len = <128>;
++		at25,addr-mode = <1>;
++		at25,page-size = <16>;
++	};
++};
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-overlay-531-100-x41.dts b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-overlay-531-100-x41.dts
+new file mode 100644
+index 0000000000000..cd6cf7fc208ed
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-overlay-531-100-x41.dts
+@@ -0,0 +1,33 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
++/*
++ * Copyright (C) 2023 Marek Vasut <marex@denx.de>
++ */
++/dts-v1/;
++/plugin/;
++
++&i2c4 {
++	#address-cells = <1>;
++	#size-cells = <0>;
++
++	eeprom@56 {
++		compatible = "atmel,24c04";
++		reg = <0x56>;
++		pagesize = <16>;
++	};
++};
++
++&ecspi2 {
++	status = "okay";
++	#address-cells = <1>;
++	#size-cells = <0>;
++
++	at25@0 {
++		compatible = "microchip,25aa010a", "atmel,at25";
++		reg = <0>;
++		spi-max-frequency = <5000000>;
++
++		at25,byte-len = <128>;
++		at25,addr-mode = <1>;
++		at25,page-size = <16>;
++	};
++};
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-overlay-560-300-x36.dts b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-overlay-560-300-x36.dts
+new file mode 100644
+index 0000000000000..e9c3c6af3d6ec
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-overlay-560-300-x36.dts
+@@ -0,0 +1,26 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
++/*
++ * Copyright (C) 2023 Marek Vasut <marex@denx.de>
++ */
++/dts-v1/;
++/plugin/;
++
++#define DH_OVERLAY_PANEL_I2C_BUS			i2cmuxed0
++
++#include "imx8mp-dhcom-overlay-panel-etm0700g0edh6.dtsi"
++
++&{/} {
++	gpio-keys {
++		button-3 {
++			/* TA4 GPIO conflicts with Touchscreen IRQ GPIO-E */
++			status = "disabled";
++		};
++	};
++
++	led {
++		led-2 {
++			/* LED2 GPIO conflicts with BL-ON1 GPIO-G */
++			status = "disabled";
++		};
++	};
++};
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-overlay-ea-murata-2ae-x20.dts b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-overlay-ea-murata-2ae-x20.dts
+new file mode 100644
+index 0000000000000..c918081dbc052
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-overlay-ea-murata-2ae-x20.dts
+@@ -0,0 +1,56 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
++/*
++ * Copyright (C) 2023 Marek Vasut <marex@denx.de>
++ */
++/dts-v1/;
++/plugin/;
++
++#include <dt-bindings/clock/imx8mp-clock.h>
++#include <dt-bindings/gpio/gpio.h>
++
++/* This DTO requires HI00106 SoM variant. */
++
++&{/} {
++	led {
++		led-0 {
++			/* LED0 GPIO conflicts with #SDIO_RST GPIO-D */
++			status = "disabled";
++		};
++	};
++};
++
++&uart3 {
++	assigned-clocks = <&clk IMX8MP_CLK_UART3>;
++	assigned-clock-parents = <&clk IMX8MP_SYS_PLL1_80M>;
++	assigned-clock-rates = <80000000>;
++
++	bluetooth {
++		compatible = "cypress,cyw4373a0-bt";
++		max-speed = <4000000>;
++	};
++};
++
++/* SD slot */
++&usdhc2 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_usdhc2>;
++	cap-power-off-card;
++       	cd-gpios;	/* cd-gpios property cannot be deleted using DTO */
++	keep-power-in-suspend;
++	non-removable;
++	vmmc-supply = <&buck4>;
++
++	#address-cells = <1>;
++	#size-cells = <0>;
++
++	bcrmf@1 {       /* muRata 2AE */
++		reg = <1>;
++		compatible = "cypress,cyw4373-fmac", "brcm,bcm4329-fmac";
++		/*
++		 * The "host-wake" interrupt output is by default not
++		 * connected to the SoC, but can be connected on to
++		 * SoC pin on the carrier board.
++		 */
++		reset-gpios = <&gpio4 27 GPIO_ACTIVE_LOW>; /* GPIO D */
++	};
++};
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-overlay-nxp-spf-29678-c1-ov5640-x29.dts b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-overlay-nxp-spf-29678-c1-ov5640-x29.dts
+new file mode 100644
+index 0000000000000..0907c42e09018
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-overlay-nxp-spf-29678-c1-ov5640-x29.dts
+@@ -0,0 +1,25 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
++/*
++ * Copyright (C) 2023 Marek Vasut <marex@denx.de>
++ */
++/dts-v1/;
++/plugin/;
++
++#include "imx8mp-dhcom-pdk3-overlay-nxp-spf-29678-c1-ov5640.dtsi"
++
++&mipi_csi_1 {
++	status = "okay";
++
++	ports {
++		#address-cells = <1>;
++		#size-cells = <0>;
++
++		port@0 {
++			mipi_csi0_ep: endpoint {
++				remote-endpoint = <&ov5640_to_mipi_csi2>;
++				clock-lanes = <0>;
++				data-lanes = <1 2>;
++			};
++		};
++	};
++};
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-overlay-nxp-spf-29678-c1-ov5640-x31.dts b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-overlay-nxp-spf-29678-c1-ov5640-x31.dts
+new file mode 100644
+index 0000000000000..f4609131768b3
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-overlay-nxp-spf-29678-c1-ov5640-x31.dts
+@@ -0,0 +1,25 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
++/*
++ * Copyright (C) 2023 Marek Vasut <marex@denx.de>
++ */
++/dts-v1/;
++/plugin/;
++
++#include "imx8mp-dhcom-pdk3-overlay-nxp-spf-29678-c1-ov5640.dtsi"
++
++&mipi_csi_0 {
++	status = "okay";
++
++	ports {
++		#address-cells = <1>;
++		#size-cells = <0>;
++
++		port@0 {
++			mipi_csi0_ep: endpoint {
++				remote-endpoint = <&ov5640_to_mipi_csi2>;
++				clock-lanes = <0>;
++				data-lanes = <1 2>;
++			};
++		};
++	};
++};
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-overlay-nxp-spf-29678-c1-ov5640.dtsi b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-overlay-nxp-spf-29678-c1-ov5640.dtsi
+new file mode 100644
+index 0000000000000..5d73373f58caf
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-overlay-nxp-spf-29678-c1-ov5640.dtsi
+@@ -0,0 +1,37 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
++/*
++ * Copyright (C) 2023 Marek Vasut <marex@denx.de>
++ */
++
++#include <dt-bindings/clock/imx8mp-clock.h>
++#include <dt-bindings/gpio/gpio.h>
++
++&i2cmuxed0 {
++	#address-cells = <1>;
++	#size-cells = <0>;
++
++	ov5640: camera@3c {
++		compatible = "ovti,ov5640";
++		reg = <0x3c>;
++		clocks = <&clk IMX8MP_CLK_CLKOUT1>;
++		clock-names = "xclk";
++		assigned-clocks = <&clk IMX8MP_CLK_CLKOUT1_SEL>,
++				  <&clk IMX8MP_CLK_CLKOUT1>;
++		assigned-clock-parents = <&clk IMX8MP_CLK_24M>;
++		assigned-clock-rates = <24000000>, <24000000>;
++		powerdown-gpios = <&gpio2 11 GPIO_ACTIVE_HIGH>;
++		reset-gpios = <&gpio1 6 GPIO_ACTIVE_LOW>;
++
++		port {
++			ov5640_to_mipi_csi2: endpoint {
++				remote-endpoint = <&mipi_csi0_ep>;
++				clock-lanes = <0>;
++				data-lanes = <1 2>;
++			};
++		};
++	};
++};
++
++&isi_0 {
++	status = "okay";
++};
+-- 
+2.39.1
+

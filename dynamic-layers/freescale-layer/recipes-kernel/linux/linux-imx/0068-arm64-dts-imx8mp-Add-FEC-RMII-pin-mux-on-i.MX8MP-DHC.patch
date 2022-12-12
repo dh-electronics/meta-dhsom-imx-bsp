@@ -1,0 +1,95 @@
+From 5d32f5a82a4023a9f3f748d21cc5f6634e6f43da Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Sat, 11 Feb 2023 22:02:31 +0100
+Subject: [PATCH 68/73] arm64: dts: imx8mp: Add FEC RMII pin mux on i.MX8MP
+ DHCOM
+
+The i.MX8MP DHCOM SoM may come with either external RGMII PHY or
+LAN8740Ai RMII PHY on the SoM attached to FEC MAC. Add pin mux
+settings for both options, so that DT overlay can override these
+settings on SoM variant with the LAN8740Ai PHY.
+
+Upstream-Status: Submitted [https://patchwork.kernel.org/project/linux-arm-kernel/patch/20230217192647.61733-5-marex@denx.de/]
+Signed-off-by: Marek Vasut <marex@denx.de>
+---
+Cc: Fabio Estevam <festevam@gmail.com>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc: Marek Vasut <marex@denx.de>
+Cc: NXP Linux Team <linux-imx@nxp.com>
+Cc: Pengutronix Kernel Team <kernel@pengutronix.de>
+Cc: Rob Herring <robh+dt@kernel.org>
+Cc: Sascha Hauer <s.hauer@pengutronix.de>
+Cc: Shawn Guo <shawnguo@kernel.org>
+Cc: devicetree@vger.kernel.org
+Cc: kernel@dh-electronics.com
+Cc: linux-arm-kernel@lists.infradead.org
+---
+ .../boot/dts/freescale/imx8mp-dhcom-pdk2.dts  |  2 ++
+ .../boot/dts/freescale/imx8mp-dhcom-som.dtsi  | 22 ++++++++++++++++---
+ 2 files changed, 21 insertions(+), 3 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk2.dts b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk2.dts
+index 029c322d26c6f..4026c025e5339 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk2.dts
++++ b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk2.dts
+@@ -148,7 +148,9 @@ sgtl5000: codec@a {
+ };
+ 
+ &fec {	/* Second ethernet */
++	pinctrl-0 = <&pinctrl_fec_rgmii>;
+ 	phy-handle = <&ethphypdk>;
++	phy-mode = "rgmii";
+ 
+ 	mdio {
+ 		ethphypdk: ethernet-phy@7 { /* KSZ 9021 */
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-som.dtsi b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-som.dtsi
+index f4278a92b4acb..4c530bd13a3dd 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-som.dtsi
++++ b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-som.dtsi
+@@ -130,9 +130,9 @@ ethphy0g: ethernet-phy@5 { /* Micrel KSZ9131RNXI */
+ 
+ &fec {	/* Second ethernet */
+ 	pinctrl-names = "default";
+-	pinctrl-0 = <&pinctrl_fec>;
++	pinctrl-0 = <&pinctrl_fec_rmii>;
+ 	phy-handle = <&ethphy1f>;
+-	phy-mode = "rgmii";
++	phy-mode = "rmii";
+ 	fsl,magic-packet;
+ 	status = "okay";
+ 
+@@ -781,7 +781,7 @@ MX8MP_IOMUXC_SAI1_RXD1__GPIO4_IO03		0x11
+ 		>;
+ 	};
+ 
+-	pinctrl_fec: dhcom-fec-grp {
++	pinctrl_fec_rgmii: dhcom-fec-rgmii-grp {	/* RGMII */
+ 		fsl,pins = <
+ 			MX8MP_IOMUXC_SAI1_MCLK__ENET1_TX_CLK		0x1f
+ 			MX8MP_IOMUXC_SAI1_RXD2__ENET1_MDC		0x3
+@@ -802,6 +802,22 @@ MX8MP_IOMUXC_SAI1_TXD6__ENET1_RX_ER		0x1f
+ 		>;
+ 	};
+ 
++	pinctrl_fec_rmii: dhcom-fec-rmii-grp {	/* RMII */
++		fsl,pins = <
++			MX8MP_IOMUXC_SAI1_RXD2__ENET1_MDC		0x3
++			MX8MP_IOMUXC_SAI1_RXD3__ENET1_MDIO		0x3
++			MX8MP_IOMUXC_SAI1_RXD4__ENET1_RGMII_RD0		0x91
++			MX8MP_IOMUXC_SAI1_RXD5__ENET1_RGMII_RD1		0x91
++			MX8MP_IOMUXC_SAI1_TXFS__ENET1_RGMII_RX_CTL	0x91
++			MX8MP_IOMUXC_SAI1_TXD6__ENET1_RX_ER		0x91
++			MX8MP_IOMUXC_SAI1_TXD0__ENET1_RGMII_TD0		0x1f
++			MX8MP_IOMUXC_SAI1_TXD1__ENET1_RGMII_TD1		0x1f
++			MX8MP_IOMUXC_SAI1_TXD4__ENET1_RGMII_TX_CTL	0x1f
++			/* Clock */
++			MX8MP_IOMUXC_SAI1_MCLK__ENET1_TX_CLK		0x4000001f
++		>;
++	};
++
+ 	pinctrl_flexcan1: dhcom-flexcan1-grp {
+ 		fsl,pins = <
+ 			MX8MP_IOMUXC_SPDIF_RX__CAN1_RX			0x154
+-- 
+2.39.1
+

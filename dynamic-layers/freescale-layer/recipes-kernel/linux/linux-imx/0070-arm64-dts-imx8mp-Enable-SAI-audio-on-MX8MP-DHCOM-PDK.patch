@@ -1,0 +1,119 @@
+From d12abffd9313c65a78b1ce880613853981fd30ec Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Sat, 18 Feb 2023 20:30:01 +0100
+Subject: [PATCH 70/73] arm64: dts: imx8mp: Enable SAI audio on MX8MP DHCOM
+ PDK3
+
+Add SAI I2S and audio bindings on MX8MP DHCOM PDK3.
+
+Upstream-Status: Pending [Blocked by SAI upstream progress]
+Signed-off-by: Marek Vasut <marex@denx.de>
+---
+Cc: Fabio Estevam <festevam@denx.de>
+Cc: Peng Fan <peng.fan@nxp.com>
+Cc: Shawn Guo <shawnguo@kernel.org>
+Cc: NXP Linux Team <linux-imx@nxp.com>
+To: linux-arm-kernel@lists.infradead.org
+---
+ .../boot/dts/freescale/imx8mp-dhcom-pdk3.dts  | 46 +++++++++++++++++++
+ .../boot/dts/freescale/imx8mp-dhcom-som.dtsi  |  8 ++++
+ 2 files changed, 54 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3.dts b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3.dts
+index 9ab6753a35412..d2fa7a9d72961 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3.dts
++++ b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3.dts
+@@ -153,6 +153,24 @@ reg_avdd: regulator-avdd {	/* AUDIO_VDD */
+ 		regulator-max-microvolt = <3300000>;
+ 		regulator-name = "AUDIO_VDD";
+ 	};
++
++	sound {
++		compatible = "simple-audio-card";
++		simple-audio-card,name = "SGTL5000-Card";
++		simple-audio-card,format = "i2s";
++		simple-audio-card,bitclock-master = <&codec_dai>;
++		simple-audio-card,frame-master = <&codec_dai>;
++		simple-audio-card,widgets = "Headphone", "Headphone Jack";
++		simple-audio-card,routing = "Headphone Jack", "HP_OUT";
++
++		cpu_dai: simple-audio-card,cpu {
++			sound-dai = <&sai3>;
++		};
++
++		codec_dai: simple-audio-card,codec {
++			sound-dai = <&sgtl5000>;
++		};
++	};
+ };
+ 
+ &i2c5 {
+@@ -167,6 +185,15 @@ i2cmuxed0: i2c@0 {
+ 			#size-cells = <0>;
+ 			reg = <0>;
+ 
++			sgtl5000: codec@a {
++				compatible = "fsl,sgtl5000";
++				reg = <0x0a>;
++				#sound-dai-cells = <0>;
++				clocks = <&clk_ext_audio_codec>;
++				VDDA-supply = <&reg_avdd>;
++				VDDIO-supply = <&reg_vdd_3p3v_awo>;
++			};
++
+ 			typec@3d {
+ 				compatible = "nxp,ptn5150";
+ 				reg = <0x3d>;
+@@ -271,6 +298,16 @@ &pcie {
+ 	status = "okay";
+ };
+ 
++&sai3 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_sai3>;
++	assigned-clocks = <&clk IMX8MP_CLK_SAI3>;
++	assigned-clock-parents = <&clk IMX8MP_AUDIO_PLL1_OUT>;
++	assigned-clock-rates = <12288000>;
++	fsl,sai-mclk-direction-output;
++	status = "okay";
++};
++
+ &usb_dwc3_0 {
+ 	usb-role-switch;
+ 
+@@ -318,4 +355,13 @@ pinctrl_ptn5150: ptn5150grp {
+ 			MX8MP_IOMUXC_SAI2_TXC__GPIO4_IO25		0x40000000
+ 		>;
+ 	};
++
++	pinctrl_sai3: sai3grp {
++		fsl,pins = <
++			MX8MP_IOMUXC_SAI3_TXFS__AUDIOMIX_SAI3_TX_SYNC	0xd6
++			MX8MP_IOMUXC_SAI3_TXC__AUDIOMIX_SAI3_TX_BCLK	0xd6
++			MX8MP_IOMUXC_SAI3_RXD__AUDIOMIX_SAI3_RX_DATA00	0xd6
++			MX8MP_IOMUXC_SAI3_TXD__AUDIOMIX_SAI3_TX_DATA00	0xd6
++		>;
++	};
+ };
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-som.dtsi b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-som.dtsi
+index 4c530bd13a3dd..db43345903131 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-som.dtsi
++++ b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-som.dtsi
+@@ -50,6 +50,14 @@ reg_usdhc2_vmmc: regulator-usdhc2-vmmc {
+ 		startup-delay-us = <100>;
+ 		vin-supply = <&buck4>;
+ 	};
++
++	reg_vdd_3p3v_awo: regulator-vdd-3p3v-awo {	/* VDD_3V3_AWO */
++		compatible = "regulator-fixed";
++		regulator-always-on;
++		regulator-min-microvolt = <3300000>;
++		regulator-max-microvolt = <3300000>;
++		regulator-name = "3P3V";
++	};
+ };
+ 
+ &A53_0 {
+-- 
+2.39.1
+

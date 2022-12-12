@@ -1,0 +1,103 @@
+From 292e646259e24a0da149daf41e652cd8fb60d44c Mon Sep 17 00:00:00 2001
+From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Date: Tue, 18 Jan 2022 01:16:14 +0100
+Subject: [PATCH 71/85] media: v4l2-subdev: Add v4l2_subdev_s_stream_helper()
+ function
+
+The v4l2_subdev_s_stream_helper() helper can be used by subdevs that
+implement the stream-aware .enable_streams() and .disable_streams()
+operations to implement .s_stream(). This is limited to subdevs that
+have a single source pad.
+
+Upstream-Status: Backport [34a315ce0e1c03120dd2438875af1a897c039ea0]
+Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Reviewed-by: Jacopo Mondi <jacopo@jmondi.org>
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+---
+ drivers/media/v4l2-core/v4l2-subdev.c | 40 +++++++++++++++++++++++++++
+ include/media/v4l2-subdev.h           | 17 ++++++++++++
+ 2 files changed, 57 insertions(+)
+
+diff --git a/drivers/media/v4l2-core/v4l2-subdev.c b/drivers/media/v4l2-core/v4l2-subdev.c
+index c94fa2c2cbdaa..1bebcda2bd20c 100644
+--- a/drivers/media/v4l2-core/v4l2-subdev.c
++++ b/drivers/media/v4l2-core/v4l2-subdev.c
+@@ -1967,6 +1967,46 @@ int v4l2_subdev_disable_streams(struct v4l2_subdev *sd, u32 pad,
+ }
+ EXPORT_SYMBOL_GPL(v4l2_subdev_disable_streams);
+ 
++int v4l2_subdev_s_stream_helper(struct v4l2_subdev *sd, int enable)
++{
++	struct v4l2_subdev_state *state;
++	struct v4l2_subdev_route *route;
++	struct media_pad *pad;
++	u64 source_mask = 0;
++	int pad_index = -1;
++
++	/*
++	 * Find the source pad. This helper is meant for subdevs that have a
++	 * single source pad, so failures shouldn't happen, but catch them
++	 * loudly nonetheless as they indicate a driver bug.
++	 */
++	media_entity_for_each_pad(&sd->entity, pad) {
++		if (pad->flags & MEDIA_PAD_FL_SOURCE) {
++			pad_index = pad->index;
++			break;
++		}
++	}
++
++	if (WARN_ON(pad_index == -1))
++		return -EINVAL;
++
++	/*
++	 * As there's a single source pad, just collect all the source streams.
++	 */
++	state = v4l2_subdev_lock_and_get_active_state(sd);
++
++	for_each_active_route(&state->routing, route)
++		source_mask |= BIT_ULL(route->source_stream);
++
++	v4l2_subdev_unlock_state(state);
++
++	if (enable)
++		return v4l2_subdev_enable_streams(sd, pad_index, source_mask);
++	else
++		return v4l2_subdev_disable_streams(sd, pad_index, source_mask);
++}
++EXPORT_SYMBOL_GPL(v4l2_subdev_s_stream_helper);
++
+ #endif /* CONFIG_VIDEO_V4L2_SUBDEV_API */
+ 
+ #endif /* CONFIG_MEDIA_CONTROLLER */
+diff --git a/include/media/v4l2-subdev.h b/include/media/v4l2-subdev.h
+index 48a7adb9fe89b..99c380dc4a2c6 100644
+--- a/include/media/v4l2-subdev.h
++++ b/include/media/v4l2-subdev.h
+@@ -1728,6 +1728,23 @@ int v4l2_subdev_enable_streams(struct v4l2_subdev *sd, u32 pad,
+ int v4l2_subdev_disable_streams(struct v4l2_subdev *sd, u32 pad,
+ 				u64 streams_mask);
+ 
++/**
++ * v4l2_subdev_s_stream_helper() - Helper to implement the subdev s_stream
++ *	operation using enable_streams and disable_streams
++ * @sd: The subdevice
++ * @enable: Enable or disable streaming
++ *
++ * Subdevice drivers that implement the streams-aware
++ * &v4l2_subdev_pad_ops.enable_streams and &v4l2_subdev_pad_ops.disable_streams
++ * operations can use this helper to implement the legacy
++ * &v4l2_subdev_video_ops.s_stream operation.
++ *
++ * This helper can only be used by subdevs that have a single source pad.
++ *
++ * Return: 0 on success, or a negative error code otherwise.
++ */
++int v4l2_subdev_s_stream_helper(struct v4l2_subdev *sd, int enable);
++
+ #endif /* CONFIG_VIDEO_V4L2_SUBDEV_API */
+ 
+ #endif /* CONFIG_MEDIA_CONTROLLER */
+-- 
+2.39.1
+

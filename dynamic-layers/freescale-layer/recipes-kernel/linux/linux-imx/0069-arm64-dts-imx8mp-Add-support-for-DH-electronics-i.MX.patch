@@ -1,0 +1,377 @@
+From b17c1d4a9fe33677b49abf7f47be13e7c0e5e660 Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Mon, 12 Dec 2022 03:00:51 +0100
+Subject: [PATCH 69/73] arm64: dts: imx8mp: Add support for DH electronics
+ i.MX8M Plus DHCOM and PDK3
+
+Add support for DH electronics i.MX8M Plus DHCOM SoM on PDK3 carrier board.
+Currently supported are serial console, EQoS and FEC ethernets, eMMC, SD,
+SPI NOR, CAN, M.2 E-Key or M.2 M-Key PCIe, USB .
+
+Upstream-Status: Submitted [https://patchwork.kernel.org/project/linux-arm-kernel/patch/20230302231626.159984-2-marex@denx.de/]
+Signed-off-by: Marek Vasut <marex@denx.de>
+---
+Cc: Fabio Estevam <festevam@gmail.com>
+Cc: Frieder Schrempf <frieder.schrempf@kontron.de>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc: Li Yang <leoyang.li@nxp.com>
+Cc: Marcel Ziswiler <marcel.ziswiler@toradex.com>
+Cc: Marek Vasut <marex@denx.de>
+Cc: Matthias Schiffer <matthias.schiffer@tq-group.com>
+Cc: Max Krummenacher <max.krummenacher@toradex.com>
+Cc: NXP Linux Team <linux-imx@nxp.com>
+Cc: Pengutronix Kernel Team <kernel@pengutronix.de>
+Cc: Rob Herring <robh+dt@kernel.org>
+Cc: Sascha Hauer <s.hauer@pengutronix.de>
+Cc: Shawn Guo <shawnguo@kernel.org>
+Cc: Stefan Wahren <stefan.wahren@i2se.com>
+Cc: devicetree@vger.kernel.org
+Cc: linux-arm-kernel@lists.infradead.org
+---
+ arch/arm64/boot/dts/freescale/Makefile        |   1 +
+ .../boot/dts/freescale/imx8mp-dhcom-pdk3.dts  | 321 ++++++++++++++++++
+ 2 files changed, 322 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3.dts
+
+diff --git a/arch/arm64/boot/dts/freescale/Makefile b/arch/arm64/boot/dts/freescale/Makefile
+index 8ea5997b35209..593ea21d400d7 100644
+--- a/arch/arm64/boot/dts/freescale/Makefile
++++ b/arch/arm64/boot/dts/freescale/Makefile
+@@ -107,6 +107,7 @@ dtb-$(CONFIG_ARCH_MXC) += imx8mp-dhcom-pdk2.dtb \
+ 			  imx8mp-dhcom-pdk2-overlay-531-100-x21.dtbo \
+ 			  imx8mp-dhcom-pdk2-overlay-531-100-x22.dtbo \
+ 			  imx8mp-dhcom-pdk2-overlay-560-300-x12.dtbo
++dtb-$(CONFIG_ARCH_MXC) += imx8mp-dhcom-pdk3.dtb
+ dtb-$(CONFIG_ARCH_MXC) += imx8mp-evk.dtb imx8mp-evk-rm67191.dtb imx8mp-evk-it6263-lvds-dual-channel.dtb \
+ 			  imx8mp-evk-pcie-ep.dtb  imx8mp-evk-rpmsg.dtb imx8mp-evk-ecspi-slave.dtb \
+ 			  imx8mp-evk-jdi-wuxga-lvds-panel.dtb imx8mp-evk-flexcan2.dtb \
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3.dts b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3.dts
+new file mode 100644
+index 0000000000000..9ab6753a35412
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3.dts
+@@ -0,0 +1,321 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Copyright (C) 2023 Marek Vasut <marex@denx.de>
++ *
++ * DHCOM iMX8MP variant:
++ * DHCM-iMX8ML8-C160-R409-F1638-SPI16-GE-CAN2-SD-RTC-WBTA-ADC-T-RGB-CSI2-HS-I-01D2
++ * DHCOM PCB number: 660-100 or newer
++ * PDK3 PCB number: 669-100 or newer
++ */
++
++/dts-v1/;
++
++#include <dt-bindings/leds/common.h>
++#include <dt-bindings/phy/phy-imx8-pcie.h>
++#include "imx8mp-dhcom-som.dtsi"
++
++/ {
++	model = "DH electronics i.MX8M Plus DHCOM Premium Developer Kit (3)";
++	compatible = "dh,imx8mp-dhcom-pdk3", "dh,imx8mp-dhcom-som",
++		     "fsl,imx8mp";
++
++	chosen {
++		stdout-path = &uart1;
++	};
++
++	clk_ext_audio_codec: clock-codec {
++		#clock-cells = <0>;
++		clock-frequency = <24000000>;
++		compatible = "fixed-clock";
++	};
++
++	clk_xtal25: clk-xtal25 {
++		compatible = "fixed-clock";
++		#clock-cells = <0>;
++		clock-frequency = <25000000>;
++	};
++
++	connector {
++		compatible = "usb-c-connector";
++		label = "USB-C";
++		data-role = "dual";
++
++		ports {
++			#address-cells = <1>;
++			#size-cells = <0>;
++
++			port@0 {
++				reg = <0>;
++
++				usb_c_0_hs_ep: endpoint {
++					remote-endpoint = <&dwc3_0_hs_ep>;
++				};
++			};
++
++			port@1 {
++				reg = <1>;
++
++				usb_c_0_ss_ep: endpoint {
++					remote-endpoint = <&ptn5150_in_ep>;
++				};
++			};
++		};
++	};
++
++	gpio-keys {
++		compatible = "gpio-keys";
++
++		button-0 {
++			gpios = <&gpio1 9 GPIO_ACTIVE_LOW>; /* GPIO A */
++			label = "TA1-GPIO-A";
++			linux,code = <KEY_A>;
++			pinctrl-0 = <&pinctrl_dhcom_a>;
++			pinctrl-names = "default";
++			wakeup-source;
++		};
++
++		button-1 {
++			gpios = <&gpio1 8 GPIO_ACTIVE_LOW>; /* GPIO B */
++			label = "TA2-GPIO-B";
++			linux,code = <KEY_B>;
++			pinctrl-0 = <&pinctrl_dhcom_b>;
++			pinctrl-names = "default";
++			wakeup-source;
++		};
++
++		button-2 {
++			gpios = <&gpio5 2 GPIO_ACTIVE_LOW>; /* GPIO C */
++			label = "TA3-GPIO-C";
++			linux,code = <KEY_C>;
++			pinctrl-0 = <&pinctrl_dhcom_c>;
++			pinctrl-names = "default";
++			wakeup-source;
++		};
++
++		button-3 {
++			gpios = <&gpio5 22 GPIO_ACTIVE_LOW>; /* GPIO E */
++			label = "TA4-GPIO-E";
++			linux,code = <KEY_E>;
++			pinctrl-0 = <&pinctrl_dhcom_e>;
++			pinctrl-names = "default";
++			wakeup-source;
++		};
++	};
++
++	led {
++		compatible = "gpio-leds";
++
++		led-0 {
++			color = <LED_COLOR_ID_GREEN>;
++			default-state = "off";
++			function = LED_FUNCTION_INDICATOR;
++			function-enumerator = <0>;
++			gpios = <&gpio4 27 GPIO_ACTIVE_HIGH>; /* GPIO D */
++			pinctrl-0 = <&pinctrl_dhcom_d>;
++			pinctrl-names = "default";
++		};
++
++		led-1 {
++			color = <LED_COLOR_ID_GREEN>;
++			default-state = "off";
++			function = LED_FUNCTION_INDICATOR;
++			function-enumerator = <1>;
++			gpios = <&gpio5 23 GPIO_ACTIVE_HIGH>; /* GPIO F */
++			pinctrl-0 = <&pinctrl_dhcom_f>;
++			pinctrl-names = "default";
++		};
++
++		led-2 {
++			color = <LED_COLOR_ID_GREEN>;
++			default-state = "off";
++			function = LED_FUNCTION_INDICATOR;
++			function-enumerator = <2>;
++			gpios = <&gpio1 0 GPIO_ACTIVE_HIGH>; /* GPIO G */
++			pinctrl-0 = <&pinctrl_dhcom_g>;
++			pinctrl-names = "default";
++		};
++
++		led-3 {
++			color = <LED_COLOR_ID_GREEN>;
++			default-state = "off";
++			function = LED_FUNCTION_INDICATOR;
++			function-enumerator = <3>;
++			gpios = <&gpio1 5 GPIO_ACTIVE_HIGH>; /* GPIO I */
++			pinctrl-0 = <&pinctrl_dhcom_i>;
++			pinctrl-names = "default";
++		};
++	};
++
++	reg_avdd: regulator-avdd {	/* AUDIO_VDD */
++		compatible = "regulator-fixed";
++		regulator-always-on;
++		regulator-min-microvolt = <3300000>;
++		regulator-max-microvolt = <3300000>;
++		regulator-name = "AUDIO_VDD";
++	};
++};
++
++&i2c5 {
++	i2cmux@70 {
++		compatible = "nxp,pca9540";
++		reg = <0x70>;
++		#address-cells = <1>;
++		#size-cells = <0>;
++
++		i2cmuxed0: i2c@0 {
++			#address-cells = <1>;
++			#size-cells = <0>;
++			reg = <0>;
++
++			typec@3d {
++				compatible = "nxp,ptn5150";
++				reg = <0x3d>;
++				interrupt-parent = <&gpio4>;
++				interrupts = <25 IRQ_TYPE_EDGE_FALLING>;
++				pinctrl-names = "default";
++				pinctrl-0 = <&pinctrl_ptn5150>;
++				status = "okay";
++
++				ports {
++					#address-cells = <1>;
++					#size-cells = <0>;
++
++					port@0 {
++						reg = <0>;
++
++						ptn5150_in_ep: endpoint {
++							remote-endpoint = <&usb_c_0_ss_ep>;
++						};
++					};
++
++					port@1 {
++						reg = <1>;
++
++						ptn5150_out_ep: endpoint {
++							remote-endpoint = <&dwc3_0_ss_ep>;
++						};
++					};
++				};
++			};
++
++			power-sensor@40 {
++			    compatible = "ti,ina238";
++			    reg = <0x40>;
++			    shunt-resistor = <20000>;	/* 0.02 R */
++			    ti,shunt-gain = <1>;	/* Drop cca. 40mV */
++			};
++
++			eeprom_board: eeprom@54 {
++				compatible = "atmel,24c04";
++				pagesize = <16>;
++				reg = <0x54>;
++			};
++
++			pcieclk: clk@6b {
++				compatible = "skyworks,si52144";
++				reg = <0x6b>;
++				clocks = <&clk_xtal25>;
++				#clock-cells = <1>;
++			};
++		};
++
++		i2cmuxed1: i2c@1 {	/* HDMI DDC I2C */
++			#address-cells = <1>;
++			#size-cells = <0>;
++			reg = <1>;
++		};
++	};
++};
++
++&ethphy0g {
++	reg = <7>;
++};
++
++&fec {	/* Second ethernet */
++	pinctrl-0 = <&pinctrl_fec_rgmii>;
++	phy-handle = <&ethphypdk>;
++	phy-mode = "rgmii-id";
++
++	mdio {
++		ethphypdk: ethernet-phy@7 { /* Micrel KSZ9131RNXI */
++			compatible = "ethernet-phy-id0022.1642",
++				     "ethernet-phy-ieee802.3-c22";
++			interrupt-parent = <&gpio4>;
++			interrupts = <3 IRQ_TYPE_LEVEL_LOW>;
++			pinctrl-0 = <&pinctrl_ethphy1>;
++			pinctrl-names = "default";
++			reg = <7>;
++			reset-assert-us = <1000>;
++			/* RESET_N signal rise time ~100ms */
++			reset-deassert-us = <120000>;
++			reset-gpios = <&gpio4 2 GPIO_ACTIVE_LOW>;
++			status = "okay";
++		};
++	};
++};
++
++&flexcan1 {
++	status = "okay";
++};
++
++&pcie_phy {
++	clocks = <&pcieclk 1>;
++	clock-names = "ref";
++	fsl,refclk-pad-mode = <IMX8_PCIE_REFCLK_PAD_INPUT>;
++	status = "okay";
++};
++
++&pcie {
++	fsl,max-link-speed = <3>;
++	reset-gpio = <&gpio1 6 GPIO_ACTIVE_LOW>;
++	status = "okay";
++};
++
++&usb_dwc3_0 {
++	usb-role-switch;
++
++	port {
++		#address-cells = <1>;
++		#size-cells = <0>;
++
++		dwc3_0_hs_ep: endpoint@0 {
++			reg = <0>;
++			remote-endpoint = <&usb_c_0_hs_ep>;
++		};
++
++		dwc3_0_ss_ep: endpoint@1 {
++			reg = <1>;
++			remote-endpoint = <&ptn5150_out_ep>;
++		};
++	};
++};
++
++&usb3_1 {
++	fsl,disable-port-power-control;
++	fsl,permanently-attached;
++};
++
++&usb_dwc3_1 {
++	/* This port has USB5734 Hub connected to it, PWR/OC pins are unused */
++	/delete-property/ pinctrl-names;
++	/delete-property/ pinctrl-0;
++};
++
++&iomuxc {
++	/*
++	 * GPIO_A,B,C,E are connected to buttons.
++	 * GPIO_D,F,G,I are connected to LEDs.
++	 * GPIO_H is connected to USB Hub RESET_N.
++	 * GPIO_M is connected to CLKOUT2.
++	 */
++	pinctrl-0 = <&pinctrl_hog_base
++		     &pinctrl_dhcom_h &pinctrl_dhcom_j &pinctrl_dhcom_k
++		     &pinctrl_dhcom_l
++		     &pinctrl_dhcom_int>;
++
++	pinctrl_ptn5150: ptn5150grp {
++		fsl,pins = <
++			MX8MP_IOMUXC_SAI2_TXC__GPIO4_IO25		0x40000000
++		>;
++	};
++};
+-- 
+2.39.1
+

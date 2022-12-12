@@ -1,0 +1,96 @@
+From 742c98d23cf15fea3fd25a0ad9baf5951d9a6981 Mon Sep 17 00:00:00 2001
+From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Date: Thu, 26 Jan 2023 02:10:01 +0100
+Subject: [PATCH 52/85] media: imx-mipi-csis: Implement .init_cfg() using
+ .set_fmt()
+
+The .set_fmt() handler is responsible for adjusting the requested format
+based on the device limitations. Implement .init_cfg() as a wrapper of
+.set_fmt(), to ensure that the initial configuration always matches the
+rules implemented in .set_fmt(), should they ever change.
+
+Upstream-Status: Backport [77645c6e3a1a3707e71732f6d5151c12e9110e37]
+Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Tested-by: Adam Ford <aford173@gmail.com> #imx8mn-beacon
+Acked-by: Rui Miguel Silva <rmfrfs@gmail.com>
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+---
+ drivers/media/platform/nxp/imx-mipi-csis.c | 48 ++++++++++------------
+ 1 file changed, 22 insertions(+), 26 deletions(-)
+
+diff --git a/drivers/media/platform/nxp/imx-mipi-csis.c b/drivers/media/platform/nxp/imx-mipi-csis.c
+index 9e424cb1c4b10..e99633565463e 100644
+--- a/drivers/media/platform/nxp/imx-mipi-csis.c
++++ b/drivers/media/platform/nxp/imx-mipi-csis.c
+@@ -989,32 +989,6 @@ static int mipi_csis_s_stream(struct v4l2_subdev *sd, int enable)
+ 	return ret;
+ }
+ 
+-static int mipi_csis_init_cfg(struct v4l2_subdev *sd,
+-			      struct v4l2_subdev_state *sd_state)
+-{
+-	struct v4l2_mbus_framefmt *fmt_sink;
+-	struct v4l2_mbus_framefmt *fmt_source;
+-
+-	fmt_sink = v4l2_subdev_get_pad_format(sd, sd_state, CSIS_PAD_SINK);
+-	fmt_source = v4l2_subdev_get_pad_format(sd, sd_state, CSIS_PAD_SOURCE);
+-
+-	fmt_sink->code = MEDIA_BUS_FMT_UYVY8_1X16;
+-	fmt_sink->width = MIPI_CSIS_DEF_PIX_WIDTH;
+-	fmt_sink->height = MIPI_CSIS_DEF_PIX_HEIGHT;
+-	fmt_sink->field = V4L2_FIELD_NONE;
+-
+-	fmt_sink->colorspace = V4L2_COLORSPACE_SMPTE170M;
+-	fmt_sink->xfer_func = V4L2_MAP_XFER_FUNC_DEFAULT(fmt_sink->colorspace);
+-	fmt_sink->ycbcr_enc = V4L2_MAP_YCBCR_ENC_DEFAULT(fmt_sink->colorspace);
+-	fmt_sink->quantization =
+-		V4L2_MAP_QUANTIZATION_DEFAULT(false, fmt_sink->colorspace,
+-					      fmt_sink->ycbcr_enc);
+-
+-	*fmt_source = *fmt_sink;
+-
+-	return 0;
+-}
+-
+ static int mipi_csis_enum_mbus_code(struct v4l2_subdev *sd,
+ 				    struct v4l2_subdev_state *sd_state,
+ 				    struct v4l2_subdev_mbus_code_enum *code)
+@@ -1101,6 +1075,7 @@ static int mipi_csis_set_fmt(struct v4l2_subdev *sd,
+ 	fmt->code = csis_fmt->code;
+ 	fmt->width = sdformat->format.width;
+ 	fmt->height = sdformat->format.height;
++	fmt->field = V4L2_FIELD_NONE;
+ 	fmt->colorspace = sdformat->format.colorspace;
+ 	fmt->quantization = sdformat->format.quantization;
+ 	fmt->xfer_func = sdformat->format.xfer_func;
+@@ -1147,6 +1122,27 @@ static int mipi_csis_get_frame_desc(struct v4l2_subdev *sd, unsigned int pad,
+ 	return 0;
+ }
+ 
++static int mipi_csis_init_cfg(struct v4l2_subdev *sd,
++			      struct v4l2_subdev_state *sd_state)
++{
++	struct v4l2_subdev_format fmt = {
++		.pad = CSIS_PAD_SINK,
++	};
++
++	fmt.format.code = mipi_csis_formats[0].code;
++	fmt.format.width = MIPI_CSIS_DEF_PIX_WIDTH;
++	fmt.format.height = MIPI_CSIS_DEF_PIX_HEIGHT;
++
++	fmt.format.colorspace = V4L2_COLORSPACE_SMPTE170M;
++	fmt.format.xfer_func = V4L2_MAP_XFER_FUNC_DEFAULT(fmt.format.colorspace);
++	fmt.format.ycbcr_enc = V4L2_MAP_YCBCR_ENC_DEFAULT(fmt.format.colorspace);
++	fmt.format.quantization =
++		V4L2_MAP_QUANTIZATION_DEFAULT(false, fmt.format.colorspace,
++					      fmt.format.ycbcr_enc);
++
++	return mipi_csis_set_fmt(sd, sd_state, &fmt);
++}
++
+ static int mipi_csis_log_status(struct v4l2_subdev *sd)
+ {
+ 	struct mipi_csis_device *csis = sd_to_mipi_csis_device(sd);
+-- 
+2.39.1
+

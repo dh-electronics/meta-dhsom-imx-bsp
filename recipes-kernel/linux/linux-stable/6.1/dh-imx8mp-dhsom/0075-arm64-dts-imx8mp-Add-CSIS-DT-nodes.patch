@@ -1,0 +1,87 @@
+From 30b92e9cd66f3ac7744317ea8c1da185199b2556 Mon Sep 17 00:00:00 2001
+From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Date: Wed, 10 Mar 2021 23:32:43 +0100
+Subject: [PATCH 75/85] arm64: dts: imx8mp: Add CSIS DT nodes
+
+Add DT nodes for the two CSI-2 receivers of the i.MX8MP.
+
+Upstream-Status: Pending [https://gitlab.com/ideasonboard/nxp/linux.git pinchartl/v6.2/dt/imx8mp c34c1fb6c02946fe596093e22e40f1af74d73418]
+Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+---
+ arch/arm64/boot/dts/freescale/imx8mp.dtsi | 60 +++++++++++++++++++++++
+ 1 file changed, 60 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp.dtsi b/arch/arm64/boot/dts/freescale/imx8mp.dtsi
+index a06f89d0c4c49..cf7bc8ce626c1 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mp.dtsi
++++ b/arch/arm64/boot/dts/freescale/imx8mp.dtsi
+@@ -1426,6 +1426,66 @@ ldb_lvds_ch1: endpoint {
+ 				};
+ 			};
+ 
++			mipi_csi_0: csi@32e40000 {
++				compatible = "fsl,imx8mp-mipi-csi2", "fsl,imx8mm-mipi-csi2";
++				reg = <0x32e40000 0x10000>;
++				interrupts = <GIC_SPI 17 IRQ_TYPE_LEVEL_HIGH>;
++				clock-frequency = <500000000>;
++				clocks = <&clk IMX8MP_CLK_MEDIA_APB_ROOT>,
++					 <&clk IMX8MP_CLK_MEDIA_CAM1_PIX_ROOT>,
++					 <&clk IMX8MP_CLK_MEDIA_MIPI_PHY1_REF_ROOT>,
++					 <&clk IMX8MP_CLK_MEDIA_AXI_ROOT>;
++				clock-names = "pclk", "wrap", "phy", "axi";
++				assigned-clocks = <&clk IMX8MP_CLK_MEDIA_CAM1_PIX>;
++				assigned-clock-parents = <&clk IMX8MP_SYS_PLL2_1000M>;
++				assigned-clock-rates = <500000000>;
++				power-domains = <&media_blk_ctrl IMX8MP_MEDIABLK_PD_MIPI_CSI2_1>;
++				status = "disabled";
++
++				ports {
++					#address-cells = <1>;
++					#size-cells = <0>;
++
++					port@0 {
++						reg = <0>;
++					};
++
++					port@1 {
++						reg = <1>;
++					};
++				};
++			};
++
++			mipi_csi_1: csi@32e50000 {
++				compatible = "fsl,imx8mp-mipi-csi2", "fsl,imx8mm-mipi-csi2";
++				reg = <0x32e50000 0x10000>;
++				interrupts = <GIC_SPI 80 IRQ_TYPE_LEVEL_HIGH>;
++				clock-frequency = <266000000>;
++				clocks = <&clk IMX8MP_CLK_MEDIA_APB_ROOT>,
++					 <&clk IMX8MP_CLK_MEDIA_CAM2_PIX_ROOT>,
++					 <&clk IMX8MP_CLK_MEDIA_MIPI_PHY1_REF_ROOT>,
++					 <&clk IMX8MP_CLK_MEDIA_AXI_ROOT>;
++				clock-names = "pclk", "wrap", "phy", "axi";
++				assigned-clocks = <&clk IMX8MP_CLK_MEDIA_CAM2_PIX>;
++				assigned-clock-parents = <&clk IMX8MP_SYS_PLL2_1000M>;
++				assigned-clock-rates = <266000000>;
++				power-domains = <&media_blk_ctrl IMX8MP_MEDIABLK_PD_MIPI_CSI2_2>;
++				status = "disabled";
++
++				ports {
++					#address-cells = <1>;
++					#size-cells = <0>;
++
++					port@0 {
++						reg = <0>;
++					};
++
++					port@1 {
++						reg = <1>;
++					};
++				};
++			};
++
+ 			pcie_phy: pcie-phy@32f00000 {
+ 				compatible = "fsl,imx8mp-pcie-phy";
+ 				reg = <0x32f00000 0x10000>;
+-- 
+2.39.1
+

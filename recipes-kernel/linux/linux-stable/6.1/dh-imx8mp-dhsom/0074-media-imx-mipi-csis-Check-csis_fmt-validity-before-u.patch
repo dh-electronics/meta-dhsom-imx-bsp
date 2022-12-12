@@ -1,0 +1,50 @@
+From 6f90fc97745ed0717921962bc9f18d74281a7781 Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Tue, 14 Feb 2023 23:15:54 +0100
+Subject: [PATCH 74/85] media: imx-mipi-csis: Check csis_fmt validity before
+ use
+
+The find_csis_format() may return NULL in case supported format is not
+found, check the return value of find_csis_format() before using the
+result to avoid NULL pointer dereference.
+
+Upstream-Status: Submitted [https://patchwork.linuxtv.org/project/linux-media/patch/20230216014401.225603-1-marex@denx.de/]
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Fixes: 11927d0fd0d0 ("media: imx-mipi-csis: Use V4L2 subdev active state")
+Signed-off-by: Marek Vasut <marex@denx.de>
+---
+Cc: Fabio Estevam <festevam@gmail.com>
+Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc: NXP Linux Team <linux-imx@nxp.com>
+Cc: Pengutronix Kernel Team <kernel@pengutronix.de>
+Cc: Philipp Zabel <p.zabel@pengutronix.de>
+Cc: Rui Miguel Silva <rmfrfs@gmail.com>
+Cc: Sascha Hauer <s.hauer@pengutronix.de>
+Cc: Shawn Guo <shawnguo@kernel.org>
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-media@vger.kernel.org
+---
+V2: Add blank line
+V3: Return -EPIPE
+---
+ drivers/media/platform/nxp/imx-mipi-csis.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/drivers/media/platform/nxp/imx-mipi-csis.c b/drivers/media/platform/nxp/imx-mipi-csis.c
+index e99633565463e..be2768a479951 100644
+--- a/drivers/media/platform/nxp/imx-mipi-csis.c
++++ b/drivers/media/platform/nxp/imx-mipi-csis.c
+@@ -1109,6 +1109,9 @@ static int mipi_csis_get_frame_desc(struct v4l2_subdev *sd, unsigned int pad,
+ 	csis_fmt = find_csis_format(fmt->code);
+ 	v4l2_subdev_unlock_state(state);
+ 
++	if (!csis_fmt)
++		return -EPIPE;
++
+ 	fd->type = V4L2_MBUS_FRAME_DESC_TYPE_PARALLEL;
+ 	fd->num_entries = 1;
+ 
+-- 
+2.39.1
+
