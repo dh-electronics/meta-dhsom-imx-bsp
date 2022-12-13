@@ -1,0 +1,1122 @@
+From bdc9da0a20a207ccc4861a3392df18be0efd5cef Mon Sep 17 00:00:00 2001
+From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
+Date: Thu, 21 Jul 2022 15:44:32 +0200
+Subject: [PATCH 8/9] imx8mp: synchronise device tree with linux
+
+Synchronise device tree with linux v5.19-rc5.
+
+Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
+---
+ arch/arm/dts/imx8mp-evk.dts           | 283 ++++++++++++++++++++++++--
+ arch/arm/dts/imx8mp-phycore-som.dtsi  |  64 ++++--
+ arch/arm/dts/imx8mp-venice-gw74xx.dts |  59 ++----
+ arch/arm/dts/imx8mp.dtsi              | 261 ++++++++++++++++++++++--
+ 4 files changed, 566 insertions(+), 101 deletions(-)
+
+diff --git a/arch/arm/dts/imx8mp-evk.dts b/arch/arm/dts/imx8mp-evk.dts
+index f846d69dac9..4c3ac4214a2 100644
+--- a/arch/arm/dts/imx8mp-evk.dts
++++ b/arch/arm/dts/imx8mp-evk.dts
+@@ -74,11 +74,21 @@
+ 	status = "okay";
+ };
+ 
++&flexcan2 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_flexcan2>;
++	xceiver-supply = <&reg_can2_stby>;
++	status = "disabled";/* can2 pin conflict with pdm */
++};
++
+ &eqos {
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&pinctrl_eqos>;
+ 	phy-mode = "rgmii-id";
+ 	phy-handle = <&ethphy0>;
++	snps,force_thresh_dma_mode;
++	snps,mtl-tx-config = <&mtl_tx_setup>;
++	snps,mtl-rx-config = <&mtl_rx_setup>;
+ 	status = "okay";
+ 
+ 	mdio {
+@@ -90,15 +100,77 @@
+ 			compatible = "ethernet-phy-ieee802.3-c22";
+ 			reg = <1>;
+ 			eee-broken-1000t;
++			reset-gpios = <&gpio4 22 GPIO_ACTIVE_LOW>;
++			reset-assert-us = <10000>;
++			reset-deassert-us = <80000>;
++			realtek,clkout-disable;
+ 		};
+ 	};
+-};
+ 
+-&flexcan2 {
+-	pinctrl-names = "default";
+-	pinctrl-0 = <&pinctrl_flexcan2>;
+-	xceiver-supply = <&reg_can2_stby>;
+-	status = "disabled";/* can2 pin conflict with pdm */
++	mtl_tx_setup: tx-queues-config {
++		snps,tx-queues-to-use = <5>;
++		snps,tx-sched-sp;
++
++		queue0 {
++			snps,dcb-algorithm;
++			snps,priority = <0x1>;
++		};
++
++		queue1 {
++			snps,dcb-algorithm;
++			snps,priority = <0x2>;
++		};
++
++		queue2 {
++			snps,dcb-algorithm;
++			snps,priority = <0x4>;
++		};
++
++		queue3 {
++			snps,dcb-algorithm;
++			snps,priority = <0x8>;
++		};
++
++		queue4 {
++			snps,dcb-algorithm;
++			snps,priority = <0xf0>;
++		};
++	};
++
++	mtl_rx_setup: rx-queues-config {
++		snps,rx-queues-to-use = <5>;
++		snps,rx-sched-sp;
++
++		queue0 {
++			snps,dcb-algorithm;
++			snps,priority = <0x1>;
++			snps,map-to-dma-channel = <0>;
++		};
++
++		queue1 {
++			snps,dcb-algorithm;
++			snps,priority = <0x2>;
++			snps,map-to-dma-channel = <1>;
++		};
++
++		queue2 {
++			snps,dcb-algorithm;
++			snps,priority = <0x4>;
++			snps,map-to-dma-channel = <2>;
++		};
++
++		queue3 {
++			snps,dcb-algorithm;
++			snps,priority = <0x8>;
++			snps,map-to-dma-channel = <3>;
++		};
++
++		queue4 {
++			snps,dcb-algorithm;
++			snps,priority = <0xf0>;
++			snps,map-to-dma-channel = <4>;
++		};
++	};
+ };
+ 
+ &fec {
+@@ -118,6 +190,95 @@
+ 			reg = <1>;
+ 			eee-broken-1000t;
+ 			reset-gpios = <&gpio4 2 GPIO_ACTIVE_LOW>;
++			reset-assert-us = <10000>;
++			reset-deassert-us = <80000>;
++			realtek,clkout-disable;
++		};
++	};
++};
++
++&i2c1 {
++	clock-frequency = <400000>;
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_i2c1>;
++	status = "okay";
++
++	pmic@25 {
++		compatible = "nxp,pca9450c";
++		reg = <0x25>;
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_pmic>;
++		interrupt-parent = <&gpio1>;
++		interrupts = <3 IRQ_TYPE_LEVEL_LOW>;
++
++		regulators {
++			BUCK1 {
++				regulator-name = "BUCK1";
++				regulator-min-microvolt = <720000>;
++				regulator-max-microvolt = <1000000>;
++				regulator-boot-on;
++				regulator-always-on;
++				regulator-ramp-delay = <3125>;
++			};
++
++			BUCK2 {
++				regulator-name = "BUCK2";
++				regulator-min-microvolt = <720000>;
++				regulator-max-microvolt = <1025000>;
++				regulator-boot-on;
++				regulator-always-on;
++				regulator-ramp-delay = <3125>;
++				nxp,dvs-run-voltage = <950000>;
++				nxp,dvs-standby-voltage = <850000>;
++			};
++
++			BUCK4 {
++				regulator-name = "BUCK4";
++				regulator-min-microvolt = <3000000>;
++				regulator-max-microvolt = <3600000>;
++				regulator-boot-on;
++				regulator-always-on;
++			};
++
++			BUCK5 {
++				regulator-name = "BUCK5";
++				regulator-min-microvolt = <1650000>;
++				regulator-max-microvolt = <1950000>;
++				regulator-boot-on;
++				regulator-always-on;
++			};
++
++			BUCK6 {
++				regulator-name = "BUCK6";
++				regulator-min-microvolt = <1045000>;
++				regulator-max-microvolt = <1155000>;
++				regulator-boot-on;
++				regulator-always-on;
++			};
++
++			LDO1 {
++				regulator-name = "LDO1";
++				regulator-min-microvolt = <1650000>;
++				regulator-max-microvolt = <1950000>;
++				regulator-boot-on;
++				regulator-always-on;
++			};
++
++			LDO3 {
++				regulator-name = "LDO3";
++				regulator-min-microvolt = <1710000>;
++				regulator-max-microvolt = <1890000>;
++				regulator-boot-on;
++				regulator-always-on;
++			};
++
++			LDO5 {
++				regulator-name = "LDO5";
++				regulator-min-microvolt = <1800000>;
++				regulator-max-microvolt = <3300000>;
++				regulator-boot-on;
++				regulator-always-on;
++			};
+ 		};
+ 	};
+ };
+@@ -133,9 +294,46 @@
+ 		reg = <0x20>;
+ 		gpio-controller;
+ 		#gpio-cells = <2>;
++		interrupt-controller;
++		#interrupt-cells = <2>;
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_pca6416_int>;
++		interrupt-parent = <&gpio1>;
++		interrupts = <12 IRQ_TYPE_LEVEL_LOW>;
++		gpio-line-names = "EXT_PWREN1",
++			"EXT_PWREN2",
++			"CAN1/I2C5_SEL",
++			"PDM/CAN2_SEL",
++			"FAN_EN",
++			"PWR_MEAS_IO1",
++			"PWR_MEAS_IO2",
++			"EXP_P0_7",
++			"EXP_P1_0",
++			"EXP_P1_1",
++			"EXP_P1_2",
++			"EXP_P1_3",
++			"EXP_P1_4",
++			"EXP_P1_5",
++			"EXP_P1_6",
++			"EXP_P1_7";
+ 	};
+ };
+ 
++/* I2C on expansion connector J22. */
++&i2c5 {
++	clock-frequency = <100000>; /* Lower clock speed for external bus. */
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_i2c5>;
++	status = "disabled"; /* can1 pins conflict with i2c5 */
++
++	/* GPIO 2 of PCA6416 is used to switch between CAN1 and I2C5 functions:
++	 *     LOW:  CAN1 (default, pull-down)
++	 *     HIGH: I2C5
++	 * You need to set it to high to enable I2C5 (for example, add gpio-hog
++	 * in pca6416 node).
++	 */
++};
++
+ &snvs_pwrkey {
+ 	status = "okay";
+ };
+@@ -147,6 +345,21 @@
+ 	status = "okay";
+ };
+ 
++&usb3_phy1 {
++	status = "okay";
++};
++
++&usb3_1 {
++	status = "okay";
++};
++
++&usb_dwc3_1 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_usb1_vbus>;
++	dr_mode = "host";
++	status = "okay";
++};
++
+ &usdhc2 {
+ 	assigned-clocks = <&clk IMX8MP_CLK_USDHC2>;
+ 	assigned-clock-rates = <400000000>;
+@@ -182,21 +395,21 @@
+ &iomuxc {
+ 	pinctrl_eqos: eqosgrp {
+ 		fsl,pins = <
+-			MX8MP_IOMUXC_ENET_MDC__ENET_QOS_MDC	0x3
+-			MX8MP_IOMUXC_ENET_MDIO__ENET_QOS_MDIO	0x3
+-			MX8MP_IOMUXC_ENET_RD0__ENET_QOS_RGMII_RD0	0x91
+-			MX8MP_IOMUXC_ENET_RD1__ENET_QOS_RGMII_RD1	0x91
+-			MX8MP_IOMUXC_ENET_RD2__ENET_QOS_RGMII_RD2	0x91
+-			MX8MP_IOMUXC_ENET_RD3__ENET_QOS_RGMII_RD3	0x91
++			MX8MP_IOMUXC_ENET_MDC__ENET_QOS_MDC				0x3
++			MX8MP_IOMUXC_ENET_MDIO__ENET_QOS_MDIO				0x3
++			MX8MP_IOMUXC_ENET_RD0__ENET_QOS_RGMII_RD0			0x91
++			MX8MP_IOMUXC_ENET_RD1__ENET_QOS_RGMII_RD1			0x91
++			MX8MP_IOMUXC_ENET_RD2__ENET_QOS_RGMII_RD2			0x91
++			MX8MP_IOMUXC_ENET_RD3__ENET_QOS_RGMII_RD3			0x91
+ 			MX8MP_IOMUXC_ENET_RXC__CCM_ENET_QOS_CLOCK_GENERATE_RX_CLK	0x91
+-			MX8MP_IOMUXC_ENET_RX_CTL__ENET_QOS_RGMII_RX_CTL	0x91
+-			MX8MP_IOMUXC_ENET_TD0__ENET_QOS_RGMII_TD0		0x1f
+-			MX8MP_IOMUXC_ENET_TD1__ENET_QOS_RGMII_TD1		0x1f
+-			MX8MP_IOMUXC_ENET_TD2__ENET_QOS_RGMII_TD2		0x1f
+-			MX8MP_IOMUXC_ENET_TD3__ENET_QOS_RGMII_TD3		0x1f
+-			MX8MP_IOMUXC_ENET_TX_CTL__ENET_QOS_RGMII_TX_CTL	0x1f
++			MX8MP_IOMUXC_ENET_RX_CTL__ENET_QOS_RGMII_RX_CTL			0x91
++			MX8MP_IOMUXC_ENET_TD0__ENET_QOS_RGMII_TD0			0x1f
++			MX8MP_IOMUXC_ENET_TD1__ENET_QOS_RGMII_TD1			0x1f
++			MX8MP_IOMUXC_ENET_TD2__ENET_QOS_RGMII_TD2			0x1f
++			MX8MP_IOMUXC_ENET_TD3__ENET_QOS_RGMII_TD3			0x1f
++			MX8MP_IOMUXC_ENET_TX_CTL__ENET_QOS_RGMII_TX_CTL			0x1f
+ 			MX8MP_IOMUXC_ENET_TXC__CCM_ENET_QOS_CLOCK_GENERATE_TX_CLK	0x1f
+-			MX8MP_IOMUXC_SAI2_RXC__GPIO4_IO22		0x19
++			MX8MP_IOMUXC_SAI2_RXC__GPIO4_IO22				0x19
+ 		>;
+ 	};
+ 
+@@ -252,6 +465,13 @@
+ 		>;
+ 	};
+ 
++	pinctrl_i2c1: i2c1grp {
++		fsl,pins = <
++			MX8MP_IOMUXC_I2C1_SCL__I2C1_SCL		0x400001c3
++			MX8MP_IOMUXC_I2C1_SDA__I2C1_SDA		0x400001c3
++		>;
++	};
++
+ 	pinctrl_i2c3: i2c3grp {
+ 		fsl,pins = <
+ 			MX8MP_IOMUXC_I2C3_SCL__I2C3_SCL		0x400001c3
+@@ -259,6 +479,25 @@
+ 		>;
+ 	};
+ 
++	pinctrl_i2c5: i2c5grp {
++		fsl,pins = <
++			MX8MP_IOMUXC_SPDIF_RX__I2C5_SDA         0x400001c3
++			MX8MP_IOMUXC_SPDIF_TX__I2C5_SCL         0x400001c3
++		>;
++	};
++
++	pinctrl_pmic: pmicgrp {
++		fsl,pins = <
++			MX8MP_IOMUXC_GPIO1_IO03__GPIO1_IO03	0x000001c0
++		>;
++	};
++
++	pinctrl_pca6416_int: pca6416_int_grp {
++		fsl,pins = <
++			MX8MP_IOMUXC_GPIO1_IO12__GPIO1_IO12	0x146 /* Input pull-up. */
++		>;
++	};
++
+ 	pinctrl_reg_usdhc2_vmmc: regusdhc2vmmcgrp {
+ 		fsl,pins = <
+ 			MX8MP_IOMUXC_SD2_RESET_B__GPIO2_IO19	0x41
+@@ -272,6 +511,12 @@
+ 		>;
+ 	};
+ 
++	pinctrl_usb1_vbus: usb1grp {
++		fsl,pins = <
++			MX8MP_IOMUXC_GPIO1_IO14__USB2_OTG_PWR	0x19
++		>;
++	};
++
+ 	pinctrl_usdhc2: usdhc2grp {
+ 		fsl,pins = <
+ 			MX8MP_IOMUXC_SD2_CLK__USDHC2_CLK	0x190
+diff --git a/arch/arm/dts/imx8mp-phycore-som.dtsi b/arch/arm/dts/imx8mp-phycore-som.dtsi
+index f3965ec5b31..79b290a002c 100644
+--- a/arch/arm/dts/imx8mp-phycore-som.dtsi
++++ b/arch/arm/dts/imx8mp-phycore-som.dtsi
+@@ -60,11 +60,26 @@
+ 			ti,tx-internal-delay = <DP83867_RGMIIDCTL_2_00_NS>;
+ 			ti,fifo-depth = <DP83867_PHYCR_FIFO_DEPTH_4_B_NIB>;
+ 			ti,clk-output-sel = <DP83867_CLK_O_SEL_OFF>;
++			ti,min-output-impedance;
+ 			enet-phy-lane-no-swap;
+ 		};
+ 	};
+ };
+ 
++&flexspi {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_flexspi0>;
++	status = "okay";
++
++	som_flash: flash@0 {
++		compatible = "jedec,spi-nor";
++		reg = <0>;
++		spi-max-frequency = <80000000>;
++		spi-tx-bus-width = <1>;
++		spi-rx-bus-width = <4>;
++	};
++};
++
+ &i2c1 {
+ 	clock-frequency = <400000>;
+ 	pinctrl-names = "default", "gpio";
+@@ -99,6 +114,8 @@
+ 				regulator-boot-on;
+ 				regulator-always-on;
+ 				regulator-ramp-delay = <3125>;
++				nxp,dvs-run-voltage = <950000>;
++				nxp,dvs-standby-voltage = <850000>;
+ 			};
+ 
+ 			buck4: BUCK4 {
+@@ -153,14 +170,14 @@
+ 				regulator-compatible = "LDO4";
+ 				regulator-min-microvolt = <800000>;
+ 				regulator-max-microvolt = <3300000>;
+-				regulator-boot-on;
+-				regulator-always-on;
+ 			};
+ 
+ 			ldo5: LDO5 {
+ 				regulator-compatible = "LDO5";
+ 				regulator-min-microvolt = <1800000>;
+ 				regulator-max-microvolt = <3300000>;
++				regulator-boot-on;
++				regulator-always-on;
+ 			};
+ 		};
+ 	};
+@@ -180,6 +197,8 @@
+ 
+ /* eMMC */
+ &usdhc3 {
++	assigned-clocks = <&clk IMX8MP_CLK_USDHC3_ROOT>;
++	assigned-clock-rates = <400000000>;
+ 	pinctrl-names = "default", "state_100mhz", "state_200mhz";
+ 	pinctrl-0 = <&pinctrl_usdhc3>;
+ 	pinctrl-1 = <&pinctrl_usdhc3_100mhz>;
+@@ -207,16 +226,27 @@
+ 			MX8MP_IOMUXC_SAI1_RXD7__ENET1_RGMII_RD3		0x91
+ 			MX8MP_IOMUXC_SAI1_TXC__ENET1_RGMII_RXC		0x91
+ 			MX8MP_IOMUXC_SAI1_TXFS__ENET1_RGMII_RX_CTL	0x91
+-			MX8MP_IOMUXC_SAI1_TXD0__ENET1_RGMII_TD0		0x1f
+-			MX8MP_IOMUXC_SAI1_TXD1__ENET1_RGMII_TD1		0x1f
+-			MX8MP_IOMUXC_SAI1_TXD2__ENET1_RGMII_TD2		0x1f
+-			MX8MP_IOMUXC_SAI1_TXD3__ENET1_RGMII_TD3		0x1f
+-			MX8MP_IOMUXC_SAI1_TXD4__ENET1_RGMII_TX_CTL	0x1f
+-			MX8MP_IOMUXC_SAI1_TXD5__ENET1_RGMII_TXC		0x1f
++			MX8MP_IOMUXC_SAI1_TXD0__ENET1_RGMII_TD0		0x12
++			MX8MP_IOMUXC_SAI1_TXD1__ENET1_RGMII_TD1		0x12
++			MX8MP_IOMUXC_SAI1_TXD2__ENET1_RGMII_TD2		0x14
++			MX8MP_IOMUXC_SAI1_TXD3__ENET1_RGMII_TD3		0x14
++			MX8MP_IOMUXC_SAI1_TXD4__ENET1_RGMII_TX_CTL	0x14
++			MX8MP_IOMUXC_SAI1_TXD5__ENET1_RGMII_TXC		0x14
+ 			MX8MP_IOMUXC_GPIO1_IO15__GPIO1_IO15		0x11
+ 		>;
+ 	};
+ 
++	pinctrl_flexspi0: flexspi0grp {
++		fsl,pins = <
++			MX8MP_IOMUXC_NAND_ALE__FLEXSPI_A_SCLK		0x1c2
++			MX8MP_IOMUXC_NAND_CE0_B__FLEXSPI_A_SS0_B	0x82
++			MX8MP_IOMUXC_NAND_DATA00__FLEXSPI_A_DATA00	0x82
++			MX8MP_IOMUXC_NAND_DATA01__FLEXSPI_A_DATA01	0x82
++			MX8MP_IOMUXC_NAND_DATA02__FLEXSPI_A_DATA02	0x82
++			MX8MP_IOMUXC_NAND_DATA03__FLEXSPI_A_DATA03	0x82
++		>;
++	};
++
+ 	pinctrl_i2c1: i2c1grp {
+ 		fsl,pins = <
+ 			MX8MP_IOMUXC_I2C1_SCL__I2C1_SCL		0x400001c3
+@@ -273,21 +303,21 @@
+ 		fsl,pins = <
+ 			MX8MP_IOMUXC_NAND_WE_B__USDHC3_CLK	0x196
+ 			MX8MP_IOMUXC_NAND_WP_B__USDHC3_CMD	0x1d6
+-			MX8MP_IOMUXC_NAND_DATA04__USDHC3_DATA0	0x1d6
+-			MX8MP_IOMUXC_NAND_DATA05__USDHC3_DATA1	0x1d6
+-			MX8MP_IOMUXC_NAND_DATA06__USDHC3_DATA2	0x1d6
+-			MX8MP_IOMUXC_NAND_DATA07__USDHC3_DATA3	0x1d6
+-			MX8MP_IOMUXC_NAND_RE_B__USDHC3_DATA4	0x1d6
+-			MX8MP_IOMUXC_NAND_CE2_B__USDHC3_DATA5	0x1d6
+-			MX8MP_IOMUXC_NAND_CE3_B__USDHC3_DATA6	0x1d6
+-			MX8MP_IOMUXC_NAND_CLE__USDHC3_DATA7	0x1d6
++			MX8MP_IOMUXC_NAND_DATA04__USDHC3_DATA0	0x1d2
++			MX8MP_IOMUXC_NAND_DATA05__USDHC3_DATA1	0x1d2
++			MX8MP_IOMUXC_NAND_DATA06__USDHC3_DATA2	0x1d2
++			MX8MP_IOMUXC_NAND_DATA07__USDHC3_DATA3	0x1d2
++			MX8MP_IOMUXC_NAND_RE_B__USDHC3_DATA4	0x1d2
++			MX8MP_IOMUXC_NAND_CE2_B__USDHC3_DATA5	0x1d2
++			MX8MP_IOMUXC_NAND_CE3_B__USDHC3_DATA6	0x1d2
++			MX8MP_IOMUXC_NAND_CLE__USDHC3_DATA7	0x1d2
+ 			MX8MP_IOMUXC_NAND_CE1_B__USDHC3_STROBE	0x196
+ 		>;
+ 	};
+ 
+ 	pinctrl_wdog: wdoggrp {
+ 		fsl,pins = <
+-			MX8MP_IOMUXC_GPIO1_IO02__WDOG1_WDOG_B	0xc6
++			MX8MP_IOMUXC_GPIO1_IO02__WDOG1_WDOG_B	0xe6
+ 		>;
+ 	};
+ };
+diff --git a/arch/arm/dts/imx8mp-venice-gw74xx.dts b/arch/arm/dts/imx8mp-venice-gw74xx.dts
+index ecb117a7a2a..101d3114760 100644
+--- a/arch/arm/dts/imx8mp-venice-gw74xx.dts
++++ b/arch/arm/dts/imx8mp-venice-gw74xx.dts
+@@ -1,6 +1,6 @@
+ // SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+ /*
+- * Copyright 2022 Gateworks Corporation
++ * Copyright 2021 Gateworks Corporation
+  */
+ 
+ /dts-v1/;
+@@ -485,40 +485,30 @@
+ 				reg = <0>;
+ 				label = "lan1";
+ 				local-mac-address = [00 00 00 00 00 00];
+-				phy-handle = <&sw_phy0>;
+-				phy-mode = "internal";
+ 			};
+ 
+ 			lan2: port@1 {
+ 				reg = <1>;
+ 				label = "lan2";
+ 				local-mac-address = [00 00 00 00 00 00];
+-				phy-handle = <&sw_phy1>;
+-				phy-mode = "internal";
+ 			};
+ 
+ 			lan3: port@2 {
+ 				reg = <2>;
+ 				label = "lan3";
+ 				local-mac-address = [00 00 00 00 00 00];
+-				phy-handle = <&sw_phy2>;
+-				phy-mode = "internal";
+ 			};
+ 
+ 			lan4: port@3 {
+ 				reg = <3>;
+ 				label = "lan4";
+ 				local-mac-address = [00 00 00 00 00 00];
+-				phy-handle = <&sw_phy3>;
+-				phy-mode = "internal";
+ 			};
+ 
+ 			lan5: port@4 {
+ 				reg = <4>;
+ 				label = "lan5";
+ 				local-mac-address = [00 00 00 00 00 00];
+-				phy-handle = <&sw_phy4>;
+-				phy-mode = "internal";
+ 			};
+ 
+ 			port@6 {
+@@ -533,38 +523,6 @@
+ 				};
+ 			};
+ 		};
+-
+-		mdios {
+-			#address-cells = <1>;
+-			#size-cells = <0>;
+-
+-			mdio@0 {
+-				reg = <0>;
+-				compatible = "microchip,ksz-mdio";
+-				#address-cells = <1>;
+-				#size-cells = <0>;
+-
+-				sw_phy0: ethernet-phy@0 {
+-					reg = <0x0>;
+-				};
+-
+-				sw_phy1: ethernet-phy@1 {
+-					reg = <0x1>;
+-				};
+-
+-				sw_phy2: ethernet-phy@2 {
+-					reg = <0x2>;
+-				};
+-
+-				sw_phy3: ethernet-phy@3 {
+-					reg = <0x3>;
+-				};
+-
+-				sw_phy4: ethernet-phy@4 {
+-					reg = <0x4>;
+-				};
+-			};
+-		};
+ 	};
+ };
+ 
+@@ -842,6 +800,21 @@
+ 		>;
+ 	};
+ 
++	pinctrl_uart3: uart3grp {
++		fsl,pins = <
++			MX8MP_IOMUXC_UART3_RXD__UART3_DCE_RX	0x140
++			MX8MP_IOMUXC_UART3_TXD__UART3_DCE_TX	0x140
++			MX8MP_IOMUXC_SAI5_RXD0__GPIO3_IO21	0x140
++			MX8MP_IOMUXC_SAI5_RXD1__GPIO3_IO22	0x140
++		>;
++	};
++
++	pinctrl_uart3_gpio: uart3gpiogrp {
++		fsl,pins = <
++			MX8MP_IOMUXC_NAND_DATA02__GPIO3_IO08	0x119
++		>;
++	};
++
+ 	pinctrl_uart4: uart4grp {
+ 		fsl,pins = <
+ 			MX8MP_IOMUXC_UART4_RXD__UART4_DCE_RX	0x140
+diff --git a/arch/arm/dts/imx8mp.dtsi b/arch/arm/dts/imx8mp.dtsi
+index 79b65750da9..d9542dfff83 100644
+--- a/arch/arm/dts/imx8mp.dtsi
++++ b/arch/arm/dts/imx8mp.dtsi
+@@ -38,6 +38,7 @@
+ 		serial1 = &uart2;
+ 		serial2 = &uart3;
+ 		serial3 = &uart4;
++		spi0 = &flexspi;
+ 	};
+ 
+ 	cpus {
+@@ -51,7 +52,16 @@
+ 			clock-latency = <61036>;
+ 			clocks = <&clk IMX8MP_CLK_ARM>;
+ 			enable-method = "psci";
++			i-cache-size = <0x8000>;
++			i-cache-line-size = <64>;
++			i-cache-sets = <256>;
++			d-cache-size = <0x8000>;
++			d-cache-line-size = <64>;
++			d-cache-sets = <128>;
+ 			next-level-cache = <&A53_L2>;
++			nvmem-cells = <&cpu_speed_grade>;
++			nvmem-cell-names = "speed_grade";
++			operating-points-v2 = <&a53_opp_table>;
+ 			#cooling-cells = <2>;
+ 		};
+ 
+@@ -62,7 +72,14 @@
+ 			clock-latency = <61036>;
+ 			clocks = <&clk IMX8MP_CLK_ARM>;
+ 			enable-method = "psci";
++			i-cache-size = <0x8000>;
++			i-cache-line-size = <64>;
++			i-cache-sets = <256>;
++			d-cache-size = <0x8000>;
++			d-cache-line-size = <64>;
++			d-cache-sets = <128>;
+ 			next-level-cache = <&A53_L2>;
++			operating-points-v2 = <&a53_opp_table>;
+ 			#cooling-cells = <2>;
+ 		};
+ 
+@@ -73,7 +90,14 @@
+ 			clock-latency = <61036>;
+ 			clocks = <&clk IMX8MP_CLK_ARM>;
+ 			enable-method = "psci";
++			i-cache-size = <0x8000>;
++			i-cache-line-size = <64>;
++			i-cache-sets = <256>;
++			d-cache-size = <0x8000>;
++			d-cache-line-size = <64>;
++			d-cache-sets = <128>;
+ 			next-level-cache = <&A53_L2>;
++			operating-points-v2 = <&a53_opp_table>;
+ 			#cooling-cells = <2>;
+ 		};
+ 
+@@ -84,12 +108,52 @@
+ 			clock-latency = <61036>;
+ 			clocks = <&clk IMX8MP_CLK_ARM>;
+ 			enable-method = "psci";
++			i-cache-size = <0x8000>;
++			i-cache-line-size = <64>;
++			i-cache-sets = <256>;
++			d-cache-size = <0x8000>;
++			d-cache-line-size = <64>;
++			d-cache-sets = <128>;
+ 			next-level-cache = <&A53_L2>;
++			operating-points-v2 = <&a53_opp_table>;
+ 			#cooling-cells = <2>;
+ 		};
+ 
+ 		A53_L2: l2-cache0 {
+ 			compatible = "cache";
++			cache-level = <2>;
++			cache-size = <0x80000>;
++			cache-line-size = <64>;
++			cache-sets = <512>;
++		};
++	};
++
++	a53_opp_table: opp-table {
++		compatible = "operating-points-v2";
++		opp-shared;
++
++		opp-1200000000 {
++			opp-hz = /bits/ 64 <1200000000>;
++			opp-microvolt = <850000>;
++			opp-supported-hw = <0x8a0>, <0x7>;
++			clock-latency-ns = <150000>;
++			opp-suspend;
++		};
++
++		opp-1600000000 {
++			opp-hz = /bits/ 64 <1600000000>;
++			opp-microvolt = <950000>;
++			opp-supported-hw = <0xa0>, <0x7>;
++			clock-latency-ns = <150000>;
++			opp-suspend;
++		};
++
++		opp-1800000000 {
++			opp-hz = /bits/ 64 <1800000000>;
++			opp-microvolt = <1000000>;
++			opp-supported-hw = <0x20>, <0x3>;
++			clock-latency-ns = <150000>;
++			opp-suspend;
+ 		};
+ 	};
+ 
+@@ -135,11 +199,21 @@
+ 		clock-output-names = "clk_ext4";
+ 	};
+ 
++	reserved-memory {
++		#address-cells = <2>;
++		#size-cells = <2>;
++		ranges;
++
++		dsp_reserved: dsp@92400000 {
++			reg = <0 0x92400000 0 0x2000000>;
++			no-map;
++		};
++	};
++
+ 	pmu {
+ 		compatible = "arm,cortex-a53-pmu";
+ 		interrupts = <GIC_PPI 7
+ 			     (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_HIGH)>;
+-		interrupt-affinity = <&A53_0>, <&A53_1>, <&A53_2>, <&A53_3>;
+ 	};
+ 
+ 	psci {
+@@ -359,6 +433,10 @@
+ 				eth_mac1: mac-address@90 {
+ 					reg = <0x90 6>;
+ 				};
++
++				eth_mac2: mac-address@96 {
++					reg = <0x96 6>;
++				};
+ 			};
+ 
+ 			anatop: anatop@30360000 {
+@@ -408,7 +486,6 @@
+ 						  <&clk IMX8MP_CLK_GIC>,
+ 						  <&clk IMX8MP_CLK_AUDIO_AHB>,
+ 						  <&clk IMX8MP_CLK_AUDIO_AXI_SRC>,
+-						  <&clk IMX8MP_CLK_IPG_AUDIO_ROOT>,
+ 						  <&clk IMX8MP_AUDIO_PLL1>,
+ 						  <&clk IMX8MP_AUDIO_PLL2>;
+ 				assigned-clock-parents = <&clk IMX8MP_SYS_PLL1_800M>,
+@@ -424,7 +501,6 @@
+ 						       <500000000>,
+ 						       <400000000>,
+ 						       <800000000>,
+-						       <400000000>,
+ 						       <393216000>,
+ 						       <361267200>;
+ 			};
+@@ -447,6 +523,11 @@
+ 					#address-cells = <1>;
+ 					#size-cells = <0>;
+ 
++					pgc_mipi_phy1: power-domain@0 {
++						#power-domain-cells = <0>;
++						reg = <IMX8MP_POWER_DOMAIN_MIPI_PHY1>;
++					};
++
+ 					pgc_pcie_phy: power-domain@1 {
+ 						#power-domain-cells = <0>;
+ 						reg = <IMX8MP_POWER_DOMAIN_PCIE_PHY>;
+@@ -462,6 +543,45 @@
+ 						reg = <IMX8MP_POWER_DOMAIN_USB2_PHY>;
+ 					};
+ 
++					pgc_gpu2d: power-domain@6 {
++						#power-domain-cells = <0>;
++						reg = <IMX8MP_POWER_DOMAIN_GPU2D>;
++						clocks = <&clk IMX8MP_CLK_GPU2D_ROOT>;
++						power-domains = <&pgc_gpumix>;
++					};
++
++					pgc_gpumix: power-domain@7 {
++						#power-domain-cells = <0>;
++						reg = <IMX8MP_POWER_DOMAIN_GPUMIX>;
++						clocks = <&clk IMX8MP_CLK_GPU_ROOT>,
++							 <&clk IMX8MP_CLK_GPU_AHB>;
++						assigned-clocks = <&clk IMX8MP_CLK_GPU_AXI>,
++								  <&clk IMX8MP_CLK_GPU_AHB>;
++						assigned-clock-parents = <&clk IMX8MP_SYS_PLL1_800M>,
++									 <&clk IMX8MP_SYS_PLL1_800M>;
++						assigned-clock-rates = <800000000>, <400000000>;
++					};
++
++					pgc_gpu3d: power-domain@9 {
++						#power-domain-cells = <0>;
++						reg = <IMX8MP_POWER_DOMAIN_GPU3D>;
++						clocks = <&clk IMX8MP_CLK_GPU3D_ROOT>,
++							 <&clk IMX8MP_CLK_GPU3D_SHADER_CORE>;
++						power-domains = <&pgc_gpumix>;
++					};
++
++					pgc_mediamix: power-domain@10 {
++						#power-domain-cells = <0>;
++						reg = <IMX8MP_POWER_DOMAIN_MEDIAMIX>;
++						clocks = <&clk IMX8MP_CLK_MEDIA_AXI_ROOT>,
++							 <&clk IMX8MP_CLK_MEDIA_APB_ROOT>;
++					};
++
++					pgc_mipi_phy2: power-domain@16 {
++						#power-domain-cells = <0>;
++						reg = <IMX8MP_POWER_DOMAIN_MIPI_PHY2>;
++					};
++
+ 					pgc_hsiomix: power-domains@17 {
+ 						#power-domain-cells = <0>;
+ 						reg = <IMX8MP_POWER_DOMAIN_HSIOMIX>;
+@@ -471,6 +591,12 @@
+ 						assigned-clock-parents = <&clk IMX8MP_SYS_PLL2_500M>;
+ 						assigned-clock-rates = <500000000>;
+ 					};
++
++					pgc_ispdwp: power-domain@18 {
++						#power-domain-cells = <0>;
++						reg = <IMX8MP_POWER_DOMAIN_MEDIAMIX_ISPDWP>;
++						clocks = <&clk IMX8MP_CLK_MEDIA_ISP_DIV>;
++					};
+ 				};
+ 			};
+ 		};
+@@ -489,7 +615,7 @@
+ 				clocks = <&clk IMX8MP_CLK_PWM1_ROOT>,
+ 					 <&clk IMX8MP_CLK_PWM1_ROOT>;
+ 				clock-names = "ipg", "per";
+-				#pwm-cells = <2>;
++				#pwm-cells = <3>;
+ 				status = "disabled";
+ 			};
+ 
+@@ -500,7 +626,7 @@
+ 				clocks = <&clk IMX8MP_CLK_PWM2_ROOT>,
+ 					 <&clk IMX8MP_CLK_PWM2_ROOT>;
+ 				clock-names = "ipg", "per";
+-				#pwm-cells = <2>;
++				#pwm-cells = <3>;
+ 				status = "disabled";
+ 			};
+ 
+@@ -511,7 +637,7 @@
+ 				clocks = <&clk IMX8MP_CLK_PWM3_ROOT>,
+ 					 <&clk IMX8MP_CLK_PWM3_ROOT>;
+ 				clock-names = "ipg", "per";
+-				#pwm-cells = <2>;
++				#pwm-cells = <3>;
+ 				status = "disabled";
+ 			};
+ 
+@@ -522,7 +648,7 @@
+ 				clocks = <&clk IMX8MP_CLK_PWM4_ROOT>,
+ 					 <&clk IMX8MP_CLK_PWM4_ROOT>;
+ 				clock-names = "ipg", "per";
+-				#pwm-cells = <2>;
++				#pwm-cells = <3>;
+ 				status = "disabled";
+ 			};
+ 
+@@ -615,11 +741,13 @@
+ 				clocks = <&clk IMX8MP_CLK_UART2_ROOT>,
+ 					 <&clk IMX8MP_CLK_UART2_ROOT>;
+ 				clock-names = "ipg", "per";
++				dmas = <&sdma1 24 4 0>, <&sdma1 25 4 0>;
++				dma-names = "rx", "tx";
+ 				status = "disabled";
+ 			};
+ 
+ 			flexcan1: can@308c0000 {
+-				compatible = "fsl,imx8mp-flexcan", "fsl,imx6q-flexcan";
++				compatible = "fsl,imx8mp-flexcan";
+ 				reg = <0x308c0000 0x10000>;
+ 				interrupts = <GIC_SPI 142 IRQ_TYPE_LEVEL_HIGH>;
+ 				clocks = <&clk IMX8MP_CLK_IPG_ROOT>,
+@@ -634,7 +762,7 @@
+ 			};
+ 
+ 			flexcan2: can@308d0000 {
+-				compatible = "fsl,imx8mp-flexcan", "fsl,imx6q-flexcan";
++				compatible = "fsl,imx8mp-flexcan";
+ 				reg = <0x308d0000 0x10000>;
+ 				interrupts = <GIC_SPI 144 IRQ_TYPE_LEVEL_HIGH>;
+ 				clocks = <&clk IMX8MP_CLK_IPG_ROOT>,
+@@ -738,6 +866,14 @@
+ 				#mbox-cells = <2>;
+ 			};
+ 
++			mu2: mailbox@30e60000 {
++				compatible = "fsl,imx8mp-mu", "fsl,imx6sx-mu";
++				reg = <0x30e60000 0x10000>;
++				interrupts = <GIC_SPI 136 IRQ_TYPE_LEVEL_HIGH>;
++				#mbox-cells = <2>;
++				status = "disabled";
++			};
++
+ 			i2c5: i2c@30ad0000 {
+ 				compatible = "fsl,imx8mp-i2c", "fsl,imx21-i2c";
+ 				#address-cells = <1>;
+@@ -759,7 +895,7 @@
+ 			};
+ 
+ 			usdhc1: mmc@30b40000 {
+-				compatible = "fsl,imx8mp-usdhc", "fsl,imx7d-usdhc";
++				compatible = "fsl,imx8mp-usdhc", "fsl,imx8mm-usdhc", "fsl,imx7d-usdhc";
+ 				reg = <0x30b40000 0x10000>;
+ 				interrupts = <GIC_SPI 22 IRQ_TYPE_LEVEL_HIGH>;
+ 				clocks = <&clk IMX8MP_CLK_DUMMY>,
+@@ -773,7 +909,7 @@
+ 			};
+ 
+ 			usdhc2: mmc@30b50000 {
+-				compatible = "fsl,imx8mp-usdhc", "fsl,imx7d-usdhc";
++				compatible = "fsl,imx8mp-usdhc", "fsl,imx8mm-usdhc", "fsl,imx7d-usdhc";
+ 				reg = <0x30b50000 0x10000>;
+ 				interrupts = <GIC_SPI 23 IRQ_TYPE_LEVEL_HIGH>;
+ 				clocks = <&clk IMX8MP_CLK_DUMMY>,
+@@ -787,7 +923,7 @@
+ 			};
+ 
+ 			usdhc3: mmc@30b60000 {
+-				compatible = "fsl,imx8mp-usdhc", "fsl,imx7d-usdhc";
++				compatible = "fsl,imx8mp-usdhc", "fsl,imx8mm-usdhc", "fsl,imx7d-usdhc";
+ 				reg = <0x30b60000 0x10000>;
+ 				interrupts = <GIC_SPI 24 IRQ_TYPE_LEVEL_HIGH>;
+ 				clocks = <&clk IMX8MP_CLK_DUMMY>,
+@@ -854,16 +990,15 @@
+ 				nvmem-cells = <&eth_mac1>;
+ 				nvmem-cell-names = "mac-address";
+ 				fsl,stop-mode = <&gpr 0x10 3>;
+-				nvmem_macaddr_swap;
+ 				status = "disabled";
+ 			};
+ 
+ 			eqos: ethernet@30bf0000 {
+ 				compatible = "nxp,imx8mp-dwmac-eqos", "snps,dwmac-5.10a";
+ 				reg = <0x30bf0000 0x10000>;
+-				interrupts = <GIC_SPI 134 IRQ_TYPE_LEVEL_HIGH>,
+-					     <GIC_SPI 135 IRQ_TYPE_LEVEL_HIGH>;
+-				interrupt-names = "eth_wake_irq", "macirq";
++				interrupts = <GIC_SPI 135 IRQ_TYPE_LEVEL_HIGH>,
++					     <GIC_SPI 134 IRQ_TYPE_LEVEL_HIGH>;
++				interrupt-names = "macirq", "eth_wake_irq";
+ 				clocks = <&clk IMX8MP_CLK_ENET_QOS_ROOT>,
+ 					 <&clk IMX8MP_CLK_QOS_ENET_ROOT>,
+ 					 <&clk IMX8MP_CLK_ENET_QOS_TIMER>,
+@@ -876,6 +1011,8 @@
+ 							 <&clk IMX8MP_SYS_PLL2_100M>,
+ 							 <&clk IMX8MP_SYS_PLL2_125M>;
+ 				assigned-clock-rates = <0>, <100000000>, <125000000>;
++				nvmem-cells = <&eth_mac2>;
++				nvmem-cell-names = "mac-address";
+ 				intf_mode = <&gpr 0x4>;
+ 				status = "disabled";
+ 			};
+@@ -888,6 +1025,44 @@
+ 			#size-cells = <1>;
+ 			ranges;
+ 
++			media_blk_ctrl: blk-ctrl@32ec0000 {
++				compatible = "fsl,imx8mp-media-blk-ctrl",
++					     "syscon";
++				reg = <0x32ec0000 0x10000>;
++				power-domains = <&pgc_mediamix>,
++						<&pgc_mipi_phy1>,
++						<&pgc_mipi_phy1>,
++						<&pgc_mediamix>,
++						<&pgc_mediamix>,
++						<&pgc_mipi_phy2>,
++						<&pgc_mediamix>,
++						<&pgc_ispdwp>,
++						<&pgc_ispdwp>,
++						<&pgc_mipi_phy2>;
++				power-domain-names = "bus", "mipi-dsi1", "mipi-csi1",
++						     "lcdif1", "isi", "mipi-csi2",
++						     "lcdif2", "isp", "dwe",
++						     "mipi-dsi2";
++				clocks = <&clk IMX8MP_CLK_MEDIA_APB_ROOT>,
++					 <&clk IMX8MP_CLK_MEDIA_AXI_ROOT>,
++					 <&clk IMX8MP_CLK_MEDIA_CAM1_PIX_ROOT>,
++					 <&clk IMX8MP_CLK_MEDIA_CAM2_PIX_ROOT>,
++					 <&clk IMX8MP_CLK_MEDIA_DISP1_PIX_ROOT>,
++					 <&clk IMX8MP_CLK_MEDIA_DISP2_PIX_ROOT>,
++					 <&clk IMX8MP_CLK_MEDIA_ISP_ROOT>,
++					 <&clk IMX8MP_CLK_MEDIA_MIPI_PHY1_REF_ROOT>;
++				clock-names = "apb", "axi", "cam1", "cam2",
++					      "disp1", "disp2", "isp", "phy";
++
++				assigned-clocks = <&clk IMX8MP_CLK_MEDIA_AXI>,
++						  <&clk IMX8MP_CLK_MEDIA_APB>;
++				assigned-clock-parents = <&clk IMX8MP_SYS_PLL2_1000M>,
++							 <&clk IMX8MP_SYS_PLL1_800M>;
++				assigned-clock-rates = <500000000>, <200000000>;
++
++				#power-domain-cells = <1>;
++			};
++
+ 			hsio_blk_ctrl: blk-ctrl@32f10000 {
+ 				compatible = "fsl,imx8mp-hsio-blk-ctrl", "syscon";
+ 				reg = <0x32f10000 0x24>;
+@@ -903,6 +1078,37 @@
+ 			};
+ 		};
+ 
++		gpu3d: gpu@38000000 {
++			compatible = "vivante,gc";
++			reg = <0x38000000 0x8000>;
++			interrupts = <GIC_SPI 3 IRQ_TYPE_LEVEL_HIGH>;
++			clocks = <&clk IMX8MP_CLK_GPU3D_ROOT>,
++				 <&clk IMX8MP_CLK_GPU3D_SHADER_CORE>,
++				 <&clk IMX8MP_CLK_GPU_ROOT>,
++				 <&clk IMX8MP_CLK_GPU_AHB>;
++			clock-names = "core", "shader", "bus", "reg";
++			assigned-clocks = <&clk IMX8MP_CLK_GPU3D_CORE>,
++					  <&clk IMX8MP_CLK_GPU3D_SHADER_CORE>;
++			assigned-clock-parents = <&clk IMX8MP_SYS_PLL1_800M>,
++						 <&clk IMX8MP_SYS_PLL1_800M>;
++			assigned-clock-rates = <800000000>, <800000000>;
++			power-domains = <&pgc_gpu3d>;
++		};
++
++		gpu2d: gpu@38008000 {
++			compatible = "vivante,gc";
++			reg = <0x38008000 0x8000>;
++			interrupts = <GIC_SPI 25 IRQ_TYPE_LEVEL_HIGH>;
++			clocks = <&clk IMX8MP_CLK_GPU2D_ROOT>,
++				 <&clk IMX8MP_CLK_GPU_ROOT>,
++				 <&clk IMX8MP_CLK_GPU_AHB>;
++			clock-names = "core", "bus", "reg";
++			assigned-clocks = <&clk IMX8MP_CLK_GPU2D_CORE>;
++			assigned-clock-parents = <&clk IMX8MP_SYS_PLL1_800M>;
++			assigned-clock-rates = <800000000>;
++			power-domains = <&pgc_gpu2d>;
++		};
++
+ 		gic: interrupt-controller@38800000 {
+ 			compatible = "arm,gic-v3";
+ 			reg = <0x38800000 0x10000>,
+@@ -913,6 +1119,12 @@
+ 			interrupt-parent = <&gic>;
+ 		};
+ 
++		edacmc: memory-controller@3d400000 {
++			compatible = "snps,ddrc-3.80a";
++			reg = <0x3d400000 0x400000>;
++			interrupts = <GIC_SPI 147 IRQ_TYPE_LEVEL_HIGH>;
++		};
++
+ 		ddr-pmu@3d800000 {
+ 			compatible = "fsl,imx8mp-ddr-pmu", "fsl,imx8m-ddr-pmu";
+ 			reg = <0x3d800000 0x400000>;
+@@ -953,9 +1165,6 @@
+ 					 <&clk IMX8MP_CLK_USB_CORE_REF>,
+ 					 <&clk IMX8MP_CLK_USB_ROOT>;
+ 				clock-names = "bus_early", "ref", "suspend";
+-				assigned-clocks = <&clk IMX8MP_CLK_HSIO_AXI>;
+-				assigned-clock-parents = <&clk IMX8MP_SYS_PLL2_500M>;
+-				assigned-clock-rates = <500000000>;
+ 				interrupts = <GIC_SPI 40 IRQ_TYPE_LEVEL_HIGH>;
+ 				phys = <&usb3_phy0>, <&usb3_phy0>;
+ 				phy-names = "usb2-phy", "usb3-phy";
+@@ -998,14 +1207,22 @@
+ 					 <&clk IMX8MP_CLK_USB_CORE_REF>,
+ 					 <&clk IMX8MP_CLK_USB_ROOT>;
+ 				clock-names = "bus_early", "ref", "suspend";
+-				assigned-clocks = <&clk IMX8MP_CLK_HSIO_AXI>;
+-				assigned-clock-parents = <&clk IMX8MP_SYS_PLL2_500M>;
+-				assigned-clock-rates = <500000000>;
+ 				interrupts = <GIC_SPI 41 IRQ_TYPE_LEVEL_HIGH>;
+ 				phys = <&usb3_phy1>, <&usb3_phy1>;
+ 				phy-names = "usb2-phy", "usb3-phy";
+ 				snps,dis-u2-freeclk-exists-quirk;
+ 			};
+ 		};
++
++		dsp: dsp@3b6e8000 {
++			compatible = "fsl,imx8mp-dsp";
++			reg = <0x3b6e8000 0x88000>;
++			mbox-names = "txdb0", "txdb1",
++				"rxdb0", "rxdb1";
++			mboxes = <&mu2 2 0>, <&mu2 2 1>,
++				<&mu2 3 0>, <&mu2 3 1>;
++			memory-region = <&dsp_reserved>;
++			status = "disabled";
++		};
+ 	};
+ };
+-- 
+2.35.1
+

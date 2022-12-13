@@ -30,6 +30,8 @@ SRC_URI:append:dh-imx8mp-dhsom = " \
 	file://0005-ARM-dts-imx-Rename-imx8mp-dhcom-pdk2-boot.dtsi.patch \
 	file://0006-ARM-dts-imx-Adjust-ECSPI1-pinmux-on-i.MX8M-Plus-DHCO.patch \
 	file://0007-ARM-dts-imx-Fix-I2C5-GPIO-assignment-on-i.MX8M-Plus-.patch \
+	file://0008-imx8mp-synchronise-device-tree-with-linux.patch \
+	file://0009-imx8mp-synchronise-device-tree-with-linux.patch \
 	"
 
 EXTRA_OEMAKE:append:dh-imx8mp-dhsom = " ATF_LOAD_ADDR=0x970000"
