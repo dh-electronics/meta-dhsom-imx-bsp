@@ -48,4 +48,4 @@ do_compile:prepend:dh-imx8mp-dhsom () {
 # format is -${MACHINE}-date.extraversion. The date is in the
 # format YYYYMMDD, the extraversion is used in case there are
 # multiple releases during a single day, which is unlikely.
-UBOOT_LOCALVERSION:dh-stm32mp1-dhsom ?= "-${MACHINE}-20221014.01"
+UBOOT_LOCALVERSION:dh-imx-dhsom ?= "-${MACHINE}-20221213.01"
