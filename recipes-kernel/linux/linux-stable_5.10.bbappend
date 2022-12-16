@@ -1,6 +1,5 @@
 FILESEXTRAPATHS:prepend := "${THISDIR}/${PN}:"
 
-BPV := "${@'.'.join(d.getVar('PV').split('.')[0:2])}"
 KBRANCH:dh-imx6-dhsom ?= "linux-${BPV}.y"
 KMACHINE:dh-imx6-dhsom ?= "dh-imx6-dhsom"
 COMPATIBLE_MACHINE:dh-imx6-dhsom = "(dh-imx6-dhsom)"
