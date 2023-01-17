@@ -1,0 +1,70 @@
+From cd1b51baeb50560ec96d6c7462b2a0da4c112105 Mon Sep 17 00:00:00 2001
+From: Lucas Stach <l.stach@pengutronix.de>
+Date: Wed, 6 Apr 2022 17:34:02 +0200
+Subject: [PATCH 16/39] arm64: dts: imx8mp: add HDMI power-domains
+
+This adds the PGC and HDMI blk-ctrl nodes providing power control for
+HDMI subsystem peripherals.
+
+Upstream-Status: Submitted [https://patchwork.kernel.org/project/linux-arm-kernel/patch/20220406153402.1265474-12-l.stach@pengutronix.de/]
+Signed-off-by: Lucas Stach <l.stach@pengutronix.de>
+---
+ arch/arm64/boot/dts/freescale/imx8mp.dtsi | 35 +++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp.dtsi b/arch/arm64/boot/dts/freescale/imx8mp.dtsi
+index 708443e0114e8..11f8c071e641b 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mp.dtsi
++++ b/arch/arm64/boot/dts/freescale/imx8mp.dtsi
+@@ -585,6 +585,23 @@ pgc_mediamix: power-domain@10 {
+ 							 <&clk IMX8MP_CLK_MEDIA_APB_ROOT>;
+ 					};
+ 
++					pgc_hdmimix: power-domains@14 {
++						#power-domain-cells = <0>;
++						reg = <IMX8MP_POWER_DOMAIN_HDMIMIX>;
++						clocks = <&clk IMX8MP_CLK_HDMI_ROOT>,
++							 <&clk IMX8MP_CLK_HDMI_APB>;
++						assigned-clocks = <&clk IMX8MP_CLK_HDMI_AXI>,
++								  <&clk IMX8MP_CLK_HDMI_APB>;
++						assigned-clock-parents = <&clk IMX8MP_SYS_PLL2_500M>,
++									 <&clk IMX8MP_SYS_PLL1_133M>;
++						assigned-clock-rates = <500000000>, <133000000>;
++					};
++
++					pgc_hdmi_phy: power-domains@15 {
++						#power-domain-cells = <0>;
++						reg = <IMX8MP_POWER_DOMAIN_HDMI_PHY>;
++					};
++
+ 					pgc_mipi_phy2: power-domain@16 {
+ 						#power-domain-cells = <0>;
+ 						reg = <IMX8MP_POWER_DOMAIN_MIPI_PHY2>;
+@@ -1285,6 +1302,24 @@ hsio_blk_ctrl: blk-ctrl@32f10000 {
+ 				interconnect-names = "noc-pcie", "usb1", "usb2", "pcie";
+ 				#power-domain-cells = <1>;
+ 			};
++
++			hdmi_blk_ctrl: blk-ctrl@32fc0000 {
++				compatible = "fsl,imx8mp-hdmi-blk-ctrl", "syscon";
++				reg = <0x32fc0000 0x23c>;
++				clocks = <&clk IMX8MP_CLK_HDMI_APB>,
++					 <&clk IMX8MP_CLK_HDMI_ROOT>,
++					 <&clk IMX8MP_CLK_HDMI_REF_266M>,
++					 <&clk IMX8MP_CLK_HDMI_24M>;
++				clock-names = "apb", "axi", "ref_266m", "ref_24m";
++				power-domains = <&pgc_hdmimix>, <&pgc_hdmimix>,
++						<&pgc_hdmimix>, <&pgc_hdmimix>,
++						<&pgc_hdmimix>, <&pgc_hdmimix>,
++						<&pgc_hdmimix>, <&pgc_hdmi_phy>;
++				power-domain-names = "bus", "irqsteer", "lcdif",
++						     "pai", "pvi", "trng",
++						     "hdmi-tx", "hdmi-tx-phy";
++				#power-domain-cells = <1>;
++			};
+ 		};
+ 
+ 		pcie: pcie@33800000 {
+-- 
+2.39.1
+
