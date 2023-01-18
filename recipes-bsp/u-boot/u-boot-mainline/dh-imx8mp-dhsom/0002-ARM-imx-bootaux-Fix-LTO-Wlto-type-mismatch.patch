@@ -1,0 +1,110 @@
+From 8455cc6e2fc8f69eb43ec2d39325f00d006b2217 Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Tue, 13 Dec 2022 05:36:10 +0100
+Subject: [PATCH 2/4] ARM: imx: bootaux: Fix LTO -Wlto-type-mismatch
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Commit 56c2dbdabab5 ("imx: bootaux: cleanup code") introduces the
+following LTO related warning:
+
+"
+arch/arm/mach-imx/imx_bootaux.c:24:31: warning: type of ‘hostmap’ does not match original declaration [-Wlto-type-mismatch]
+   24 | const __weak struct rproc_att hostmap[] = { };
+      |                               ^
+arch/arm/mach-imx/imx8m/soc.c:1590:24: note: array types have different bounds
+ 1590 | const struct rproc_att hostmap[] = {
+      |                        ^
+arch/arm/mach-imx/imx8m/soc.c:1590:24: note: ‘hostmap’ was previously declared here
+../aarch64-linux-gnu/bin/ld: warning: u-boot has a LOAD segment with RWX permissions
+"
+
+This is because the weak empty array of structures "hostmap" is eventually
+replaced by non-empty array of structures with different number of elements.
+Fix this by avoiding weak variable size array, instead use a weak function
+which returns single pointer to the array.
+
+Upstream-Status: Backport [3f7afddc9cbdcbbc47a0b814a132b76593cf8b28]
+Fixes: 56c2dbdabab5 ("imx: bootaux: cleanup code")
+Signed-off-by: Marek Vasut <marex@denx.de>
+---
+Cc: "NXP i.MX U-Boot Team" <uboot-imx@nxp.com>
+Cc: Fabio Estevam <festevam@gmail.com>
+Cc: Marek Behún <kabel@kernel.org>
+Cc: Peng Fan <peng.fan@nxp.com>
+Cc: Stefano Babic <sbabic@denx.de>
+---
+ arch/arm/include/asm/mach-imx/sys_proto.h | 2 ++
+ arch/arm/mach-imx/imx8m/soc.c             | 5 +++++
+ arch/arm/mach-imx/imx_bootaux.c           | 7 +++++--
+ arch/arm/mach-imx/mx7/soc.c               | 5 +++++
+ 4 files changed, 17 insertions(+), 2 deletions(-)
+
+diff --git a/arch/arm/include/asm/mach-imx/sys_proto.h b/arch/arm/include/asm/mach-imx/sys_proto.h
+index dd0d3f29333..27fdc16cd50 100644
+--- a/arch/arm/include/asm/mach-imx/sys_proto.h
++++ b/arch/arm/include/asm/mach-imx/sys_proto.h
+@@ -149,6 +149,8 @@ struct rproc_att {
+ 	u32 size; /* size of reg range */
+ };
+ 
++const struct rproc_att *imx_bootaux_get_hostmap(void);
++
+ struct rom_api {
+ 	u16 ver;
+ 	u16 tag;
+diff --git a/arch/arm/mach-imx/imx8m/soc.c b/arch/arm/mach-imx/imx8m/soc.c
+index a4863281e36..5e92f8143cf 100644
+--- a/arch/arm/mach-imx/imx8m/soc.c
++++ b/arch/arm/mach-imx/imx8m/soc.c
+@@ -1610,4 +1610,9 @@ const struct rproc_att hostmap[] = {
+ 	{ 0x40000000, 0x40000000, 0x80000000 },
+ 	{ /* sentinel */ }
+ };
++
++const struct rproc_att *imx_bootaux_get_hostmap(void)
++{
++	return hostmap;
++}
+ #endif
+diff --git a/arch/arm/mach-imx/imx_bootaux.c b/arch/arm/mach-imx/imx_bootaux.c
+index 433c1f80cee..888c53d6901 100644
+--- a/arch/arm/mach-imx/imx_bootaux.c
++++ b/arch/arm/mach-imx/imx_bootaux.c
+@@ -21,11 +21,14 @@
+ #define SRC_M4_REG_OFFSET		0
+ #endif
+ 
+-const __weak struct rproc_att hostmap[] = { };
++__weak const struct rproc_att *imx_bootaux_get_hostmap(void)
++{
++	return NULL;
++}
+ 
+ static const struct rproc_att *get_host_mapping(unsigned long auxcore)
+ {
+-	const struct rproc_att *mmap = hostmap;
++	const struct rproc_att *mmap = imx_bootaux_get_hostmap();
+ 
+ 	while (mmap && mmap->size) {
+ 		if (mmap->da <= auxcore &&
+diff --git a/arch/arm/mach-imx/mx7/soc.c b/arch/arm/mach-imx/mx7/soc.c
+index 02af0d568f2..689dbefe8ee 100644
+--- a/arch/arm/mach-imx/mx7/soc.c
++++ b/arch/arm/mach-imx/mx7/soc.c
+@@ -224,6 +224,11 @@ const struct rproc_att hostmap[] = {
+ 	{ 0x80000000, 0x80000000, 0x60000000 }, /* DDRC */
+ 	{ /* sentinel */ }
+ };
++
++const struct rproc_att *imx_bootaux_get_hostmap(void)
++{
++	return hostmap;
++}
+ #endif
+ 
+ #if !CONFIG_IS_ENABLED(SKIP_LOWLEVEL_INIT)
+-- 
+2.39.1
+
