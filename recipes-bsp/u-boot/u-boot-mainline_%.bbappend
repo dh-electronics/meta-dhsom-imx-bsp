@@ -10,28 +10,9 @@ do_compile:append:dh-imx-dhsom () {
 }
 
 SRC_URI:append:dh-imx-dhsom = " \
-	file://0001-gpio-fix-incorrect-depends-on-for-SPL_GPIO_HOG.patch \
-	file://0002-Revert-i2c-fix-stack-buffer-overflow-vulnerability-i.patch \
-	file://0003-i2c-fix-stack-buffer-overflow-vulnerability-in-i2c-m.patch \
-	file://0004-mmc-fsl_esdhc-fix-problem-when-using-clk-driver.patch \
 	file://boot.cmd \
 	file://fw_env.config \
-	"
-
-SRC_URI:append:dh-imx6-dhsom = " \
-	file://0001-ARM-imx-dh-imx6-Increase-SF-erase-area-for-u-boot-up.patch \
-	"
-
-SRC_URI:append:dh-imx8mp-dhsom = " \
-	file://0001-ARM-imx-Enable-USB-ethernet-on-i.MX8M-Plus-DHCOM.patch \
-	file://0002-ARM-dts-imx-Add-HW-variant-details-to-i.MX8M-Plus-DH.patch \
-	file://0003-ARM-dts-imx-Drop-Atheros-PHY-header-from-i.MX8M-Plus.patch \
-	file://0004-ARM-dts-imx-Add-SoM-compatible-to-i.MX8M-Plus-DHCOM-.patch \
-	file://0005-ARM-dts-imx-Rename-imx8mp-dhcom-pdk2-boot.dtsi.patch \
-	file://0006-ARM-dts-imx-Adjust-ECSPI1-pinmux-on-i.MX8M-Plus-DHCO.patch \
-	file://0007-ARM-dts-imx-Fix-I2C5-GPIO-assignment-on-i.MX8M-Plus-.patch \
-	file://0008-imx8mp-synchronise-device-tree-with-linux.patch \
-	file://0009-imx8mp-synchronise-device-tree-with-linux.patch \
+	file://0001-u-boot-initial-env-rework-make-target.patch \
 	"
 
 EXTRA_OEMAKE:append:dh-imx8mp-dhsom = " ATF_LOAD_ADDR=0x970000"
@@ -48,4 +29,4 @@ do_compile:prepend:dh-imx8mp-dhsom () {
 # format is -${MACHINE}-date.extraversion. The date is in the
 # format YYYYMMDD, the extraversion is used in case there are
 # multiple releases during a single day, which is unlikely.
-UBOOT_LOCALVERSION:dh-imx-dhsom ?= "-${MACHINE}-20221213.01"
+UBOOT_LOCALVERSION:dh-imx-dhsom ?= "-${MACHINE}-20230218.01"
