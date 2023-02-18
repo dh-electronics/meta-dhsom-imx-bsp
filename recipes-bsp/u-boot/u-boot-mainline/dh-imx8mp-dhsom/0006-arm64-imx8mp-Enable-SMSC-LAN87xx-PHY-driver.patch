@@ -1,0 +1,45 @@
+From 9f0db49702c1f7af244119d87e113b7801e7c04c Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Thu, 19 Jan 2023 21:47:19 +0100
+Subject: [PATCH 06/25] arm64: imx8mp: Enable SMSC LAN87xx PHY driver
+
+These SoMs may ship with SMSC LAN8740Ai PHYs, enable the SMSC PHY driver.
+
+Upstream-Status: Backport [5aa348d2bbf895c561af05bc758a98bf9c9a0354]
+Signed-off-by: Marek Vasut <marex@denx.de>
+---
+Cc: "Ariel D'Alessandro" <ariel.dalessandro@collabora.com>
+Cc: "NXP i.MX U-Boot Team" <uboot-imx@nxp.com>
+Cc: Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>
+Cc: Fabio Estevam <festevam@gmail.com>
+Cc: Joe Hershberger <joe.hershberger@ni.com>
+Cc: Lukasz Majewski <lukma@denx.de>
+Cc: Marcel Ziswiler <marcel.ziswiler@toradex.com>
+Cc: Marek Vasut <marex@denx.de>
+Cc: Michael Trimarchi <michael@amarulasolutions.com>
+Cc: Peng Fan <peng.fan@nxp.com>
+Cc: Ramon Fried <rfried.dev@gmail.com>
+Cc: Sean Anderson <seanga2@gmail.com>
+Cc: Stefano Babic <sbabic@denx.de>
+Cc: Tim Harvey <tharvey@gateworks.com>
+Cc: Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
+Cc: u-boot@lists.denx.de
+---
+ configs/imx8mp_dhcom_pdk2_defconfig | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/configs/imx8mp_dhcom_pdk2_defconfig b/configs/imx8mp_dhcom_pdk2_defconfig
+index 9ce8f0a263b..d88b7a0c46b 100644
+--- a/configs/imx8mp_dhcom_pdk2_defconfig
++++ b/configs/imx8mp_dhcom_pdk2_defconfig
+@@ -199,6 +199,7 @@ CONFIG_SPI_FLASH_WINBOND=y
+ CONFIG_SPI_FLASH_MTD=y
+ CONFIG_PHY_MICREL=y
+ CONFIG_PHY_MICREL_KSZ90X1=y
++CONFIG_PHY_SMSC=y
+ CONFIG_DM_MDIO=y
+ CONFIG_DM_ETH_PHY=y
+ CONFIG_DWC_ETH_QOS=y
+-- 
+2.39.1
+

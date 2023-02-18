@@ -1,0 +1,73 @@
+From 257646c9142045ec28135083231025fc9dd2554f Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Sat, 11 Feb 2023 13:35:20 +0100
+Subject: [PATCH 22/25] arm64: dts: imx8mp: Add EQoS RMII pin mux on i.MX8MP
+ DHCOM
+
+The i.MX8MP DHCOM SoM may come with either KSZ9131RNXI RGMII PHY
+or LAN8740Ai RMII PHY on the SoM attached to EQoS MAC. Add pin
+mux settings for both options, so that DT overlay can override
+these settings on SoM variant with the LAN8740Ai PHY.
+
+Upstream-Status: Submitted [https://patchwork.ozlabs.org/project/uboot/patch/20230211223801.560053-2-marex@denx.de/]
+Signed-off-by: Marek Vasut <marex@denx.de>
+---
+Cc: "NXP i.MX U-Boot Team" <uboot-imx@nxp.com>
+Cc: Fabio Estevam <festevam@gmail.com>
+Cc: Peng Fan <peng.fan@nxp.com>
+Cc: Stefano Babic <sbabic@denx.de>
+Cc: u-boot@lists.denx.de
+---
+V2: No change
+---
+ arch/arm/dts/imx8mp-dhcom-som.dtsi | 20 ++++++++++++++++++--
+ 1 file changed, 18 insertions(+), 2 deletions(-)
+
+diff --git a/arch/arm/dts/imx8mp-dhcom-som.dtsi b/arch/arm/dts/imx8mp-dhcom-som.dtsi
+index 304c94557ed..b56607dfb39 100644
+--- a/arch/arm/dts/imx8mp-dhcom-som.dtsi
++++ b/arch/arm/dts/imx8mp-dhcom-som.dtsi
+@@ -83,7 +83,7 @@
+ 
+ &eqos {	/* First ethernet */
+ 	pinctrl-names = "default";
+-	pinctrl-0 = <&pinctrl_eqos>;
++	pinctrl-0 = <&pinctrl_eqos_rgmii>;
+ 	phy-handle = <&ethphy0g>;
+ 	phy-mode = "rgmii-id";
+ 	status = "okay";
+@@ -664,7 +664,7 @@
+ 		>;
+ 	};
+ 
+-	pinctrl_eqos: dhcom-eqos-grp {	/* RGMII */
++	pinctrl_eqos_rgmii: dhcom-eqos-rgmii-grp {	/* RGMII */
+ 		fsl,pins = <
+ 			MX8MP_IOMUXC_ENET_MDC__ENET_QOS_MDC		0x3
+ 			MX8MP_IOMUXC_ENET_MDIO__ENET_QOS_MDIO		0x3
+@@ -683,6 +683,22 @@
+ 		>;
+ 	};
+ 
++	pinctrl_eqos_rmii: dhcom-eqos-rmii-grp {	/* RMII */
++		fsl,pins = <
++			MX8MP_IOMUXC_ENET_MDC__ENET_QOS_MDC		0x3
++			MX8MP_IOMUXC_ENET_MDIO__ENET_QOS_MDIO		0x3
++			MX8MP_IOMUXC_ENET_TX_CTL__ENET_QOS_RGMII_TX_CTL	0x1f
++			MX8MP_IOMUXC_ENET_TD0__ENET_QOS_RGMII_TD0	0x1f
++			MX8MP_IOMUXC_ENET_TD1__ENET_QOS_RGMII_TD1	0x1f
++			MX8MP_IOMUXC_ENET_RXC__ENET_QOS_RX_ER		0x1f
++			MX8MP_IOMUXC_ENET_RX_CTL__ENET_QOS_RGMII_RX_CTL	0x91
++			MX8MP_IOMUXC_ENET_RD0__ENET_QOS_RGMII_RD0	0x91
++			MX8MP_IOMUXC_ENET_RD1__ENET_QOS_RGMII_RD1	0x91
++			/* Clock */
++			MX8MP_IOMUXC_ENET_TD2__CCM_ENET_QOS_CLOCK_GENERATE_REF_CLK	0x4000001f
++		>;
++	};
++
+ 	pinctrl_enet_vio: dhcom-enet-vio-grp {
+ 		fsl,pins = <
+ 			MX8MP_IOMUXC_SD1_RESET_B__GPIO2_IO10		0x22
+-- 
+2.39.1
+

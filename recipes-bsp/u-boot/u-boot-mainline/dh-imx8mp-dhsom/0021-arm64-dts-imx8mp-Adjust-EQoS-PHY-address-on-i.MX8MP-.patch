@@ -1,0 +1,48 @@
+From 9723aef85de034579956421399c3a6cb95c84565 Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Sat, 11 Feb 2023 13:33:45 +0100
+Subject: [PATCH 21/25] arm64: dts: imx8mp: Adjust EQoS PHY address on i.MX8MP
+ DHCOM
+
+The current variant of the SoM has LAN8740Ai PHY connected to EQoS
+strapped to MDIO address 0 , adjust the MDIO address to match the
+hardware.
+
+Upstream-Status: Submitted [https://patchwork.ozlabs.org/project/uboot/patch/20230211223801.560053-1-marex@denx.de/]
+Signed-off-by: Marek Vasut <marex@denx.de>
+---
+Cc: "NXP i.MX U-Boot Team" <uboot-imx@nxp.com>
+Cc: Fabio Estevam <festevam@gmail.com>
+Cc: Peng Fan <peng.fan@nxp.com>
+Cc: Stefano Babic <sbabic@denx.de>
+Cc: u-boot@lists.denx.de
+---
+V2: This is EQoS PHY address, not FEC, update commit message
+---
+ arch/arm/dts/imx8mp-dhcom-som.dtsi | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/arch/arm/dts/imx8mp-dhcom-som.dtsi b/arch/arm/dts/imx8mp-dhcom-som.dtsi
+index 0f13ee36277..304c94557ed 100644
+--- a/arch/arm/dts/imx8mp-dhcom-som.dtsi
++++ b/arch/arm/dts/imx8mp-dhcom-som.dtsi
+@@ -94,14 +94,14 @@
+ 		#size-cells = <0>;
+ 
+ 		/* Up to one of these two PHYs may be populated. */
+-		ethphy0f: ethernet-phy@1 { /* SMSC LAN8740Ai */
++		ethphy0f: ethernet-phy@0 { /* SMSC LAN8740Ai */
+ 			compatible = "ethernet-phy-id0007.c110",
+ 				     "ethernet-phy-ieee802.3-c22";
+ 			interrupt-parent = <&gpio3>;
+ 			interrupts = <19 IRQ_TYPE_LEVEL_LOW>;
+ 			pinctrl-0 = <&pinctrl_ethphy0>;
+ 			pinctrl-names = "default";
+-			reg = <1>;
++			reg = <0>;
+ 			reset-assert-us = <1000>;
+ 			reset-deassert-us = <1000>;
+ 			reset-gpios = <&gpio3 20 GPIO_ACTIVE_LOW>;
+-- 
+2.39.1
+

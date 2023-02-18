@@ -1,0 +1,51 @@
+From 7365618788a3cdc35e87ed02172cc93f0404b29f Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Thu, 9 Feb 2023 21:41:46 +0100
+Subject: [PATCH 11/25] net: dwc_eth_qos: Staticize
+ eqos_inval_buffer_tegra186()
+
+This function is only used within the driver, staticize it.
+
+Upstream-Status: Submitted [https://patchwork.ozlabs.org/project/uboot/patch/20230211214729.478566-5-marex@denx.de/]
+Fixes: 149e80f74b6 ("net: dwc_eth_qos: public some functions")
+Signed-off-by: Marek Vasut <marex@denx.de>
+---
+Cc: "Ariel D'Alessandro" <ariel.dalessandro@collabora.com>
+Cc: "NXP i.MX U-Boot Team" <uboot-imx@nxp.com>
+Cc: Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>
+Cc: Fabio Estevam <festevam@gmail.com>
+Cc: Joe Hershberger <joe.hershberger@ni.com>
+Cc: Lukasz Majewski <lukma@denx.de>
+Cc: Marcel Ziswiler <marcel.ziswiler@toradex.com>
+Cc: Marek Vasut <marex@denx.de>
+Cc: Michael Trimarchi <michael@amarulasolutions.com>
+Cc: Peng Fan <peng.fan@nxp.com>
+Cc: Ramon Fried <rfried.dev@gmail.com>
+Cc: Sean Anderson <seanga2@gmail.com>
+Cc: Stefano Babic <sbabic@denx.de>
+Cc: Tim Harvey <tharvey@gateworks.com>
+Cc: Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
+Cc: u-boot@lists.denx.de
+---
+V2: - New patch
+V3: No change
+---
+ drivers/net/dwc_eth_qos.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/net/dwc_eth_qos.c b/drivers/net/dwc_eth_qos.c
+index e4b2b6f0d88..bd558587371 100644
+--- a/drivers/net/dwc_eth_qos.c
++++ b/drivers/net/dwc_eth_qos.c
+@@ -108,7 +108,7 @@ void eqos_flush_desc_generic(void *desc)
+ 	flush_dcache_range(start, end);
+ }
+ 
+-void eqos_inval_buffer_tegra186(void *buf, size_t size)
++static void eqos_inval_buffer_tegra186(void *buf, size_t size)
+ {
+ 	unsigned long start = (unsigned long)buf & ~(ARCH_DMA_MINALIGN - 1);
+ 	unsigned long end = ALIGN(start + size, ARCH_DMA_MINALIGN);
+-- 
+2.39.1
+

@@ -1,0 +1,350 @@
+From 09fefa7a1b2db17029d3dd632a6ea74d64aa031c Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Thu, 19 Jan 2023 21:31:02 +0100
+Subject: [PATCH 19/25] arm64: imx8mp: Drop EQoS GPR[1] board workaround
+
+The EQoS interface mode is now configured in common board_interface_eth_init()
+and called by EQoS MAC driver when appropriate. Drop the board side duplicates
+if the same functionality.
+
+Pending [FIXME]
+Upstream-Status: Submitted [https://patchwork.ozlabs.org/project/uboot/patch/20230211214729.478566-13-marex@denx.de/]
+Signed-off-by: Marek Vasut <marex@denx.de>
+---
+Cc: "Ariel D'Alessandro" <ariel.dalessandro@collabora.com>
+Cc: "NXP i.MX U-Boot Team" <uboot-imx@nxp.com>
+Cc: Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>
+Cc: Fabio Estevam <festevam@gmail.com>
+Cc: Joe Hershberger <joe.hershberger@ni.com>
+Cc: Lukasz Majewski <lukma@denx.de>
+Cc: Marcel Ziswiler <marcel.ziswiler@toradex.com>
+Cc: Marek Vasut <marex@denx.de>
+Cc: Michael Trimarchi <michael@amarulasolutions.com>
+Cc: Peng Fan <peng.fan@nxp.com>
+Cc: Ramon Fried <rfried.dev@gmail.com>
+Cc: Sean Anderson <seanga2@gmail.com>
+Cc: Stefano Babic <sbabic@denx.de>
+Cc: Tim Harvey <tharvey@gateworks.com>
+Cc: Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
+Cc: u-boot@lists.denx.de
+---
+V2: Fix the advantech board build
+V3: Drop now unused architecture set_clk_eqos() code as well
+---
+ arch/arm/include/asm/arch-imx8m/clock.h       |  1 -
+ arch/arm/mach-imx/imx8m/clock_imx8mm.c        | 47 -------------------
+ .../imx8mp_rsb3720a1/imx8mp_rsb3720a1.c       | 17 +------
+ .../dh_imx8mp/imx8mp_dhcom_pdk2.c             | 14 ------
+ board/engicam/imx8mp/icore_mx8mp.c            | 16 -------
+ board/freescale/imx8mp_evk/imx8mp_evk.c       | 17 -------
+ board/gateworks/venice/venice.c               | 15 ------
+ board/msc/sm2s_imx8mp/sm2s_imx8mp.c           | 15 ------
+ board/toradex/verdin-imx8mp/verdin-imx8mp.c   | 16 -------
+ 9 files changed, 1 insertion(+), 157 deletions(-)
+
+diff --git a/arch/arm/include/asm/arch-imx8m/clock.h b/arch/arm/include/asm/arch-imx8m/clock.h
+index e4433763bc4..a861cd6db3a 100644
+--- a/arch/arm/include/asm/arch-imx8m/clock.h
++++ b/arch/arm/include/asm/arch-imx8m/clock.h
+@@ -276,5 +276,4 @@ int set_clk_qspi(void);
+ void enable_ocotp_clk(unsigned char enable);
+ int enable_i2c_clk(unsigned char enable, unsigned int i2c_num);
+ int set_clk_enet(enum enet_freq type);
+-int set_clk_eqos(enum enet_freq type);
+ void hab_caam_clock_enable(unsigned char enable);
+diff --git a/arch/arm/mach-imx/imx8m/clock_imx8mm.c b/arch/arm/mach-imx/imx8m/clock_imx8mm.c
+index 94b15a86acc..3f03b515a63 100644
+--- a/arch/arm/mach-imx/imx8m/clock_imx8mm.c
++++ b/arch/arm/mach-imx/imx8m/clock_imx8mm.c
+@@ -827,53 +827,6 @@ u32 mxc_get_clock(enum mxc_clock clk)
+ }
+ 
+ #if defined(CONFIG_IMX8MP) && defined(CONFIG_DWC_ETH_QOS)
+-int set_clk_eqos(enum enet_freq type)
+-{
+-	u32 target;
+-	u32 enet1_ref;
+-
+-	switch (type) {
+-	case ENET_125MHZ:
+-		enet1_ref = ENET1_REF_CLK_ROOT_FROM_PLL_ENET_MAIN_125M_CLK;
+-		break;
+-	case ENET_50MHZ:
+-		enet1_ref = ENET1_REF_CLK_ROOT_FROM_PLL_ENET_MAIN_50M_CLK;
+-		break;
+-	case ENET_25MHZ:
+-		enet1_ref = ENET1_REF_CLK_ROOT_FROM_PLL_ENET_MAIN_25M_CLK;
+-		break;
+-	default:
+-		return -EINVAL;
+-	}
+-
+-	/* disable the clock first */
+-	clock_enable(CCGR_QOS_ETHENET, 0);
+-	clock_enable(CCGR_SDMA2, 0);
+-
+-	/* set enet axi clock 266Mhz */
+-	target = CLK_ROOT_ON | ENET_AXI_CLK_ROOT_FROM_SYS1_PLL_266M |
+-		 CLK_ROOT_PRE_DIV(CLK_ROOT_PRE_DIV1) |
+-		 CLK_ROOT_POST_DIV(CLK_ROOT_POST_DIV1);
+-	clock_set_target_val(ENET_AXI_CLK_ROOT, target);
+-
+-	target = CLK_ROOT_ON | enet1_ref |
+-		 CLK_ROOT_PRE_DIV(CLK_ROOT_PRE_DIV1) |
+-		 CLK_ROOT_POST_DIV(CLK_ROOT_POST_DIV1);
+-	clock_set_target_val(ENET_QOS_CLK_ROOT, target);
+-
+-	target = CLK_ROOT_ON |
+-		ENET1_TIME_CLK_ROOT_FROM_PLL_ENET_MAIN_100M_CLK |
+-		CLK_ROOT_PRE_DIV(CLK_ROOT_PRE_DIV1) |
+-		CLK_ROOT_POST_DIV(CLK_ROOT_POST_DIV4);
+-	clock_set_target_val(ENET_QOS_TIMER_CLK_ROOT, target);
+-
+-	/* enable clock */
+-	clock_enable(CCGR_QOS_ETHENET, 1);
+-	clock_enable(CCGR_SDMA2, 1);
+-
+-	return 0;
+-}
+-
+ static int imx8mp_eqos_interface_init(struct udevice *dev,
+ 				      phy_interface_t interface_type)
+ {
+diff --git a/board/advantech/imx8mp_rsb3720a1/imx8mp_rsb3720a1.c b/board/advantech/imx8mp_rsb3720a1/imx8mp_rsb3720a1.c
+index aa9687f7a9d..56068b0c01e 100644
+--- a/board/advantech/imx8mp_rsb3720a1/imx8mp_rsb3720a1.c
++++ b/board/advantech/imx8mp_rsb3720a1/imx8mp_rsb3720a1.c
+@@ -113,7 +113,7 @@ static const iomux_v3_cfg_t eqos_rst_pads[] = {
+ 	MX8MP_PAD_SAI2_RXC__GPIO4_IO22 | MUX_PAD_CTRL(NO_PAD_CTRL),
+ };
+ 
+-static void setup_iomux_eqos(void)
++static void setup_eqos(void)
+ {
+ 	imx_iomux_v3_setup_multiple_pads(eqos_rst_pads,
+ 					 ARRAY_SIZE(eqos_rst_pads));
+@@ -124,21 +124,6 @@ static void setup_iomux_eqos(void)
+ 	gpio_direction_output(EQOS_RST_PAD, 1);
+ 	mdelay(100);
+ }
+-
+-static int setup_eqos(void)
+-{
+-	struct iomuxc_gpr_base_regs *gpr =
+-		(struct iomuxc_gpr_base_regs *)IOMUXC_GPR_BASE_ADDR;
+-
+-	setup_iomux_eqos();
+-
+-	/* set INTF as RGMII, enable RGMII TXC clock */
+-	clrsetbits_le32(&gpr->gpr[1],
+-			IOMUXC_GPR_GPR1_GPR_ENET_QOS_INTF_SEL_MASK, BIT(16));
+-	setbits_le32(&gpr->gpr[1], BIT(19) | BIT(21));
+-
+-	return set_clk_eqos(ENET_125MHZ);
+-}
+ #endif /* CONFIG_DWC_ETH_QOS */
+ 
+ int board_phy_config(struct phy_device *phydev)
+diff --git a/board/dhelectronics/dh_imx8mp/imx8mp_dhcom_pdk2.c b/board/dhelectronics/dh_imx8mp/imx8mp_dhcom_pdk2.c
+index 9d8e19d994a..cb9973900bd 100644
+--- a/board/dhelectronics/dh_imx8mp/imx8mp_dhcom_pdk2.c
++++ b/board/dhelectronics/dh_imx8mp/imx8mp_dhcom_pdk2.c
+@@ -37,19 +37,6 @@ int board_phys_sdram_size(phys_size_t *size)
+ 	return 0;
+ }
+ 
+-static void setup_eqos(void)
+-{
+-	struct iomuxc_gpr_base_regs *gpr =
+-		(struct iomuxc_gpr_base_regs *)IOMUXC_GPR_BASE_ADDR;
+-
+-	/* Set INTF as RGMII, enable RGMII TXC clock. */
+-	clrsetbits_le32(&gpr->gpr[1],
+-			IOMUXC_GPR_GPR1_GPR_ENET_QOS_INTF_SEL_MASK, BIT(16));
+-	setbits_le32(&gpr->gpr[1], BIT(19) | BIT(21));
+-
+-	set_clk_eqos(ENET_125MHZ);
+-}
+-
+ static void setup_fec(void)
+ {
+ 	struct iomuxc_gpr_base_regs *gpr =
+@@ -127,7 +114,6 @@ int dh_setup_mac_address(void)
+ 
+ int board_init(void)
+ {
+-	setup_eqos();
+ 	setup_fec();
+ 	return 0;
+ }
+diff --git a/board/engicam/imx8mp/icore_mx8mp.c b/board/engicam/imx8mp/icore_mx8mp.c
+index b309a12df08..b80513c7957 100644
+--- a/board/engicam/imx8mp/icore_mx8mp.c
++++ b/board/engicam/imx8mp/icore_mx8mp.c
+@@ -34,19 +34,6 @@ static void setup_fec(void)
+ 	setbits_le32(&gpr->gpr[1], BIT(22));
+ }
+ 
+-static int setup_eqos(void)
+-{
+-	struct iomuxc_gpr_base_regs *gpr =
+-		(struct iomuxc_gpr_base_regs *)IOMUXC_GPR_BASE_ADDR;
+-
+-	/* set INTF as RGMII, enable RGMII TXC clock */
+-	clrsetbits_le32(&gpr->gpr[1],
+-			IOMUXC_GPR_GPR1_GPR_ENET_QOS_INTF_SEL_MASK, BIT(16));
+-	setbits_le32(&gpr->gpr[1], BIT(19) | BIT(21));
+-
+-	return set_clk_eqos(ENET_125MHZ);
+-}
+-
+ #if CONFIG_IS_ENABLED(NET)
+ int board_phy_config(struct phy_device *phydev)
+ {
+@@ -61,9 +48,6 @@ int board_init(void)
+ 	if (CONFIG_IS_ENABLED(FEC_MXC))
+ 		setup_fec();
+ 
+-	if (CONFIG_IS_ENABLED(DWC_ETH_QOS))
+-		setup_eqos();
+-
+ 	return 0;
+ }
+ 
+diff --git a/board/freescale/imx8mp_evk/imx8mp_evk.c b/board/freescale/imx8mp_evk/imx8mp_evk.c
+index 8971a827df3..0fefdafadfa 100644
+--- a/board/freescale/imx8mp_evk/imx8mp_evk.c
++++ b/board/freescale/imx8mp_evk/imx8mp_evk.c
+@@ -29,19 +29,6 @@ static void setup_fec(void)
+ 	setbits_le32(&gpr->gpr[1], BIT(22));
+ }
+ 
+-static int setup_eqos(void)
+-{
+-	struct iomuxc_gpr_base_regs *gpr =
+-		(struct iomuxc_gpr_base_regs *)IOMUXC_GPR_BASE_ADDR;
+-
+-	/* set INTF as RGMII, enable RGMII TXC clock */
+-	clrsetbits_le32(&gpr->gpr[1],
+-			IOMUXC_GPR_GPR1_GPR_ENET_QOS_INTF_SEL_MASK, BIT(16));
+-	setbits_le32(&gpr->gpr[1], BIT(19) | BIT(21));
+-
+-	return set_clk_eqos(ENET_125MHZ);
+-}
+-
+ #if CONFIG_IS_ENABLED(NET)
+ int board_phy_config(struct phy_device *phydev)
+ {
+@@ -59,10 +46,6 @@ int board_init(void)
+ 		setup_fec();
+ 	}
+ 
+-	if (CONFIG_IS_ENABLED(DWC_ETH_QOS)) {
+-		ret = setup_eqos();
+-	}
+-
+ 	return ret;
+ }
+ 
+diff --git a/board/gateworks/venice/venice.c b/board/gateworks/venice/venice.c
+index c4d86c26a9b..bc8937b366c 100644
+--- a/board/gateworks/venice/venice.c
++++ b/board/gateworks/venice/venice.c
+@@ -58,19 +58,6 @@ static int setup_fec(void)
+ 	return 0;
+ }
+ 
+-static int setup_eqos(void)
+-{
+-	struct iomuxc_gpr_base_regs *gpr =
+-		(struct iomuxc_gpr_base_regs *)IOMUXC_GPR_BASE_ADDR;
+-
+-	/* set INTF as RGMII, enable RGMII TXC clock */
+-	clrsetbits_le32(&gpr->gpr[1],
+-			IOMUXC_GPR_GPR1_GPR_ENET_QOS_INTF_SEL_MASK, BIT(16));
+-	setbits_le32(&gpr->gpr[1], BIT(19) | BIT(21));
+-
+-	return set_clk_eqos(ENET_125MHZ);
+-}
+-
+ int board_phy_config(struct phy_device *phydev)
+ {
+ 	unsigned short val;
+@@ -115,8 +102,6 @@ int board_init(void)
+ 
+ 	if (IS_ENABLED(CONFIG_FEC_MXC))
+ 		setup_fec();
+-	if (IS_ENABLED(CONFIG_DWC_ETH_QOS))
+-		setup_eqos();
+ 
+ 	return 0;
+ }
+diff --git a/board/msc/sm2s_imx8mp/sm2s_imx8mp.c b/board/msc/sm2s_imx8mp/sm2s_imx8mp.c
+index 3913c4f2427..6ccbf02db06 100644
+--- a/board/msc/sm2s_imx8mp/sm2s_imx8mp.c
++++ b/board/msc/sm2s_imx8mp/sm2s_imx8mp.c
+@@ -30,19 +30,6 @@ static void setup_fec(void)
+ 	setbits_le32(&gpr->gpr[1], BIT(22));
+ }
+ 
+-static int setup_eqos(void)
+-{
+-	struct iomuxc_gpr_base_regs *gpr =
+-		(struct iomuxc_gpr_base_regs *)IOMUXC_GPR_BASE_ADDR;
+-
+-	/* set INTF as RGMII, enable RGMII TXC clock */
+-	clrsetbits_le32(&gpr->gpr[1],
+-			IOMUXC_GPR_GPR1_GPR_ENET_QOS_INTF_SEL_MASK, BIT(16));
+-	setbits_le32(&gpr->gpr[1], BIT(19) | BIT(21));
+-
+-	return set_clk_eqos(ENET_125MHZ);
+-}
+-
+ int board_phy_config(struct phy_device *phydev)
+ {
+ 	if (phydev->drv->config)
+@@ -54,7 +41,5 @@ int board_init(void)
+ {
+ 	setup_fec();
+ 
+-	setup_eqos();
+-
+ 	return 0;
+ }
+diff --git a/board/toradex/verdin-imx8mp/verdin-imx8mp.c b/board/toradex/verdin-imx8mp/verdin-imx8mp.c
+index 9c2e44a1229..5490d3ed44a 100644
+--- a/board/toradex/verdin-imx8mp/verdin-imx8mp.c
++++ b/board/toradex/verdin-imx8mp/verdin-imx8mp.c
+@@ -49,19 +49,6 @@ static void setup_fec(void)
+ 	setbits_le32(&gpr->gpr[1], BIT(22));
+ }
+ 
+-static int setup_eqos(void)
+-{
+-	struct iomuxc_gpr_base_regs *gpr =
+-		(struct iomuxc_gpr_base_regs *)IOMUXC_GPR_BASE_ADDR;
+-
+-	/* set INTF as RGMII, enable RGMII TXC clock */
+-	clrsetbits_le32(&gpr->gpr[1],
+-			IOMUXC_GPR_GPR1_GPR_ENET_QOS_INTF_SEL_MASK, BIT(16));
+-	setbits_le32(&gpr->gpr[1], BIT(19) | BIT(21));
+-
+-	return set_clk_eqos(ENET_125MHZ);
+-}
+-
+ #if IS_ENABLED(CONFIG_NET)
+ int board_phy_config(struct phy_device *phydev)
+ {
+@@ -78,9 +65,6 @@ int board_init(void)
+ 	if (IS_ENABLED(CONFIG_FEC_MXC))
+ 		setup_fec();
+ 
+-	if (IS_ENABLED(CONFIG_DWC_ETH_QOS))
+-		ret = setup_eqos();
+-
+ 	return ret;
+ }
+ 
+-- 
+2.39.1
+
