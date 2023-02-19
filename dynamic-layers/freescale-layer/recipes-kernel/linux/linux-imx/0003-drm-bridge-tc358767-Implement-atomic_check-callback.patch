@@ -1,7 +1,7 @@
-From 29f9c6daf616f7c321f1698140a0ed3bda8428b9 Mon Sep 17 00:00:00 2001
+From 495aff89ee12138b2470b2e42bdfbc3b0205e3c7 Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
 Date: Tue, 29 Mar 2022 10:50:09 +0200
-Subject: [PATCH 03/60] drm/bridge: tc358767: Implement atomic_check callback
+Subject: [PATCH 03/61] drm/bridge: tc358767: Implement atomic_check callback
 
 Implement .atomic_check callback which prevents user space from setting
 unsupported mode. The tc_edp_common_atomic_check() variant is already
@@ -24,7 +24,7 @@ Link: https://patchwork.freedesktop.org/patch/msgid/20220329085015.39159-6-marex
  1 file changed, 26 insertions(+)
 
 diff --git a/drivers/gpu/drm/bridge/tc358767.c b/drivers/gpu/drm/bridge/tc358767.c
-index 2be85478a45aa..f60426f33d5ec 100644
+index 590677cee0a75..0a340af7fc170 100644
 --- a/drivers/gpu/drm/bridge/tc358767.c
 +++ b/drivers/gpu/drm/bridge/tc358767.c
 @@ -1289,6 +1289,31 @@ static bool tc_bridge_mode_fixup(struct drm_bridge *bridge,
@@ -68,5 +68,5 @@ index 2be85478a45aa..f60426f33d5ec 100644
  	.atomic_disable = tc_edp_bridge_atomic_disable,
  	.mode_fixup = tc_bridge_mode_fixup,
 -- 
-2.35.1
+2.39.1
 

@@ -1,0 +1,99 @@
+From 7f1712596f1fa48243f113a95fff30544cf91ed6 Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Fri, 22 Jul 2022 04:12:32 +0200
+Subject: [PATCH 59/61] arm64: dts: imx8mp: Add TC9595 bridge on MX8MP DHCOM
+ SoM
+
+Add TC9595 DSI-to-DPI and DSI-to-DP bridge and LCDIF1 and DSI bindings
+on MX8MP DHCOM SoM.
+
+Upstream-Status: Pending [Depends on DSIM support upstream]
+Signed-off-by: Marek Vasut <marex@denx.de>
+---
+ .../boot/dts/freescale/imx8mp-dhcom-som.dtsi  | 56 +++++++++++++++++++
+ 1 file changed, 56 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-som.dtsi b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-som.dtsi
+index 00f765cdd8d84..a03a29b0d510f 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-som.dtsi
++++ b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-som.dtsi
+@@ -232,6 +232,37 @@ &i2c3 {
+ 	sda-gpios = <&gpio5 19 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
+ 	status = "okay";
+ 
++	tc_bridge: bridge@f {
++		#address-cells = <0>;
++		#size-cells = <0>;
++		compatible = "toshiba,tc9595", "toshiba,tc358767";
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_tc9595>;
++		reg = <0xf>;
++		clock-names = "ref";
++		clocks = <&clk IMX8MP_CLK_CLKOUT2>;
++		assigned-clocks = <&clk IMX8MP_CLK_CLKOUT2_SEL>,
++				  <&clk IMX8MP_CLK_CLKOUT2>,
++				  <&clk IMX8MP_AUDIO_PLL2_OUT>;
++		assigned-clock-parents = <&clk IMX8MP_AUDIO_PLL2_OUT>;
++		assigned-clock-rates = <13000000>, <13000000>, <156000000>;
++		reset-gpios = <&gpio3 21 GPIO_ACTIVE_HIGH>;
++		status = "disabled";
++
++		ports {
++			#address-cells = <1>;
++			#size-cells = <0>;
++
++			port@0 {
++				reg = <0>;
++				tc_bridge_in: endpoint {
++					data-lanes = <1 2 3 4>;
++					remote-endpoint = <&dsi_out>;
++				};
++			};
++		};
++	};
++
+ 	pmic: pmic@25 {
+ 		compatible = "nxp,pca9450c";
+ 		reg = <0x25>;
+@@ -398,6 +429,22 @@ &i2c5 {	/* HDMI EDID bus */
+ 	status = "okay";
+ };
+ 
++&mipi_dsi {
++	samsung,burst-clock-frequency = <160000000>;
++	samsung,esc-clock-frequency = <10000000>;
++
++	ports {
++		port@1 {
++			reg = <1>;
++
++			dsi_out: endpoint {
++				data-lanes = <1 2 3 4>;
++				remote-endpoint = <&tc_bridge_in>;
++			};
++		};
++	};
++};
++
+ &pwm1 {
+ 	pinctrl-0 = <&pinctrl_pwm1>;
+ 	pinctrl-names = "default";
+@@ -831,6 +878,15 @@ MX8MP_IOMUXC_SPDIF_EXT_CLK__GPIO5_IO05		0x400001c6
+ 		>;
+ 	};
+ 
++	pinctrl_tc9595: dhcom-tc9595-grp {
++		fsl,pins = <
++			/* RESET_DSIBRIDGE */
++			MX8MP_IOMUXC_SAI1_RXC__GPIO4_IO01		0x40000146
++			/* DSI-CONV_INT Interrupt */
++			MX8MP_IOMUXC_SAI5_RXD0__GPIO3_IO21		0x141
++		>;
++	};
++
+ 	pinctrl_touch: dhcom-touch-grp {
+ 		fsl,pins = <
+ 			/* #TOUCH_INT */
+-- 
+2.39.1
+

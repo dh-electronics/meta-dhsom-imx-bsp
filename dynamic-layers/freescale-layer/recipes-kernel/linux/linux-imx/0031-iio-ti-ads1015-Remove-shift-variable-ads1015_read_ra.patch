@@ -1,0 +1,53 @@
+From 24c65a84d7569e19a2248fede1e4a4acc8d51780 Mon Sep 17 00:00:00 2001
+From: Gwendal Grignou <gwendal@chromium.org>
+Date: Thu, 4 Nov 2021 01:24:11 -0700
+Subject: [PATCH 31/61] iio: ti-ads1015: Remove shift variable ads1015_read_raw
+
+By using scan_type.realbits when processing raw data,
+we use scan_type.shit only once, thus we don't need to define a local
+variable for it anymore.
+
+Upstream-Status: Backport [aad54091e1b50d725baa31c11358e6d6dcf44cf0]
+Signed-off-by: Gwendal Grignou <gwendal@chromium.org>
+Link: https://lore.kernel.org/r/20211104082413.3681212-12-gwendal@chromium.org
+Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+---
+ drivers/iio/adc/ti-ads1015.c | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/iio/adc/ti-ads1015.c b/drivers/iio/adc/ti-ads1015.c
+index b0352e91ac165..b92d4cd1b8238 100644
+--- a/drivers/iio/adc/ti-ads1015.c
++++ b/drivers/iio/adc/ti-ads1015.c
+@@ -464,9 +464,7 @@ static int ads1015_read_raw(struct iio_dev *indio_dev,
+ 
+ 	mutex_lock(&data->lock);
+ 	switch (mask) {
+-	case IIO_CHAN_INFO_RAW: {
+-		int shift = chan->scan_type.shift;
+-
++	case IIO_CHAN_INFO_RAW:
+ 		ret = iio_device_claim_direct_mode(indio_dev);
+ 		if (ret)
+ 			break;
+@@ -487,7 +485,8 @@ static int ads1015_read_raw(struct iio_dev *indio_dev,
+ 			goto release_direct;
+ 		}
+ 
+-		*val = sign_extend32(*val >> shift, 15 - shift);
++		*val = sign_extend32(*val >> chan->scan_type.shift,
++				     chan->scan_type.realbits - 1);
+ 
+ 		ret = ads1015_set_power_state(data, false);
+ 		if (ret < 0)
+@@ -497,7 +496,6 @@ static int ads1015_read_raw(struct iio_dev *indio_dev,
+ release_direct:
+ 		iio_device_release_direct_mode(indio_dev);
+ 		break;
+-	}
+ 	case IIO_CHAN_INFO_SCALE:
+ 		idx = data->channel_data[chan->address].pga;
+ 		*val = ads1015_fullscale_range[idx];
+-- 
+2.39.1
+

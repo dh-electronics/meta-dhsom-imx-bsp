@@ -1,0 +1,65 @@
+From 176d67b5e4216367cb7b39ca38605b36785b195c Mon Sep 17 00:00:00 2001
+From: Sascha Hauer <s.hauer@pengutronix.de>
+Date: Fri, 4 Mar 2022 13:52:55 +0100
+Subject: [PATCH 23/61] clk: imx: pll14xx: Add pr_fmt
+
+Print all messages from within the pll14xx driver with a common
+prefix using pr_fmt. No need to print function names anymore, so
+drop them from the messages.
+
+Upstream-Status: Backport [80cbc80612a01461a257f2c2eb9976cbadfb7be2]
+Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
+Reviewed-by: Abel Vesa <abel.vesa@nxp.com>
+Link: https://lore.kernel.org/r/20220304125256.2125023-8-s.hauer@pengutronix.de
+Signed-off-by: Abel Vesa <abel.vesa@nxp.com>
+---
+ drivers/clk/imx/clk-pll14xx.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/clk/imx/clk-pll14xx.c b/drivers/clk/imx/clk-pll14xx.c
+index 9e84ea574aacd..ff0bf14ab9c31 100644
+--- a/drivers/clk/imx/clk-pll14xx.c
++++ b/drivers/clk/imx/clk-pll14xx.c
+@@ -3,6 +3,8 @@
+  * Copyright 2017-2018 NXP.
+  */
+ 
++#define pr_fmt(fmt) "pll14xx: " fmt
++
+ #include <linux/bitfield.h>
+ #include <linux/bits.h>
+ #include <linux/clk-provider.h>
+@@ -177,8 +179,8 @@ static int clk_pll1416x_set_rate(struct clk_hw *hw, unsigned long drate,
+ 
+ 	rate = imx_get_pll_settings(pll, drate);
+ 	if (!rate) {
+-		pr_err("%s: Invalid rate : %lu for pll clk %s\n", __func__,
+-		       drate, clk_hw_get_name(hw));
++		pr_err("Invalid rate %lu for pll clk %s\n", drate,
++		       clk_hw_get_name(hw));
+ 		return -EINVAL;
+ 	}
+ 
+@@ -424,8 +426,7 @@ struct clk_hw *imx_dev_clk_hw_pll14xx(struct device *dev, const char *name,
+ 		init.ops = &clk_pll1443x_ops;
+ 		break;
+ 	default:
+-		pr_err("%s: Unknown pll type for pll clk %s\n",
+-		       __func__, name);
++		pr_err("Unknown pll type for pll clk %s\n", name);
+ 		kfree(pll);
+ 		return ERR_PTR(-EINVAL);
+ 	}
+@@ -444,8 +445,7 @@ struct clk_hw *imx_dev_clk_hw_pll14xx(struct device *dev, const char *name,
+ 
+ 	ret = clk_hw_register(dev, hw);
+ 	if (ret) {
+-		pr_err("%s: failed to register pll %s %d\n",
+-			__func__, name, ret);
++		pr_err("failed to register pll %s %d\n", name, ret);
+ 		kfree(pll);
+ 		return ERR_PTR(ret);
+ 	}
+-- 
+2.39.1
+

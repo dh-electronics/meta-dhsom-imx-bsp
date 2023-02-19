@@ -1,0 +1,54 @@
+From 2e864f5bc7f63fb3853aee51c401365c5e7afcf9 Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Thu, 2 Sep 2021 21:58:34 +0200
+Subject: [PATCH 55/61] arm64: dts: imx8mp: Add PCIe support to DH electronics
+ i.MX8M Plus DHCOM and PDK2
+
+Add PCIe support for DH electronics i.MX8M Plus DHCOM SoM on PDK2 carrier board.
+
+Upstream-Status: Submitted [https://patchwork.kernel.org/project/linux-arm-kernel/patch/20230217192444.61680-1-marex@denx.de/]
+Signed-off-by: Marek Vasut <marex@denx.de>
+---
+Cc: Fabio Estevam <festevam@gmail.com>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc: Marek Vasut <marex@denx.de>
+Cc: NXP Linux Team <linux-imx@nxp.com>
+Cc: Pengutronix Kernel Team <kernel@pengutronix.de>
+Cc: Rob Herring <robh+dt@kernel.org>
+Cc: Sascha Hauer <s.hauer@pengutronix.de>
+Cc: Shawn Guo <shawnguo@kernel.org>
+Cc: devicetree@vger.kernel.org
+Cc: kernel@dh-electronics.com
+Cc: linux-arm-kernel@lists.infradead.org
+---
+ .../arm64/boot/dts/freescale/imx8mp-dhcom-pdk2.dts | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk2.dts b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk2.dts
+index 382fbedaf6ba4..fdf18b7f208d5 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk2.dts
++++ b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk2.dts
+@@ -151,6 +151,20 @@ &flexcan1 {
+ 	status = "okay";
+ };
+ 
++&pcie_phy {
++	clock-names = "ref";
++	clocks = <&clk IMX8MP_SYS_PLL2_100M>;
++	fsl,clkreq-unsupported;
++	fsl,refclk-pad-mode = <IMX8_PCIE_REFCLK_PAD_UNUSED>;
++	status = "okay";
++};
++
++&pcie {
++	fsl,max-link-speed = <1>;
++	reset-gpio = <&gpio1 6 GPIO_ACTIVE_LOW>;	/* GPIO J */
++	status = "okay";
++};
++
+ &usb3_1 {
+ 	fsl,over-current-active-low;
+ };
+-- 
+2.39.1
+

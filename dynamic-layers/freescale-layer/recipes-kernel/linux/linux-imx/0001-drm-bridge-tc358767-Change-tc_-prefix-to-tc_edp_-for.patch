@@ -1,7 +1,7 @@
-From 783e13a361c3ce8b4d64d2d88325bfcb1e4a5fda Mon Sep 17 00:00:00 2001
+From 984e2ec399c5f74de7f10043eb7f868c25d8cafc Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
 Date: Tue, 29 Mar 2022 10:50:07 +0200
-Subject: [PATCH 01/60] drm/bridge: tc358767: Change tc_ prefix to tc_edp_ for
+Subject: [PATCH 01/61] drm/bridge: tc358767: Change tc_ prefix to tc_edp_ for
  (e)DP specific functions
 
 These functions are specific to (e)DP output initialization and
@@ -25,7 +25,7 @@ Link: https://patchwork.freedesktop.org/patch/msgid/20220329085015.39159-4-marex
  1 file changed, 20 insertions(+), 19 deletions(-)
 
 diff --git a/drivers/gpu/drm/bridge/tc358767.c b/drivers/gpu/drm/bridge/tc358767.c
-index 23a6f90b694b3..9c8999d3b9f0d 100644
+index 14d6717429639..d8a0d05f78547 100644
 --- a/drivers/gpu/drm/bridge/tc358767.c
 +++ b/drivers/gpu/drm/bridge/tc358767.c
 @@ -1164,7 +1164,7 @@ static int tc_main_link_disable(struct tc_data *tc)
@@ -130,7 +130,7 @@ index 23a6f90b694b3..9c8999d3b9f0d 100644
  	.mode_fixup = tc_bridge_mode_fixup,
  	.detect = tc_bridge_detect,
  	.get_edid = tc_get_edid,
-@@ -1696,7 +1697,7 @@ static int tc_probe(struct i2c_client *client, const struct i2c_device_id *id)
+@@ -1708,7 +1709,7 @@ static int tc_probe(struct i2c_client *client, const struct i2c_device_id *id)
  	tc->aux.transfer = tc_aux_transfer;
  	drm_dp_aux_init(&tc->aux);
  
@@ -140,5 +140,5 @@ index 23a6f90b694b3..9c8999d3b9f0d 100644
  		tc->bridge.ops |= DRM_BRIDGE_OP_DETECT;
  	tc->bridge.ops |= DRM_BRIDGE_OP_EDID;
 -- 
-2.35.1
+2.39.1
 

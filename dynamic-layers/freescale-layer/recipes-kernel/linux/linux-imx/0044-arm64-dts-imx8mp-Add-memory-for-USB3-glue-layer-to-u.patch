@@ -1,0 +1,50 @@
+From d9285a655b2d80e03739720403c609aff024146a Mon Sep 17 00:00:00 2001
+From: Alexander Stein <alexander.stein@ew.tq-group.com>
+Date: Fri, 18 Feb 2022 16:27:07 +0100
+Subject: [PATCH 44/61] arm64: dts: imx8mp: Add memory for USB3 glue layer to
+ usb3 nodes
+
+The USB3 glue layer has 2 areas in the register set, see RM Rev.1
+section 11.2.5.2.1 GLUE_usb3 memory map:
+* USB3 control/status
+* PHY control/status
+
+Provide the memory area to the usb3 nodes for accessing the features
+in the USB3 control area.
+
+Upstream-Status: Backport [290918c72a2973ffc876d8efb4da304bf7aaea8f]
+Reviewed-by: Li Jun <jun.li@nxp.com>
+Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+Link: https://lore.kernel.org/r/20220218152707.2198357-5-alexander.stein@ew.tq-group.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ arch/arm64/boot/dts/freescale/imx8mp.dtsi | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp.dtsi b/arch/arm64/boot/dts/freescale/imx8mp.dtsi
+index 7e71a112c6182..433c21e62e797 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mp.dtsi
++++ b/arch/arm64/boot/dts/freescale/imx8mp.dtsi
+@@ -2147,7 +2147,8 @@ usb3_phy0: usb-phy@381f0040 {
+ 
+ 		usb3_0: usb@32f10100 {
+ 			compatible = "fsl,imx8mp-dwc3";
+-			reg = <0x32f10100 0x8>;
++			reg = <0x32f10100 0x8>,
++			      <0x381f0000 0x20>;
+ 			clocks = <&clk IMX8MP_CLK_HSIO_ROOT>,
+ 				 <&clk IMX8MP_CLK_USB_ROOT>;
+ 			clock-names = "hsio", "suspend";
+@@ -2189,7 +2190,8 @@ usb3_phy1: usb-phy@382f0040 {
+ 
+ 		usb3_1: usb@32f10108 {
+ 			compatible = "fsl,imx8mp-dwc3";
+-			reg = <0x32f10108 0x8>;
++			reg = <0x32f10108 0x8>,
++			      <0x382f0000 0x20>;
+ 			clocks = <&clk IMX8MP_CLK_HSIO_ROOT>,
+ 				 <&clk IMX8MP_CLK_USB_ROOT>;
+ 			clock-names = "hsio", "suspend";
+-- 
+2.39.1
+

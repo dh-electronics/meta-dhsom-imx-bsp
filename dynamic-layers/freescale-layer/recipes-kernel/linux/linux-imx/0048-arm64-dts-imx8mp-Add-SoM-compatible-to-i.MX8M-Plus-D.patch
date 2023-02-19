@@ -1,0 +1,37 @@
+From 180ac35d64af4c3063c78efca726e3eb1d41de61 Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Sun, 24 Jul 2022 22:47:41 +0200
+Subject: [PATCH 48/61] arm64: dts: imx8mp: Add SoM compatible to i.MX8M Plus
+ DHCOM PDK2
+
+Add SoM compatible string into i.MX8MP DHCOM PDK2 compatible strings.
+
+Upstream-Status: Backport [dcc80ddbc3a602731464c1baa8f22403ec62e915]
+Signed-off-by: Marek Vasut <marex@denx.de>
+Cc: Fabio Estevam <festevam@denx.de>
+Cc: NXP Linux Team <linux-imx@nxp.com>
+Cc: Peng Fan <peng.fan@nxp.com>
+Cc: Shawn Guo <shawnguo@kernel.org>
+To: linux-arm-kernel@lists.infradead.org
+Signed-off-by: Shawn Guo <shawnguo@kernel.org>
+---
+ arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk2.dts | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk2.dts b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk2.dts
+index c641b850c5774..382fbedaf6ba4 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk2.dts
++++ b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk2.dts
+@@ -16,7 +16,8 @@
+ 
+ / {
+ 	model = "DH electronics i.MX8M Plus DHCOM Premium Developer Kit (2)";
+-	compatible = "dh,imx8mp-dhcom-pdk2", "fsl,imx8mp";
++	compatible = "dh,imx8mp-dhcom-pdk2", "dh,imx8mp-dhcom-som",
++		     "fsl,imx8mp";
+ 
+ 	chosen {
+ 		stdout-path = &uart1;
+-- 
+2.39.1
+

@@ -1,7 +1,7 @@
-From 8d3e2707169c9e9a952e1fea03427d71d21cf5e4 Mon Sep 17 00:00:00 2001
+From 0ae21eb2e9202b9ccd9963f39c8bbe6069494fdc Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
 Date: Tue, 29 Mar 2022 10:50:08 +0200
-Subject: [PATCH 02/60] drm/bridge: tc358767: Convert to atomic ops
+Subject: [PATCH 02/61] drm/bridge: tc358767: Convert to atomic ops
 
 Use the atomic version of the enable/disable operations to continue the
 transition to the atomic API. This will be needed to access the mode
@@ -23,7 +23,7 @@ Link: https://patchwork.freedesktop.org/patch/msgid/20220329085015.39159-5-marex
  1 file changed, 11 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/gpu/drm/bridge/tc358767.c b/drivers/gpu/drm/bridge/tc358767.c
-index 9c8999d3b9f0d..2be85478a45aa 100644
+index d8a0d05f78547..590677cee0a75 100644
 --- a/drivers/gpu/drm/bridge/tc358767.c
 +++ b/drivers/gpu/drm/bridge/tc358767.c
 @@ -1234,7 +1234,9 @@ static int tc_edp_stream_disable(struct tc_data *tc)
@@ -66,5 +66,5 @@ index 9c8999d3b9f0d..2be85478a45aa 100644
  
  static bool tc_readable_reg(struct device *dev, unsigned int reg)
 -- 
-2.35.1
+2.39.1
 

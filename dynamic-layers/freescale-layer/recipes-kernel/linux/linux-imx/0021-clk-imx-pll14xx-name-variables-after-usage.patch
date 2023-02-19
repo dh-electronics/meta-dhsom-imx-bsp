@@ -1,0 +1,106 @@
+From f677e66348836b8266a507b4d8afa35015cbc1b5 Mon Sep 17 00:00:00 2001
+From: Sascha Hauer <s.hauer@pengutronix.de>
+Date: Fri, 4 Mar 2022 13:52:53 +0100
+Subject: [PATCH 21/61] clk: imx: pll14xx: name variables after usage
+
+In clk_pll1443x_set_rate() 'tmp' is used for the content of different
+registers which makes it a bit hard to follow. Use different variables
+named after the registers to make it clearer. No functional change
+intended.
+
+Upstream-Status: Backport [052d03a043afebb8e26ec17de52e8cdc8b217ef9]
+Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
+Reviewed-by: Abel Vesa <abel.vesa@nxp.com>
+Link: https://lore.kernel.org/r/20220304125256.2125023-6-s.hauer@pengutronix.de
+Signed-off-by: Abel Vesa <abel.vesa@nxp.com>
+---
+ drivers/clk/imx/clk-pll14xx.c | 42 +++++++++++++++++------------------
+ 1 file changed, 21 insertions(+), 21 deletions(-)
+
+diff --git a/drivers/clk/imx/clk-pll14xx.c b/drivers/clk/imx/clk-pll14xx.c
+index ac484c92d132a..4d5e26058b6d3 100644
+--- a/drivers/clk/imx/clk-pll14xx.c
++++ b/drivers/clk/imx/clk-pll14xx.c
+@@ -238,7 +238,7 @@ static int clk_pll1443x_set_rate(struct clk_hw *hw, unsigned long drate,
+ {
+ 	struct clk_pll14xx *pll = to_clk_pll14xx(hw);
+ 	const struct imx_pll14xx_rate_table *rate;
+-	u32 tmp, div_val;
++	u32 gnrl_ctl, div_ctl0;
+ 	int ret;
+ 
+ 	rate = imx_get_pll_settings(pll, drate);
+@@ -248,32 +248,32 @@ static int clk_pll1443x_set_rate(struct clk_hw *hw, unsigned long drate,
+ 		return -EINVAL;
+ 	}
+ 
+-	tmp = readl_relaxed(pll->base + DIV_CTL0);
++	div_ctl0 = readl_relaxed(pll->base + DIV_CTL0);
+ 
+-	if (!clk_pll14xx_mp_change(rate, tmp)) {
+-		tmp &= ~SDIV_MASK;
+-		tmp |= FIELD_PREP(SDIV_MASK, rate->sdiv);
+-		writel_relaxed(tmp, pll->base + DIV_CTL0);
++	if (!clk_pll14xx_mp_change(rate, div_ctl0)) {
++		div_ctl0 &= ~SDIV_MASK;
++		div_ctl0 |= FIELD_PREP(SDIV_MASK, rate->sdiv);
++		writel_relaxed(div_ctl0, pll->base + DIV_CTL0);
+ 
+-		tmp = FIELD_PREP(KDIV_MASK, rate->kdiv);
+-		writel_relaxed(tmp, pll->base + DIV_CTL1);
++		writel_relaxed(FIELD_PREP(KDIV_MASK, rate->kdiv),
++			       pll->base + DIV_CTL1);
+ 
+ 		return 0;
+ 	}
+ 
+ 	/* Enable RST */
+-	tmp = readl_relaxed(pll->base + GNRL_CTL);
+-	tmp &= ~RST_MASK;
+-	writel_relaxed(tmp, pll->base + GNRL_CTL);
++	gnrl_ctl = readl_relaxed(pll->base + GNRL_CTL);
++	gnrl_ctl &= ~RST_MASK;
++	writel_relaxed(gnrl_ctl, pll->base + GNRL_CTL);
+ 
+ 	/* Enable BYPASS */
+-	tmp |= BYPASS_MASK;
+-	writel_relaxed(tmp, pll->base + GNRL_CTL);
++	gnrl_ctl |= BYPASS_MASK;
++	writel_relaxed(gnrl_ctl, pll->base + GNRL_CTL);
+ 
+-	div_val = FIELD_PREP(MDIV_MASK, rate->mdiv) |
+-		  FIELD_PREP(PDIV_MASK, rate->pdiv) |
+-		  FIELD_PREP(SDIV_MASK, rate->sdiv);
+-	writel_relaxed(div_val, pll->base + DIV_CTL0);
++	div_ctl0 = FIELD_PREP(MDIV_MASK, rate->mdiv) |
++		   FIELD_PREP(PDIV_MASK, rate->pdiv) |
++		   FIELD_PREP(SDIV_MASK, rate->sdiv);
++	writel_relaxed(div_ctl0, pll->base + DIV_CTL0);
+ 	writel_relaxed(FIELD_PREP(KDIV_MASK, rate->kdiv), pll->base + DIV_CTL1);
+ 
+ 	/*
+@@ -285,8 +285,8 @@ static int clk_pll1443x_set_rate(struct clk_hw *hw, unsigned long drate,
+ 	udelay(3);
+ 
+ 	/* Disable RST */
+-	tmp |= RST_MASK;
+-	writel_relaxed(tmp, pll->base + GNRL_CTL);
++	gnrl_ctl |= RST_MASK;
++	writel_relaxed(gnrl_ctl, pll->base + GNRL_CTL);
+ 
+ 	/* Wait Lock*/
+ 	ret = clk_pll14xx_wait_lock(pll);
+@@ -294,8 +294,8 @@ static int clk_pll1443x_set_rate(struct clk_hw *hw, unsigned long drate,
+ 		return ret;
+ 
+ 	/* Bypass */
+-	tmp &= ~BYPASS_MASK;
+-	writel_relaxed(tmp, pll->base + GNRL_CTL);
++	gnrl_ctl &= ~BYPASS_MASK;
++	writel_relaxed(gnrl_ctl, pll->base + GNRL_CTL);
+ 
+ 	return 0;
+ }
+-- 
+2.39.1
+
