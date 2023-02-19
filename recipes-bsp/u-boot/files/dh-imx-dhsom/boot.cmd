@@ -48,6 +48,23 @@ if test -z "${initrd_high}" ; then
   setenv initrd_high %UBOOT_DTB_LOADADDRESS%
 fi
 
+# If the user did not override the DTOs to be loaded from the fitImage,
+# apply DTOs which may be required to operate specific SoM variant or
+# board variant.
+if test -z "${loaddtos}" ; then
+  if test "${board_name}" = "dh_imx8mp" ; then
+    fdt addr ${fdtcontroladdr}
+    fdt get value dh_phy_mode_eqos /soc@0/bus@30800000/ethernet@30bf0000 phy-mode
+    fdt get value dh_phy_mode_fec /soc@0/bus@30800000/ethernet@30be0000 phy-mode
+    if test "${dh_phy_mode_eqos}" = "rmii" -a "${dh_phy_mode_fec}" = "rmii" ; then
+      echo "DH i.MX8M Plus HI00106 SoM variant detected, applying dual-RMII PHY DTO."
+      fdt addr ${loadaddr}
+      fdt get value loaddtos /configurations default
+      setenv loaddtos "#${loaddtos}#conf-freescale_imx8mp-dhcom-som-overlay-hi00106.dtbo"
+    fi
+  fi
+fi
+
 # A custom script exists to load DTOs
 if test -n "${loaddtoscustom}" ; then
   if test -z "${loaddtos}" ; then
