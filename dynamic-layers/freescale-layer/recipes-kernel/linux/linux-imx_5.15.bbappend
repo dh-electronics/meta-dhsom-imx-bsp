@@ -62,6 +62,7 @@ SRC_URI:append:dh-imx8mp-dhsom = " \
 	file://0059-arm64-dts-imx8mp-Add-TC9595-bridge-on-MX8MP-DHCOM-So.patch \
 	file://0060-arm64-dts-imx8mp-Add-DT-overlays-for-i.MX8MP-DHCOM-P.patch \
 	file://0061-arm64-dts-imx8mp-Adjust-DT-to-match-downstream-DTSI.patch \
+	file://0062-arm64-dts-imx8mp-Add-DT-overlays-for-i.MX8MP-DHCOM-S.patch \
 	"
 
 # Inject extra config options into kernel config this way,

@@ -37,3 +37,4 @@ patch 0036-arm64-dts-imx8mp-Add-TC9595-bridge-on-MX8MP-DHCOM-So.patch
 patch 0037-arm64-dts-imx8mp-Bind-bluetooth-UART-on-DH-electroni.patch
 patch 0038-arm64-dts-imx8mp-Improve-bluetooth-UART-on-DH-electr.patch
 patch 0039-arm64-dts-imx8mp-Add-DT-overlays-for-i.MX8MP-DHCOM-P.patch
+patch 0040-arm64-dts-imx8mp-Add-DT-overlays-for-i.MX8MP-DHCOM-S.patch

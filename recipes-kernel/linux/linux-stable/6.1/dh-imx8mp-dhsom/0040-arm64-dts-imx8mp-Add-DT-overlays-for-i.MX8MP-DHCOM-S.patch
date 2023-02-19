@@ -1,0 +1,98 @@
+From a7a4efaaba13053f080c0afb2613a06a2efdc7b1 Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Sat, 18 Feb 2023 23:55:05 +0100
+Subject: [PATCH] arm64: dts: imx8mp: Add DT overlays for i.MX8MP DHCOM SoM
+
+Add DT overlays to support:
+- DH 660-100 HI00106 SoM with 2xRMII PHY
+
+Upstream-Status: Inappropriate
+Signed-off-by: Marek Vasut <marex@denx.de>
+---
+ arch/arm64/boot/dts/freescale/Makefile        |  1 +
+ .../imx8mp-dhcom-som-overlay-hi00106.dts      | 61 +++++++++++++++++++
+ 2 files changed, 62 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-dhcom-som-overlay-hi00106.dts
+
+diff --git a/arch/arm64/boot/dts/freescale/Makefile b/arch/arm64/boot/dts/freescale/Makefile
+index 049e42d9e0487..08b761ee4ce55 100644
+--- a/arch/arm64/boot/dts/freescale/Makefile
++++ b/arch/arm64/boot/dts/freescale/Makefile
+@@ -84,6 +84,7 @@ dtb-$(CONFIG_ARCH_MXC) += imx8mn-ddr4-evk.dtb
+ dtb-$(CONFIG_ARCH_MXC) += imx8mn-tqma8mqnl-mba8mx.dtb
+ dtb-$(CONFIG_ARCH_MXC) += imx8mn-var-som-symphony.dtb
+ dtb-$(CONFIG_ARCH_MXC) += imx8mn-venice-gw7902.dtb
++dtb-$(CONFIG_ARCH_MXC) += imx8mp-dhcom-som-overlay-hi00106.dtbo
+ dtb-$(CONFIG_ARCH_MXC) += imx8mp-dhcom-pdk2.dtb \
+ 			  imx8mp-dhcom-pdk2-overlay-505-200-x12-ch101olhlwh.dtbo \
+ 			  imx8mp-dhcom-pdk2-overlay-531-100-x21.dtbo \
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-som-overlay-hi00106.dts b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-som-overlay-hi00106.dts
+new file mode 100644
+index 0000000000000..0536938c17c3d
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-som-overlay-hi00106.dts
+@@ -0,0 +1,61 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
++/*
++ * Copyright (C) 2023 Marek Vasut <marex@denx.de>
++ */
++/dts-v1/;
++/plugin/;
++
++#include <dt-bindings/clock/imx8mp-clock.h>
++
++/* Dual RMII 100/Full Fast ethernet on this SoM variant. */
++
++&eqos {	/* First ethernet */
++	pinctrl-0 = <&pinctrl_eqos_rmii>;
++	phy-handle = <&ethphy0f>;
++	phy-mode = "rmii";
++
++	assigned-clock-parents = <&clk IMX8MP_SYS_PLL1_266M>,
++				 <&clk IMX8MP_SYS_PLL2_100M>,
++				 <&clk IMX8MP_SYS_PLL2_50M>;
++	assigned-clock-rates = <0>, <100000000>, <50000000>;
++};
++
++&ethphy0g {	/* Micrel KSZ9131RNXI */
++	status = "disabled";
++};
++
++&ethphy0f {	/* SMSC LAN8740Ai */
++	status = "okay";
++};
++
++&fec {	/* Second ethernet */
++	pinctrl-0 = <&pinctrl_fec_rmii>;
++	phy-handle = <&ethphy1f>;
++	phy-mode = "rmii";
++
++	assigned-clock-parents = <&clk IMX8MP_SYS_PLL1_266M>,
++				 <&clk IMX8MP_SYS_PLL2_100M>,
++				 <&clk IMX8MP_SYS_PLL2_50M>,
++				 <&clk IMX8MP_SYS_PLL2_50M>;
++	assigned-clock-rates = <0>, <100000000>, <50000000>, <0>;
++};
++
++&ethphypdk {	/* Micrel KSZ9131RNXI */
++	status = "disabled";
++};
++
++&ethphy1f {	/* SMSC LAN8740Ai */
++	status = "okay";
++};
++
++/* No WiFi/BT chipset on this SoM variant. */
++
++&uart2 {
++	bluetooth {
++		status = "disabled";
++	};
++};
++
++&usdhc1 {
++	status = "disabled";
++};
+-- 
+2.39.1
+
