@@ -68,10 +68,10 @@ index d4c1eebb35015..937be7df8a8a2 100644
 +
 +&i2c5 {
 +	sgtl5000: codec@a {
-+		#sound-dai-cells = <0>;
-+		clocks = <&clk_ext_audio_codec>;
 +		compatible = "fsl,sgtl5000";
 +		reg = <0x0a>;
++		#sound-dai-cells = <0>;
++		clocks = <&clk_ext_audio_codec>;
 +		VDDA-supply = <&reg_3p3v>;
 +		VDDIO-supply = <&reg_3p3v>;
 +	};

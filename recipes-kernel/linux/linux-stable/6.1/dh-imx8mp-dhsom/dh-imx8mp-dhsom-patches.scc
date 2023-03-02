@@ -23,8 +23,7 @@ patch 0022-phy-freescale-imx8m-pcie-Refine-register-definitions.patch
 patch 0023-phy-freescale-imx8m-pcie-Refine-i.MX8MM-PCIe-PHY-dri.patch
 patch 0024-phy-freescale-imx8m-pcie-Add-i.MX8MP-PCIe-PHY-suppor.patch
 patch 0025-phy-freescale-imx8m-pcie-Add-one-missing-error-retur.patch
-patch 0026-clk-Introduce-devm_clk_hw_register_mux_parent_data.patch
-patch 0027-clk-Introduce-devm_clk_hw_register_gate_parent_data.patch
+patch 0026-clk-Introduce-devm_clk_hw_register_gate_parent_data.patch
 patch 0028-clk-imx-imx8mp-Add-audiomix-block-control.patch
 patch 0029-arm64-dts-imx8mp-Add-SAI-SDMA-AudioMIX.patch
 patch 0030-arm64-dts-imx8mp-Add-Hantro-G1-G2-DT-nodes.patch

@@ -8,29 +8,57 @@ series of clock gates and muxes. Model it as a large static table of
 gates and muxes with one exception, which is the PLL14xx . The PLL14xx
 SAI PLL has to be registered separately.
 
-Upstream-Status: Submitted [https://patchwork.kernel.org/project/linux-arm-kernel/patch/20220625013235.710346-3-marex@denx.de/]
+Upstream-Status: Submitted [https://patchwork.kernel.org/project/linux-arm-kernel/patch/20230301163257.49005-2-marex@denx.de/]
+Reviewed-by: Marco Felsch <m.felsch@pengutronix.de>
+Reviewed-by: Peng Fan <peng.fan@nxp.com>
+Reviewed-by: Fabio Estevam <festevam@gmail.com>
+Tested-by: Adam Ford <aford173@gmail.com> #imx8mp-beacon-kit
+Tested-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+Tested-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+Tested-by: Richard Leitner <richard.leitner@skidata.com>
 Signed-off-by: Marek Vasut <marex@denx.de>
-Cc: Abel Vesa <abel.vesa@nxp.com>
+---
+Cc: Abel Vesa <abelvesa@kernel.org>
+Cc: Alexander Stein <alexander.stein@ew.tq-group.com>
 Cc: Fabio Estevam <festevam@gmail.com>
 Cc: Jacky Bai <ping.bai@nxp.com>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
 Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc: Luca Ceresoli <luca.ceresoli@bootlin.com>
 Cc: Lucas Stach <l.stach@pengutronix.de>
+Cc: Marco Felsch <m.felsch@pengutronix.de>
 Cc: Michael Turquette <mturquette@baylibre.com>
+Cc: NXP Linux Team <linux-imx@nxp.com>
+Cc: Peng Fan <peng.fan@nxp.com>
+Cc: Pengutronix Kernel Team <kernel@pengutronix.de>
+Cc: Richard Cochran <richardcochran@gmail.com>
+Cc: Rob Herring <robh+dt@kernel.org>
+Cc: Sascha Hauer <s.hauer@pengutronix.de>
 Cc: Shawn Guo <shawnguo@kernel.org>
 Cc: Stephen Boyd <sboyd@kernel.org>
+Cc: devicetree@vger.kernel.org
 Cc: linux-arm-kernel@lists.infradead.org
 Cc: linux-clk@vger.kernel.org
-Cc: linux-imx@nxp.com
 ---
 V2: No change
 V3: - Use devm_platform_ioremap_resource
     - Use clk_hw_onecell_data instead of clk_imx8mp_audiomix_priv
     - Include mod_devicetable.h for of_device_id struct
     - Use struct clk_parent_data instead of string parent_name
+V4: - Fix SAI_MCLK_SEL offset as pointed out by Marco
+    - Add TB from Luca
+    - Use devm_clk_hw_register_mux_parent_data_table() and drop
+      custom devm_clk_hw_register_mux_parent_data() patch, tweak
+      the indent to be less hideous
+    - Rebase on next 20230223
+V5: Add TB from Adam and Alexander
+V6: Add RB from Fabio
+V7: Add RB from Marco, Peng
+V8: Add TB from Richard
 ---
  drivers/clk/imx/Makefile              |   2 +-
- drivers/clk/imx/clk-imx8mp-audiomix.c | 286 ++++++++++++++++++++++++++
- 2 files changed, 287 insertions(+), 1 deletion(-)
+ drivers/clk/imx/clk-imx8mp-audiomix.c | 277 ++++++++++++++++++++++++++
+ 2 files changed, 278 insertions(+), 1 deletion(-)
  create mode 100644 drivers/clk/imx/clk-imx8mp-audiomix.c
 
 diff --git a/drivers/clk/imx/Makefile b/drivers/clk/imx/Makefile
@@ -48,10 +76,10 @@ index e8aacb0ee6ac6..d7204c91f74dd 100644
  obj-$(CONFIG_CLK_IMX93) += clk-imx93.o
 diff --git a/drivers/clk/imx/clk-imx8mp-audiomix.c b/drivers/clk/imx/clk-imx8mp-audiomix.c
 new file mode 100644
-index 0000000000000..2d5d8255c7fa2
+index 0000000000000..e4300df88f1ac
 --- /dev/null
 +++ b/drivers/clk/imx/clk-imx8mp-audiomix.c
-@@ -0,0 +1,286 @@
+@@ -0,0 +1,277 @@
 +// SPDX-License-Identifier: GPL-2.0-or-later
 +/*
 + * Driver for i.MX8M Plus Audio BLK_CTRL
@@ -72,7 +100,7 @@ index 0000000000000..2d5d8255c7fa2
 +
 +#define CLKEN0			0x000
 +#define CLKEN1			0x004
-+#define SAI_MCLK_SEL(n)		(300 + 4 * (n))	/* n in 0..5 */
++#define SAI_MCLK_SEL(n)		(0x300 + 4 * (n))	/* n in 0..5 */
 +#define PDM_SEL			0x318
 +#define SAI_PLL_GNRL_CTL	0x400
 +
@@ -254,22 +282,15 @@ index 0000000000000..2d5d8255c7fa2
 +	for (i = 0; i < ARRAY_SIZE(sels); i++) {
 +		if (sels[i].num_parents == 1) {
 +			hw = devm_clk_hw_register_gate_parent_data(dev,
-+								   sels[i].name,
-+								   &sels[i].parent,
-+								   0,
-+								   base + sels[i].reg,
-+								   sels[i].shift,
-+								   0, NULL);
++				sels[i].name, &sels[i].parent, 0,
++				base + sels[i].reg, sels[i].shift, 0, NULL);
 +		} else {
-+			hw = devm_clk_hw_register_mux_parent_data(dev,
-+								  sels[i].name,
-+								  sels[i].parents,
-+								  sels[i].num_parents,
-+								  0,
-+								  base + sels[i].reg,
-+								  sels[i].shift,
-+								  sels[i].width,
-+								  0, NULL);
++			hw = devm_clk_hw_register_mux_parent_data_table(dev,
++				sels[i].name, sels[i].parents,
++				sels[i].num_parents, 0,
++				base + sels[i].reg,
++				sels[i].shift, sels[i].width,
++				0, NULL, NULL);
 +		}
 +
 +		if (IS_ERR(hw))
@@ -279,12 +300,11 @@ index 0000000000000..2d5d8255c7fa2
 +	}
 +
 +	/* SAI PLL */
-+	hw = devm_clk_hw_register_mux_parent_data(dev, "sai_pll_ref_sel",
-+						  clk_imx8mp_audiomix_pll_parents,
-+						  ARRAY_SIZE(clk_imx8mp_audiomix_pll_parents),
-+						  CLK_SET_RATE_NO_REPARENT,
-+						  base + SAI_PLL_GNRL_CTL,
-+						  0, 2, 0, NULL);
++	hw = devm_clk_hw_register_mux_parent_data_table(dev,
++		"sai_pll_ref_sel", clk_imx8mp_audiomix_pll_parents,
++		ARRAY_SIZE(clk_imx8mp_audiomix_pll_parents),
++		CLK_SET_RATE_NO_REPARENT, base + SAI_PLL_GNRL_CTL,
++		0, 2, 0, NULL, NULL);
 +	priv->hws[IMX8MP_CLK_AUDIOMIX_SAI_PLL_REF_SEL] = hw;
 +
 +	hw = imx_dev_clk_hw_pll14xx(dev, "sai_pll", "sai_pll_ref_sel",
@@ -293,12 +313,11 @@ index 0000000000000..2d5d8255c7fa2
 +		return PTR_ERR(hw);
 +	priv->hws[IMX8MP_CLK_AUDIOMIX_SAI_PLL] = hw;
 +
-+	hw = devm_clk_hw_register_mux_parent_data(dev, "sai_pll_bypass",
-+						  clk_imx8mp_audiomix_pll_bypass_sels,
-+						  ARRAY_SIZE(clk_imx8mp_audiomix_pll_bypass_sels),
-+						  CLK_SET_RATE_NO_REPARENT | CLK_SET_RATE_PARENT,
-+						  base + SAI_PLL_GNRL_CTL,
-+						  16, 1, 0, NULL);
++	hw = devm_clk_hw_register_mux_parent_data_table(dev,
++		"sai_pll_bypass", clk_imx8mp_audiomix_pll_bypass_sels,
++		ARRAY_SIZE(clk_imx8mp_audiomix_pll_bypass_sels),
++		CLK_SET_RATE_NO_REPARENT | CLK_SET_RATE_PARENT,
++		base + SAI_PLL_GNRL_CTL, 16, 1, 0, NULL, NULL);
 +	if (IS_ERR(hw))
 +		return PTR_ERR(hw);
 +	priv->hws[IMX8MP_CLK_AUDIOMIX_SAI_PLL_BYPASS] = hw;
