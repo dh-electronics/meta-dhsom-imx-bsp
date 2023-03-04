@@ -17,15 +17,17 @@ Signed-off-by: Marek Vasut <marex@denx.de>
  ...mx8mp-dhcom-overlay-panel-ch101olhlwh.dtsi | 51 ++++++++++++++++++
  .../imx8mp-dhcom-overlay-panel-common.dtsi    | 31 +++++++++++
  .../imx8mp-dhcom-overlay-panel-dpi.dtsi       | 34 ++++++++++++
+ ...8mp-dhcom-overlay-panel-etm0700g0edh6.dtsi | 52 +++++++++++++++++++
  .../imx8mp-dhcom-overlay-panel-lvds.dtsi      | 22 ++++++++
  ...m-pdk2-overlay-505-200-x12-ch101olhlwh.dts | 24 +++++++++
  .../imx8mp-dhcom-pdk2-overlay-531-100-x21.dts | 33 ++++++++++++
  .../imx8mp-dhcom-pdk2-overlay-531-100-x22.dts | 33 ++++++++++++
- .../imx8mp-dhcom-pdk2-overlay-560-300-x12.dts | 52 +++++++++++++++++++
- 9 files changed, 285 insertions(+), 1 deletion(-)
+ .../imx8mp-dhcom-pdk2-overlay-560-300-x12.dts | 27 ++++++++++
+ 10 files changed, 312 insertions(+), 1 deletion(-)
  create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-dhcom-overlay-panel-ch101olhlwh.dtsi
  create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-dhcom-overlay-panel-common.dtsi
  create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-dhcom-overlay-panel-dpi.dtsi
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-dhcom-overlay-panel-etm0700g0edh6.dtsi
  create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-dhcom-overlay-panel-lvds.dtsi
  create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk2-overlay-505-200-x12-ch101olhlwh.dts
  create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk2-overlay-531-100-x21.dts
@@ -183,6 +185,64 @@ index 0000000000000..2f7615c232090
 +		};
 +	};
 +};
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-overlay-panel-etm0700g0edh6.dtsi b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-overlay-panel-etm0700g0edh6.dtsi
+new file mode 100644
+index 0000000000000..35acdb2884d08
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-overlay-panel-etm0700g0edh6.dtsi
+@@ -0,0 +1,52 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
++/*
++ * Copyright (C) 2022 Marek Vasut <marex@denx.de>
++ */
++/dts-v1/;
++/plugin/;
++
++#include "imx8mp-dhcom-overlay-panel-dpi.dtsi"
++
++&{/} {
++	led {
++		led-0 {
++			/* LED5 GPIO conflicts with Touchscreen IRQ GPIO-E */
++			status = "disabled";
++		};
++	};
++};
++
++&display_bl {
++	pwms = <&pwm1 0 5000000 0>;
++};
++
++&DH_OVERLAY_PANEL_I2C_BUS {
++	#address-cells = <1>;
++	#size-cells = <0>;
++
++	touchscreen@38 {
++		compatible = "edt,edt-ft5406";
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_dhcom_e>;
++		reg = <0x38>;
++		/* Touchscreen IRQ GPIO-E conflicts with LED5 GPIO */
++		interrupt-parent = <&gpio5>;
++		interrupts = <22 IRQ_TYPE_EDGE_FALLING>; /* GPIO E */
++	};
++};
++
++&mipi_dsi {
++	/*
++	 * This is DSIM PLL frequency, DSI HS clock lane frequency
++	 * is half of the "samsung,burst-clock-frequency" value.
++	 */
++	samsung,burst-clock-frequency = <300000000>;
++};
++
++&panel {
++	compatible = "edt,etm0700g0edh6";
++};
++
++&pwm1 {
++	status = "okay";
++};
 diff --git a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-overlay-panel-lvds.dtsi b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-overlay-panel-lvds.dtsi
 new file mode 100644
 index 0000000000000..8dc5353e77313
@@ -324,7 +384,7 @@ new file mode 100644
 index 0000000000000..6453b7e1a56bf
 --- /dev/null
 +++ b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk2-overlay-560-300-x12.dts
-@@ -0,0 +1,52 @@
+@@ -0,0 +1,27 @@
 +// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
 +/*
 + * Copyright (C) 2022 Marek Vasut <marex@denx.de>
@@ -332,7 +392,10 @@ index 0000000000000..6453b7e1a56bf
 +/dts-v1/;
 +/plugin/;
 +
-+#include "imx8mp-dhcom-overlay-panel-dpi.dtsi"
++#define DH_OVERLAY_PANEL_I2C_BUS			i2c5
++
++#include "imx8mp-dhcom-overlay-panel-etm0700g0edh6.dtsi"
++#include "imx8mp-pinfunc.h"
 +
 +&{/} {
 +	led {
@@ -343,39 +406,11 @@ index 0000000000000..6453b7e1a56bf
 +	};
 +};
 +
-+&display_bl {
-+	pwms = <&pwm1 0 5000000 0>;
-+};
-+
-+&i2c5 {
-+	#address-cells = <1>;
-+	#size-cells = <0>;
-+
-+	touchscreen@38 {
-+		compatible = "edt,edt-ft5406";
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pinctrl_dhcom_e>;
-+		reg = <0x38>;
-+		/* Touchscreen IRQ GPIO-E conflicts with LED5 GPIO */
-+		interrupt-parent = <&gpio5>;
-+		interrupts = <22 IRQ_TYPE_EDGE_FALLING>; /* GPIO E */
-+	};
-+};
-+
-+&mipi_dsi {
-+	/*
-+	 * This is DSIM PLL frequency, DSI HS clock lane frequency
-+	 * is half of the "samsung,burst-clock-frequency" value.
-+	 */
-+	samsung,burst-clock-frequency = <300000000>;
-+};
-+
-+&panel {
-+	compatible = "edt,etm0700g0edh6";
-+};
-+
-+&pwm1 {
-+	status = "okay";
++&pinctrl_dhcom_e {
++	fsl,pins = <
++		/* GPIO_E */
++		MX8MP_IOMUXC_UART1_RXD__GPIO5_IO22 0x40000000
++	>;
 +};
 -- 
 2.39.1
