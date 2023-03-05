@@ -14,7 +14,8 @@ require conf/machine/include/soc-family.inc
 SERIAL_CONSOLE = "115200 ttymxc0"
 
 # Linux kernel
-PREFERRED_VERSION_linux-stable ?= "5.10%"
+PREFERRED_VERSION_linux-stable ?= "6.1%"
+KERNEL_DTC_FLAGS += "-@"
 
 # U-Boot bootloader
 UBOOT_ENTRYPOINT := "0x17800000"
