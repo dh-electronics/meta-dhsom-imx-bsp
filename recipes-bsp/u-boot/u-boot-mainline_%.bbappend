@@ -13,6 +13,7 @@ SRC_URI:append:dh-imx-dhsom = " \
 	file://boot.cmd \
 	file://fw_env.config \
 	file://0001-u-boot-initial-env-rework-make-target.patch \
+	file://0002-mtd-spi-nor-Add-CHIP_ERASE-optimization.patch \
 	"
 
 SRC_URI:append:dh-imx6-dhsom = " \
@@ -63,4 +64,4 @@ do_compile:prepend:dh-imx8mp-dhsom () {
 # format is -${MACHINE}-date.extraversion. The date is in the
 # format YYYYMMDD, the extraversion is used in case there are
 # multiple releases during a single day, which is unlikely.
-UBOOT_LOCALVERSION:dh-imx-dhsom ?= "-${MACHINE}-20230306.02"
+UBOOT_LOCALVERSION:dh-imx-dhsom ?= "-${MACHINE}-20230309.01"
