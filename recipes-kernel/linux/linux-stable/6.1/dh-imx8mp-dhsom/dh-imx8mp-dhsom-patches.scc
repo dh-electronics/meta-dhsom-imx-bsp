@@ -9,7 +9,6 @@ patch 0008-drm-bridge-samsung-dsim-Add-input_bus_flags.patch
 patch 0009-drm-bridge-samsung-dsim-Add-i.MX8MM-support.patch
 patch 0010-drm-bridge-samsung-dsim-Add-i.MX8M-Plus-support.patch
 patch 0011-drm-bridge-samsung-dsim-Implement-support-for-DSI-cl.patch
-patch 0012-drm-bridge-tc358767-Set-default-CLRSIPO-count.patch
 patch 0013-drm-bridge-tc358767-Enable-DSI-burst-mode-LPM-non-co.patch
 patch 0014-arm64-dts-imx8mp-Add-LCDIF2-LDB-nodes.patch
 patch 0015-arm64-dts-imx8mp-Add-display-pipeline-components.patch
