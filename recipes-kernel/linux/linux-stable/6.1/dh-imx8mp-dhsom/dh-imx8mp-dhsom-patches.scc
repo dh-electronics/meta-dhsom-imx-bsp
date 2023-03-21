@@ -40,7 +40,6 @@ patch 0041-clk-si521xx-Clock-driver-for-Skyworks-Si521xx-I2C-PC.patch
 patch 0042-media-ov5640-report-correct-frame-rate-to-user.patch
 patch 0043-media-ov5640-set-correct-default-format-for-CSI-2-mo.patch
 patch 0044-media-ov5640-Update-last-busy-timestamp-to-reset-aut.patch
-patch 0047-media-ov5640-Fix-analogue-gain-control.patch
 patch 0048-media-imx-mipi-csis-Rename-error-labels-with-err_-pr.patch
 patch 0049-media-imx-mipi-csis-Don-t-take-lock-in-runtime-PM-ha.patch
 patch 0050-media-imx-mipi-csis-Pass-format-explicitly-to-intern.patch
