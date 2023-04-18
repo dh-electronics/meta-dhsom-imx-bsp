@@ -15,3 +15,4 @@ SRC_URI = "\
 # repo during parse
 PV .= "+git${SRCPV}"
 SRCREV = "30ca44e9c81552098548ad902f8e1ab5ffdab97e"
+SRCREV:dh-imx6ull-dhsom = "7e1b0c796401a276f568ef96428e34f6cfade180"
