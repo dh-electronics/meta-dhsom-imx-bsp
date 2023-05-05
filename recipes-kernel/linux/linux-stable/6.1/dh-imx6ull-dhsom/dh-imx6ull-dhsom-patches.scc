@@ -1,0 +1,10 @@
+patch 0001-mfd-da9062-Use-MFD_CELL_OF-macro.patch
+patch 0002-mfd-da9062-Remove-IRQ-requirement.patch
+patch 0003-regulator-da9062-Make-the-use-of-IRQ-optional.patch
+patch 0004-serial-core-Add-option-to-output-RS485-RX_DURING_TX-.patch
+patch 0005-serial-imx-Add-support-for-RS485-RX_DURING_TX-output.patch
+patch 0006-leds-gpio-Configure-per-LED-pin-control.patch
+patch 0007-net-fec-Set-PHY-in-reset-state-before-turn-off-the-c.patch
+patch 0008-clk-imx6ul-Separate-both-ethernet-clocks-from-each-o.patch
+patch 0009-ARM-dts-imx6ull-dhcom-Add-DH-electronics-DHCOM-i.MX6.patch
+patch 0010-ARM-dts-imx6ull-dhcor-Set-and-limit-the-mode-for-PMI.patch

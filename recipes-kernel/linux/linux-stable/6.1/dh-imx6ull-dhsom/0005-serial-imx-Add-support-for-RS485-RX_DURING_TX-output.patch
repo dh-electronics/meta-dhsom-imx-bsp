@@ -1,0 +1,58 @@
+From f08ae697f731cb36d36dfa932c6ca91df708a826 Mon Sep 17 00:00:00 2001
+From: Christoph Niedermaier <cniedermaier@dh-electronics.com>
+Date: Fri, 2 Dec 2022 11:41:26 +0100
+Subject: [PATCH 05/10] serial: imx: Add support for RS485 RX_DURING_TX output
+ GPIO
+
+If a RX_DURING_TX GPIO is defined by the DT property "rs485-rx-during-tx-gpios"
+this patch switches this GPIO accordingly to the RS485 flag RX_DURING_TX in user
+space. In addition, the i.MX UART receiver is no longer turned on and off during
+sending, because now the hardware is responsible for connecting or disconnecting
+RX during TX controlled by this GPIO.
+
+Upstream-Status: Backport [ca530cfa968c6fa197ee7df877a277954b87bad5]
+Signed-off-by: Christoph Niedermaier <cniedermaier@dh-electronics.com>
+Link: https://lore.kernel.org/r/20221202104127.122761-3-cniedermaier@dh-electronics.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ drivers/tty/serial/imx.c | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/tty/serial/imx.c b/drivers/tty/serial/imx.c
+index f07c4f9ff13c0..528c393f42fd7 100644
+--- a/drivers/tty/serial/imx.c
++++ b/drivers/tty/serial/imx.c
+@@ -476,7 +476,8 @@ static void imx_uart_stop_tx(struct uart_port *port)
+ 				imx_uart_rts_inactive(sport, &ucr2);
+ 			imx_uart_writel(sport, ucr2, UCR2);
+ 
+-			imx_uart_start_rx(port);
++			if (!port->rs485_rx_during_tx_gpio)
++				imx_uart_start_rx(port);
+ 
+ 			sport->tx_state = OFF;
+ 		}
+@@ -708,7 +709,8 @@ static void imx_uart_start_tx(struct uart_port *port)
+ 				imx_uart_rts_inactive(sport, &ucr2);
+ 			imx_uart_writel(sport, ucr2, UCR2);
+ 
+-			if (!(port->rs485.flags & SER_RS485_RX_DURING_TX))
++			if (!(port->rs485.flags & SER_RS485_RX_DURING_TX) &&
++			    !port->rs485_rx_during_tx_gpio)
+ 				imx_uart_stop_rx(port);
+ 
+ 			sport->tx_state = WAIT_AFTER_RTS;
+@@ -1958,6 +1960,10 @@ static int imx_uart_rs485_config(struct uart_port *port, struct ktermios *termio
+ 	    rs485conf->flags & SER_RS485_RX_DURING_TX)
+ 		imx_uart_start_rx(port);
+ 
++	if (port->rs485_rx_during_tx_gpio)
++		gpiod_set_value_cansleep(port->rs485_rx_during_tx_gpio,
++					 !!(rs485conf->flags & SER_RS485_RX_DURING_TX));
++
+ 	return 0;
+ }
+ 
+-- 
+2.39.2
+

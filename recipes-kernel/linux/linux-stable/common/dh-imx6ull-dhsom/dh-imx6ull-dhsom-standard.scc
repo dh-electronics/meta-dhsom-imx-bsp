@@ -1,0 +1,7 @@
+define KMACHINE dh-imx6ull-dhsom
+define KTYPE standard
+define KARCH arm
+branch dh-imx6ull-dhsom
+kconf hardware dh-imx6ull-dhsom.cfg
+
+include dh-imx6ull-dhsom-patches.scc

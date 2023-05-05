@@ -1,0 +1,52 @@
+From c47c2963e97bec23af3183dc68e47d51f5dec5c5 Mon Sep 17 00:00:00 2001
+From: Christoph Niedermaier <cniedermaier@dh-electronics.com>
+Date: Wed, 16 Nov 2022 11:07:26 +0100
+Subject: [PATCH 03/10] regulator: da9062: Make the use of IRQ optional
+
+This patch makes the use of IRQ optional to make the DA9061/62 usable
+for designs that don't have the IRQ pin connected, because the regulator
+is usable without IRQ.
+
+Upstream-Status: Submitted [https://lore.kernel.org/lkml/20230309092254.56279-3-cniedermaier@dh-electronics.com]
+Signed-off-by: Christoph Niedermaier <cniedermaier@dh-electronics.com>
+Acked-by: Mark Brown <broonie@kernel.org>
+Reviewed-by: Adam Ward <DLG-Adam.Ward.opensource@dm.renesas.com>
+Reported-by: kernel test robot <lkp@intel.com>
+Link: https://lore.kernel.org/oe-kbuild-all/202303082246.GuLdPL0t-lkp@intel.com/
+---
+ drivers/regulator/da9062-regulator.c | 11 +++++------
+ 1 file changed, 5 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/regulator/da9062-regulator.c b/drivers/regulator/da9062-regulator.c
+index 1a63240010275..ae7955afce865 100644
+--- a/drivers/regulator/da9062-regulator.c
++++ b/drivers/regulator/da9062-regulator.c
+@@ -924,7 +924,7 @@ static int da9062_regulator_probe(struct platform_device *pdev)
+ 	struct da9062_regulator *regl;
+ 	struct regulator_config config = { };
+ 	const struct da9062_regulator_info *rinfo;
+-	int irq, n, ret;
++	int n, ret;
+ 	int max_regulators;
+ 
+ 	switch (chip->chip_type) {
+@@ -1012,12 +1012,11 @@ static int da9062_regulator_probe(struct platform_device *pdev)
+ 	}
+ 
+ 	/* LDOs overcurrent event support */
+-	irq = platform_get_irq_byname(pdev, "LDO_LIM");
+-	if (irq < 0)
+-		return irq;
+-	regulators->irq_ldo_lim = irq;
++	regulators->irq_ldo_lim = platform_get_irq_byname_optional(pdev, "LDO_LIM");
++	if (regulators->irq_ldo_lim < 0)
++		return 0;
+ 
+-	ret = devm_request_threaded_irq(&pdev->dev, irq,
++	ret = devm_request_threaded_irq(&pdev->dev, regulators->irq_ldo_lim,
+ 					NULL, da9062_ldo_lim_event,
+ 					IRQF_TRIGGER_LOW | IRQF_ONESHOT,
+ 					"LDO_LIM", regulators);
+-- 
+2.39.2
+
