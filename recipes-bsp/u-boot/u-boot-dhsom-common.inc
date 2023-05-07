@@ -9,7 +9,7 @@ do_compile:append:dh-imx-dhsom () {
 		-d ${WORKDIR}/boot.cmd ${WORKDIR}/boot.scr
 }
 
-SRC_URI:append:dh-imx6-dhsom = " \
+SRC_URI:append:dh-imx-dhsom = " \
 	file://boot.cmd \
 	file://fw_env.config \
 	"

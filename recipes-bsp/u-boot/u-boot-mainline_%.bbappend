@@ -1,17 +1,8 @@
-FILESEXTRAPATHS:prepend := "${THISDIR}/${BPN}:${THISDIR}/files/common:${THISDIR}/files/${MACHINE}:${THISDIR}/files:"
+FILESEXTRAPATHS:prepend := "${THISDIR}/${PN}/${MACHINE}:${THISDIR}/${PN}:${THISDIR}/files/${MACHINE}:${THISDIR}/files:"
 
-DEPENDS:append:dh-imx-dhsom = " u-boot-mainline-tools-native "
-do_compile:append:dh-imx-dhsom () {
-	sed -i -e "s/%UBOOT_DTB_LOADADDRESS%/${UBOOT_DTB_LOADADDRESS}/g" \
-		-e "s/%UBOOT_DTBO_LOADADDRESS%/${UBOOT_DTBO_LOADADDRESS}/g" \
-		${WORKDIR}/boot.cmd
-	uboot-mkimage -A arm -T script -C none \
-		-d ${WORKDIR}/boot.cmd ${WORKDIR}/boot.scr
-}
+require u-boot-dhsom-common.inc
 
 SRC_URI:append:dh-imx-dhsom = " \
-	file://boot.cmd \
-	file://fw_env.config \
 	file://0001-u-boot-initial-env-rework-make-target.patch \
 	file://0002-mtd-spi-nor-Add-CHIP_ERASE-optimization.patch \
 	"
