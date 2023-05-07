@@ -1,7 +1,5 @@
 require recipes-bsp/u-boot/u-boot-mainline.inc
 
-DEPENDS += "bc-native dtc-native"
-
 FILESEXTRAPATHS:prepend := "${THISDIR}/${PN}/${MACHINE}:${THISDIR}/${PN}:${THISDIR}/files/${MACHINE}:${THISDIR}/files:"
 
 DEPENDS:append:dh-imx-dhsom = " u-boot-mainline-tools-native "
