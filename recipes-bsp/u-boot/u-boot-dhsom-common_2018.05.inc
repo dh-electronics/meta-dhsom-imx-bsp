@@ -1,6 +1,4 @@
 require recipes-bsp/u-boot/u-boot-common.inc
-# tools/binman/binman needs python3-setuptools now
-DEPENDS:append = " python3-setuptools-native"
 
 LICENSE = "GPLv2+"
 LIC_FILES_CHKSUM = "file://Licenses/README;md5=a2c678cfd4a4d97135585cad908541c6"
