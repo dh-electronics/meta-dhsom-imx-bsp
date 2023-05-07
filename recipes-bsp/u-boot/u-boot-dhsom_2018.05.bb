@@ -13,4 +13,5 @@ SRC_URI = "\
 
 # We use the revision in order to avoid having to fetch it from the
 # repo during parse
-SRCREV = "6d7695d86b58549cc596d88d07ce56cd8a06111c"
+PV .= "+git${SRCPV}"
+SRCREV = "30ca44e9c81552098548ad902f8e1ab5ffdab97e"
