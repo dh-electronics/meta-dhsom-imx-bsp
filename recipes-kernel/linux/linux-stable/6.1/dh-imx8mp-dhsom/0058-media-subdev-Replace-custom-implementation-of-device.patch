@@ -1,0 +1,32 @@
+From 9b45f0db6ea36cc45330eadf0fe013d6636e79ca Mon Sep 17 00:00:00 2001
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Date: Tue, 27 Sep 2022 18:16:18 +0100
+Subject: [PATCH 58/94] media: subdev: Replace custom implementation of
+ device_match_fwnode()
+
+Replace custom implementation of the device_match_fwnode().
+
+Upstream-Status: Backport [026df23098b8816df44b46504de79a46f23aecfa]
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+---
+ drivers/media/v4l2-core/v4l2-subdev.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/media/v4l2-core/v4l2-subdev.c b/drivers/media/v4l2-core/v4l2-subdev.c
+index 8a4ca2bd1584d..4988a25bd8f46 100644
+--- a/drivers/media/v4l2-core/v4l2-subdev.c
++++ b/drivers/media/v4l2-core/v4l2-subdev.c
+@@ -860,7 +860,7 @@ int v4l2_subdev_get_fwnode_pad_1_to_1(struct media_entity *entity,
+ 	fwnode = fwnode_graph_get_port_parent(endpoint->local_fwnode);
+ 	fwnode_handle_put(fwnode);
+ 
+-	if (dev_fwnode(sd->dev) == fwnode)
++	if (device_match_fwnode(sd->dev, fwnode))
+ 		return endpoint->port;
+ 
+ 	return -ENXIO;
+-- 
+2.39.2
+

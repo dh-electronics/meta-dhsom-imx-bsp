@@ -1,0 +1,73 @@
+From 692b0c5caca60af9f382c7b37d8849eb4c4071f8 Mon Sep 17 00:00:00 2001
+From: Sakari Ailus <sakari.ailus@linux.intel.com>
+Date: Mon, 17 Oct 2022 10:04:32 +0300
+Subject: [PATCH 57/94] v4l: subdev: Warn if disabling streaming failed, return
+ success
+
+Complain in the newly added s_stream video op wrapper if disabling
+streaming failed. Also return zero in this case as there's nothing the
+caller can do to return the error.
+
+This way drivers also won't need to bother with printing error messages.
+
+Upstream-Status: Backport [379c258677ccf0dab1032d531829f6d8440713fa]
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Reviewed-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+---
+ drivers/media/v4l2-core/v4l2-subdev.c | 15 +++++++++++++++
+ include/media/v4l2-subdev.h           |  6 ++++--
+ 2 files changed, 19 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/media/v4l2-core/v4l2-subdev.c b/drivers/media/v4l2-core/v4l2-subdev.c
+index 5c27bac772ea4..8a4ca2bd1584d 100644
+--- a/drivers/media/v4l2-core/v4l2-subdev.c
++++ b/drivers/media/v4l2-core/v4l2-subdev.c
+@@ -318,6 +318,20 @@ static int call_get_mbus_config(struct v4l2_subdev *sd, unsigned int pad,
+ 	       sd->ops->pad->get_mbus_config(sd, pad, config);
+ }
+ 
++static int call_s_stream(struct v4l2_subdev *sd, int enable)
++{
++	int ret;
++
++	ret = sd->ops->video->s_stream(sd, enable);
++
++	if (!enable && ret < 0) {
++		dev_warn(sd->dev, "disabling streaming failed (%d)\n", ret);
++		return 0;
++	}
++
++	return ret;
++}
++
+ #ifdef CONFIG_MEDIA_CONTROLLER
+ /*
+  * Create state-management wrapper for pad ops dealing with subdev state. The
+@@ -377,6 +391,7 @@ static const struct v4l2_subdev_pad_ops v4l2_subdev_call_pad_wrappers = {
+ static const struct v4l2_subdev_video_ops v4l2_subdev_call_video_wrappers = {
+ 	.g_frame_interval	= call_g_frame_interval,
+ 	.s_frame_interval	= call_s_frame_interval,
++	.s_stream		= call_s_stream,
+ };
+ 
+ const struct v4l2_subdev_ops v4l2_subdev_call_wrappers = {
+diff --git a/include/media/v4l2-subdev.h b/include/media/v4l2-subdev.h
+index 2f80c9c818ed0..ccac82e0ad1e1 100644
+--- a/include/media/v4l2-subdev.h
++++ b/include/media/v4l2-subdev.h
+@@ -437,8 +437,10 @@ enum v4l2_subdev_pre_streamon_flags {
+  * @g_input_status: get input status. Same as the status field in the
+  *	&struct v4l2_input
+  *
+- * @s_stream: used to notify the driver that a video stream will start or has
+- *	stopped.
++ * @s_stream: start (enabled == 1) or stop (enabled == 0) streaming on the
++ *	sub-device. Failure on stop will remove any resources acquired in
++ *	streaming start, while the error code is still returned by the driver.
++ *	Also see call_s_stream wrapper in v4l2-subdev.c.
+  *
+  * @g_pixelaspect: callback to return the pixelaspect ratio.
+  *
+-- 
+2.39.2
+

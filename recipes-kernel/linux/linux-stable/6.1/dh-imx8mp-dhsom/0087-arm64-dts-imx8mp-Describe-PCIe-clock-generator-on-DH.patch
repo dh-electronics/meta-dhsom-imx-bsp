@@ -1,0 +1,71 @@
+From dcb93c6eb96d90867cdef1c3b55f449fe4427aee Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Mon, 12 Dec 2022 03:00:51 +0100
+Subject: [PATCH 87/94] arm64: dts: imx8mp: Describe PCIe clock generator on DH
+ electronics i.MX8M Plus DHCOM on PDK3
+
+The PDK3 carrier board contains a PCIe clock generator which is used to
+supply the PCIe clock lanes. This generator is always on, unless external
+CLKREQ signal toggles an output off, but this is handled in hardware. The
+generator does however have I2C interface, describe it in DT.
+
+Upstream-Status: Submitted [https://patchwork.kernel.org/project/linux-arm-kernel/patch/20230515155102.61227-1-marex@denx.de/]
+Signed-off-by: Marek Vasut <marex@denx.de>
+---
+Cc: Conor Dooley <conor+dt@kernel.org>
+Cc: Fabio Estevam <festevam@gmail.com>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc: NXP Linux Team <linux-imx@nxp.com>
+Cc: Pengutronix Kernel Team <kernel@pengutronix.de>
+Cc: Rob Herring <robh+dt@kernel.org>
+Cc: Sascha Hauer <s.hauer@pengutronix.de>
+Cc: Shawn Guo <shawnguo@kernel.org>
+Cc: devicetree@vger.kernel.org
+Cc: linux-arm-kernel@lists.infradead.org
+---
+ arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3.dts | 13 ++++++++++---
+ 1 file changed, 10 insertions(+), 3 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3.dts b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3.dts
+index b5e76b992a103..24dc58b3404fb 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3.dts
++++ b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3.dts
+@@ -23,10 +23,10 @@ chosen {
+ 		stdout-path = &uart1;
+ 	};
+ 
+-	clk_pcie: clock-pcie {
++	clk_xtal25: clock-xtal25 {
+ 		compatible = "fixed-clock";
+ 		#clock-cells = <0>;
+-		clock-frequency = <100000000>;
++		clock-frequency = <25000000>;
+ 	};
+ 
+ 	connector {
+@@ -203,6 +203,13 @@ eeprom_board: eeprom@54 {
+ 				pagesize = <16>;
+ 				reg = <0x54>;
+ 			};
++
++			pcieclk: clock@6b {
++				compatible = "skyworks,si52144";
++				reg = <0x6b>;
++				clocks = <&clk_xtal25>;
++				#clock-cells = <1>;
++			};
+ 		};
+ 
+ 		i2cmuxed1: i2c@1 {	/* HDMI DDC I2C */
+@@ -244,7 +251,7 @@ &flexcan1 {
+ };
+ 
+ &pcie_phy {
+-	clocks = <&clk_pcie>;
++	clocks = <&pcieclk 1>;
+ 	clock-names = "ref";
+ 	fsl,refclk-pad-mode = <IMX8_PCIE_REFCLK_PAD_INPUT>;
+ 	status = "okay";
+-- 
+2.39.2
+

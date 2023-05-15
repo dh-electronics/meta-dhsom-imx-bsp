@@ -1,0 +1,45 @@
+From e43afc3b475abcd45d3cb165acc09d5788479764 Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Sat, 18 Feb 2023 20:20:53 +0100
+Subject: [PATCH 89/94] arm64: dts: imx8mp: Enable HDMI on MX8MP DHCOM PDK3
+
+Enable HDMI output on MX8MP DHCOM PDK3. The I2C mux port 1 is used
+instead of HDMI DDC I2C5 to permit connection of other I2C devices
+on that bus.
+
+Upstream-Status: Pending [Depends on MX8MP HDMI support]
+Signed-off-by: Marek Vasut <marex@denx.de>
+Cc: Fabio Estevam <festevam@denx.de>
+Cc: Peng Fan <peng.fan@nxp.com>
+Cc: Shawn Guo <shawnguo@kernel.org>
+Cc: NXP Linux Team <linux-imx@nxp.com>
+To: linux-arm-kernel@lists.infradead.org
+---
+ arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3.dts | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3.dts b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3.dts
+index 6bcf17ffc9393..5ba7b2d9175d8 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3.dts
++++ b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3.dts
+@@ -283,6 +283,17 @@ &flexcan1 {
+ 	status = "okay";
+ };
+ 
++&hdmi_tx {
++	ddc-i2c-bus = <&i2cmuxed1>;
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_hdmi>;
++	status = "okay";
++};
++
++&hdmi_tx_phy {
++	status = "okay";
++};
++
+ &pcie_phy {
+ 	clocks = <&pcieclk 1>;
+ 	clock-names = "ref";
+-- 
+2.39.2
+

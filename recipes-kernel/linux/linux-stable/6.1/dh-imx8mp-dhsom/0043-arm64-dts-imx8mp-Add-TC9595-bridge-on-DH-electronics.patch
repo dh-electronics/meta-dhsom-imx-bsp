@@ -1,0 +1,111 @@
+From 36c7d81f695b702d9a08e3caa83b8fc672b59f8d Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Fri, 22 Jul 2022 04:12:32 +0200
+Subject: [PATCH 43/94] arm64: dts: imx8mp: Add TC9595 bridge on DH electronics
+ i.MX8M Plus DHCOM
+
+Add TC9595 DSI-to-DPI and DSI-to-(e)DP bridge to
+DH electronics i.MX8M Plus DHCOM SoM . The bridge
+is populated on the SoM, but disabled by default
+unless used for display output.
+
+Upstream-Status: Submitted [https://lore.kernel.org/linux-arm-kernel/20230515162424.67597-1-marex@denx.de/T/#u]
+Signed-off-by: Marek Vasut <marex@denx.de>
+---
+Cc: Conor Dooley <conor+dt@kernel.org>
+Cc: Fabio Estevam <festevam@gmail.com>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc: NXP Linux Team <linux-imx@nxp.com>
+Cc: Pengutronix Kernel Team <kernel@pengutronix.de>
+Cc: Rob Herring <robh+dt@kernel.org>
+Cc: Sascha Hauer <s.hauer@pengutronix.de>
+Cc: Shawn Guo <shawnguo@kernel.org>
+Cc: devicetree@vger.kernel.org
+Cc: linux-arm-kernel@lists.infradead.org
+---
+ .../boot/dts/freescale/imx8mp-dhcom-som.dtsi  | 55 +++++++++++++++++++
+ 1 file changed, 55 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-som.dtsi b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-som.dtsi
+index 590f580656785..7a45d7a4f9739 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-som.dtsi
++++ b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-som.dtsi
+@@ -232,6 +232,36 @@ &i2c3 {
+ 	sda-gpios = <&gpio5 19 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
+ 	status = "okay";
+ 
++	tc_bridge: bridge@f {
++		compatible = "toshiba,tc9595", "toshiba,tc358767";
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_tc9595>;
++		reg = <0xf>;
++		clock-names = "ref";
++		clocks = <&clk IMX8MP_CLK_CLKOUT2>;
++		assigned-clocks = <&clk IMX8MP_CLK_CLKOUT2_SEL>,
++				  <&clk IMX8MP_CLK_CLKOUT2>,
++				  <&clk IMX8MP_AUDIO_PLL2_OUT>;
++		assigned-clock-parents = <&clk IMX8MP_AUDIO_PLL2_OUT>;
++		assigned-clock-rates = <13000000>, <13000000>, <156000000>;
++		reset-gpios = <&gpio3 21 GPIO_ACTIVE_HIGH>;
++		status = "disabled";
++
++		ports {
++			#address-cells = <1>;
++			#size-cells = <0>;
++
++			port@0 {
++				reg = <0>;
++
++				tc_bridge_in: endpoint {
++					data-lanes = <1 2 3 4>;
++					remote-endpoint = <&dsi_out>;
++				};
++			};
++		};
++	};
++
+ 	pmic: pmic@25 {
+ 		compatible = "nxp,pca9450c";
+ 		reg = <0x25>;
+@@ -408,6 +438,22 @@ &i2c5 {	/* HDMI EDID bus */
+ 	status = "okay";
+ };
+ 
++&mipi_dsi {
++	samsung,burst-clock-frequency = <160000000>;
++	samsung,esc-clock-frequency = <10000000>;
++
++	ports {
++		port@1 {
++			reg = <1>;
++
++			dsi_out: endpoint {
++				data-lanes = <1 2 3 4>;
++				remote-endpoint = <&tc_bridge_in>;
++			};
++		};
++	};
++};
++
+ &pwm1 {
+ 	pinctrl-0 = <&pinctrl_pwm1>;
+ 	pinctrl-names = "default";
+@@ -822,6 +868,15 @@ MX8MP_IOMUXC_SPDIF_EXT_CLK__GPIO5_IO05		0x400001c6
+ 		>;
+ 	};
+ 
++	pinctrl_tc9595: dhcom-tc9595-grp {
++		fsl,pins = <
++			/* RESET_DSIBRIDGE */
++			MX8MP_IOMUXC_SAI1_RXC__GPIO4_IO01		0x40000146
++			/* DSI-CONV_INT Interrupt */
++			MX8MP_IOMUXC_SAI5_RXD0__GPIO3_IO21		0x141
++		>;
++	};
++
+ 	pinctrl_touch: dhcom-touch-grp {
+ 		fsl,pins = <
+ 			/* #TOUCH_INT */
+-- 
+2.39.2
+

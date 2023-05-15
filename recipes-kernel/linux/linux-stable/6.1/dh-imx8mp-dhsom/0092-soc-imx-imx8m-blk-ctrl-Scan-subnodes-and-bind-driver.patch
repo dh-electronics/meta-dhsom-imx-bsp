@@ -1,0 +1,37 @@
+From 789e70011a6efdb3965f1ae8243f4f71e677338a Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Mon, 27 Feb 2023 16:54:21 +0100
+Subject: [PATCH 92/94] soc: imx: imx8m-blk-ctrl: Scan subnodes and bind
+ drivers to them
+
+This particular block can have DT subnodes describing the LVDS LDB
+bridge. Instead of misusing simple-bus to scan for those nodes, do
+the scan within the driver.
+
+Tested-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+Upstream-Status: Backport [9cb6d1b39a8f5086bbebb01357ba1e4ada2169e5]
+Signed-off-by: Marek Vasut <marex@denx.de>
+Reviewed-by: Lucas Stach <l.stach@pengutronix.de>
+Signed-off-by: Shawn Guo <shawnguo@kernel.org>
+---
+ drivers/soc/imx/imx8m-blk-ctrl.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/drivers/soc/imx/imx8m-blk-ctrl.c b/drivers/soc/imx/imx8m-blk-ctrl.c
+index 00879615a7015..328161b337395 100644
+--- a/drivers/soc/imx/imx8m-blk-ctrl.c
++++ b/drivers/soc/imx/imx8m-blk-ctrl.c
+@@ -304,6 +304,10 @@ static int imx8m_blk_ctrl_probe(struct platform_device *pdev)
+ 
+ 	dev_set_drvdata(dev, bc);
+ 
++	ret = devm_of_platform_populate(dev);
++	if (ret)
++		goto cleanup_provider;
++
+ 	return 0;
+ 
+ cleanup_provider:
+-- 
+2.39.2
+

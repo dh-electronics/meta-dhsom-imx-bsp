@@ -1,0 +1,36 @@
+From 5bb144e1f7fb6f5b8f70065ae04136dc7c61d1ef Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Thu, 16 Feb 2023 02:44:01 +0100
+Subject: [PATCH 78/94] media: imx-mipi-csis: Check csis_fmt validity before
+ use
+
+The find_csis_format() may return NULL in case supported format is not
+found, check the return value of find_csis_format() before using the
+result to avoid NULL pointer dereference.
+
+Upstream-Status: Backport [3e62aba8284de0994a669d07983299242e68fe72]
+Fixes: 11927d0fd0d0 ("media: imx-mipi-csis: Use V4L2 subdev active state")
+Signed-off-by: Marek Vasut <marex@denx.de>
+Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+---
+ drivers/media/platform/nxp/imx-mipi-csis.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/drivers/media/platform/nxp/imx-mipi-csis.c b/drivers/media/platform/nxp/imx-mipi-csis.c
+index e99633565463e..be2768a479951 100644
+--- a/drivers/media/platform/nxp/imx-mipi-csis.c
++++ b/drivers/media/platform/nxp/imx-mipi-csis.c
+@@ -1109,6 +1109,9 @@ static int mipi_csis_get_frame_desc(struct v4l2_subdev *sd, unsigned int pad,
+ 	csis_fmt = find_csis_format(fmt->code);
+ 	v4l2_subdev_unlock_state(state);
+ 
++	if (!csis_fmt)
++		return -EPIPE;
++
+ 	fd->type = V4L2_MBUS_FRAME_DESC_TYPE_PARALLEL;
+ 	fd->num_entries = 1;
+ 
+-- 
+2.39.2
+

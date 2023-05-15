@@ -1,0 +1,88 @@
+From 3bb6d982b8ea9eb22de35e06415c366813fd0589 Mon Sep 17 00:00:00 2001
+From: Jacopo Mondi <jacopo+renesas@jmondi.org>
+Date: Sun, 17 Oct 2021 20:24:42 +0200
+Subject: [PATCH 66/94] media: subdev: Add for_each_active_route() macro
+
+Add a for_each_active_route() macro to replace the repeated pattern
+of iterating on the active routes of a routing table.
+
+Upstream-Status: Backport [837f92f070f6b7e877143eb168025995688b9756]
+Signed-off-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
+Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+---
+ .clang-format                         |  1 +
+ drivers/media/v4l2-core/v4l2-subdev.c | 20 ++++++++++++++++++++
+ include/media/v4l2-subdev.h           | 13 +++++++++++++
+ 3 files changed, 34 insertions(+)
+
+diff --git a/.clang-format b/.clang-format
+index 8d01225bfcb7d..ba4845e47a817 100644
+--- a/.clang-format
++++ b/.clang-format
+@@ -190,6 +190,7 @@ ForEachMacros:
+   - 'for_each_active_dev_scope'
+   - 'for_each_active_drhd_unit'
+   - 'for_each_active_iommu'
++  - 'for_each_active_route'
+   - 'for_each_aggr_pgid'
+   - 'for_each_available_child_of_node'
+   - 'for_each_bench'
+diff --git a/drivers/media/v4l2-core/v4l2-subdev.c b/drivers/media/v4l2-core/v4l2-subdev.c
+index d95cbea1a7284..730c31eaa35e8 100644
+--- a/drivers/media/v4l2-core/v4l2-subdev.c
++++ b/drivers/media/v4l2-core/v4l2-subdev.c
+@@ -1239,6 +1239,26 @@ int v4l2_subdev_set_routing(struct v4l2_subdev *sd,
+ }
+ EXPORT_SYMBOL_GPL(v4l2_subdev_set_routing);
+ 
++struct v4l2_subdev_route *
++__v4l2_subdev_next_active_route(const struct v4l2_subdev_krouting *routing,
++				struct v4l2_subdev_route *route)
++{
++	if (route)
++		++route;
++	else
++		route = &routing->routes[0];
++
++	for (; route < routing->routes + routing->num_routes; ++route) {
++		if (!(route->flags & V4L2_SUBDEV_ROUTE_FL_ACTIVE))
++			continue;
++
++		return route;
++	}
++
++	return NULL;
++}
++EXPORT_SYMBOL_GPL(__v4l2_subdev_next_active_route);
++
+ #endif /* CONFIG_VIDEO_V4L2_SUBDEV_API */
+ 
+ #endif /* CONFIG_MEDIA_CONTROLLER */
+diff --git a/include/media/v4l2-subdev.h b/include/media/v4l2-subdev.h
+index c10f9b2959553..e159e478cd544 100644
+--- a/include/media/v4l2-subdev.h
++++ b/include/media/v4l2-subdev.h
+@@ -1437,6 +1437,19 @@ int v4l2_subdev_set_routing(struct v4l2_subdev *sd,
+ 			    struct v4l2_subdev_state *state,
+ 			    const struct v4l2_subdev_krouting *routing);
+ 
++struct v4l2_subdev_route *
++__v4l2_subdev_next_active_route(const struct v4l2_subdev_krouting *routing,
++				struct v4l2_subdev_route *route);
++
++/**
++ * for_each_active_route - iterate on all active routes of a routing table
++ * @routing: The routing table
++ * @route: The route iterator
++ */
++#define for_each_active_route(routing, route) \
++	for ((route) = NULL;                  \
++	     ((route) = __v4l2_subdev_next_active_route((routing), (route)));)
++
+ #endif /* CONFIG_VIDEO_V4L2_SUBDEV_API */
+ 
+ #endif /* CONFIG_MEDIA_CONTROLLER */
+-- 
+2.39.2
+
