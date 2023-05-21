@@ -9,7 +9,11 @@ PREFERRED_PROVIDER_virtual/mesa ?= "mesa-mainline"
 # Mesa 22.0.y compatibility with dunfell release
 PREFERRED_PROVIDER_drm ??= "${@'libdrm-mainline' if (d.getVar('LAYERSERIES_CORENAMES') in ["dunfell"]) else 'libdrm'}"
 PREFERRED_PROVIDER_libdrm ??= "${@'libdrm-mainline' if (d.getVar('LAYERSERIES_CORENAMES') in ["dunfell"]) else 'libdrm'}"
+PREFERRED_PROVIDER_libdrm-native ??= "${@'libdrm-mainline-native' if (d.getVar('LAYERSERIES_CORENAMES') in ["dunfell"]) else 'libdrm-native'}"
+PREFERRED_PROVIDER_nativesdk-libdrm ??= "${@'nativesdk-libdrm-mainline' if (d.getVar('LAYERSERIES_CORENAMES') in ["dunfell"]) else 'nativesdk-libdrm'}"
 PREFERRED_PROVIDER_wayland-protocols ??= "${@'wayland-protocols-mainline' if (d.getVar('LAYERSERIES_CORENAMES') in ["dunfell"]) else 'wayland-protocols'}"
+PREFERRED_PROVIDER_wayland-protocols-native ??= "${@'wayland-protocols-mainline-native' if (d.getVar('LAYERSERIES_CORENAMES') in ["dunfell"]) else 'wayland-protocols-native'}"
+PREFERRED_PROVIDER_nativesdk-wayland-protocols ??= "${@'nativesdk-wayland-protocols-mainline' if (d.getVar('LAYERSERIES_CORENAMES') in ["dunfell"]) else 'nativesdk-wayland-protocols'}"
 
 KERNEL_MODULES_AUTOLOAD += " etnaviv "
 
