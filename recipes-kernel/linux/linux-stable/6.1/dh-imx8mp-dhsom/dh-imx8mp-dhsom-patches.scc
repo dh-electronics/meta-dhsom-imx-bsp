@@ -91,4 +91,3 @@ patch 0090-arm64-dts-imx8mp-Add-DT-overlays-for-i.MX8MP-DHCOM-P.patch
 patch 0091-arm64-dts-imx8mp-Add-DeWarp-Engine-DT-node.patch
 patch 0092-soc-imx-imx8m-blk-ctrl-Scan-subnodes-and-bind-driver.patch
 patch 0093-drm-bridge-ldb-add-support-for-using-channel-1-only.patch
-patch 0094-net-stmmac-Initialize-MAC_ONEUS_TIC_COUNTER-register.patch
