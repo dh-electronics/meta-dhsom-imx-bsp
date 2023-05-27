@@ -1,14 +1,19 @@
 SUMMARY = "Firmware files for use with Linux kernel for i.MX CPUs"
 SECTION = "kernel"
 LICENSE = "Firmware-nxp-imx-firmware"
-
-inherit allarch deploy
+LICENSE:${PN}-nxp-imx-license = "Firmware-nxp-imx-firmware"
+LICENSE:${PN}-sdma-imx6q = "Firmware-nxp-imx-firmware"
+LICENSE:${PN}-sdma-imx7d = "Firmware-nxp-imx-firmware"
+LICENSE:${PN}-vpu-imx6d = "Firmware-nxp-imx-firmware"
+LICENSE:${PN}-vpu-imx6q = "Firmware-nxp-imx-firmware"
 
 LIC_FILES_CHKSUM = "file://firmware-imx-${PV}/COPYING;md5=03bcadc8dc0a788f66ca9e2b89f56c6f"
 
 SRC_URI = "http://www.freescale.com/lgfiles/NMG/MAD/YOCTO/firmware-imx-${PV}.bin"
 SRC_URI[md5sum] = "3357c84e48fdc220984a9642d1e808f6"
 SRC_URI[sha256sum] = "bfe9c57857e8442e7eb26ba3e1020733b09a7c9b83952ad4822980546c58a7f4"
+
+inherit allarch deploy
 
 do_extra_unpack() {
 	dd if=${S}/../firmware-imx-${PV}.bin of=${S}/firmware-imx-${PV}.tar.bz2 \
@@ -48,9 +53,6 @@ addtask deploy after do_install before do_build
 
 NO_GENERIC_LICENSE[Firmware-nxp-imx-firmware] = "firmware-imx-${PV}/COPYING"
 
-LICENSE:${PN}-nxp-imx-license = "Firmware-nxp-imx-firmware"
-FILES:${PN}-nxp-imx-license = "${nonarch_base_libdir}/firmware/imx/COPYING"
-
 ALLOW_EMPTY:${PN} = "1"
 PACKAGES = " \
 	${PN}-nxp-imx-license \
@@ -58,20 +60,16 @@ PACKAGES = " \
 	${PN}-vpu-imx6d ${PN}-vpu-imx6q \
 	"
 
+FILES:${PN}-nxp-imx-license = "${nonarch_base_libdir}/firmware/imx/COPYING"
 FILES:${PN}-sdma-imx6q = " ${nonarch_base_libdir}/firmware/imx/sdma/sdma-imx6q.bin "
-LICENSE:${PN}-sdma-imx6q = "Firmware-nxp-imx-firmware"
-RDEPENDS:${PN}-sdma-imx6q += "${PN}-nxp-imx-license"
-RREPLACES:${PN}-sdma-imx6q = "linux-firmware-imx-sdma-imx6q"
-
 FILES:${PN}-sdma-imx7d = " ${nonarch_base_libdir}/firmware/imx/sdma/sdma-imx7d.bin "
-LICENSE:${PN}-sdma-imx7d = "Firmware-nxp-imx-firmware"
-RDEPENDS:${PN}-sdma-imx7d += "${PN}-nxp-imx-license"
+FILES:${PN}-vpu-imx6d = " ${nonarch_base_libdir}/firmware/vpu/vpu_fw_imx6d.bin "
+FILES:${PN}-vpu-imx6q = " ${nonarch_base_libdir}/firmware/vpu/vpu_fw_imx6q.bin "
+
+RREPLACES:${PN}-sdma-imx6q = "linux-firmware-imx-sdma-imx6q"
 RREPLACES:${PN}-sdma-imx7d = "linux-firmware-imx-sdma-imx7d"
 
-FILES:${PN}-vpu-imx6d = " ${nonarch_base_libdir}/firmware/vpu/vpu_fw_imx6d.bin "
-LICENSE:${PN}-vpu-imx6d = "Firmware-nxp-imx-firmware"
+RDEPENDS:${PN}-sdma-imx6q += "${PN}-nxp-imx-license"
+RDEPENDS:${PN}-sdma-imx7d += "${PN}-nxp-imx-license"
 RDEPENDS:${PN}-vpu-imx6d += "${PN}-nxp-imx-license"
-
-FILES:${PN}-vpu-imx6q = " ${nonarch_base_libdir}/firmware/vpu/vpu_fw_imx6q.bin "
-LICENSE:${PN}-vpu-imx6q = "Firmware-nxp-imx-firmware"
 RDEPENDS:${PN}-vpu-imx6q += "${PN}-nxp-imx-license"
