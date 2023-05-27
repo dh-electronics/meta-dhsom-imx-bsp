@@ -7,7 +7,7 @@ SUMMARY = "Trusted Firmware-A"
 # Use TF-A for version
 SRCREV_FORMAT = "tfa"
 
-# TF-A v2.6
+# TF-A
 LIC_FILES_CHKSUM = "file://license.rst;md5=1dd070c98a281d18d9eefd938729b031"
 
 #
@@ -27,7 +27,7 @@ SRC_URI[tfa.sha256sum] = "7c4c00a4f28d3cfbb235fd1a1fb28c4d2fc1d657c9301686e7d882
 SRC_URI[mbedtls.md5sum] = "37cdec398ae9ebdd4640df74af893c95"
 SRC_URI[mbedtls.sha256sum] = "a6834fcd7b7e64b83dfaaa6ee695198cb5019a929b2806cb0162e049f98206a4"
 
-SRCREV_tfa = "a1f02f4f3daae7e21ee58b4c93ec3e46b8f28d15"
+SRCREV_tfa = "d3e71ead6ea5bc3555ac90a446efec84ef6c6122"
 SRCREV_mbedtls = "d81c11b8ab61fd5b2da8133aa73c5fe33a0633eb"
 
 S = "${WORKDIR}/git"
