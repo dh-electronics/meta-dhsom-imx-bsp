@@ -1,11 +1,4 @@
-DESCRIPTION = "Trusted Firmware-A"
 LICENSE = "BSD-3-Clause & MIT"
-
-PROVIDES = "virtual/trusted-firmware-a"
-
-PACKAGE_ARCH = "${MACHINE_ARCH}"
-
-inherit deploy nopackages
 
 COMPATIBLE_MACHINE ?= "invalid"
 
@@ -30,12 +23,23 @@ TFA_MBEDTLS_DIR ?= "mbedtls"
 SRC_URI_MBEDTLS ??= ""
 # This should be set to MBEDTLS LIC FILES checksum
 LIC_FILES_CHKSUM_MBEDTLS ??= ""
-# add MBEDTLS to our sources if activated
-SRC_URI:append = " ${@bb.utils.contains('TFA_MBEDTLS', '1', '${SRC_URI_MBEDTLS}', '', d)}"
 # add mbed TLS chksum
 LIC_FILES_CHKSUM:append = " ${@bb.utils.contains('TFA_MBEDTLS', '1', '${LIC_FILES_CHKSUM_MBEDTLS}', '', d)}"
 # add mbed TLS to version
 SRCREV_FORMAT:append = " ${@bb.utils.contains('TFA_MBEDTLS', '1', '_mbedtls', '', d)}"
+
+# We need dtc for dtbs compilation
+# We need openssl for fiptool
+DEPENDS:append = " dtc-native openssl-native"
+
+PROVIDES = "virtual/trusted-firmware-a"
+
+# add MBEDTLS to our sources if activated
+SRC_URI:append = " ${@bb.utils.contains('TFA_MBEDTLS', '1', '${SRC_URI_MBEDTLS}', '', d)}"
+
+inherit deploy nopackages
+
+PACKAGE_ARCH = "${MACHINE_ARCH}"
 
 # What to build
 # By default we only build bl1, do_deploy will copy
@@ -58,10 +62,6 @@ LD[unexport] = "1"
 
 # No configure
 do_configure[noexec] = "1"
-
-# We need dtc for dtbs compilation
-# We need openssl for fiptool
-DEPENDS:append = " dtc-native openssl-native"
 
 # Add platform parameter
 EXTRA_OEMAKE += "PLAT=${TFA_PLATFORM}"
