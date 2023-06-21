@@ -1,0 +1,89 @@
+From 2d8722e1a4243ecac352331de55ac1997de54986 Mon Sep 17 00:00:00 2001
+From: Adam Ford <aford173@gmail.com>
+Date: Thu, 11 May 2023 20:04:23 -0500
+Subject: [PATCH] arm64: dts: imx8mp: Fix video clock parents
+
+There are a few clocks whose parents are set in mipi_dsi
+and lcdif nodes, but these clocks are used by the media_blk_ctrl
+power domain.  This may cause an issue when re-parenting, because
+the media_blk_ctrl may start the clocks before the reparent is
+done resulting in a disp_pixel clock having the wrong parent and
+rate.
+
+Fix this by moving the assigned-clock-parents and rates to the
+media_blk_ctrl node to configure these clocks before they are enabled.
+
+After this patch, both disp1_pix_root and dixp2_pix_root clock
+become children of the video_pll1.
+
+video_pll1_ref_sel           24000000
+  video_pll1               1039500000
+    video_pll1_bypass        1039500000
+      video_pll1_out           1039500000
+        media_disp2_pix          1039500000
+          media_disp2_pix_root_clk   1039500000
+        media_disp1_pix          1039500000
+          media_disp1_pix_root_clk   1039500000
+
+Upstream-Status: Backport [07bb2e368820a4de9b4b586691e143976b74ea44]
+Fixes: eda09fe149df ("arm64: dts: imx8mp: Add display pipeline components")
+Signed-off-by: Adam Ford <aford173@gmail.com>
+Signed-off-by: Shawn Guo <shawnguo@kernel.org>
+---
+ arch/arm64/boot/dts/freescale/imx8mp.dtsi | 25 ++++++++---------------
+ 1 file changed, 9 insertions(+), 16 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp.dtsi b/arch/arm64/boot/dts/freescale/imx8mp.dtsi
+index 3d73e883c7968..ab74306c952e5 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mp.dtsi
++++ b/arch/arm64/boot/dts/freescale/imx8mp.dtsi
+@@ -1293,13 +1293,6 @@ lcdif1: display-controller@32e80000 {
+ 					 <&clk IMX8MP_CLK_MEDIA_APB_ROOT>,
+ 					 <&clk IMX8MP_CLK_MEDIA_AXI_ROOT>;
+ 				clock-names = "pix", "axi", "disp_axi";
+-				assigned-clocks = <&clk IMX8MP_CLK_MEDIA_DISP1_PIX_ROOT>,
+-						  <&clk IMX8MP_CLK_MEDIA_AXI>,
+-						  <&clk IMX8MP_CLK_MEDIA_APB>;
+-				assigned-clock-parents = <&clk IMX8MP_CLK_MEDIA_DISP1_PIX>,
+-							 <&clk IMX8MP_SYS_PLL2_1000M>,
+-							 <&clk IMX8MP_SYS_PLL1_800M>;
+-				assigned-clock-rates = <594000000>, <500000000>, <200000000>;
+ 				interrupts = <GIC_SPI 5 IRQ_TYPE_LEVEL_HIGH>;
+ 				power-domains = <&media_blk_ctrl IMX8MP_MEDIABLK_PD_LCDIF_1>;
+ 				status = "disabled";
+@@ -1319,11 +1312,6 @@ lcdif2: display-controller@32e90000 {
+ 					 <&clk IMX8MP_CLK_MEDIA_APB_ROOT>,
+ 					 <&clk IMX8MP_CLK_MEDIA_AXI_ROOT>;
+ 				clock-names = "pix", "axi", "disp_axi";
+-				assigned-clocks = <&clk IMX8MP_CLK_MEDIA_DISP2_PIX>,
+-						  <&clk IMX8MP_VIDEO_PLL1>;
+-				assigned-clock-parents = <&clk IMX8MP_VIDEO_PLL1_OUT>,
+-							 <&clk IMX8MP_VIDEO_PLL1_REF_SEL>;
+-				assigned-clock-rates = <0>, <1039500000>;
+ 				power-domains = <&media_blk_ctrl IMX8MP_MEDIABLK_PD_LCDIF_2>;
+ 				status = "disabled";
+ 
+@@ -1378,11 +1366,16 @@ media_blk_ctrl: blk-ctrl@32ec0000 {
+ 					      "disp1", "disp2", "isp", "phy";
+ 
+ 				assigned-clocks = <&clk IMX8MP_CLK_MEDIA_AXI>,
+-						  <&clk IMX8MP_CLK_MEDIA_APB>;
++						  <&clk IMX8MP_CLK_MEDIA_APB>,
++						  <&clk IMX8MP_CLK_MEDIA_DISP1_PIX>,
++						  <&clk IMX8MP_CLK_MEDIA_DISP2_PIX>,
++						  <&clk IMX8MP_VIDEO_PLL1>;
+ 				assigned-clock-parents = <&clk IMX8MP_SYS_PLL2_1000M>,
+-							 <&clk IMX8MP_SYS_PLL1_800M>;
+-				assigned-clock-rates = <500000000>, <200000000>;
+-
++							 <&clk IMX8MP_SYS_PLL1_800M>,
++							 <&clk IMX8MP_VIDEO_PLL1_OUT>,
++							 <&clk IMX8MP_VIDEO_PLL1_OUT>;
++				assigned-clock-rates = <500000000>, <200000000>,
++						       <0>, <0>, <1039500000>;
+ 				#power-domain-cells = <1>;
+ 
+ 				lvds_bridge: bridge@5c {
+-- 
+2.39.2
+
