@@ -7,11 +7,11 @@ LICENSE:${PN}-sdma-imx7d = "Firmware-nxp-imx-firmware"
 LICENSE:${PN}-vpu-imx6d = "Firmware-nxp-imx-firmware"
 LICENSE:${PN}-vpu-imx6q = "Firmware-nxp-imx-firmware"
 
-LIC_FILES_CHKSUM = "file://firmware-imx-${PV}/COPYING;md5=03bcadc8dc0a788f66ca9e2b89f56c6f"
+LIC_FILES_CHKSUM = "file://firmware-imx-${PV}/COPYING;md5=63a38e9f392d8813d6f1f4d0d6fbe657"
 
 SRC_URI = "http://www.freescale.com/lgfiles/NMG/MAD/YOCTO/firmware-imx-${PV}.bin"
-SRC_URI[md5sum] = "3357c84e48fdc220984a9642d1e808f6"
-SRC_URI[sha256sum] = "bfe9c57857e8442e7eb26ba3e1020733b09a7c9b83952ad4822980546c58a7f4"
+SRC_URI[md5sum] = "25c50f3371450b2324401ee06ff1bf6a"
+SRC_URI[sha256sum] = "f6dc6a5c8fd9b913a15360d3ccd53d188db05a08a8594c518e57622478c72383"
 
 inherit allarch deploy
 
