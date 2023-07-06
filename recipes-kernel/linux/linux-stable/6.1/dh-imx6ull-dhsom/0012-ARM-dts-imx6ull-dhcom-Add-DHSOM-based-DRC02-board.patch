@@ -1,0 +1,141 @@
+From 2d8eb1aec23740bf2bec2a32eb117655cd769b52 Mon Sep 17 00:00:00 2001
+From: Christoph Niedermaier <cniedermaier@dh-electronics.com>
+Date: Tue, 25 Oct 2022 18:17:49 +0200
+Subject: [PATCH 11/12] ARM: dts: imx6ull-dhcom: Add DHSOM based DRC02 board
+
+Add DT for DH DRC02 unit, which is a universal controller device.
+The system has two ethernet ports, two CANs, RS485 and RS232, USB,
+capacitive buttons and an OLED display. For this board a DHCOM
+i.MX6ULL SoM configuration without WiFi/BT is used. The interface
+is used for the SD card instead.
+
+Upstream-Status: Backport [addaaf0a18b7964913a289f5933f618974a408b3]
+
+Signed-off-by: Christoph Niedermaier <cniedermaier@dh-electronics.com>
+Reviewed-by: Marek Vasut <marex@denx.de>
+---
+ arch/arm/boot/dts/Makefile                |  1 +
+ arch/arm/boot/dts/imx6ull-dhcom-drc02.dts | 99 +++++++++++++++++++++++++++++++
+ 2 files changed, 100 insertions(+)
+ create mode 100644 arch/arm/boot/dts/imx6ull-dhcom-drc02.dts
+
+diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+index 3a6d6921dfc1..d54cd6d9bec8 100644
+--- a/arch/arm/boot/dts/Makefile
++++ b/arch/arm/boot/dts/Makefile
+@@ -736,6 +736,7 @@ dtb-$(CONFIG_SOC_IMX6UL) += \
+ 	imx6ull-colibri-wifi-eval-v3.dtb \
+ 	imx6ull-colibri-wifi-iris.dtb \
+ 	imx6ull-colibri-wifi-iris-v2.dtb \
++	imx6ull-dhcom-drc02.dtb \
+ 	imx6ull-dhcom-pdk2.dtb \
+ 	imx6ull-dhcom-picoitx.dtb \
+ 	imx6ull-jozacp.dtb \
+diff --git a/arch/arm/boot/dts/imx6ull-dhcom-drc02.dts b/arch/arm/boot/dts/imx6ull-dhcom-drc02.dts
+new file mode 100644
+index 000000000000..b539975a872c
+--- /dev/null
++++ b/arch/arm/boot/dts/imx6ull-dhcom-drc02.dts
+@@ -0,0 +1,99 @@
++// SPDX-License-Identifier: GPL-2.0+ OR BSD-3-Clause
++/*
++ * Copyright (C) 2023 DH electronics GmbH
++ *
++ * DHCOM iMX6ULL variant:
++ * DHCM-iMX6ULL-C080-R051-F0409-SPI-E2-CAN2-SD-RTC-ADC-I-01D2
++ * DHCOR PCB number: 578-200 or newer
++ * DHCOM PCB number: 579-200 or newer
++ * DRC02 PCB number: 568-100 or newer (2nd ethernet by SoM)
++ */
++/dts-v1/;
++
++#include "imx6ull-dhcom-som.dtsi"
++#include "imx6ull-dhcom-som-cfg-sdcard.dtsi"
++
++/ {
++	model = "DH electronics i.MX6ULL DHCOM on DRC02";
++	compatible = "dh,imx6ull-dhcom-drc02", "dh,imx6ull-dhcom-som",
++		     "dh,imx6ull-dhcor-som", "fsl,imx6ull";
++};
++
++/*
++ * The signals for CAN2 TX and RX are routed to the DHCOM UART1 RTS/CTS pins.
++ * Therefore the UART RTS/CTS must be output on other DHCOM pins, see uart1
++ * node below.
++ */
++&can2 {
++	status = "okay";
++};
++
++&gpio1 {
++	gpio-line-names =
++		"", "", "", "",
++		"", "", "", "",
++		"", "", "", "DRC02-In2",
++		"", "", "", "",
++		"", "", "DHCOM-I", "",
++		"", "", "", "",
++		"", "", "", "",
++		"", "", "", "";
++};
++
++&gpio4 {
++	gpio-line-names =
++		"", "", "", "",
++		"", "", "", "",
++		"", "", "", "",
++		"", "", "", "",
++		"", "DRC02-HW0", "DRC02-HW1", "DHCOM-M",
++		"DRC02-HW2", "DHCOM-U", "DHCOM-T", "DHCOM-S",
++		"DHCOM-R", "DHCOM-Q", "DHCOM-P", "DHCOM-O",
++		"DHCOM-N", "", "", "";
++	/*
++	 * NOTE: On DRC02, the RS485_RX_En is controlled by a separate
++	 * GPIO line, however the i.MX6ULL UART driver assumes RX happens
++	 * during TX anyway and that it only controls drive enable DE
++	 * line. Hence, the RX is always enabled here.
++	 */
++	rs485-rx-en-hog {
++		gpio-hog;
++		gpios = <25 0>; /* GPIO Q */
++		line-name = "rs485-rx-en";
++		output-low;
++	};
++};
++
++&gpio5 {
++	gpio-line-names =
++		"DHCOM-A", "DHCOM-B", "DHCOM-C", "DRC02-Out2",
++		"DHCOM-E", "", "", "DRC02-Out1",
++		"DRC02-In1", "DHCOM-H", "", "",
++		"", "", "", "",
++		"", "", "", "",
++		"", "", "", "",
++		"", "", "", "",
++		"", "", "", "";
++};
++
++/* DHCOM I2C2 */
++&i2c1 {
++	eeprom@56 {
++		compatible = "atmel,24c04";
++		reg = <0x56>;
++		pagesize = <16>;
++	};
++};
++
++&uart1 {
++	/delete-property/ uart-has-rtscts;
++	rts-gpios = <&gpio1 18 GPIO_ACTIVE_HIGH>; /* GPIO I */
++	cts-gpios = <&gpio4 19 GPIO_ACTIVE_HIGH>; /* GPIO M */
++};
++
++/* Use UART as RS485 */
++&uart2 {
++	/delete-property/ uart-has-rtscts;
++	linux,rs485-enabled-at-boot-time;
++	rts-gpios = <&gpio4 26 GPIO_ACTIVE_HIGH>; /* GPIO P */
++};
+-- 
+2.11.0
+
