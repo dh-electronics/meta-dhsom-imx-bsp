@@ -8,3 +8,4 @@ patch 0007-net-fec-Set-PHY-in-reset-state-before-turn-off-the-c.patch
 patch 0008-clk-imx6ul-Separate-both-ethernet-clocks-from-each-o.patch
 patch 0009-ARM-dts-imx6ull-dhcom-Add-DH-electronics-DHCOM-i.MX6.patch
 patch 0010-ARM-dts-imx6ull-dhcor-Set-and-limit-the-mode-for-PMI.patch
+patch 0011-ARM-dts-imx6ull-dhcom-Add-DHCOM-based-PicoITX-board.patch
