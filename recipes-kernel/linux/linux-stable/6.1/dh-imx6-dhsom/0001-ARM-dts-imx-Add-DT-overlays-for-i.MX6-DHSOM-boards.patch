@@ -20,12 +20,12 @@ Signed-off-by: Marek Vasut <marex@denx.de>
  ...l-dhcom-overlay-panel-dpi-ch101olhlwh.dtsi | 75 +++++++++++++++++++
  .../dts/imx6qdl-dhcom-overlay-panel-dpi.dtsi  | 64 ++++++++++++++++
  ...imx6qdl-dhcom-pdk2-overlay-497-200-x12.dts | 30 ++++++++
- ...m-pdk2-overlay-505-200-x12-ch101olhlwh.dts |  8 ++
+ ...m-pdk2-overlay-505-200-x12-ch101olhlwh.dts | 26 +++++++
  ...imx6qdl-dhcom-pdk2-overlay-531-100-x21.dts | 33 ++++++++
  ...imx6qdl-dhcom-pdk2-overlay-531-100-x22.dts | 33 ++++++++
  ...imx6qdl-dhcom-pdk2-overlay-560-200-x12.dts | 39 ++++++++++
  ...picoitx-overlay-626-100-x2-ch101olhlwh.dts |  8 ++
- 9 files changed, 296 insertions(+)
+ 9 files changed, 314 insertions(+)
  create mode 100644 arch/arm/boot/dts/imx6qdl-dhcom-overlay-panel-dpi-ch101olhlwh.dtsi
  create mode 100644 arch/arm/boot/dts/imx6qdl-dhcom-overlay-panel-dpi.dtsi
  create mode 100644 arch/arm/boot/dts/imx6qdl-dhcom-pdk2-overlay-497-200-x12.dts
@@ -244,7 +244,7 @@ new file mode 100644
 index 0000000000000..81d7ef3c71664
 --- /dev/null
 +++ b/arch/arm/boot/dts/imx6qdl-dhcom-pdk2-overlay-505-200-x12-ch101olhlwh.dts
-@@ -0,0 +1,8 @@
+@@ -0,0 +1,26 @@
 +// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
 +/*
 + * Copyright (C) 2021 Marek Vasut <marex@denx.de>
@@ -253,6 +253,24 @@ index 0000000000000..81d7ef3c71664
 +/plugin/;
 +
 +#include "imx6qdl-dhcom-overlay-panel-dpi-ch101olhlwh.dtsi"
++
++&{/} {
++	gpio-keys {
++		/* BUTTON1 GPIO-B conflicts with touchscreen reset */
++		button-1 {
++			/* Use status as /delete-node/ does not work in DTOs */
++			status = "disabled";
++		};
++	};
++
++	led {
++		/* LED7 GPIO-H conflicts with touchscreen IRQ */
++		led-7 {
++			/* Use status as /delete-node/ does not work in DTOs */
++			status = "disabled";
++		};
++	};
++};
 diff --git a/arch/arm/boot/dts/imx6qdl-dhcom-pdk2-overlay-531-100-x21.dts b/arch/arm/boot/dts/imx6qdl-dhcom-pdk2-overlay-531-100-x21.dts
 new file mode 100644
 index 0000000000000..c3ed42101d6fb
