@@ -386,7 +386,7 @@ index 0000000000000..b31229600eefc
 +
 +	touchscreen@38 {
 +		pinctrl-names = "default";
-+		pinctrl-0 = <&pinctrl_touchscreen>;
++		pinctrl-0 = <&pinctrl_dhcom_e>;
 +		compatible = "edt,edt-ft5406";
 +		reg = <0x38>;
 +		/* Touchscreen IRQ GPIO-E conflicts with LED5 GPIO */
