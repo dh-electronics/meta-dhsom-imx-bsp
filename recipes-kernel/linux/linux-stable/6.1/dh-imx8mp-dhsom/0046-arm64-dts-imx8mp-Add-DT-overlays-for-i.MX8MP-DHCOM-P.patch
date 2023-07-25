@@ -93,12 +93,12 @@ index 0000000000000..99a923f17b1f3
 +	};
 +};
 +
-+&lcdif2 {
++&media_blk_ctrl {
 +	/*
 +	 * The Chefree CH101OLHLWH-002 panel requires 71.4 MHz LVDS clock.
 +	 * Set IMX8MP_VIDEO_PLL1 to 500 MHz , since 500 MHz / 7 = 71.42 MHz .
 +	 */
-+	assigned-clock-rates = <0>, <500000000>;
++	assigned-clock-rates = <500000000>, <200000000>, <0>, <0>, <500000000>;
 +};
 +
 +&panel {
