@@ -1,0 +1,55 @@
+From 16247e7665da75cd2b37816128c0f6575b26a2f9 Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Tue, 22 Aug 2023 02:28:09 +0200
+Subject: [PATCH 98/98] arm64: dts: imx8mp: Switch PCIe to HSIO PLL on i.MX8MP
+ DHCOM PDK2 and generate clock from SoC
+
+The PDK2 carrier board had to be manually patched to obtain working PCIe
+with the i.MX8MP DHCOM SoM so far, because the PCIe clock generator has
+not been connected to the PCIe block REF_PAD_CLK inputs.
+
+Switch to use of HSIO PLL as the clock source for the PCIe block instead,
+and use the REF_PAD_CLK as outputs to generate PCIe clock from the SoC.
+This way, it is not necessary to patch the PDK2 in any way to obtain a
+working PCIe.
+
+Note that PDK3 has PCIe clock generator always connected to REF_PAD_CLK
+and is not affected.
+
+Upstream-Status: Submitted [https://patchwork.kernel.org/project/linux-arm-kernel/patch/20230822005007.128571-1-marex@denx.de/]
+Signed-off-by: Marek Vasut <marex@denx.de>
+---
+Cc: Conor Dooley <conor+dt@kernel.org>
+Cc: Fabio Estevam <festevam@gmail.com>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc: Marek Vasut <marex@denx.de>
+Cc: NXP Linux Team <linux-imx@nxp.com>
+Cc: Pengutronix Kernel Team <kernel@pengutronix.de>
+Cc: Rob Herring <robh+dt@kernel.org>
+Cc: Sascha Hauer <s.hauer@pengutronix.de>
+Cc: Shawn Guo <shawnguo@kernel.org>
+Cc: devicetree@vger.kernel.org
+Cc: linux-arm-kernel@lists.infradead.org
+---
+ arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk2.dts | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk2.dts b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk2.dts
+index 3dadd977693b0..cb471c22a3352 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk2.dts
++++ b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk2.dts
+@@ -197,9 +197,9 @@ &hdmi_tx_phy {
+ 
+ &pcie_phy {
+ 	clock-names = "ref";
+-	clocks = <&clk IMX8MP_SYS_PLL2_100M>;
++	clocks = <&hsio_blk_ctrl>;
+ 	fsl,clkreq-unsupported;
+-	fsl,refclk-pad-mode = <IMX8_PCIE_REFCLK_PAD_UNUSED>;
++	fsl,refclk-pad-mode = <IMX8_PCIE_REFCLK_PAD_OUTPUT>;
+ 	status = "okay";
+ };
+ 
+-- 
+2.40.1
+

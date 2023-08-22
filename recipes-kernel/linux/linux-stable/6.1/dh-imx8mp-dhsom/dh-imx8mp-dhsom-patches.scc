@@ -92,3 +92,7 @@ patch 0091-arm64-dts-imx8mp-Add-DeWarp-Engine-DT-node.patch
 patch 0092-soc-imx-imx8m-blk-ctrl-Scan-subnodes-and-bind-driver.patch
 patch 0093-drm-bridge-ldb-add-support-for-using-channel-1-only.patch
 patch 0094-arm64-dts-imx8mp-Fix-video-clock-parents.patch
+patch 0095-soc-imx-imx8mp-blk-ctrl-add-instance-specific-probe-.patch
+patch 0096-soc-imx-imx8mp-blk-ctrl-expose-high-performance-PLL-.patch
+patch 0097-arm64-dts-imx8mp-add-clock-cells-to-hsio-blk-ctrl.patch
+patch 0098-arm64-dts-imx8mp-Switch-PCIe-to-HSIO-PLL-on-i.MX8MP-.patch
