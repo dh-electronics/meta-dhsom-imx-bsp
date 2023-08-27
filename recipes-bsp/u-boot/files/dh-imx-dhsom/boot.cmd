@@ -53,14 +53,25 @@ fi
 # board variant.
 if test -z "${loaddtos}" ; then
   if test "${board_name}" = "dh_imx8mp" ; then
+    fdt addr ${loadaddr}
+    fdt get value loaddtos /configurations default
+    setenv loaddtos "#${loaddtos}"
     fdt addr ${fdtcontroladdr}
+    fdt get value dh_compatible / compatible
     fdt get value dh_phy_mode_eqos /soc@0/bus@30800000/ethernet@30bf0000 phy-mode
     fdt get value dh_phy_mode_fec /soc@0/bus@30800000/ethernet@30be0000 phy-mode
-    if test "${dh_phy_mode_eqos}" = "rmii" -a "${dh_phy_mode_fec}" = "rmii" ; then
-      echo "DH i.MX8M Plus HI00106 SoM variant detected, applying dual-RMII PHY DTO."
-      fdt addr ${loadaddr}
-      fdt get value loaddtos /configurations default
-      setenv loaddtos "#${loaddtos}#conf-freescale_imx8mp-dhcom-som-overlay-hi00106.dtbo"
+    if test "${dh_phy_mode_eqos}" = "rmii" ; then
+      if test "${dh_phy_mode_fec}" = "rmii" ; then
+        echo "DH i.MX8M Plus 2x RMII PHY SoM variant detected, applying dual-RMII PHY DTO."
+        setenv loaddtos "${loaddtos}#conf-freescale_imx8mp-dhcom-som-overlay-eth2xfast.dtbo"
+        if test "${dh_compatible}" = "dh,imx8mp-dhcom-pdk2" -o "${dh_compatible}" = "dh,imx8mp-dhcom-pdk3" ; then
+          echo "DH i.MX8M Plus 2x RMII PHY SoM variant on PDK2/PDK3 detected, applying dual-RMII PHY DTO."
+          setenv loaddtos "${loaddtos}#conf-freescale_imx8mp-dhcom-pdk-overlay-eth2xfast.dtbo"
+        fi
+      else
+        echo "DH i.MX8M Plus 1x RMII PHY SoM variant detected, applying single-RMII PHY DTO."
+        setenv loaddtos "${loaddtos}#conf-freescale_imx8mp-dhcom-som-overlay-eth1xfast.dtbo"
+      fi
     fi
   fi
 fi
