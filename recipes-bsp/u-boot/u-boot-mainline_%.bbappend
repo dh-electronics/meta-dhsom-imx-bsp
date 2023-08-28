@@ -6,6 +6,8 @@ SRC_URI:append:dh-imx-dhsom = " \
 	file://default-device-tree.cfg \
 	file://0001-ARM-imx-Drop-CONFIG_USE_BOOTCOMMAND-n.patch \
 	file://0002-ARM-imx-Use-default-SAVED_DRAM_TIMING_BASE-on-DH-i.M.patch \
+	file://0003-spl-fit-Add-board-level-function-to-decide-applicati.patch \
+	file://0004-arm64-dts-imx8mp-Switch-to-DT-overlays-for-i.MX8MP-D.patch \
 	"
 
 EXTRA_OEMAKE:append:dh-imx8mp-dhsom = " ATF_LOAD_ADDR=0x970000"
@@ -22,4 +24,4 @@ do_compile:prepend:dh-imx8mp-dhsom () {
 # format is -${MACHINE}-date.extraversion. The date is in the
 # format YYYYMMDD, the extraversion is used in case there are
 # multiple releases during a single day, which is unlikely.
-UBOOT_LOCALVERSION:dh-imx-dhsom ?= "-${MACHINE}-20230901.01"
+UBOOT_LOCALVERSION:dh-imx-dhsom ?= "-${MACHINE}-20230921.01"
