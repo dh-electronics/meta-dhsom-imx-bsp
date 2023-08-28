@@ -104,3 +104,8 @@ patch 0103-arm64-dts-imx8mp-Switch-WiFI-enable-signal-to-mmc-pw.patch
 patch 0104-arm64-dts-imx8mp-Add-UART1-and-RTC-wake-up-source-on.patch
 patch 0105-arm64-dts-imx8mp-Simplify-USB-C-on-DH-i.MX8M-Plus-DH.patch
 patch 0106-soc-imx-imx8m-blk-ctrl-Defer-probe-if-bus-genpd-is-n.patch
+patch 0107-rtc-rv3032-use-IRQ-flags-obtained-from-fwnode.patch
+patch 0108-iio-adc-ti-ads1015-Add-edge-trigger-support.patch
+patch 0109-arm64-dts-imx8mp-Update-i.MX8MP-DHCOM-SoM-DT-to-prod.patch
+patch 0110-arm64-dts-imx8mp-Drop-i.MX8MP-DHCOM-rev.100-PHY-addr.patch
+patch 0111-arm64-dts-imx8mp-Add-DT-overlay-describing-i.MX8MP-D.patch

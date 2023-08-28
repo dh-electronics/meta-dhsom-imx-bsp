@@ -1,0 +1,39 @@
+From a6908497b8b910a195875382a56d3311c3367446 Mon Sep 17 00:00:00 2001
+From: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Date: Mon, 23 Jan 2023 21:02:16 +0100
+Subject: [PATCH 79/83] rtc: rv3032: use IRQ flags obtained from fwnode
+
+Allow the IRQ type to be passed from the device tree if available as there
+may be components changing the trigger type of the interrupt between the
+RTC and the IRQ controller.
+
+Upstream-Status: Backport [c4b12f89f5aefe559522e4e41528a6c719fcdcdb]
+Link: https://lore.kernel.org/r/20230123200217.1236011-11-alexandre.belloni@bootlin.com
+Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+---
+ drivers/rtc/rtc-rv3032.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/rtc/rtc-rv3032.c b/drivers/rtc/rtc-rv3032.c
+index 1b62ed2f14594..8916c439d4ec0 100644
+--- a/drivers/rtc/rtc-rv3032.c
++++ b/drivers/rtc/rtc-rv3032.c
+@@ -864,9 +864,14 @@ static int rv3032_probe(struct i2c_client *client)
+ 		return PTR_ERR(rv3032->rtc);
+ 
+ 	if (client->irq > 0) {
++		unsigned long irqflags = IRQF_TRIGGER_LOW;
++
++		if (dev_fwnode(&client->dev))
++			irqflags = 0;
++
+ 		ret = devm_request_threaded_irq(&client->dev, client->irq,
+ 						NULL, rv3032_handle_irq,
+-						IRQF_TRIGGER_LOW | IRQF_ONESHOT,
++						irqflags | IRQF_ONESHOT,
+ 						"rv3032", rv3032);
+ 		if (ret) {
+ 			dev_warn(&client->dev, "unable to request IRQ, alarms disabled\n");
+-- 
+2.40.1
+

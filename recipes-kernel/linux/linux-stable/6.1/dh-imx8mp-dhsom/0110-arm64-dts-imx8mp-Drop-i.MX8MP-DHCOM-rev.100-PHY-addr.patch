@@ -1,0 +1,36 @@
+From b792e39c471996a93154de3669795f329c602405 Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Sun, 27 Aug 2023 23:17:34 +0200
+Subject: [PATCH 109/110] arm64: dts: imx8mp: Drop i.MX8MP DHCOM rev.100 PHY
+ address workaround from PDK3 DT
+
+In case the i.MX8MP DHCOM rev.100 has been populated on the PDK3
+carrier board, the on-SoM PHY PHYAD1 signal has been pulled high
+by the carrier board and changed the PHY MDIO address from 5 to 7.
+This has been fixed on production rev.200 SoM by additional buffer
+on the SoM PHYAD/LED signals, remove the workaround.
+
+Upstream-Status: Submitted [https://patchwork.kernel.org/project/linux-arm-kernel/patch/20230921192933.71639-2-marex@denx.de/]
+Signed-off-by: Marek Vasut <marex@denx.de>
+---
+ arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3.dts | 4 ----
+ 1 file changed, 4 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3.dts b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3.dts
+index 29d3b7ed56d5c..f10e7df104986 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3.dts
++++ b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3.dts
+@@ -212,10 +212,6 @@ i2cmuxed1: i2c@1 {	/* HDMI DDC I2C */
+ 	};
+ };
+ 
+-&ethphy0g {
+-	reg = <7>;
+-};
+-
+ &fec {	/* Second ethernet */
+ 	pinctrl-0 = <&pinctrl_fec_rgmii>;
+ 	phy-handle = <&ethphypdk>;
+-- 
+2.40.1
+

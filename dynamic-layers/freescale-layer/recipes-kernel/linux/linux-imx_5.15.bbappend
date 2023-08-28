@@ -79,6 +79,11 @@ SRC_URI:append:dh-imx8mp-dhsom = " \
 	file://0076-arm64-dts-imx8mp-Switch-WiFI-enable-signal-to-mmc-pw.patch \
 	file://0077-arm64-dts-imx8mp-Add-UART1-and-RTC-wake-up-source-on.patch \
 	file://0078-arm64-dts-imx8mp-Simplify-USB-C-on-DH-i.MX8M-Plus-DH.patch \
+	file://0079-rtc-rv3032-use-IRQ-flags-obtained-from-fwnode.patch \
+	file://0080-iio-adc-ti-ads1015-Add-edge-trigger-support.patch \
+	file://0081-arm64-dts-imx8mp-Update-i.MX8MP-DHCOM-SoM-DT-to-prod.patch \
+	file://0082-arm64-dts-imx8mp-Drop-i.MX8MP-DHCOM-rev.100-PHY-addr.patch \
+	file://0083-arm64-dts-imx8mp-Add-DT-overlay-describing-i.MX8MP-D.patch \
 	"
 
 # Inject extra config options into kernel config this way,

@@ -1,0 +1,189 @@
+From 61a65a644e85efdf266b34a505d9a8ed3f19ab3b Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Tue, 8 Aug 2023 00:39:46 +0200
+Subject: [PATCH 83/83] arm64: dts: imx8mp: Add DT overlay describing i.MX8MP
+ DHCOM SoM rev.100
+
+The current imx8mp-dhcom-som.dtsi describes production rev.200 SoM,
+add DT overlay which reinstates rev.100 SoM description to permit
+prototype rev.100 SoMs to be used until they get phased out.
+
+Upstream-Status: Pending
+Signed-off-by: Marek Vasut <marex@denx.de>
+---
+ arch/arm64/boot/dts/freescale/Makefile        |   6 +-
+ .../imx8mp-dhcom-pdk3-overlay-rev100.dts      |  10 ++
+ .../imx8mp-dhcom-som-overlay-rev100.dts       | 120 ++++++++++++++++++
+ 3 files changed, 134 insertions(+), 2 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-overlay-rev100.dts
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-dhcom-som-overlay-rev100.dts
+
+diff --git a/arch/arm64/boot/dts/freescale/Makefile b/arch/arm64/boot/dts/freescale/Makefile
+index 8adac7dff93d5..4409ab651c04d 100644
+--- a/arch/arm64/boot/dts/freescale/Makefile
++++ b/arch/arm64/boot/dts/freescale/Makefile
+@@ -102,7 +102,8 @@ dtb-$(CONFIG_ARCH_MXC) += imx8mn-evk-root.dtb imx8mn-evk-inmate.dtb imx8mn-evk-l
+ dtb-$(CONFIG_ARCH_MXC) += imx8mn-ab2.dtb imx8mn-ddr4-ab2.dtb imx8mn-ddr3l-ab2.dtb
+ dtb-$(CONFIG_ARCH_MXC) += imx8mn-var-som-symphony.dtb
+ dtb-$(CONFIG_ARCH_MXC) += imx8mp-dhcom-som-overlay-eth1xfast.dtbo \
+-			  imx8mp-dhcom-som-overlay-eth2xfast.dtbo
++			  imx8mp-dhcom-som-overlay-eth2xfast.dtbo \
++			  imx8mp-dhcom-som-overlay-rev100.dtbo
+ dtb-$(CONFIG_ARCH_MXC) += imx8mp-dhcom-pdk-overlay-eth2xfast.dtbo
+ dtb-$(CONFIG_ARCH_MXC) += imx8mp-dhcom-pdk2.dtb \
+ 			  imx8mp-dhcom-pdk2-overlay-505-200-x12-ch101olhlwh.dtbo \
+@@ -116,7 +117,8 @@ dtb-$(CONFIG_ARCH_MXC) += imx8mp-dhcom-pdk3.dtb \
+ 			  imx8mp-dhcom-pdk3-overlay-560-300-x36.dtbo \
+ 			  imx8mp-dhcom-pdk3-overlay-ea-murata-2ae-x20.dtbo \
+ 			  imx8mp-dhcom-pdk3-overlay-nxp-spf-29678-c1-ov5640-x29.dtbo \
+-			  imx8mp-dhcom-pdk3-overlay-nxp-spf-29678-c1-ov5640-x31.dtbo
++			  imx8mp-dhcom-pdk3-overlay-nxp-spf-29678-c1-ov5640-x31.dtbo \
++			  imx8mp-dhcom-pdk3-overlay-rev100.dtbo
+ dtb-$(CONFIG_ARCH_MXC) += imx8mp-evk.dtb imx8mp-evk-rm67191.dtb imx8mp-evk-it6263-lvds-dual-channel.dtb \
+ 			  imx8mp-evk-pcie-ep.dtb  imx8mp-evk-rpmsg.dtb imx8mp-evk-ecspi-slave.dtb \
+ 			  imx8mp-evk-jdi-wuxga-lvds-panel.dtb imx8mp-evk-flexcan2.dtb \
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-overlay-rev100.dts b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-overlay-rev100.dts
+new file mode 100644
+index 0000000000000..f27e6429abe42
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-overlay-rev100.dts
+@@ -0,0 +1,10 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
++/*
++ * Copyright (C) 2023 Marek Vasut <marex@denx.de>
++ */
++/dts-v1/;
++/plugin/;
++
++&ethphy0g {
++	reg = <7>;
++};
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-som-overlay-rev100.dts b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-som-overlay-rev100.dts
+new file mode 100644
+index 0000000000000..4488fa9be9813
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-som-overlay-rev100.dts
+@@ -0,0 +1,120 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
++/*
++ * Copyright (C) 2023 Marek Vasut <marex@denx.de>
++ */
++/dts-v1/;
++/plugin/;
++
++#include <dt-bindings/gpio/gpio.h>
++#include <dt-bindings/interrupt-controller/irq.h>
++
++#include "imx8mp-pinfunc.h"
++
++&eeprom0 {	/* EEPROM with EQoS MAC address */
++	compatible = "atmel,24c02";
++	pagesize = <16>;
++};
++
++&eeprom1 {	/* EEPROM with FEC MAC address */
++	compatible = "atmel,24c02";
++	pagesize = <16>;
++};
++
++&ethphy0f { /* SMSC LAN8740Ai */
++	pinctrl-0 = <&pinctrl_ethphy0 &pinctrl_ioexp>;
++	reset-gpios = <&gpio3 20 GPIO_ACTIVE_LOW>;
++};
++
++&ethphy0g { /* Micrel KSZ9131RNXI */
++	pinctrl-0 = <&pinctrl_ethphy0 &pinctrl_ioexp>;
++	reset-gpios = <&gpio3 20 GPIO_ACTIVE_LOW>;
++};
++
++&i2c3 {
++	adc@48 {
++		compatible = "ti,tla2024";
++		interrupts-extended;
++	};
++};
++
++&ioexp {
++	status = "disabled";
++};
++
++&reg_eth_vio {
++	gpio = <&gpio2 10 GPIO_ACTIVE_LOW>;
++	pinctrl-0 = <&pinctrl_enet_vio>;
++	pinctrl-names = "default";
++};
++
++&rv3032 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_rtc>;
++	interrupts-extended = <&gpio5 5 IRQ_TYPE_LEVEL_LOW>;
++};
++
++&uart2 {
++	bluetooth {
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_uart2_bt>;
++		shutdown-gpios = <&gpio1 12 GPIO_ACTIVE_HIGH>;
++	};
++};
++
++&usb_dwc3_0 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_usb0_vbus>;
++};
++
++&usdhc1 {
++	pinctrl-0 = <&pinctrl_usdhc1 &pinctrl_usdhc1_wl_reg_en>;
++	pinctrl-1 = <&pinctrl_usdhc1_100mhz &pinctrl_usdhc1_wl_reg_en>;
++	pinctrl-2 = <&pinctrl_usdhc1_200mhz &pinctrl_usdhc1_wl_reg_en>;
++};
++
++&wlan_pwrseq {
++	reset-gpios = <&gpio1 13 GPIO_ACTIVE_LOW>;
++};
++
++&iomuxc {
++	pinctrl-0 = <&pinctrl_hog_base
++		     &pinctrl_dhcom_a &pinctrl_dhcom_b &pinctrl_dhcom_c
++		     &pinctrl_dhcom_d &pinctrl_dhcom_e &pinctrl_dhcom_f
++		     &pinctrl_dhcom_g &pinctrl_dhcom_h &pinctrl_dhcom_i
++		     &pinctrl_dhcom_j &pinctrl_dhcom_k &pinctrl_dhcom_l
++		     /* GPIO_M is connected to CLKOUT2 */
++		     &pinctrl_dhcom_int>;
++
++	pinctrl_enet_vio: dhcom-enet-vio-grp {
++		fsl,pins = <
++			MX8MP_IOMUXC_SD1_RESET_B__GPIO2_IO10		0x22
++		>;
++	};
++
++	pinctrl_rtc: dhcom-rtc-grp {
++		fsl,pins = <
++			/* RTC_#INT Interrupt */
++			MX8MP_IOMUXC_SPDIF_EXT_CLK__GPIO5_IO05		0x400001c6
++		>;
++	};
++
++	pinctrl_uart2_bt: dhcom-uart2-bt-grp {
++		fsl,pins = <
++			/* BT_REG_EN */
++			MX8MP_IOMUXC_GPIO1_IO12__GPIO1_IO12		0x144
++		>;
++	};
++
++	pinctrl_usb0_vbus: dhcom-usb0-grp {
++		fsl,pins = <
++			MX8MP_IOMUXC_GPIO1_IO10__USB1_ID		0x0
++		>;
++	};
++
++	pinctrl_usdhc1_wl_reg_en: dhcom-usdhc1-wl-reg-en-grp {
++		fsl,pins = <
++			/* WL_REG_EN */
++			MX8MP_IOMUXC_GPIO1_IO13__GPIO1_IO13		0x144
++		>;
++	};
++};
+-- 
+2.40.1
+
