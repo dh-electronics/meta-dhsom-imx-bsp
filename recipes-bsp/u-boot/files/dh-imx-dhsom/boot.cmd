@@ -73,6 +73,24 @@ if test -z "${loaddtos}" ; then
         setenv loaddtos "${loaddtos}#conf-freescale_imx8mp-dhcom-som-overlay-eth1xfast.dtbo"
       fi
     fi
+
+    # Determine SoM revision from SoM coding GPIOs
+    gpio input GPIO3_25
+    setexpr dh_som_rev $? * 2
+    gpio input GPIO4_19
+    setexpr dh_som_rev ${dh_som_rev} + $?
+    setexpr dh_som_rev ${dh_som_rev} * 2
+    gpio input GPIO3_14
+    setexpr dh_som_rev ${dh_som_rev} + $?
+
+    if test "${dh_som_rev}" = "0" ; then
+      echo "DH i.MX8M Plus rev.100 SoM detected, applying rev.100 SoM DTO."
+      setenv loaddtos "${loaddtos}#conf-freescale_imx8mp-dhcom-som-overlay-rev100.dtbo"
+      if test "${dh_compatible}" = "dh,imx8mp-dhcom-pdk3" ; then
+        echo "DH i.MX8M Plus rev.100 SoM on PDK3 detected, applying rev.100 SoM on PDK3 DTO."
+        setenv loaddtos "${loaddtos}#conf-freescale_imx8mp-dhcom-pdk3-overlay-rev100.dtbo"
+      fi
+    fi
   fi
 fi
 
