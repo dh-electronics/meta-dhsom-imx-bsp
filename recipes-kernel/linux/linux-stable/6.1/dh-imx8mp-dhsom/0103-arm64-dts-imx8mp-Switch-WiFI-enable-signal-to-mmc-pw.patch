@@ -1,0 +1,69 @@
+From a5145502e75ad570a30a43830656721af2cd1d92 Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Mon, 28 Aug 2023 19:20:53 +0200
+Subject: [PATCH 103/105] arm64: dts: imx8mp: Switch WiFI enable signal to
+ mmc-pwrseq-simple on i.MX8MP DHCOM SoM
+
+The reset-gpio is connected to WL_REG_EN signal of the WiFi MAC, the
+mmc-pwrseq-simple driver is better suited to operate this signal as
+it is tied to the slot instead of the MAC, and it can enable the MAC
+before the brcmfmac driver binds to it. Make use of the MMC power
+sequencer.
+
+Upstream-Status: Submitted [https://patchwork.kernel.org/project/linux-arm-kernel/patch/20230831182020.154863-3-marex@denx.de/]
+Signed-off-by: Marek Vasut <marex@denx.de>
+---
+Cc: Conor Dooley <conor+dt@kernel.org>
+Cc: Fabio Estevam <festevam@gmail.com>
+Cc: Frieder Schrempf <frieder.schrempf@kontron.de>
+Cc: Geert Uytterhoeven <geert+renesas@glider.be>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc: Magnus Damm <magnus.damm@gmail.com>
+Cc: Marek Vasut <marex@denx.de>
+Cc: NXP Linux Team <linux-imx@nxp.com>
+Cc: Peng Fan <peng.fan@nxp.com>
+Cc: Pengutronix Kernel Team <kernel@pengutronix.de>
+Cc: Rob Herring <robh+dt@kernel.org>
+Cc: Sascha Hauer <s.hauer@pengutronix.de>
+Cc: Shawn Guo <shawnguo@kernel.org>
+Cc: devicetree@vger.kernel.org
+Cc: linux-arm-kernel@lists.infradead.org
+---
+ arch/arm64/boot/dts/freescale/imx8mp-dhcom-som.dtsi | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-som.dtsi b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-som.dtsi
+index fa6d67c74310e..aa9c5f2087c0b 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-som.dtsi
++++ b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-som.dtsi
+@@ -57,6 +57,11 @@ reg_vdd_3p3v_awo: regulator-vdd-3p3v-awo {	/* VDD_3V3_AWO */
+ 		regulator-max-microvolt = <3300000>;
+ 		regulator-name = "VDD_3P3V_AWO";
+ 	};
++
++	wlan_pwrseq: wifi-pwrseq {
++		compatible = "mmc-pwrseq-simple";
++		reset-gpios = <&gpio1 13 GPIO_ACTIVE_LOW>;
++	};
+ };
+ 
+ &A53_0 {
+@@ -553,6 +558,7 @@ &usdhc1 {
+ 	pinctrl-0 = <&pinctrl_usdhc1>;
+ 	pinctrl-1 = <&pinctrl_usdhc1_100mhz>;
+ 	pinctrl-2 = <&pinctrl_usdhc1_200mhz>;
++	mmc-pwrseq = <&wlan_pwrseq>;
+ 	vmmc-supply = <&buck4>;
+ 	bus-width = <4>;
+ 	non-removable;
+@@ -571,7 +577,6 @@ brcmf: bcrmf@1 {	/* muRata 2AE */
+ 		 * connected to the SoC, but can be connected on to
+ 		 * SoC pin on the carrier board.
+ 		 */
+-		reset-gpios = <&gpio1 13 GPIO_ACTIVE_LOW>;
+ 	};
+ };
+ 
+-- 
+2.40.1
+

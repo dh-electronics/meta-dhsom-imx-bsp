@@ -96,3 +96,11 @@ patch 0095-soc-imx-imx8mp-blk-ctrl-add-instance-specific-probe-.patch
 patch 0096-soc-imx-imx8mp-blk-ctrl-expose-high-performance-PLL-.patch
 patch 0097-arm64-dts-imx8mp-add-clock-cells-to-hsio-blk-ctrl.patch
 patch 0098-arm64-dts-imx8mp-Switch-PCIe-to-HSIO-PLL-on-i.MX8MP-.patch
+patch 0099-clk-si521xx-Use-REGCACHE_FLAT-instead-of-NONE.patch
+patch 0100-clk-si521xx-Fix-regmap-write-accessor.patch
+patch 0101-arm64-dts-imx8mp-Describe-VDD_ARM-run-and-standby-vo.patch
+patch 0102-arm64-dts-imx8mp-Fix-property-indent-on-DH-i.MX8M-Pl.patch
+patch 0103-arm64-dts-imx8mp-Switch-WiFI-enable-signal-to-mmc-pw.patch
+patch 0104-arm64-dts-imx8mp-Add-UART1-and-RTC-wake-up-source-on.patch
+patch 0105-arm64-dts-imx8mp-Simplify-USB-C-on-DH-i.MX8M-Plus-DH.patch
+patch 0106-soc-imx-imx8m-blk-ctrl-Defer-probe-if-bus-genpd-is-n.patch

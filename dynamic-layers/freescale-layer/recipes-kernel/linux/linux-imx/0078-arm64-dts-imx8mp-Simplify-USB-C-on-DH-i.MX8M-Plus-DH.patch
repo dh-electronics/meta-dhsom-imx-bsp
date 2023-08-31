@@ -1,0 +1,122 @@
+From a93d2119453372127a79bd5863812970e607ad84 Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Thu, 31 Aug 2023 21:44:13 +0200
+Subject: [PATCH 78/78] arm64: dts: imx8mp: Simplify USB C on DH i.MX8M Plus
+ DHCOM PDK3
+
+Remove the connector as well as all the links and only connect the
+PTN5150 with xHCI controller. This is sufficient to implement the
+role switching.
+
+Furthermore, this makes resume work without hanging. Without this
+patch, the platform would hang on resume of 'connector'.
+
+Upstream-Status: Submitted [https://patchwork.kernel.org/project/linux-arm-kernel/patch/20230831195509.196883-1-marex@denx.de/]
+Signed-off-by: Marek Vasut <marex@denx.de>
+---
+Cc: Conor Dooley <conor+dt@kernel.org>
+Cc: Fabio Estevam <festevam@gmail.com>
+Cc: Frieder Schrempf <frieder.schrempf@kontron.de>
+Cc: Geert Uytterhoeven <geert+renesas@glider.be>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc: Magnus Damm <magnus.damm@gmail.com>
+Cc: Marek Vasut <marex@denx.de>
+Cc: NXP Linux Team <linux-imx@nxp.com>
+Cc: Peng Fan <peng.fan@nxp.com>
+Cc: Pengutronix Kernel Team <kernel@pengutronix.de>
+Cc: Rob Herring <robh+dt@kernel.org>
+Cc: Sascha Hauer <s.hauer@pengutronix.de>
+Cc: Shawn Guo <shawnguo@kernel.org>
+Cc: devicetree@vger.kernel.org
+Cc: linux-arm-kernel@lists.infradead.org
+---
+ .../boot/dts/freescale/imx8mp-dhcom-pdk3.dts  | 58 ++-----------------
+ 1 file changed, 4 insertions(+), 54 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3.dts b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3.dts
+index 11f111d4782a4..5926161694940 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3.dts
++++ b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3.dts
+@@ -35,33 +35,6 @@ clk_xtal25: clk-xtal25 {
+ 		clock-frequency = <25000000>;
+ 	};
+ 
+-	connector {
+-		compatible = "usb-c-connector";
+-		label = "USB-C";
+-		data-role = "dual";
+-
+-		ports {
+-			#address-cells = <1>;
+-			#size-cells = <0>;
+-
+-			port@0 {
+-				reg = <0>;
+-
+-				usb_c_0_hs_ep: endpoint {
+-					remote-endpoint = <&dwc3_0_hs_ep>;
+-				};
+-			};
+-
+-			port@1 {
+-				reg = <1>;
+-
+-				usb_c_0_ss_ep: endpoint {
+-					remote-endpoint = <&ptn5150_in_ep>;
+-				};
+-			};
+-		};
+-	};
+-
+ 	gpio-keys {
+ 		compatible = "gpio-keys";
+ 
+@@ -203,24 +176,10 @@ typec@3d {
+ 				pinctrl-0 = <&pinctrl_ptn5150>;
+ 				status = "okay";
+ 
+-				ports {
+-					#address-cells = <1>;
+-					#size-cells = <0>;
+-
+-					port@0 {
+-						reg = <0>;
+-
+-						ptn5150_in_ep: endpoint {
+-							remote-endpoint = <&usb_c_0_ss_ep>;
+-						};
+-					};
+-
+-					port@1 {
+-						reg = <1>;
++				port {
+ 
+-						ptn5150_out_ep: endpoint {
+-							remote-endpoint = <&dwc3_0_ss_ep>;
+-						};
++					ptn5150_out_ep: endpoint {
++						remote-endpoint = <&dwc3_0_ep>;
+ 					};
+ 				};
+ 			};
+@@ -323,16 +282,7 @@ &usb_dwc3_0 {
+ 	usb-role-switch;
+ 
+ 	port {
+-		#address-cells = <1>;
+-		#size-cells = <0>;
+-
+-		dwc3_0_hs_ep: endpoint@0 {
+-			reg = <0>;
+-			remote-endpoint = <&usb_c_0_hs_ep>;
+-		};
+-
+-		dwc3_0_ss_ep: endpoint@1 {
+-			reg = <1>;
++		dwc3_0_ep: endpoint {
+ 			remote-endpoint = <&ptn5150_out_ep>;
+ 		};
+ 	};
+-- 
+2.40.1
+

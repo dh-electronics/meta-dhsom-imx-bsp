@@ -1,0 +1,54 @@
+From 121b115a205a85c7a25af657d22d8f342f04dbc7 Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Thu, 31 Aug 2023 05:05:05 +0200
+Subject: [PATCH 104/105] arm64: dts: imx8mp: Add UART1 and RTC wake up source
+ on DH i.MX8M Plus DHCOM SoM
+
+Turn Console UART1 and dedicated RTC into wake up sources, to make
+it possible to wake on UART and RTC alarm.
+
+Upstream-Status: Submitted [https://patchwork.kernel.org/project/linux-arm-kernel/patch/20230831182020.154863-4-marex@denx.de/]
+Signed-off-by: Marek Vasut <marex@denx.de>
+---
+Cc: Conor Dooley <conor+dt@kernel.org>
+Cc: Fabio Estevam <festevam@gmail.com>
+Cc: Frieder Schrempf <frieder.schrempf@kontron.de>
+Cc: Geert Uytterhoeven <geert+renesas@glider.be>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc: Magnus Damm <magnus.damm@gmail.com>
+Cc: Marek Vasut <marex@denx.de>
+Cc: NXP Linux Team <linux-imx@nxp.com>
+Cc: Peng Fan <peng.fan@nxp.com>
+Cc: Pengutronix Kernel Team <kernel@pengutronix.de>
+Cc: Rob Herring <robh+dt@kernel.org>
+Cc: Sascha Hauer <s.hauer@pengutronix.de>
+Cc: Shawn Guo <shawnguo@kernel.org>
+Cc: devicetree@vger.kernel.org
+Cc: linux-arm-kernel@lists.infradead.org
+---
+ arch/arm64/boot/dts/freescale/imx8mp-dhcom-som.dtsi | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-som.dtsi b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-som.dtsi
+index aa9c5f2087c0b..014158d84b2ce 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-som.dtsi
++++ b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-som.dtsi
+@@ -424,6 +424,7 @@ rv3032: rtc@51 {
+ 		interrupts-extended = <&gpio5 5 IRQ_TYPE_LEVEL_LOW>;
+ 		pinctrl-names = "default";
+ 		pinctrl-0 = <&pinctrl_rtc>;
++		wakeup-source;
+ 	};
+ 
+ 	eeprom1: eeprom@53 {	/* EEPROM with FEC MAC address */
+@@ -480,6 +481,7 @@ &uart1 {
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&pinctrl_uart1>;
+ 	status = "okay";
++	wakeup-source;
+ };
+ 
+ &uart2 {
+-- 
+2.40.1
+

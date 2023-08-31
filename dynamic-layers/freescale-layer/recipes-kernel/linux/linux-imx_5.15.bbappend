@@ -74,6 +74,11 @@ SRC_URI:append:dh-imx8mp-dhsom = " \
 	file://0071-arm64-dts-imx8mp-Enable-HDMI-on-MX8MP-DHCOM-PDK3.patch \
 	file://0072-arm64-dts-imx8mp-Add-DT-overlays-for-i.MX8MP-DHCOM-P.patch \
 	file://0073-arm64-dts-imx8mp-Adjust-PDK3-DT-to-match-downstream-.patch \
+	file://0074-arm64-dts-imx8mp-Describe-VDD_ARM-run-and-standby-vo.patch \
+	file://0075-arm64-dts-imx8mp-Fix-property-indent-on-DH-i.MX8M-Pl.patch \
+	file://0076-arm64-dts-imx8mp-Switch-WiFI-enable-signal-to-mmc-pw.patch \
+	file://0077-arm64-dts-imx8mp-Add-UART1-and-RTC-wake-up-source-on.patch \
+	file://0078-arm64-dts-imx8mp-Simplify-USB-C-on-DH-i.MX8M-Plus-DH.patch \
 	"
 
 # Inject extra config options into kernel config this way,
