@@ -1,3 +1,4 @@
+FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
 COMPATIBLE_MACHINE:dh-imx8mp-dhsom = "dh-imx8mp-dhsom"
 TFA_PLATFORM:dh-imx8mp-dhsom = "imx8mp"
 TFA_BUILD_TARGET:dh-imx8mp-dhsom = "bl31"
@@ -8,3 +9,8 @@ do_compile:prepend:dh-imx8mp-dhsom() {
 }
 
 EXTRA_OEMAKE:append:dh-imx8mp-dhsom = " IMX_BOOT_UART_BASE=0x30860000 "
+
+SRC_URI:append:dh-imx8mp-dhsom = " \
+	file://0001-feat-imx8m-add-more-dram-pll-setting.patch \
+	file://0002-feat-imx8m-move-the-gpc-reg-macro-to-a-separate-head.patch \
+	"
