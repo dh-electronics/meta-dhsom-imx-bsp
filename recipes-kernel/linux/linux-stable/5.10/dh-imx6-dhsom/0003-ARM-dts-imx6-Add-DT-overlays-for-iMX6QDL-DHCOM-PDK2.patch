@@ -1,7 +1,7 @@
-From ee0f5e6a44feb23fa0903ab052d2dc1bc55426e6 Mon Sep 17 00:00:00 2001
+From 3452472cc2d17302563999707101efcafb89518e Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
 Date: Fri, 9 Apr 2021 15:17:29 +0200
-Subject: [PATCH] ARM: dts: imx6: Add DT overlays for iMX6QDL DHCOM PDK2
+Subject: [PATCH 3/4] ARM: dts: imx6: Add DT overlays for iMX6QDL DHCOM PDK2
 
 Add DT overlays to support:
  - DH 497-200 Display board in edge connector X12
@@ -12,8 +12,6 @@ Add DT overlays to support:
 
 Upstream-Status: Inappropriate
 Signed-off-by: Marek Vasut <marex@denx.de>
----
-NOTE: DH 460-200 SRAM board in header X11 is not supported yet
 ---
  arch/arm/boot/dts/Makefile                    |  5 ++
  arch/arm/boot/dts/imx6q-dhcom-pdk2.dts        | 60 ---------------
@@ -34,10 +32,10 @@ NOTE: DH 460-200 SRAM board in header X11 is not supported yet
  create mode 100644 arch/arm/boot/dts/imx6qdl-dhcom-pdk2-overlay-560-200-x12.dts
 
 diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index ade80f724cbb3..d65014e91d722 100644
+index e75abfce33f54..c596710933640 100644
 --- a/arch/arm/boot/dts/Makefile
 +++ b/arch/arm/boot/dts/Makefile
-@@ -505,6 +505,11 @@ dtb-$(CONFIG_SOC_IMX6Q) += \
+@@ -506,6 +506,11 @@ dtb-$(CONFIG_SOC_IMX6Q) += \
  	imx6q-cubox-i-som-v15.dtb \
  	imx6q-dfi-fs700-m60.dtb \
  	imx6q-dhcom-pdk2.dtb \
@@ -50,7 +48,7 @@ index ade80f724cbb3..d65014e91d722 100644
  	imx6q-dmo-edmqmx6.dtb \
  	imx6q-dms-ba16.dtb \
 diff --git a/arch/arm/boot/dts/imx6q-dhcom-pdk2.dts b/arch/arm/boot/dts/imx6q-dhcom-pdk2.dts
-index 7aa970420d2ec..1b7f8fcd10517 100644
+index a685b1c3208f3..f26764d17f250 100644
 --- a/arch/arm/boot/dts/imx6q-dhcom-pdk2.dts
 +++ b/arch/arm/boot/dts/imx6q-dhcom-pdk2.dts
 @@ -22,53 +22,6 @@ clk_ext_audio_codec: clock-codec {
@@ -107,7 +105,7 @@ index 7aa970420d2ec..1b7f8fcd10517 100644
  	sound {
  		compatible = "fsl,imx-audio-sgtl5000";
  		model = "imx-sgtl5000";
-@@ -151,15 +104,6 @@ sgtl5000: codec@a {
+@@ -112,15 +65,6 @@ sgtl5000: codec@a {
  		VDDA-supply = <&reg_3p3v>;
  		VDDIO-supply = <&sw2_reg>;
  	};
@@ -123,7 +121,7 @@ index 7aa970420d2ec..1b7f8fcd10517 100644
  };
  
  &iomuxc {
-@@ -283,10 +227,6 @@ MX6QDL_PAD_CSI0_DATA_EN__GPIO5_IO20	0x1b0b1
+@@ -239,10 +183,6 @@ MX6QDL_PAD_CSI0_DATA_EN__GPIO5_IO20	0x1b0b1
  	};
  };
  
@@ -136,7 +134,7 @@ index 7aa970420d2ec..1b7f8fcd10517 100644
  	pinctrl-0 = <&pinctrl_pcie>;
 diff --git a/arch/arm/boot/dts/imx6qdl-dhcom-overlay-panel-dpi-ch101olhlwh.dtsi b/arch/arm/boot/dts/imx6qdl-dhcom-overlay-panel-dpi-ch101olhlwh.dtsi
 new file mode 100644
-index 0000000000000..074fa7e482b81
+index 0000000000000..60ff5c6e58fa0
 --- /dev/null
 +++ b/arch/arm/boot/dts/imx6qdl-dhcom-overlay-panel-dpi-ch101olhlwh.dtsi
 @@ -0,0 +1,75 @@
@@ -455,5 +453,5 @@ index 0000000000000..b31229600eefc
 +	};
 +};
 -- 
-2.35.1
+2.42.0
 

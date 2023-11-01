@@ -1,8 +1,8 @@
-From b857b349385ce19735275186dd9ee0dd67251cd4 Mon Sep 17 00:00:00 2001
+From 8157b351a558bc2ce1b5794832b23be2de54ae8d Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
 Date: Sun, 17 Oct 2021 02:12:04 +0200
-Subject: [PATCH] drm/bridge: lvds-codec: Add support for pixel data sampling
- edge select
+Subject: [PATCH 2/4] drm/bridge: lvds-codec: Add support for pixel data
+ sampling edge select
 
 The OnSemi FIN3385 Parallel-to-LVDS encoder has a dedicated input line to
 select input pixel data sampling edge. Add DT property "pclk-sample", not
@@ -71,5 +71,5 @@ index f52ccffc1bd1d..48d46711b9112 100644
  
  	platform_set_drvdata(pdev, lvds_codec);
 -- 
-2.35.1
+2.42.0
 
