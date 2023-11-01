@@ -1,4 +1,4 @@
-From c6a04cfa99c741911be62812685f9730860d3aac Mon Sep 17 00:00:00 2001
+From 0f830b2cb15ed89e4e9ec625c6ecfd06cf8b9ae3 Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
 Date: Fri, 9 Apr 2021 15:17:29 +0200
 Subject: [PATCH] ARM: dts: imx: Add DT overlays for i.MX6 DHSOM boards
@@ -36,10 +36,10 @@ Signed-off-by: Marek Vasut <marex@denx.de>
  create mode 100644 arch/arm/boot/dts/imx6qdl-dhcom-picoitx-overlay-626-100-x2-ch101olhlwh.dts
 
 diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index 6aa7dc4db2fc8..fa1317631101b 100644
+index df6d905eeb877..a243e03ae2189 100644
 --- a/arch/arm/boot/dts/Makefile
 +++ b/arch/arm/boot/dts/Makefile
-@@ -573,6 +573,12 @@ dtb-$(CONFIG_SOC_IMX6Q) += \
+@@ -574,6 +574,12 @@ dtb-$(CONFIG_SOC_IMX6Q) += \
  	imx6q-cubox-i-som-v15.dtb \
  	imx6q-dfi-fs700-m60.dtb \
  	imx6q-dhcom-pdk2.dtb \
@@ -241,7 +241,7 @@ index 0000000000000..55dd5fbf1b0d5
 +};
 diff --git a/arch/arm/boot/dts/imx6qdl-dhcom-pdk2-overlay-505-200-x12-ch101olhlwh.dts b/arch/arm/boot/dts/imx6qdl-dhcom-pdk2-overlay-505-200-x12-ch101olhlwh.dts
 new file mode 100644
-index 0000000000000..81d7ef3c71664
+index 0000000000000..966c5544d2931
 --- /dev/null
 +++ b/arch/arm/boot/dts/imx6qdl-dhcom-pdk2-overlay-505-200-x12-ch101olhlwh.dts
 @@ -0,0 +1,26 @@
@@ -351,7 +351,7 @@ index 0000000000000..cdfa9125d50a7
 +};
 diff --git a/arch/arm/boot/dts/imx6qdl-dhcom-pdk2-overlay-560-200-x12.dts b/arch/arm/boot/dts/imx6qdl-dhcom-pdk2-overlay-560-200-x12.dts
 new file mode 100644
-index 0000000000000..b31229600eefc
+index 0000000000000..aeadc7382458b
 --- /dev/null
 +++ b/arch/arm/boot/dts/imx6qdl-dhcom-pdk2-overlay-560-200-x12.dts
 @@ -0,0 +1,39 @@
@@ -409,5 +409,5 @@ index 0000000000000..0655b0ad66e64
 +
 +#include "imx6qdl-dhcom-overlay-panel-dpi-ch101olhlwh.dtsi"
 -- 
-2.39.2
+2.42.0
 
