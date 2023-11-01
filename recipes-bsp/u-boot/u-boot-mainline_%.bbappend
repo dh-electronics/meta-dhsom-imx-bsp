@@ -4,7 +4,7 @@ require u-boot-dhsom-common.inc
 
 SRC_URI:append:dh-imx-dhsom = " \
 	file://default-device-tree.cfg \
-	file://0001-ARM-imx-Drop-CONFIG_USE_BOOTCOMMAND-n.patch \
+	file://0001-ARM-imx-Drop-CONFIG_USE_BOOTCOMMAND-n-on-i.MX6-DHSOM.patch \
 	file://0002-ARM-imx-Use-default-SAVED_DRAM_TIMING_BASE-on-DH-i.M.patch \
 	file://0003-spl-fit-Add-board-level-function-to-decide-applicati.patch \
 	file://0004-arm64-dts-imx8mp-Switch-to-DT-overlays-for-i.MX8MP-D.patch \

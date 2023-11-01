@@ -1,7 +1,7 @@
-From 08f351e2e3594cf40990a2e705d9abb6b030d3a7 Mon Sep 17 00:00:00 2001
+From 065d43c045ef7482242c75f7247c5b148ac08c88 Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
-Date: Tue, 8 Aug 2023 02:18:53 +0200
-Subject: [PATCH 4/6] arm64: dts: imx8mp: Update i.MX8MP DHCOM SoM DT to
+Date: Thu, 21 Sep 2023 20:44:18 +0200
+Subject: [PATCH 5/7] arm64: dts: imx8mp: Update i.MX8MP DHCOM SoM DT to
  production rev.200
 
 The current imx8mp-dhcom-som.dtsi describes prototype rev.100 SoM,
@@ -12,7 +12,7 @@ following changes:
 - ADC upgraded from TLA2024 to ADS1015 with conversion interrupt
 - EEPROM size increased from 256 B to 4 kiB
 
-Upstream-Status: Submitted [https://patchwork.ozlabs.org/project/uboot/patch/20230921184420.45186-3-marex@denx.de/]
+Upstream-Status: Backport [9de599ec3d599c1b2bcf381213e48da0103e2afd]
 Signed-off-by: Marek Vasut <marex@denx.de>
 ---
  arch/arm/dts/imx8mp-dhcom-som.dtsi    | 176 +++++++++++++++++++-------
@@ -342,7 +342,7 @@ index 9fd8bce8065..ea2a567447a 100644
  	};
  
 diff --git a/arch/arm/dts/imx8mp-dhcom-u-boot.dtsi b/arch/arm/dts/imx8mp-dhcom-u-boot.dtsi
-index 205f5964f7f..76764999a72 100644
+index 00e1db66568..6f21fbe1151 100644
 --- a/arch/arm/dts/imx8mp-dhcom-u-boot.dtsi
 +++ b/arch/arm/dts/imx8mp-dhcom-u-boot.dtsi
 @@ -167,6 +167,26 @@
@@ -370,17 +370,19 @@ index 205f5964f7f..76764999a72 100644
 +					};
 +				};
  			};
+ 
+ 			configurations {
+@@ -176,7 +196,9 @@
+ 					fdt = "fdt-1",
+ 					      "fdt-dto-imx8mp-dhcom-som-overlay-eth1xfast",
+ 					      "fdt-dto-imx8mp-dhcom-som-overlay-eth2xfast",
+-					      "fdt-dto-imx8mp-dhcom-pdk-overlay-eth2xfast";
++					      "fdt-dto-imx8mp-dhcom-pdk-overlay-eth2xfast",
++					      "fdt-dto-imx8mp-dhcom-som-overlay-rev100",
++					      "fdt-dto-imx8mp-dhcom-pdk-overlay-rev100";
+ 				};
+ 			};
  		};
- 	};
-@@ -176,5 +196,7 @@
- 	fdt = "fdt-1",
- 	      "fdt-dto-imx8mp-dhcom-som-overlay-eth1xfast",
- 	      "fdt-dto-imx8mp-dhcom-som-overlay-eth2xfast",
--	      "fdt-dto-imx8mp-dhcom-pdk-overlay-eth2xfast";
-+	      "fdt-dto-imx8mp-dhcom-pdk-overlay-eth2xfast",
-+	      "fdt-dto-imx8mp-dhcom-som-overlay-rev100",
-+	      "fdt-dto-imx8mp-dhcom-pdk-overlay-rev100";
- };
 diff --git a/configs/imx8mp_dhcom_pdk3_defconfig b/configs/imx8mp_dhcom_pdk3_defconfig
 index 899048b55f8..d35674e82be 100644
 --- a/configs/imx8mp_dhcom_pdk3_defconfig
@@ -391,5 +393,5 @@ index 899048b55f8..d35674e82be 100644
  CONFIG_IMX_WATCHDOG=y
 +CONFIG_DM_PCA953X=y
 -- 
-2.40.1
+2.42.0
 

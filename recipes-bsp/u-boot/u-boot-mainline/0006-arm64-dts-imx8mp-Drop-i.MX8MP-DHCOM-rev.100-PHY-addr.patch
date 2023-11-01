@@ -1,7 +1,7 @@
-From ffeb1a494258f222c0124732e81e910b6ee7061b Mon Sep 17 00:00:00 2001
+From bfb5057864f2897a788613b04628e8f131e0f8d2 Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
-Date: Mon, 28 Aug 2023 00:04:35 +0200
-Subject: [PATCH 5/6] arm64: dts: imx8mp: Drop i.MX8MP DHCOM rev.100 PHY
+Date: Thu, 21 Sep 2023 20:44:19 +0200
+Subject: [PATCH 6/7] arm64: dts: imx8mp: Drop i.MX8MP DHCOM rev.100 PHY
  address workaround from PDK3 DT
 
 In case the i.MX8MP DHCOM rev.100 has been populated on the PDK3
@@ -10,7 +10,7 @@ by the carrier board and changed the PHY MDIO address from 5 to 7.
 This has been fixed on production rev.200 SoM by additional buffer
 on the SoM PHYAD/LED signals, remove the workaround.
 
-Upstream-Status: Submitted [https://patchwork.ozlabs.org/project/uboot/patch/20230921184420.45186-4-marex@denx.de/]
+Upstream-Status: Backport [68e0d92d33804b89973a215ae4ee212ecae7f4ea]
 Signed-off-by: Marek Vasut <marex@denx.de>
 ---
  arch/arm/dts/imx8mp-dhcom-pdk3.dts | 4 ----
@@ -32,5 +32,5 @@ index c5f0607f43b..867d238f2b5 100644
  	pinctrl-0 = <&pinctrl_fec_rgmii>;
  	phy-handle = <&ethphypdk>;
 -- 
-2.40.1
+2.42.0
 

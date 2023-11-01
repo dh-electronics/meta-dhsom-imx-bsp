@@ -1,14 +1,14 @@
-From 4468d57fb6cea9e9979ecf631a20cb7a8edd4187 Mon Sep 17 00:00:00 2001
+From a623011c7a05bad0769b2d36f17ea01cfdf1eec4 Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
-Date: Sat, 18 Feb 2023 23:55:05 +0100
-Subject: [PATCH 6/6] arm64: dts: imx8mp: Add DT overlay describing i.MX8MP
+Date: Thu, 21 Sep 2023 20:44:20 +0200
+Subject: [PATCH 7/7] arm64: dts: imx8mp: Add DT overlay describing i.MX8MP
  DHCOM SoM rev.100
 
 The current imx8mp-dhcom-som.dtsi describes production rev.200 SoM,
 add DT overlay which reinstates rev.100 SoM description to permit
 prototype rev.100 SoMs to be used until they get phased out.
 
-Upstream-Status: Submitted [https://patchwork.ozlabs.org/project/uboot/patch/20230921184420.45186-5-marex@denx.de/]
+Upstream-Status: Backport [24985686feae92b039f6749bedf9847e907c9087]
 Signed-off-by: Marek Vasut <marex@denx.de>
 ---
  arch/arm/dts/Makefile                         |   2 +
@@ -181,7 +181,7 @@ index 00000000000..5d9a00c9429
 +	};
 +};
 diff --git a/arch/arm/dts/imx8mp-dhcom-u-boot.dtsi b/arch/arm/dts/imx8mp-dhcom-u-boot.dtsi
-index 76764999a72..aa17a1450ab 100644
+index 6f21fbe1151..a29db0ddd3f 100644
 --- a/arch/arm/dts/imx8mp-dhcom-u-boot.dtsi
 +++ b/arch/arm/dts/imx8mp-dhcom-u-boot.dtsi
 @@ -178,13 +178,13 @@
@@ -201,15 +201,17 @@ index 76764999a72..aa17a1450ab 100644
  					};
  				};
  			};
-@@ -198,5 +198,5 @@
- 	      "fdt-dto-imx8mp-dhcom-som-overlay-eth2xfast",
- 	      "fdt-dto-imx8mp-dhcom-pdk-overlay-eth2xfast",
- 	      "fdt-dto-imx8mp-dhcom-som-overlay-rev100",
--	      "fdt-dto-imx8mp-dhcom-pdk-overlay-rev100";
-+	      "fdt-dto-imx8mp-dhcom-pdk3-overlay-rev100";
- };
+@@ -198,7 +198,7 @@
+ 					      "fdt-dto-imx8mp-dhcom-som-overlay-eth2xfast",
+ 					      "fdt-dto-imx8mp-dhcom-pdk-overlay-eth2xfast",
+ 					      "fdt-dto-imx8mp-dhcom-som-overlay-rev100",
+-					      "fdt-dto-imx8mp-dhcom-pdk-overlay-rev100";
++					      "fdt-dto-imx8mp-dhcom-pdk3-overlay-rev100";
+ 				};
+ 			};
+ 		};
 diff --git a/board/dhelectronics/dh_imx8mp/spl.c b/board/dhelectronics/dh_imx8mp/spl.c
-index 8d980b10cac..2bc826b94d2 100644
+index 2864edc0d57..f0c1a83a5a6 100644
 --- a/board/dhelectronics/dh_imx8mp/spl.c
 +++ b/board/dhelectronics/dh_imx8mp/spl.c
 @@ -43,6 +43,7 @@ static const iomux_v3_cfg_t wdog_pads[] = {
@@ -257,5 +259,5 @@ index 8d980b10cac..2bc826b94d2 100644
  	for (i = 0; i < ARRAY_SIZE(mux_sion); i++)
  		clrbits_le32(mux_base + mux_sion[i], IOMUX_CONFIG_SION);
 -- 
-2.40.1
+2.42.0
 

@@ -1,7 +1,7 @@
-From f23613ff2db9b023810904614cda03785974f32a Mon Sep 17 00:00:00 2001
+From 21284a7cd17f56ba7894b47a6567cc84a0bf0509 Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
-Date: Thu, 31 Aug 2023 02:57:11 +0200
-Subject: [PATCH] ARM: imx: Use default SAVED_DRAM_TIMING_BASE on DH i.MX8M
+Date: Thu, 31 Aug 2023 16:41:15 +0200
+Subject: [PATCH 2/7] ARM: imx: Use default SAVED_DRAM_TIMING_BASE on DH i.MX8M
  Plus DHCOM
 
 Use default SAVED_DRAM_TIMING_BASE as that is what upstream TFA expects.
@@ -27,10 +27,10 @@ index 60ab31b6e8e..859e6dd1f03 100644
  CONFIG_DFU_TIMEOUT=y
  CONFIG_DFU_MMC=y
 diff --git a/configs/imx8mp_dhcom_pdk3_defconfig b/configs/imx8mp_dhcom_pdk3_defconfig
-index c85b33e8b34..d35674e82be 100644
+index 6a98a906059..cb5572e081e 100644
 --- a/configs/imx8mp_dhcom_pdk3_defconfig
 +++ b/configs/imx8mp_dhcom_pdk3_defconfig
-@@ -163,7 +163,6 @@ CONFIG_SPL_CLK_COMPOSITE_CCF=y
+@@ -162,7 +162,6 @@ CONFIG_SPL_CLK_COMPOSITE_CCF=y
  CONFIG_CLK_COMPOSITE_CCF=y
  CONFIG_SPL_CLK_IMX8MP=y
  CONFIG_CLK_IMX8MP=y
@@ -39,5 +39,5 @@ index c85b33e8b34..d35674e82be 100644
  CONFIG_DFU_TIMEOUT=y
  CONFIG_DFU_MMC=y
 -- 
-2.40.1
+2.42.0
 

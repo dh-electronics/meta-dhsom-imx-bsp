@@ -1,7 +1,7 @@
-From 700ded2944f3e6f846a4f976ebf59452ea31c080 Mon Sep 17 00:00:00 2001
+From 6e4c0d8033a245a90116871dac09748ea2264292 Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
-Date: Sat, 18 Feb 2023 23:55:05 +0100
-Subject: [PATCH 3/3] arm64: dts: imx8mp: Switch to DT overlays for i.MX8MP
+Date: Thu, 21 Sep 2023 20:44:17 +0200
+Subject: [PATCH 4/7] arm64: dts: imx8mp: Switch to DT overlays for i.MX8MP
  DHCOM SoM
 
 Add DT overlays to support additional DH i.MX8MP DHCOM SoM 660-100
@@ -12,18 +12,18 @@ Use SPL DTO support to apply matching SoM specific DTO to cater
 for the SoM differences. Remove ad-hoc patching of control DT from
 fdtdec_board_setup().
 
-Upstream-Status: Submitted [https://patchwork.ozlabs.org/project/uboot/patch/20230921184420.45186-2-marex@denx.de/]
+Upstream-Status: Backport [ad1158c50e0ec2f00cbe7da8f092fdc32638c2c5]
 Signed-off-by: Marek Vasut <marex@denx.de>
 ---
  arch/arm/dts/Makefile                         |   3 +
  .../imx8mp-dhcom-pdk-overlay-eth2xfast.dts    |  10 +
  .../imx8mp-dhcom-som-overlay-eth1xfast.dts    |  43 ++++
  .../imx8mp-dhcom-som-overlay-eth2xfast.dts    |  24 ++
- arch/arm/dts/imx8mp-dhcom-u-boot.dtsi         |  45 ++++
+ arch/arm/dts/imx8mp-dhcom-u-boot.dtsi         |  49 ++++
  .../dh_imx8mp/imx8mp_dhcom_pdk2.c             | 228 ------------------
  board/dhelectronics/dh_imx8mp/spl.c           |  46 ++++
  configs/imx8mp_dhcom_pdk3_defconfig           |   3 +-
- 8 files changed, 173 insertions(+), 229 deletions(-)
+ 8 files changed, 177 insertions(+), 229 deletions(-)
  create mode 100644 arch/arm/dts/imx8mp-dhcom-pdk-overlay-eth2xfast.dts
  create mode 100644 arch/arm/dts/imx8mp-dhcom-som-overlay-eth1xfast.dts
  create mode 100644 arch/arm/dts/imx8mp-dhcom-som-overlay-eth2xfast.dts
@@ -60,7 +60,7 @@ index 00000000000..3b397776920
 +};
 diff --git a/arch/arm/dts/imx8mp-dhcom-som-overlay-eth1xfast.dts b/arch/arm/dts/imx8mp-dhcom-som-overlay-eth1xfast.dts
 new file mode 100644
-index 00000000000..f6076d54b14
+index 00000000000..bb5a2b68175
 --- /dev/null
 +++ b/arch/arm/dts/imx8mp-dhcom-som-overlay-eth1xfast.dts
 @@ -0,0 +1,43 @@
@@ -138,10 +138,10 @@ index 00000000000..82dadcea96c
 +	status = "okay";
 +};
 diff --git a/arch/arm/dts/imx8mp-dhcom-u-boot.dtsi b/arch/arm/dts/imx8mp-dhcom-u-boot.dtsi
-index 59d31eebc3e..205f5964f7f 100644
+index 59d31eebc3e..00e1db66568 100644
 --- a/arch/arm/dts/imx8mp-dhcom-u-boot.dtsi
 +++ b/arch/arm/dts/imx8mp-dhcom-u-boot.dtsi
-@@ -133,3 +133,48 @@
+@@ -133,3 +133,52 @@
  &wdog1 {
  	bootph-pre-ram;
  };
@@ -180,15 +180,19 @@ index 59d31eebc3e..205f5964f7f 100644
 +					};
 +				};
 +			};
++
++			configurations {
++				default = "@config-DEFAULT-SEQ";
++
++				@config-SEQ {
++					fdt = "fdt-1",
++					      "fdt-dto-imx8mp-dhcom-som-overlay-eth1xfast",
++					      "fdt-dto-imx8mp-dhcom-som-overlay-eth2xfast",
++					      "fdt-dto-imx8mp-dhcom-pdk-overlay-eth2xfast";
++				};
++			};
 +		};
 +	};
-+};
-+
-+&binman_configuration {
-+	fdt = "fdt-1",
-+	      "fdt-dto-imx8mp-dhcom-som-overlay-eth1xfast",
-+	      "fdt-dto-imx8mp-dhcom-som-overlay-eth2xfast",
-+	      "fdt-dto-imx8mp-dhcom-pdk-overlay-eth2xfast";
 +};
 diff --git a/board/dhelectronics/dh_imx8mp/imx8mp_dhcom_pdk2.c b/board/dhelectronics/dh_imx8mp/imx8mp_dhcom_pdk2.c
 index 760ea4be35c..5edb85e1de5 100644
@@ -440,7 +444,7 @@ index 760ea4be35c..5edb85e1de5 100644
 -	return dh_dt_patch_som(fdt_blob);
 -}
 diff --git a/board/dhelectronics/dh_imx8mp/spl.c b/board/dhelectronics/dh_imx8mp/spl.c
-index e2aa874723a..8d980b10cac 100644
+index e2aa874723a..2864edc0d57 100644
 --- a/board/dhelectronics/dh_imx8mp/spl.c
 +++ b/board/dhelectronics/dh_imx8mp/spl.c
 @@ -21,6 +21,8 @@
@@ -545,5 +549,5 @@ index cb5572e081e..899048b55f8 100644
  CONFIG_SPL_POWER=y
  CONFIG_SPL_WATCHDOG=y
 -- 
-2.40.1
+2.42.0
 

@@ -1,7 +1,7 @@
-From 79537f716306c8468f0117044464f7ff2924736b Mon Sep 17 00:00:00 2001
+From 72d636d85a477ea3ee3e8a1850c10984220bd8a4 Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
-Date: Sun, 27 Aug 2023 22:42:50 +0200
-Subject: [PATCH 2/3] spl: fit: Add board level function to decide application
+Date: Thu, 21 Sep 2023 20:44:16 +0200
+Subject: [PATCH 3/7] spl: fit: Add board level function to decide application
  of DTO
 
 Add board-specific function used to indicate whether a DTO from fitImage
@@ -12,7 +12,7 @@ This is useful in case of DTOs which implement e.g. different board revision
 details, where such DTO should be applied on one board revision, and should
 not be applied on another board revision.
 
-Upstream-Status: Submitted [https://patchwork.ozlabs.org/project/uboot/patch/20230921184420.45186-1-marex@denx.de/]
+Upstream-Status: Backport [b13eaf3bb4e64fff117210821b3cf2f106de8ae2]
 Signed-off-by: Marek Vasut <marex@denx.de>
 ---
  common/spl/spl_fit.c | 23 ++++++++++++++++++++---
@@ -90,5 +90,5 @@ index 98f57328a53..7e19658d2cc 100644
  void spl_save_restore_data(void);
  #endif
 -- 
-2.40.1
+2.42.0
 
