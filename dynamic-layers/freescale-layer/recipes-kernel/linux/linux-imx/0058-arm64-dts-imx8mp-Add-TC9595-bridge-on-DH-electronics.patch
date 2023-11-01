@@ -1,29 +1,30 @@
-From 7f1712596f1fa48243f113a95fff30544cf91ed6 Mon Sep 17 00:00:00 2001
+From fa5ee3f79e1ace6d333645ff6be7dc59b4b34ffb Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
-Date: Fri, 22 Jul 2022 04:12:32 +0200
-Subject: [PATCH 59/61] arm64: dts: imx8mp: Add TC9595 bridge on MX8MP DHCOM
- SoM
+Date: Mon, 15 May 2023 18:24:24 +0200
+Subject: [PATCH 59/83] arm64: dts: imx8mp: Add TC9595 bridge on DH electronics
+ i.MX8M Plus DHCOM
 
-Add TC9595 DSI-to-DPI and DSI-to-DP bridge and LCDIF1 and DSI bindings
-on MX8MP DHCOM SoM.
+Add TC9595 DSI-to-DPI and DSI-to-(e)DP bridge to
+DH electronics i.MX8M Plus DHCOM SoM . The bridge
+is populated on the SoM, but disabled by default
+unless used for display output.
 
-Upstream-Status: Pending [Depends on DSIM support upstream]
+Upstream-Status: Backport [20d0b83e712b92163ddcfb313288272720272733]
 Signed-off-by: Marek Vasut <marex@denx.de>
+Signed-off-by: Shawn Guo <shawnguo@kernel.org>
 ---
- .../boot/dts/freescale/imx8mp-dhcom-som.dtsi  | 56 +++++++++++++++++++
- 1 file changed, 56 insertions(+)
+ .../boot/dts/freescale/imx8mp-dhcom-som.dtsi  | 55 +++++++++++++++++++
+ 1 file changed, 55 insertions(+)
 
 diff --git a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-som.dtsi b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-som.dtsi
-index 00f765cdd8d84..a03a29b0d510f 100644
+index 00f765cdd8d84..e06ba4e2025d8 100644
 --- a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-som.dtsi
 +++ b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-som.dtsi
-@@ -232,6 +232,37 @@ &i2c3 {
+@@ -232,6 +232,36 @@ &i2c3 {
  	sda-gpios = <&gpio5 19 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
  	status = "okay";
  
 +	tc_bridge: bridge@f {
-+		#address-cells = <0>;
-+		#size-cells = <0>;
 +		compatible = "toshiba,tc9595", "toshiba,tc358767";
 +		pinctrl-names = "default";
 +		pinctrl-0 = <&pinctrl_tc9595>;
@@ -44,6 +45,7 @@ index 00f765cdd8d84..a03a29b0d510f 100644
 +
 +			port@0 {
 +				reg = <0>;
++
 +				tc_bridge_in: endpoint {
 +					data-lanes = <1 2 3 4>;
 +					remote-endpoint = <&dsi_out>;
@@ -55,7 +57,7 @@ index 00f765cdd8d84..a03a29b0d510f 100644
  	pmic: pmic@25 {
  		compatible = "nxp,pca9450c";
  		reg = <0x25>;
-@@ -398,6 +429,22 @@ &i2c5 {	/* HDMI EDID bus */
+@@ -398,6 +428,22 @@ &i2c5 {	/* HDMI EDID bus */
  	status = "okay";
  };
  
@@ -78,7 +80,7 @@ index 00f765cdd8d84..a03a29b0d510f 100644
  &pwm1 {
  	pinctrl-0 = <&pinctrl_pwm1>;
  	pinctrl-names = "default";
-@@ -831,6 +878,15 @@ MX8MP_IOMUXC_SPDIF_EXT_CLK__GPIO5_IO05		0x400001c6
+@@ -831,6 +877,15 @@ MX8MP_IOMUXC_SPDIF_EXT_CLK__GPIO5_IO05		0x400001c6
  		>;
  	};
  
@@ -95,5 +97,5 @@ index 00f765cdd8d84..a03a29b0d510f 100644
  		fsl,pins = <
  			/* #TOUCH_INT */
 -- 
-2.39.1
+2.42.0
 

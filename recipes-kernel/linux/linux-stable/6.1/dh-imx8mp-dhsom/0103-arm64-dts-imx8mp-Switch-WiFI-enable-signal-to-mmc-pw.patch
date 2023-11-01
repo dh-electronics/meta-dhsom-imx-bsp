@@ -1,6 +1,6 @@
-From bd81fb14177593df6bf5656109366a8e0ca287e7 Mon Sep 17 00:00:00 2001
+From 109f6283a19e177d3159d412c159f2cf52383285 Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
-Date: Mon, 28 Aug 2023 19:20:53 +0200
+Date: Thu, 31 Aug 2023 20:20:19 +0200
 Subject: [PATCH 103/111] arm64: dts: imx8mp: Switch WiFI enable signal to
  mmc-pwrseq-simple on i.MX8MP DHCOM SoM
 
@@ -10,14 +10,15 @@ it is tied to the slot instead of the MAC, and it can enable the MAC
 before the brcmfmac driver binds to it. Make use of the MMC power
 sequencer.
 
-Upstream-Status: Submitted [https://patchwork.kernel.org/project/linux-arm-kernel/patch/20230831182020.154863-3-marex@denx.de/]
+Upstream-Status: Backport [dfd948b99846bcce72929d2312199535ed55868e]
 Signed-off-by: Marek Vasut <marex@denx.de>
+Signed-off-by: Shawn Guo <shawnguo@kernel.org>
 ---
  arch/arm64/boot/dts/freescale/imx8mp-dhcom-som.dtsi | 7 ++++++-
  1 file changed, 6 insertions(+), 1 deletion(-)
 
 diff --git a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-som.dtsi b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-som.dtsi
-index fa6d67c74310e..aa9c5f2087c0b 100644
+index 7908515f3b5e5..2f63e1d70baf8 100644
 --- a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-som.dtsi
 +++ b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-som.dtsi
 @@ -57,6 +57,11 @@ reg_vdd_3p3v_awo: regulator-vdd-3p3v-awo {	/* VDD_3V3_AWO */

@@ -1,12 +1,14 @@
-From fde426dbba94d841532bd42d491a4665503bba50 Mon Sep 17 00:00:00 2001
+From d7b3571c41272772c27a434ad69c4dc0a0fe1d27 Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
-Date: Thu, 9 Mar 2023 20:11:09 +0100
+Date: Tue, 16 May 2023 10:13:54 +0200
 Subject: [PATCH 091/111] arm64: dts: imx8mp: Add DeWarp Engine DT node
 
 Add DT node for the DeWarp Engine of the i.MX8MP.
 
-Upstream-Status: Submitted [https://lore.kernel.org/linux-arm-kernel/20230515163224.70300-1-marex@denx.de/]
+Upstream-Status: Backport [0c45fb7faf6f57aeb8b17c77195d113b3fc06cd3]
 Signed-off-by: Marek Vasut <marex@denx.de>
+Reviewed-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+Signed-off-by: Shawn Guo <shawnguo@kernel.org>
 ---
  arch/arm64/boot/dts/freescale/imx8mp.dtsi | 10 ++++++++++
  1 file changed, 10 insertions(+)

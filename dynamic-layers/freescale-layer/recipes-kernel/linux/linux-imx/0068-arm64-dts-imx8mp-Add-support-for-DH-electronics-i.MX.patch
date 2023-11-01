@@ -1,43 +1,28 @@
-From b17c1d4a9fe33677b49abf7f47be13e7c0e5e660 Mon Sep 17 00:00:00 2001
+From ea6e37f136ea810deb1b3df12418f625f98b6b6b Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
-Date: Mon, 12 Dec 2022 03:00:51 +0100
-Subject: [PATCH 69/73] arm64: dts: imx8mp: Add support for DH electronics
+Date: Fri, 17 Mar 2023 10:47:25 +0100
+Subject: [PATCH 69/83] arm64: dts: imx8mp: Add support for DH electronics
  i.MX8M Plus DHCOM and PDK3
 
 Add support for DH electronics i.MX8M Plus DHCOM SoM on PDK3 carrier board.
 Currently supported are serial console, EQoS and FEC ethernets, eMMC, SD,
 SPI NOR, CAN, M.2 E-Key or M.2 M-Key PCIe, USB .
 
-Upstream-Status: Submitted [https://patchwork.kernel.org/project/linux-arm-kernel/patch/20230302231626.159984-2-marex@denx.de/]
+Upstream-Status: Backport [44eeddd6bd185358ecbdfb5c8f4fd24c1d58645f]
 Signed-off-by: Marek Vasut <marex@denx.de>
----
-Cc: Fabio Estevam <festevam@gmail.com>
-Cc: Frieder Schrempf <frieder.schrempf@kontron.de>
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc: Li Yang <leoyang.li@nxp.com>
-Cc: Marcel Ziswiler <marcel.ziswiler@toradex.com>
-Cc: Marek Vasut <marex@denx.de>
-Cc: Matthias Schiffer <matthias.schiffer@tq-group.com>
-Cc: Max Krummenacher <max.krummenacher@toradex.com>
-Cc: NXP Linux Team <linux-imx@nxp.com>
-Cc: Pengutronix Kernel Team <kernel@pengutronix.de>
-Cc: Rob Herring <robh+dt@kernel.org>
-Cc: Sascha Hauer <s.hauer@pengutronix.de>
-Cc: Shawn Guo <shawnguo@kernel.org>
-Cc: Stefan Wahren <stefan.wahren@i2se.com>
-Cc: devicetree@vger.kernel.org
-Cc: linux-arm-kernel@lists.infradead.org
+Reviewed-by: Fabio Estevam <festevam@gmail.com>
+Signed-off-by: Shawn Guo <shawnguo@kernel.org>
 ---
  arch/arm64/boot/dts/freescale/Makefile        |   1 +
- .../boot/dts/freescale/imx8mp-dhcom-pdk3.dts  | 321 ++++++++++++++++++
- 2 files changed, 322 insertions(+)
+ .../boot/dts/freescale/imx8mp-dhcom-pdk3.dts  | 306 ++++++++++++++++++
+ 2 files changed, 307 insertions(+)
  create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3.dts
 
 diff --git a/arch/arm64/boot/dts/freescale/Makefile b/arch/arm64/boot/dts/freescale/Makefile
-index 8ea5997b35209..593ea21d400d7 100644
+index 65ea2f068ff84..de0dc4de1992f 100644
 --- a/arch/arm64/boot/dts/freescale/Makefile
 +++ b/arch/arm64/boot/dts/freescale/Makefile
-@@ -107,6 +107,7 @@ dtb-$(CONFIG_ARCH_MXC) += imx8mp-dhcom-pdk2.dtb \
+@@ -109,6 +109,7 @@ dtb-$(CONFIG_ARCH_MXC) += imx8mp-dhcom-pdk2.dtb \
  			  imx8mp-dhcom-pdk2-overlay-531-100-x21.dtbo \
  			  imx8mp-dhcom-pdk2-overlay-531-100-x22.dtbo \
  			  imx8mp-dhcom-pdk2-overlay-560-300-x12.dtbo
@@ -47,10 +32,10 @@ index 8ea5997b35209..593ea21d400d7 100644
  			  imx8mp-evk-jdi-wuxga-lvds-panel.dtb imx8mp-evk-flexcan2.dtb \
 diff --git a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3.dts b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3.dts
 new file mode 100644
-index 0000000000000..9ab6753a35412
+index 0000000000000..b5e76b992a103
 --- /dev/null
 +++ b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3.dts
-@@ -0,0 +1,321 @@
+@@ -0,0 +1,306 @@
 +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
 +/*
 + * Copyright (C) 2023 Marek Vasut <marex@denx.de>
@@ -76,16 +61,10 @@ index 0000000000000..9ab6753a35412
 +		stdout-path = &uart1;
 +	};
 +
-+	clk_ext_audio_codec: clock-codec {
-+		#clock-cells = <0>;
-+		clock-frequency = <24000000>;
-+		compatible = "fixed-clock";
-+	};
-+
-+	clk_xtal25: clk-xtal25 {
++	clk_pcie: clock-pcie {
 +		compatible = "fixed-clock";
 +		#clock-cells = <0>;
-+		clock-frequency = <25000000>;
++		clock-frequency = <100000000>;
 +	};
 +
 +	connector {
@@ -209,7 +188,7 @@ index 0000000000000..9ab6753a35412
 +};
 +
 +&i2c5 {
-+	i2cmux@70 {
++	i2c-mux@70 {
 +		compatible = "nxp,pca9540";
 +		reg = <0x70>;
 +		#address-cells = <1>;
@@ -227,7 +206,6 @@ index 0000000000000..9ab6753a35412
 +				interrupts = <25 IRQ_TYPE_EDGE_FALLING>;
 +				pinctrl-names = "default";
 +				pinctrl-0 = <&pinctrl_ptn5150>;
-+				status = "okay";
 +
 +				ports {
 +					#address-cells = <1>;
@@ -263,13 +241,6 @@ index 0000000000000..9ab6753a35412
 +				pagesize = <16>;
 +				reg = <0x54>;
 +			};
-+
-+			pcieclk: clk@6b {
-+				compatible = "skyworks,si52144";
-+				reg = <0x6b>;
-+				clocks = <&clk_xtal25>;
-+				#clock-cells = <1>;
-+			};
 +		};
 +
 +		i2cmuxed1: i2c@1 {	/* HDMI DDC I2C */
@@ -302,7 +273,6 @@ index 0000000000000..9ab6753a35412
 +			/* RESET_N signal rise time ~100ms */
 +			reset-deassert-us = <120000>;
 +			reset-gpios = <&gpio4 2 GPIO_ACTIVE_LOW>;
-+			status = "okay";
 +		};
 +	};
 +};
@@ -312,7 +282,7 @@ index 0000000000000..9ab6753a35412
 +};
 +
 +&pcie_phy {
-+	clocks = <&pcieclk 1>;
++	clocks = <&clk_pcie>;
 +	clock-names = "ref";
 +	fsl,refclk-pad-mode = <IMX8_PCIE_REFCLK_PAD_INPUT>;
 +	status = "okay";
@@ -373,5 +343,5 @@ index 0000000000000..9ab6753a35412
 +	};
 +};
 -- 
-2.39.1
+2.42.0
 

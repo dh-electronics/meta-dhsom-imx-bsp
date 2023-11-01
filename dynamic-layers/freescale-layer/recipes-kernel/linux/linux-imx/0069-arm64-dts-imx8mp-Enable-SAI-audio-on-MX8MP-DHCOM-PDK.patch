@@ -1,7 +1,7 @@
-From d1fae02c8f7f4c2afcfaedcb3d81af68c55e5096 Mon Sep 17 00:00:00 2001
+From 59cb8fb3397b545dc46c07276b4eedbc7d2e691d Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
 Date: Sat, 27 May 2023 12:22:33 +0200
-Subject: [PATCH 088/111] arm64: dts: imx8mp: Enable SAI audio on MX8MP DHCOM
+Subject: [PATCH 70/83] arm64: dts: imx8mp: Enable SAI audio on MX8MP DHCOM
  PDK2 and PDK3
 
 Add SAI I2S and audio bindings on MX8MP DHCOM PDK2 and PDK3.
@@ -24,7 +24,7 @@ Signed-off-by: Shawn Guo <shawnguo@kernel.org>
  3 files changed, 116 insertions(+), 2 deletions(-)
 
 diff --git a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk2.dts b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk2.dts
-index c0addf30da068..87263136f4674 100644
+index 0ddd20556e52a..0cdc62368557b 100644
 --- a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk2.dts
 +++ b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk2.dts
 @@ -23,6 +23,12 @@ chosen {
@@ -103,7 +103,7 @@ index c0addf30da068..87263136f4674 100644
  	fsl,over-current-active-low;
  };
 diff --git a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3.dts b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3.dts
-index 24dc58b3404fb..31d85d5871c91 100644
+index b5e76b992a103..2ae7e893c2908 100644
 --- a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3.dts
 +++ b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3.dts
 @@ -23,6 +23,12 @@ chosen {
@@ -116,7 +116,7 @@ index 24dc58b3404fb..31d85d5871c91 100644
 +		clock-frequency = <24000000>;
 +	};
 +
- 	clk_xtal25: clock-xtal25 {
+ 	clk_pcie: clock-pcie {
  		compatible = "fixed-clock";
  		#clock-cells = <0>;
 @@ -140,12 +146,30 @@ led-3 {
@@ -168,7 +168,7 @@ index 24dc58b3404fb..31d85d5871c91 100644
  			typec@3d {
  				compatible = "nxp,ptn5150";
  				reg = <0x3d>;
-@@ -263,6 +296,16 @@ &pcie {
+@@ -256,6 +289,16 @@ &pcie {
  	status = "okay";
  };
  
@@ -186,10 +186,10 @@ index 24dc58b3404fb..31d85d5871c91 100644
  	usb-role-switch;
  
 diff --git a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-som.dtsi b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-som.dtsi
-index f84dab0fca16d..5dfafc6c681d4 100644
+index 4cbf9ec3a8491..18f342a498a03 100644
 --- a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-som.dtsi
 +++ b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-som.dtsi
-@@ -49,6 +49,14 @@ reg_usdhc2_vmmc: regulator-usdhc2-vmmc {
+@@ -50,6 +50,14 @@ reg_usdhc2_vmmc: regulator-usdhc2-vmmc {
  		startup-delay-us = <100>;
  		vin-supply = <&buck4>;
  	};
@@ -204,7 +204,7 @@ index f84dab0fca16d..5dfafc6c681d4 100644
  };
  
  &A53_0 {
-@@ -928,6 +936,15 @@ MX8MP_IOMUXC_SAI5_RXD0__GPIO3_IO21		0x141
+@@ -920,6 +928,15 @@ MX8MP_IOMUXC_SAI5_RXD0__GPIO3_IO21		0x141
  		>;
  	};
  

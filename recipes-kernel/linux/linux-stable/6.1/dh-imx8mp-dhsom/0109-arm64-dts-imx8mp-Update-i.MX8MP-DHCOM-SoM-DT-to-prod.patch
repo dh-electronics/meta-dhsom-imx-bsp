@@ -1,6 +1,6 @@
-From da969b6311af22601cdb99e706a4efce0affded0 Mon Sep 17 00:00:00 2001
+From 9b5e86a96736ac1274b7cbe5165fe08b11909c9c Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
-Date: Tue, 8 Aug 2023 00:39:46 +0200
+Date: Thu, 21 Sep 2023 21:29:32 +0200
 Subject: [PATCH 109/111] arm64: dts: imx8mp: Update i.MX8MP DHCOM SoM DT to
  production rev.200
 
@@ -12,14 +12,15 @@ following changes:
 - ADC upgraded from TLA2024 to ADS1015 with conversion interrupt
 - EEPROM size increased from 256 B to 4 kiB
 
-Upstream-Status: Submitted [https://patchwork.kernel.org/project/linux-arm-kernel/patch/20230921192933.71639-1-marex@denx.de/]
+Upstream-Status: Backport [320371562fae19b513668974fc58ffff91673435]
 Signed-off-by: Marek Vasut <marex@denx.de>
+Signed-off-by: Shawn Guo <shawnguo@kernel.org>
 ---
  .../boot/dts/freescale/imx8mp-dhcom-som.dtsi  | 145 +++++++++++-------
  1 file changed, 90 insertions(+), 55 deletions(-)
 
 diff --git a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-som.dtsi b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-som.dtsi
-index 014158d84b2ce..ab81ae56a4afa 100644
+index 8aecaa4286d36..7bc1ec01b5abf 100644
 --- a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-som.dtsi
 +++ b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-som.dtsi
 @@ -25,9 +25,7 @@ memory@40000000 {

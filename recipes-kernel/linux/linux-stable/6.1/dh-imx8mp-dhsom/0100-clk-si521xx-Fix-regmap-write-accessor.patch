@@ -1,6 +1,6 @@
-From 59dbb2b5f0c0ea1dd2809863da20a354c62c7ce6 Mon Sep 17 00:00:00 2001
+From 80d5deaae0543706d6697320ca5110f6c9c4a43a Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
-Date: Thu, 31 Aug 2023 19:39:20 +0200
+Date: Thu, 31 Aug 2023 20:16:56 +0200
 Subject: [PATCH 100/111] clk: si521xx: Fix regmap write accessor
 
 Rework the write operation such that the Byte Count register is written with
@@ -13,9 +13,11 @@ write payload, but any subsequent writes would fail due to this Byte Count
 register programming. Such failing writes happens e.g. during resume, when
 restoring the regmap content.
 
-Upstream-Status: Submitted [https://patchwork.kernel.org/project/linux-clk/patch/20230831181656.154750-2-marex@denx.de/]
+Upstream-Status: Backport [83df5bf010eb5ccc11ce95f2d076515ec216c99c]
 Fixes: edc12763a3a2 ("clk: si521xx: Clock driver for Skyworks Si521xx I2C PCIe clock generators")
 Signed-off-by: Marek Vasut <marex@denx.de>
+Link: https://lore.kernel.org/r/20230831181656.154750-2-marex@denx.de
+Signed-off-by: Stephen Boyd <sboyd@kernel.org>
 ---
  drivers/clk/clk-si521xx.c | 7 ++++---
  1 file changed, 4 insertions(+), 3 deletions(-)

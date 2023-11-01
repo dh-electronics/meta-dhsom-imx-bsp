@@ -1,7 +1,7 @@
-From fde00612f9b20cb98ac98dc148595ae1ac3d8cde Mon Sep 17 00:00:00 2001
+From 630c44684ee1b11fe5fe88be7207364f68bfd39d Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
 Date: Thu, 31 Aug 2023 20:20:18 +0200
-Subject: [PATCH 102/111] arm64: dts: imx8mp: Fix property indent on DH i.MX8M
+Subject: [PATCH 75/83] arm64: dts: imx8mp: Fix property indent on DH i.MX8M
  Plus DHCOM PDK3
 
 Fix indent to use tab indent. No functional change.
@@ -14,7 +14,7 @@ Signed-off-by: Shawn Guo <shawnguo@kernel.org>
  1 file changed, 4 insertions(+), 4 deletions(-)
 
 diff --git a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3.dts b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3.dts
-index 8fbb86499edac..94936c6f6541a 100644
+index d0dd83a42ec79..78f7e0414efcc 100644
 --- a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3.dts
 +++ b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3.dts
 @@ -225,10 +225,10 @@ ptn5150_out_ep: endpoint {

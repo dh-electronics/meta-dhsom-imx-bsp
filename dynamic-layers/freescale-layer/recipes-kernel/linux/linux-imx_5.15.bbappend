@@ -58,32 +58,31 @@ SRC_URI:append:dh-imx8mp-dhsom = " \
 	file://0055-arm64-dts-imx8mp-Add-PCIe-support-to-DH-electronics-.patch \
 	file://0056-arm64-dts-imx8mp-Enable-HDMI-on-MX8MP-DHCOM-PDK2.patch \
 	file://0057-arm64-dts-imx8mp-Enable-weak-pullup-until-R269-is-po.patch \
-	file://0058-arm64-dts-imx8mp-Add-SGTL5000-codec-on-MX8MP-DHCOM-P.patch \
-	file://0059-arm64-dts-imx8mp-Add-TC9595-bridge-on-MX8MP-DHCOM-So.patch \
-	file://0060-arm64-dts-imx8mp-Add-DT-overlays-for-i.MX8MP-DHCOM-P.patch \
-	file://0061-arm64-dts-imx8mp-Adjust-DT-to-match-downstream-DTSI.patch \
-	file://0062-arm64-dts-imx8mp-Add-DT-overlays-for-i.MX8MP-DHCOM-S.patch \
-	file://0063-extcon-ptn5150-Add-usb-role-class-support.patch \
-	file://0064-arm64-dts-imx8mp-Do-not-delete-PHY-nodes-on-i.MX8MP-.patch \
-	file://0065-arm64-dts-imx8mp-Adjust-EQoS-reset-comment-on-i.MX8M.patch \
-	file://0066-arm64-dts-imx8mp-Adjust-EQoS-PHY-address-on-i.MX8MP-.patch \
-	file://0067-arm64-dts-imx8mp-Add-EQoS-RMII-pin-mux-on-i.MX8MP-DH.patch \
-	file://0068-arm64-dts-imx8mp-Add-FEC-RMII-pin-mux-on-i.MX8MP-DHC.patch \
-	file://0069-arm64-dts-imx8mp-Add-support-for-DH-electronics-i.MX.patch \
-	file://0070-arm64-dts-imx8mp-Enable-SAI-audio-on-MX8MP-DHCOM-PDK.patch \
-	file://0071-arm64-dts-imx8mp-Enable-HDMI-on-MX8MP-DHCOM-PDK3.patch \
-	file://0072-arm64-dts-imx8mp-Add-DT-overlays-for-i.MX8MP-DHCOM-P.patch \
-	file://0073-arm64-dts-imx8mp-Adjust-PDK3-DT-to-match-downstream-.patch \
-	file://0074-arm64-dts-imx8mp-Describe-VDD_ARM-run-and-standby-vo.patch \
-	file://0075-arm64-dts-imx8mp-Fix-property-indent-on-DH-i.MX8M-Pl.patch \
-	file://0076-arm64-dts-imx8mp-Switch-WiFI-enable-signal-to-mmc-pw.patch \
-	file://0077-arm64-dts-imx8mp-Add-UART1-and-RTC-wake-up-source-on.patch \
-	file://0078-arm64-dts-imx8mp-Simplify-USB-C-on-DH-i.MX8M-Plus-DH.patch \
-	file://0079-rtc-rv3032-use-IRQ-flags-obtained-from-fwnode.patch \
-	file://0080-iio-adc-ti-ads1015-Add-edge-trigger-support.patch \
-	file://0081-arm64-dts-imx8mp-Update-i.MX8MP-DHCOM-SoM-DT-to-prod.patch \
-	file://0082-arm64-dts-imx8mp-Drop-i.MX8MP-DHCOM-rev.100-PHY-addr.patch \
-	file://0083-arm64-dts-imx8mp-Add-DT-overlay-describing-i.MX8MP-D.patch \
+	file://0058-arm64-dts-imx8mp-Add-TC9595-bridge-on-DH-electronics.patch \
+	file://0059-arm64-dts-imx8mp-Add-DT-overlays-for-i.MX8MP-DHCOM-P.patch \
+	file://0060-arm64-dts-imx8mp-Adjust-DT-to-match-downstream-DTSI.patch \
+	file://0061-arm64-dts-imx8mp-Add-DT-overlays-for-i.MX8MP-DHCOM-S.patch \
+	file://0062-extcon-ptn5150-Add-usb-role-class-support.patch \
+	file://0063-arm64-dts-imx8mp-Do-not-delete-PHY-nodes-on-i.MX8MP-.patch \
+	file://0064-arm64-dts-imx8mp-Adjust-EQoS-reset-comment-on-i.MX8M.patch \
+	file://0065-arm64-dts-imx8mp-Adjust-EQoS-PHY-address-on-i.MX8MP-.patch \
+	file://0066-arm64-dts-imx8mp-Add-EQoS-RMII-pin-mux-on-i.MX8MP-DH.patch \
+	file://0067-arm64-dts-imx8mp-Add-FEC-RMII-pin-mux-on-i.MX8MP-DHC.patch \
+	file://0068-arm64-dts-imx8mp-Add-support-for-DH-electronics-i.MX.patch \
+	file://0069-arm64-dts-imx8mp-Enable-SAI-audio-on-MX8MP-DHCOM-PDK.patch \
+	file://0070-arm64-dts-imx8mp-Enable-HDMI-on-MX8MP-DHCOM-PDK3.patch \
+	file://0071-arm64-dts-imx8mp-Add-DT-overlays-for-i.MX8MP-DHCOM-P.patch \
+	file://0072-arm64-dts-imx8mp-Adjust-PDK3-DT-to-match-downstream-.patch \
+	file://0073-arm64-dts-imx8mp-Describe-VDD_ARM-run-and-standby-vo.patch \
+	file://0074-arm64-dts-imx8mp-Fix-property-indent-on-DH-i.MX8M-Pl.patch \
+	file://0075-arm64-dts-imx8mp-Switch-WiFI-enable-signal-to-mmc-pw.patch \
+	file://0076-arm64-dts-imx8mp-Add-UART1-and-RTC-wake-up-source-on.patch \
+	file://0077-arm64-dts-imx8mp-Simplify-USB-C-on-DH-i.MX8M-Plus-DH.patch \
+	file://0078-rtc-rv3032-use-IRQ-flags-obtained-from-fwnode.patch \
+	file://0079-iio-adc-ti-ads1015-Add-edge-trigger-support.patch \
+	file://0080-arm64-dts-imx8mp-Update-i.MX8MP-DHCOM-SoM-DT-to-prod.patch \
+	file://0081-arm64-dts-imx8mp-Drop-i.MX8MP-DHCOM-rev.100-PHY-addr.patch \
+	file://0082-arm64-dts-imx8mp-Add-DT-overlay-describing-i.MX8MP-D.patch \
 	"
 
 # Inject extra config options into kernel config this way,

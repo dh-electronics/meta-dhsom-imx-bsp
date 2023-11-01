@@ -1,6 +1,6 @@
-From f2cf520e4a956507235f54e28b3260261511245b Mon Sep 17 00:00:00 2001
+From 5680f62f2575765557f366ca0d8de057d151290b Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
-Date: Sun, 27 Aug 2023 23:17:34 +0200
+Date: Thu, 21 Sep 2023 21:29:33 +0200
 Subject: [PATCH 82/83] arm64: dts: imx8mp: Drop i.MX8MP DHCOM rev.100 PHY
  address workaround from PDK3 DT
 
@@ -10,17 +10,18 @@ by the carrier board and changed the PHY MDIO address from 5 to 7.
 This has been fixed on production rev.200 SoM by additional buffer
 on the SoM PHYAD/LED signals, remove the workaround.
 
-Upstream-Status: Submitted [https://patchwork.kernel.org/project/linux-arm-kernel/patch/20230921192933.71639-2-marex@denx.de/]
+Upstream-Status: Backport [2651723668870357ab2786985004235a74fdccad]
 Signed-off-by: Marek Vasut <marex@denx.de>
+Signed-off-by: Shawn Guo <shawnguo@kernel.org>
 ---
  arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3.dts | 4 ----
  1 file changed, 4 deletions(-)
 
 diff --git a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3.dts b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3.dts
-index 5926161694940..c415adbcdac2f 100644
+index 0668664624650..0c2e0895be0a5 100644
 --- a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3.dts
 +++ b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3.dts
-@@ -213,10 +213,6 @@ i2cmuxed1: i2c@1 {	/* HDMI DDC I2C */
+@@ -205,10 +205,6 @@ i2cmuxed1: i2c@1 {	/* HDMI DDC I2C */
  	};
  };
  
@@ -32,5 +33,5 @@ index 5926161694940..c415adbcdac2f 100644
  	pinctrl-0 = <&pinctrl_fec_rgmii>;
  	phy-handle = <&ethphypdk>;
 -- 
-2.40.1
+2.42.0
 

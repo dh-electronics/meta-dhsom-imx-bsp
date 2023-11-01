@@ -1,7 +1,7 @@
-From b2a10c41f76ec844265aa23bbe4dfa1407bc190e Mon Sep 17 00:00:00 2001
+From f57d61c97ded1a0f338f715c18df2b1cd9fe9cfc Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
 Date: Sat, 18 Feb 2023 20:20:53 +0100
-Subject: [PATCH 71/73] arm64: dts: imx8mp: Enable HDMI on MX8MP DHCOM PDK3
+Subject: [PATCH 71/83] arm64: dts: imx8mp: Enable HDMI on MX8MP DHCOM PDK3
 
 Enable HDMI output on MX8MP DHCOM PDK3. The I2C mux port 1 is used
 instead of HDMI DDC I2C5 to permit connection of other I2C devices
@@ -19,10 +19,10 @@ To: linux-arm-kernel@lists.infradead.org
  1 file changed, 11 insertions(+)
 
 diff --git a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3.dts b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3.dts
-index d2fa7a9d72961..75937c5766210 100644
+index 2ae7e893c2908..a18aadbf07b65 100644
 --- a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3.dts
 +++ b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3.dts
-@@ -285,6 +285,17 @@ &flexcan1 {
+@@ -276,6 +276,17 @@ &flexcan1 {
  	status = "okay";
  };
  
@@ -38,8 +38,8 @@ index d2fa7a9d72961..75937c5766210 100644
 +};
 +
  &pcie_phy {
- 	clocks = <&pcieclk 1>;
+ 	clocks = <&clk_pcie>;
  	clock-names = "ref";
 -- 
-2.39.1
+2.42.0
 

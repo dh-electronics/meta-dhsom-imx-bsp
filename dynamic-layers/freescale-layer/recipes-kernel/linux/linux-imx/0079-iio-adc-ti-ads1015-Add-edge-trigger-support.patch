@@ -1,14 +1,16 @@
-From 6380e5b323cbd0e0f31ac3767f93e8cf360163f9 Mon Sep 17 00:00:00 2001
+From c0bb08075f5f29991fb1664b03c049cfdedfedaa Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
-Date: Mon, 28 Aug 2023 04:48:34 +0200
+Date: Thu, 31 Aug 2023 20:25:02 +0200
 Subject: [PATCH 80/83] iio: adc: ti-ads1015: Add edge trigger support
 
 The comparator generates an edge on the IRQ like and stays in the
 configured state until cleared. Support edge triggered IRQs as well
 as not all controllers do support level triggered IRQ.
 
-Upstream-Status: Submitted [https://patchwork.kernel.org/project/linux-iio/patch/20230831182502.154899-1-marex@denx.de/]
+Upstream-Status: Backport [17f961a6555ae38490cfcc39f12c0c014cbd2617]
 Signed-off-by: Marek Vasut <marex@denx.de>
+Link: https://lore.kernel.org/r/20230831182502.154899-1-marex@denx.de
+Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 ---
  drivers/iio/adc/ti-ads1015.c | 2 ++
  1 file changed, 2 insertions(+)
@@ -32,5 +34,5 @@ index 5544da80b6369..68ac0222bf530 100644
  					ADS1015_CFG_COMP_POL_SHIFT;
  			break;
 -- 
-2.40.1
+2.42.0
 

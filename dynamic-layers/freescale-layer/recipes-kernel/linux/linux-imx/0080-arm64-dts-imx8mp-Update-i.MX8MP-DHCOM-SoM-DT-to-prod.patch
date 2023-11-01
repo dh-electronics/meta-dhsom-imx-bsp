@@ -1,6 +1,6 @@
-From 7e87fe8994f8ec1b93e4846391bc46ecbedb8f7f Mon Sep 17 00:00:00 2001
+From e7ef222554b42c8824cdef35230cb17c2f8108ea Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
-Date: Tue, 8 Aug 2023 00:39:46 +0200
+Date: Thu, 21 Sep 2023 21:29:32 +0200
 Subject: [PATCH 81/83] arm64: dts: imx8mp: Update i.MX8MP DHCOM SoM DT to
  production rev.200
 
@@ -12,14 +12,15 @@ following changes:
 - ADC upgraded from TLA2024 to ADS1015 with conversion interrupt
 - EEPROM size increased from 256 B to 4 kiB
 
-Upstream-Status: Submitted [https://patchwork.kernel.org/project/linux-arm-kernel/patch/20230921192933.71639-1-marex@denx.de/]
+Upstream-Status: Backport [320371562fae19b513668974fc58ffff91673435]
 Signed-off-by: Marek Vasut <marex@denx.de>
+Signed-off-by: Shawn Guo <shawnguo@kernel.org>
 ---
  .../boot/dts/freescale/imx8mp-dhcom-som.dtsi  | 145 +++++++++++-------
  1 file changed, 90 insertions(+), 55 deletions(-)
 
 diff --git a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-som.dtsi b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-som.dtsi
-index 30fd285eac0c2..e3e577df598b0 100644
+index 8b8b651a6fd17..248ca2b76e78a 100644
 --- a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-som.dtsi
 +++ b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-som.dtsi
 @@ -26,9 +26,7 @@ memory@40000000 {
@@ -60,7 +61,7 @@ index 30fd285eac0c2..e3e577df598b0 100644
  			/* Default PHY population option. */
  			status = "okay";
  		};
-@@ -357,8 +355,9 @@ ldo5: LDO5 {	/* NVCC_SD2 */
+@@ -356,8 +354,9 @@ ldo5: LDO5 {	/* NVCC_SD2 */
  	};
  
  	adc@48 {
@@ -71,7 +72,7 @@ index 30fd285eac0c2..e3e577df598b0 100644
  		#address-cells = <1>;
  		#size-cells = <0>;
  
-@@ -405,25 +404,42 @@ touchscreen@49 {
+@@ -404,25 +403,42 @@ touchscreen@49 {
  	};
  
  	eeprom0: eeprom@50 {	/* EEPROM with EQoS MAC address */
@@ -121,7 +122,7 @@ index 30fd285eac0c2..e3e577df598b0 100644
  };
  
  &i2c4 {
-@@ -496,10 +512,8 @@ &uart2 {
+@@ -495,10 +511,8 @@ &uart2 {
  	assigned-clock-rates = <80000000>;
  
  	bluetooth {
@@ -133,7 +134,7 @@ index 30fd285eac0c2..e3e577df598b0 100644
  		max-speed = <4000000>;
  	};
  };
-@@ -526,8 +540,6 @@ &usb3_0 {
+@@ -525,8 +539,6 @@ &usb3_0 {
  };
  
  &usb_dwc3_0 {
@@ -142,7 +143,7 @@ index 30fd285eac0c2..e3e577df598b0 100644
  	dr_mode = "otg";
  	status = "okay";
  };
-@@ -613,8 +625,9 @@ &pinctrl_dhcom_a &pinctrl_dhcom_b &pinctrl_dhcom_c
+@@ -612,8 +624,9 @@ &pinctrl_dhcom_a &pinctrl_dhcom_b &pinctrl_dhcom_c
  		     &pinctrl_dhcom_d &pinctrl_dhcom_e &pinctrl_dhcom_f
  		     &pinctrl_dhcom_g &pinctrl_dhcom_h &pinctrl_dhcom_i
  		     &pinctrl_dhcom_j &pinctrl_dhcom_k &pinctrl_dhcom_l
@@ -154,7 +155,7 @@ index 30fd285eac0c2..e3e577df598b0 100644
  	pinctrl-names = "default";
  
  	pinctrl_dhcom_a: dhcom-a-grp {
-@@ -701,6 +714,55 @@ MX8MP_IOMUXC_GPIO1_IO07__GPIO1_IO07		0x2
+@@ -700,6 +713,55 @@ MX8MP_IOMUXC_GPIO1_IO07__GPIO1_IO07		0x2
  		>;
  	};
  
@@ -210,7 +211,7 @@ index 30fd285eac0c2..e3e577df598b0 100644
  	pinctrl_dhcom_int: dhcom-int-grp {
  		fsl,pins = <
  			/* INT_HIGHEST_PRIO */
-@@ -774,16 +836,8 @@ MX8MP_IOMUXC_ENET_TD2__CCM_ENET_QOS_CLOCK_GENERATE_REF_CLK	0x4000001f
+@@ -773,16 +835,8 @@ MX8MP_IOMUXC_ENET_TD2__CCM_ENET_QOS_CLOCK_GENERATE_REF_CLK	0x4000001f
  		>;
  	};
  
@@ -227,7 +228,7 @@ index 30fd285eac0c2..e3e577df598b0 100644
  			/* ENET_QOS_#INT Interrupt */
  			MX8MP_IOMUXC_SAI5_RXFS__GPIO3_IO19		0x22
  		>;
-@@ -909,6 +963,13 @@ MX8MP_IOMUXC_HDMI_DDC_SDA__GPIO3_IO27		0x84
+@@ -908,6 +962,13 @@ MX8MP_IOMUXC_HDMI_DDC_SDA__GPIO3_IO27		0x84
  		>;
  	};
  
@@ -241,7 +242,7 @@ index 30fd285eac0c2..e3e577df598b0 100644
  	pinctrl_pmic: dhcom-pmic-grp {
  		fsl,pins = <
  			/* PMIC_nINT */
-@@ -922,13 +983,6 @@ MX8MP_IOMUXC_GPIO1_IO01__PWM1_OUT		0x6
+@@ -921,13 +982,6 @@ MX8MP_IOMUXC_GPIO1_IO01__PWM1_OUT		0x6
  		>;
  	};
  
@@ -255,7 +256,7 @@ index 30fd285eac0c2..e3e577df598b0 100644
  	pinctrl_tc9595: dhcom-tc9595-grp {
  		fsl,pins = <
  			/* RESET_DSIBRIDGE */
-@@ -965,13 +1019,6 @@ MX8MP_IOMUXC_SD1_DATA5__UART2_DCE_CTS		0x49
+@@ -973,13 +1027,6 @@ MX8MP_IOMUXC_SD1_DATA5__UART2_DCE_CTS		0x49
  		>;
  	};
  
@@ -269,7 +270,7 @@ index 30fd285eac0c2..e3e577df598b0 100644
  	pinctrl_uart3: dhcom-uart3-grp {
  		fsl,pins = <
  			MX8MP_IOMUXC_ECSPI1_SCLK__UART3_DCE_RX		0x49
-@@ -988,12 +1035,6 @@ MX8MP_IOMUXC_UART4_TXD__UART4_DCE_TX		0x49
+@@ -996,12 +1043,6 @@ MX8MP_IOMUXC_UART4_TXD__UART4_DCE_TX		0x49
  		>;
  	};
  
@@ -282,7 +283,7 @@ index 30fd285eac0c2..e3e577df598b0 100644
  	pinctrl_usb1_vbus: dhcom-usb1-grp {
  		fsl,pins = <
  			MX8MP_IOMUXC_GPIO1_IO14__USB2_PWR		0x6
-@@ -1009,8 +1050,6 @@ MX8MP_IOMUXC_SD1_DATA0__USDHC1_DATA0		0x1d0
+@@ -1017,8 +1058,6 @@ MX8MP_IOMUXC_SD1_DATA0__USDHC1_DATA0		0x1d0
  			MX8MP_IOMUXC_SD1_DATA1__USDHC1_DATA1		0x1d0
  			MX8MP_IOMUXC_SD1_DATA2__USDHC1_DATA2		0x1d0
  			MX8MP_IOMUXC_SD1_DATA3__USDHC1_DATA3		0x1d0
@@ -291,7 +292,7 @@ index 30fd285eac0c2..e3e577df598b0 100644
  		>;
  	};
  
-@@ -1022,8 +1061,6 @@ MX8MP_IOMUXC_SD1_DATA0__USDHC1_DATA0		0x1d4
+@@ -1030,8 +1069,6 @@ MX8MP_IOMUXC_SD1_DATA0__USDHC1_DATA0		0x1d4
  			MX8MP_IOMUXC_SD1_DATA1__USDHC1_DATA1		0x1d4
  			MX8MP_IOMUXC_SD1_DATA2__USDHC1_DATA2		0x1d4
  			MX8MP_IOMUXC_SD1_DATA3__USDHC1_DATA3		0x1d4
@@ -300,7 +301,7 @@ index 30fd285eac0c2..e3e577df598b0 100644
  		>;
  	};
  
-@@ -1035,8 +1072,6 @@ MX8MP_IOMUXC_SD1_DATA0__USDHC1_DATA0		0x1d6
+@@ -1043,8 +1080,6 @@ MX8MP_IOMUXC_SD1_DATA0__USDHC1_DATA0		0x1d6
  			MX8MP_IOMUXC_SD1_DATA1__USDHC1_DATA1		0x1d6
  			MX8MP_IOMUXC_SD1_DATA2__USDHC1_DATA2		0x1d6
  			MX8MP_IOMUXC_SD1_DATA3__USDHC1_DATA3		0x1d6
@@ -310,5 +311,5 @@ index 30fd285eac0c2..e3e577df598b0 100644
  	};
  
 -- 
-2.40.1
+2.42.0
 

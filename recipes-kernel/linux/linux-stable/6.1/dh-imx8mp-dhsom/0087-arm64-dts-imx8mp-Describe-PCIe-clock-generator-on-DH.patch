@@ -1,6 +1,6 @@
-From 0d7381e308565ee27dc0767ce0e632b330b839f0 Mon Sep 17 00:00:00 2001
+From 5384fa548af3fcde776c0629c2f6f76d3673dbdb Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
-Date: Mon, 12 Dec 2022 03:00:51 +0100
+Date: Mon, 15 May 2023 17:51:02 +0200
 Subject: [PATCH 087/111] arm64: dts: imx8mp: Describe PCIe clock generator on
  DH electronics i.MX8M Plus DHCOM on PDK3
 
@@ -9,8 +9,9 @@ supply the PCIe clock lanes. This generator is always on, unless external
 CLKREQ signal toggles an output off, but this is handled in hardware. The
 generator does however have I2C interface, describe it in DT.
 
-Upstream-Status: Submitted [https://patchwork.kernel.org/project/linux-arm-kernel/patch/20230515155102.61227-1-marex@denx.de/]
+Upstream-Status: Backport [64d45a1a27159229fd55deab9eb2001add8adc9b]
 Signed-off-by: Marek Vasut <marex@denx.de>
+Signed-off-by: Shawn Guo <shawnguo@kernel.org>
 ---
  arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3.dts | 13 ++++++++++---
  1 file changed, 10 insertions(+), 3 deletions(-)

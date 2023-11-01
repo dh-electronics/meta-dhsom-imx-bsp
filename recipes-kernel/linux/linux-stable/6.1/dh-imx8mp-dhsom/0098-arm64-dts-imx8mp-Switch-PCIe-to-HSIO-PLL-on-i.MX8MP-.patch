@@ -1,6 +1,6 @@
-From 213c1d09664dc2cb8173170076befe7225273a1c Mon Sep 17 00:00:00 2001
+From 11c7e01aa29f43c5337dde46c314fccb8449b49f Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
-Date: Tue, 22 Aug 2023 02:28:09 +0200
+Date: Tue, 22 Aug 2023 02:50:07 +0200
 Subject: [PATCH 098/111] arm64: dts: imx8mp: Switch PCIe to HSIO PLL on
  i.MX8MP DHCOM PDK2 and generate clock from SoC
 
@@ -16,14 +16,15 @@ working PCIe.
 Note that PDK3 has PCIe clock generator always connected to REF_PAD_CLK
 and is not affected.
 
-Upstream-Status: Submitted [https://patchwork.kernel.org/project/linux-arm-kernel/patch/20230822005007.128571-1-marex@denx.de/]
+Upstream-Status: Backport [929dcf7dce56ea03795b7293975687d252c29215]
 Signed-off-by: Marek Vasut <marex@denx.de>
+Signed-off-by: Shawn Guo <shawnguo@kernel.org>
 ---
  arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk2.dts | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk2.dts b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk2.dts
-index 3dadd977693b0..cb471c22a3352 100644
+index 87263136f4674..bc9ba83667f60 100644
 --- a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk2.dts
 +++ b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk2.dts
 @@ -197,9 +197,9 @@ &hdmi_tx_phy {

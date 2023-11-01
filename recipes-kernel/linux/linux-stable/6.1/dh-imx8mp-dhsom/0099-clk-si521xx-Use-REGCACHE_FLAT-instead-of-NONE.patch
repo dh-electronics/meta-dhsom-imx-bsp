@@ -1,6 +1,6 @@
-From 25d5bf78103f82e4915b5f38decdd1e69f39c7ab Mon Sep 17 00:00:00 2001
+From 892120c52d25727c7c8701e12cce51c5502cbfb0 Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
-Date: Thu, 31 Aug 2023 05:25:20 +0200
+Date: Thu, 31 Aug 2023 20:16:55 +0200
 Subject: [PATCH 099/111] clk: si521xx: Use REGCACHE_FLAT instead of NONE
 
 In order to reload registers into the clock generator on resume using
@@ -9,9 +9,11 @@ which are not NONE. Since this device has some 7 registers, use the
 simplest one, FLAT. The regcache code complains about REGCACHE_NONE
 being selected and generates a WARNING, this fixes that warning.
 
-Upstream-Status: Submitted [https://patchwork.kernel.org/project/linux-clk/patch/20230831181656.154750-1-marex@denx.de/]
+Upstream-Status: Backport [f03a562450eef35b785a814005ed164a89dfb2db]
 Fixes: edc12763a3a2 ("clk: si521xx: Clock driver for Skyworks Si521xx I2C PCIe clock generators")
 Signed-off-by: Marek Vasut <marex@denx.de>
+Link: https://lore.kernel.org/r/20230831181656.154750-1-marex@denx.de
+Signed-off-by: Stephen Boyd <sboyd@kernel.org>
 ---
  drivers/clk/clk-si521xx.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)

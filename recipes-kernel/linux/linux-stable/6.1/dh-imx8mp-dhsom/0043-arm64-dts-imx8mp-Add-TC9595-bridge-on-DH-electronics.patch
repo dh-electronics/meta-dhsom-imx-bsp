@@ -1,6 +1,6 @@
-From 1f37c2786c7cc3cc8e6025ef52c6a0a74e0f1ea2 Mon Sep 17 00:00:00 2001
+From 677a4d31163a1db2d172c54d8f71e966af26193d Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
-Date: Fri, 22 Jul 2022 04:12:32 +0200
+Date: Mon, 15 May 2023 18:24:24 +0200
 Subject: [PATCH 043/111] arm64: dts: imx8mp: Add TC9595 bridge on DH
  electronics i.MX8M Plus DHCOM
 
@@ -9,8 +9,9 @@ DH electronics i.MX8M Plus DHCOM SoM . The bridge
 is populated on the SoM, but disabled by default
 unless used for display output.
 
-Upstream-Status: Submitted [https://lore.kernel.org/linux-arm-kernel/20230515162424.67597-1-marex@denx.de/T/#u]
+Upstream-Status: Backport [20d0b83e712b92163ddcfb313288272720272733]
 Signed-off-by: Marek Vasut <marex@denx.de>
+Signed-off-by: Shawn Guo <shawnguo@kernel.org>
 ---
  .../boot/dts/freescale/imx8mp-dhcom-som.dtsi  | 55 +++++++++++++++++++
  1 file changed, 55 insertions(+)

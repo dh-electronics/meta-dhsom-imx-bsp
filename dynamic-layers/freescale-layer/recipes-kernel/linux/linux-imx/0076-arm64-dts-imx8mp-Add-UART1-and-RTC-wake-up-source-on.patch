@@ -1,8 +1,8 @@
-From 26554f1e6956fa83d6ec9ca019bbe1e56dba9a96 Mon Sep 17 00:00:00 2001
+From 0d1df9714a4ae5aad473aca13ce27764d169c09f Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
 Date: Thu, 31 Aug 2023 20:20:20 +0200
-Subject: [PATCH 104/111] arm64: dts: imx8mp: Add UART1 and RTC wake up source
- on DH i.MX8M Plus DHCOM SoM
+Subject: [PATCH 77/83] arm64: dts: imx8mp: Add UART1 and RTC wake up source on
+ DH i.MX8M Plus DHCOM SoM
 
 Turn Console UART1 and dedicated RTC into wake up sources, to make
 it possible to wake on UART and RTC alarm.
@@ -15,10 +15,10 @@ Signed-off-by: Shawn Guo <shawnguo@kernel.org>
  1 file changed, 2 insertions(+)
 
 diff --git a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-som.dtsi b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-som.dtsi
-index 2f63e1d70baf8..8aecaa4286d36 100644
+index 0e8dd72e0480a..8b8b651a6fd17 100644
 --- a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-som.dtsi
 +++ b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-som.dtsi
-@@ -424,6 +424,7 @@ rv3032: rtc@51 {
+@@ -415,6 +415,7 @@ rv3032: rtc@51 {
  		interrupts-extended = <&gpio5 5 IRQ_TYPE_LEVEL_LOW>;
  		pinctrl-names = "default";
  		pinctrl-0 = <&pinctrl_rtc>;
@@ -26,7 +26,7 @@ index 2f63e1d70baf8..8aecaa4286d36 100644
  	};
  
  	eeprom1: eeprom@53 {	/* EEPROM with FEC MAC address */
-@@ -480,6 +481,7 @@ &uart1 {
+@@ -472,6 +473,7 @@ &uart1 {
  	pinctrl-names = "default";
  	pinctrl-0 = <&pinctrl_uart1>;
  	status = "okay";

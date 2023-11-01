@@ -1,7 +1,7 @@
-From b7c2fab35c5ad5cd8fd35ad41c0cd4a67fa2edd7 Mon Sep 17 00:00:00 2001
+From 10884c9e10124b6831f599956b0860f7b4ad6e4b Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
 Date: Thu, 31 Aug 2023 20:20:17 +0200
-Subject: [PATCH 101/111] arm64: dts: imx8mp: Describe VDD_ARM run and standby
+Subject: [PATCH 74/83] arm64: dts: imx8mp: Describe VDD_ARM run and standby
  voltage for DH i.MX8M Plus DHCOM SoM
 
 Describe VDD_ARM (BUCK2) run and standby voltage in DT.
@@ -15,13 +15,13 @@ Signed-off-by: Shawn Guo <shawnguo@kernel.org>
  1 file changed, 2 insertions(+)
 
 diff --git a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-som.dtsi b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-som.dtsi
-index 5dfafc6c681d4..7908515f3b5e5 100644
+index 18f342a498a03..86245099c3da7 100644
 --- a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-som.dtsi
 +++ b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-som.dtsi
-@@ -296,6 +296,8 @@ buck1: BUCK1 {	/* VDD_SOC (dual-phase with BUCK3) */
+@@ -294,6 +294,8 @@ buck1: BUCK1 {	/* VDD_SOC (dual-phase with BUCK3) */
+ 			};
  
  			buck2: BUCK2 {	/* VDD_ARM */
- 				regulator-compatible = "BUCK2";
 +				nxp,dvs-run-voltage = <950000>;
 +				nxp,dvs-standby-voltage = <850000>;
  				regulator-min-microvolt = <850000>;
