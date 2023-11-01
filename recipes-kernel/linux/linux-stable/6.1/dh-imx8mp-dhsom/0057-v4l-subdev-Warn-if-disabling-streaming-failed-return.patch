@@ -1,8 +1,8 @@
-From 692b0c5caca60af9f382c7b37d8849eb4c4071f8 Mon Sep 17 00:00:00 2001
+From deaeccecbe2911f3caaf08ac685fdd2d88fd0018 Mon Sep 17 00:00:00 2001
 From: Sakari Ailus <sakari.ailus@linux.intel.com>
 Date: Mon, 17 Oct 2022 10:04:32 +0300
-Subject: [PATCH 57/94] v4l: subdev: Warn if disabling streaming failed, return
- success
+Subject: [PATCH 057/111] v4l: subdev: Warn if disabling streaming failed,
+ return success
 
 Complain in the newly added s_stream video op wrapper if disabling
 streaming failed. Also return zero in this case as there's nothing the
@@ -69,5 +69,5 @@ index 2f80c9c818ed0..ccac82e0ad1e1 100644
   * @g_pixelaspect: callback to return the pixelaspect ratio.
   *
 -- 
-2.39.2
+2.42.0
 

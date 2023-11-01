@@ -1,7 +1,7 @@
-From 6f9e93a2da20a97c6f08d30cc839a822b3620d70 Mon Sep 17 00:00:00 2001
+From 6638f5ebfb906128e7536d9ee7aaf3cad4e227b9 Mon Sep 17 00:00:00 2001
 From: Lucas Stach <l.stach@pengutronix.de>
 Date: Fri, 16 Dec 2022 21:08:21 +0100
-Subject: [PATCH 97/98] arm64: dts: imx8mp: add clock-cells to hsio-blk-ctrl
+Subject: [PATCH 097/111] arm64: dts: imx8mp: add clock-cells to hsio-blk-ctrl
 
 The HSIO blk-ctrl exposes the high performance PLL as
 a simple clock.
@@ -28,5 +28,5 @@ index ab74306c952e5..5e025d96dc6a6 100644
  
  			hdmi_blk_ctrl: blk-ctrl@32fc0000 {
 -- 
-2.40.1
+2.42.0
 

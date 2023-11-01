@@ -1,7 +1,7 @@
-From e82760bb16c4a7c553eab24019756b0affcb3855 Mon Sep 17 00:00:00 2001
+From 86930390a3da8757559f48110796166ae3baefb3 Mon Sep 17 00:00:00 2001
 From: Jagan Teki <jagan@amarulasolutions.com>
 Date: Wed, 8 Mar 2023 22:09:44 +0530
-Subject: [PATCH 09/94] drm: exynos: dsi: Add atomic check
+Subject: [PATCH 009/111] drm: exynos: dsi: Add atomic check
 
 Look like an explicit fixing up of mode_flags is required for DSIM IP
 present in i.MX8M Mini/Nano SoCs.
@@ -91,5 +91,5 @@ index eb33c2bcac16d..df4d95ae8aada 100644
  	.atomic_enable			= exynos_dsi_atomic_enable,
  	.atomic_disable			= exynos_dsi_atomic_disable,
 -- 
-2.39.2
+2.42.0
 

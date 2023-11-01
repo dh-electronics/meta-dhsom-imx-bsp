@@ -1,8 +1,8 @@
-From 36c7d81f695b702d9a08e3caa83b8fc672b59f8d Mon Sep 17 00:00:00 2001
+From 1f37c2786c7cc3cc8e6025ef52c6a0a74e0f1ea2 Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
 Date: Fri, 22 Jul 2022 04:12:32 +0200
-Subject: [PATCH 43/94] arm64: dts: imx8mp: Add TC9595 bridge on DH electronics
- i.MX8M Plus DHCOM
+Subject: [PATCH 043/111] arm64: dts: imx8mp: Add TC9595 bridge on DH
+ electronics i.MX8M Plus DHCOM
 
 Add TC9595 DSI-to-DPI and DSI-to-(e)DP bridge to
 DH electronics i.MX8M Plus DHCOM SoM . The bridge
@@ -11,17 +11,6 @@ unless used for display output.
 
 Upstream-Status: Submitted [https://lore.kernel.org/linux-arm-kernel/20230515162424.67597-1-marex@denx.de/T/#u]
 Signed-off-by: Marek Vasut <marex@denx.de>
----
-Cc: Conor Dooley <conor+dt@kernel.org>
-Cc: Fabio Estevam <festevam@gmail.com>
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc: NXP Linux Team <linux-imx@nxp.com>
-Cc: Pengutronix Kernel Team <kernel@pengutronix.de>
-Cc: Rob Herring <robh+dt@kernel.org>
-Cc: Sascha Hauer <s.hauer@pengutronix.de>
-Cc: Shawn Guo <shawnguo@kernel.org>
-Cc: devicetree@vger.kernel.org
-Cc: linux-arm-kernel@lists.infradead.org
 ---
  .../boot/dts/freescale/imx8mp-dhcom-som.dtsi  | 55 +++++++++++++++++++
  1 file changed, 55 insertions(+)
@@ -107,5 +96,5 @@ index 590f580656785..7a45d7a4f9739 100644
  		fsl,pins = <
  			/* #TOUCH_INT */
 -- 
-2.39.2
+2.42.0
 

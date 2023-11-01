@@ -1,7 +1,8 @@
-From 22d46fd278a8cd6c95bc1cdc7be14ae02ac62b59 Mon Sep 17 00:00:00 2001
+From fbf1b6b1cc5d2ce306fcdd24eece5f6e3fa8ff91 Mon Sep 17 00:00:00 2001
 From: Jagan Teki <jagan@amarulasolutions.com>
 Date: Wed, 8 Mar 2023 22:09:51 +0530
-Subject: [PATCH 15/94] drm: bridge: samsung-dsim: Add i.MX8M Mini/Nano support
+Subject: [PATCH 015/111] drm: bridge: samsung-dsim: Add i.MX8M Mini/Nano
+ support
 
 Samsung MIPI DSIM master can also be found in i.MX8M Mini/Nano SoC.
 
@@ -99,5 +100,5 @@ index f9a5e69a0fcd4..f3bd06489a392 100644
  };
  MODULE_DEVICE_TABLE(of, samsung_dsim_of_match);
 -- 
-2.39.2
+2.42.0
 

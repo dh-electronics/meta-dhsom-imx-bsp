@@ -1,7 +1,7 @@
-From 474d127e318a58e15a25dd752317f7cf528c9255 Mon Sep 17 00:00:00 2001
+From a1c10e06509181a684491b94c535e343e1c19461 Mon Sep 17 00:00:00 2001
 From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Date: Tue, 18 Apr 2023 18:31:04 +0300
-Subject: [PATCH 80/94] arm64: dts: imx8mp: Add ISI DT node
+Subject: [PATCH 080/111] arm64: dts: imx8mp: Add ISI DT node
 
 Add a DT node for the i.MX8MP ISI instance, and model to connection to
 two CSI-2 receivers (CSIS).
@@ -82,5 +82,5 @@ index 11ec0ae5e2118..89853f66cf61c 100644
  				};
  			};
 -- 
-2.39.2
+2.42.0
 

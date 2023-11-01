@@ -1,7 +1,7 @@
-From 960f02e24fc7127ffc39b095b0ca05037e3ccc46 Mon Sep 17 00:00:00 2001
+From 68dc405557b93874542ee8777a12ba6fa4e3786b Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
 Date: Wed, 1 Mar 2023 17:32:54 +0100
-Subject: [PATCH 36/94] clk: imx: imx8mp: Add audiomix block control
+Subject: [PATCH 036/111] clk: imx: imx8mp: Add audiomix block control
 
 Unlike the other block control IPs in i.MX8M, the audiomix is mostly a
 series of clock gates and muxes. Model it as a large static table of
@@ -322,5 +322,5 @@ index 0000000000000..e4300df88f1ac
 +MODULE_DESCRIPTION("Freescale i.MX8MP Audio Block Controller driver");
 +MODULE_LICENSE("GPL");
 -- 
-2.39.2
+2.42.0
 

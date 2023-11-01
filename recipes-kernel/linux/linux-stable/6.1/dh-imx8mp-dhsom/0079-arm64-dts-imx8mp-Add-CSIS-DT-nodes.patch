@@ -1,7 +1,7 @@
-From 45306827c97ac98e1dd2b03d6d38fb73de24bd0b Mon Sep 17 00:00:00 2001
+From c0dbcc50e220fc0371311ff4e27c1f063424937d Mon Sep 17 00:00:00 2001
 From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Date: Tue, 18 Apr 2023 18:31:03 +0300
-Subject: [PATCH 79/94] arm64: dts: imx8mp: Add CSIS DT nodes
+Subject: [PATCH 079/111] arm64: dts: imx8mp: Add CSIS DT nodes
 
 Add DT nodes for the two CSI-2 receivers of the i.MX8MP.
 
@@ -85,5 +85,5 @@ index 403a6c35ce7bf..11ec0ae5e2118 100644
  				compatible = "fsl,imx8mp-pcie-phy";
  				reg = <0x32f00000 0x10000>;
 -- 
-2.39.2
+2.42.0
 

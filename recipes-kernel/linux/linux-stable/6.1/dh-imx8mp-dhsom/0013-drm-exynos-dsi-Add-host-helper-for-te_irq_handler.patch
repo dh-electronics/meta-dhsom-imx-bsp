@@ -1,7 +1,7 @@
-From f2c1041b5e47c8287bc3192b6af1a74c8a562375 Mon Sep 17 00:00:00 2001
+From 902d52281b08f3ea54c18691f817d65b34be3262 Mon Sep 17 00:00:00 2001
 From: Jagan Teki <jagan@amarulasolutions.com>
 Date: Wed, 8 Mar 2023 22:09:48 +0530
-Subject: [PATCH 13/94] drm: exynos: dsi: Add host helper for te_irq_handler
+Subject: [PATCH 013/111] drm: exynos: dsi: Add host helper for te_irq_handler
 
 IRQ handler for te-gpio seems to be common across DSIM host.
 
@@ -79,5 +79,5 @@ index 01ed1677a4fd9..b75b5cc88bc85 100644
  
  static const struct exynos_dsi_plat_data exynos3250_dsi_pdata = {
 -- 
-2.39.2
+2.42.0
 

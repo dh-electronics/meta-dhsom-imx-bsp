@@ -1,8 +1,8 @@
-From b12c43dd9be29d073748360da229b2ded9fa4349 Mon Sep 17 00:00:00 2001
+From 2bfc557d08cda71be21a24509cf99c97aaf1b425 Mon Sep 17 00:00:00 2001
 From: Lucas Stach <l.stach@pengutronix.de>
 Date: Fri, 16 Dec 2022 22:07:40 +0100
-Subject: [PATCH 26/94] drm/bridge: imx: add bridge wrapper driver for i.MX8MP
- DWC HDMI
+Subject: [PATCH 026/111] drm/bridge: imx: add bridge wrapper driver for
+ i.MX8MP DWC HDMI
 
 Add a simple wrapper driver for the DWC HDMI bridge driver that
 implements the few bits that are necessary to abstract the i.MX8MP
@@ -194,5 +194,5 @@ index 0000000000000..06849b817aedd
 +MODULE_DESCRIPTION("i.MX8MP HDMI encoder driver");
 +MODULE_LICENSE("GPL");
 -- 
-2.39.2
+2.42.0
 

@@ -1,7 +1,7 @@
-From 9b07b6088194a36cd20fc059eb1c8baa74b37dfc Mon Sep 17 00:00:00 2001
+From d4d780833583fe83c5c1f22511876a977a7e7f2a Mon Sep 17 00:00:00 2001
 From: Lucas Stach <l.stach@pengutronix.de>
 Date: Fri, 6 May 2022 20:10:32 +0200
-Subject: [PATCH 29/94] arm64: dts: imx8mp: add HDMI irqsteer
+Subject: [PATCH 029/111] arm64: dts: imx8mp: add HDMI irqsteer
 
 The HDMI irqsteer is a secondary interrupt controller within the HDMI
 subsystem that maps all HDMI peripheral IRQs into a single upstream
@@ -38,5 +38,5 @@ index 7e90045e46d03..c64070634b8c0 100644
  
  		pcie: pcie@33800000 {
 -- 
-2.39.2
+2.42.0
 

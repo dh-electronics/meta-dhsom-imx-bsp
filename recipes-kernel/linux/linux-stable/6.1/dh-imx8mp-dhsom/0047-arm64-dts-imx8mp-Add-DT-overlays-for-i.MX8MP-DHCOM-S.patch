@@ -1,7 +1,7 @@
-From 5ce42b9b754137274cd274caba4b2a4313f9fcac Mon Sep 17 00:00:00 2001
+From 259694eee142190ed00835bcf1bb98cfd301f5c6 Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
 Date: Sat, 18 Feb 2023 23:55:05 +0100
-Subject: [PATCH 47/94] arm64: dts: imx8mp: Add DT overlays for i.MX8MP DHCOM
+Subject: [PATCH 047/111] arm64: dts: imx8mp: Add DT overlays for i.MX8MP DHCOM
  SoM
 
 Add DT overlays to support:
@@ -21,10 +21,10 @@ Signed-off-by: Marek Vasut <marex@denx.de>
  create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-dhcom-som-overlay-eth2xfast.dts
 
 diff --git a/arch/arm64/boot/dts/freescale/Makefile b/arch/arm64/boot/dts/freescale/Makefile
-index 049e42d9e0487..08b761ee4ce55 100644
+index f8768440b19f6..443e913196964 100644
 --- a/arch/arm64/boot/dts/freescale/Makefile
 +++ b/arch/arm64/boot/dts/freescale/Makefile
-@@ -84,6 +84,9 @@ dtb-$(CONFIG_ARCH_MXC) += imx8mn-ddr4-evk.dtb
+@@ -85,6 +85,9 @@ dtb-$(CONFIG_ARCH_MXC) += imx8mn-ddr4-evk.dtb
  dtb-$(CONFIG_ARCH_MXC) += imx8mn-tqma8mqnl-mba8mx.dtb
  dtb-$(CONFIG_ARCH_MXC) += imx8mn-var-som-symphony.dtb
  dtb-$(CONFIG_ARCH_MXC) += imx8mn-venice-gw7902.dtb
@@ -52,7 +52,7 @@ index 0000000000000..3b397776920c1
 +};
 diff --git a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-som-overlay-eth1xfast.dts b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-som-overlay-eth1xfast.dts
 new file mode 100644
-index 0000000000000..0536938c17c3d
+index 0000000000000..bb5a2b6817540
 --- /dev/null
 +++ b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-som-overlay-eth1xfast.dts
 @@ -0,0 +1,43 @@
@@ -101,7 +101,7 @@ index 0000000000000..0536938c17c3d
 +};
 diff --git a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-som-overlay-eth2xfast.dts b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-som-overlay-eth2xfast.dts
 new file mode 100644
-index 0000000000000..bfca20733345b
+index 0000000000000..82dadcea96cb6
 --- /dev/null
 +++ b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-som-overlay-eth2xfast.dts
 @@ -0,0 +1,24 @@
@@ -130,5 +130,5 @@ index 0000000000000..bfca20733345b
 +	status = "okay";
 +};
 -- 
-2.39.2
+2.42.0
 

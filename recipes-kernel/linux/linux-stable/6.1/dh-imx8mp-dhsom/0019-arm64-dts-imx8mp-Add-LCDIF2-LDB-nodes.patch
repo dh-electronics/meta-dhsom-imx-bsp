@@ -1,7 +1,7 @@
-From b1bdfd9cd32f5fbaea35055427d9212e0842a0e3 Mon Sep 17 00:00:00 2001
+From 10f17aa9a572d141a88ad9c633504460d3e67abc Mon Sep 17 00:00:00 2001
 From: Alexander Stein <alexander.stein@ew.tq-group.com>
 Date: Thu, 8 Dec 2022 10:08:41 +0100
-Subject: [PATCH 19/94] arm64: dts: imx8mp: Add LCDIF2 & LDB nodes
+Subject: [PATCH 019/111] arm64: dts: imx8mp: Add LCDIF2 & LDB nodes
 
 LCDIF2 is directly attached to the LVDS Display Bridge (LDB).
 Both need the same clock source (VIDEO_PLL1).
@@ -102,5 +102,5 @@ index 25630a395db56..8fca629103054 100644
  
  			pcie_phy: pcie-phy@32f00000 {
 -- 
-2.39.2
+2.42.0
 

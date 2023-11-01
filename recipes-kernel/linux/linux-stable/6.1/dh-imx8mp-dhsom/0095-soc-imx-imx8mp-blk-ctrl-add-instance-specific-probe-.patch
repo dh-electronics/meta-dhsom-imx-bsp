@@ -1,8 +1,8 @@
-From d60a6d9ec13550a0f3fb72faaa088201047b9474 Mon Sep 17 00:00:00 2001
+From 78bfddbfd8d01cd67ca8df5c783944e08177b0a1 Mon Sep 17 00:00:00 2001
 From: Lucas Stach <l.stach@pengutronix.de>
 Date: Fri, 16 Dec 2022 21:08:19 +0100
-Subject: [PATCH 95/98] soc: imx: imx8mp-blk-ctrl: add instance specific probe
- function
+Subject: [PATCH 095/111] soc: imx: imx8mp-blk-ctrl: add instance specific
+ probe function
 
 Allow the specific blk-ctrl instance to define a function, which will
 be called during probe to provide device specific extensions.
@@ -42,5 +42,5 @@ index 0f13853901dfe..b48c1cb3331fd 100644
  
  	return 0;
 -- 
-2.40.1
+2.42.0
 

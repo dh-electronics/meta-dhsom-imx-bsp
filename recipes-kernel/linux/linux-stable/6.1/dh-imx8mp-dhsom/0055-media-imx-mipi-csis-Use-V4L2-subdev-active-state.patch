@@ -1,7 +1,7 @@
-From 53cfa2ed06f5d3a0c6c43cc94daa01614f08be2e Mon Sep 17 00:00:00 2001
+From f174a0c5d0f09ecfcd2faaee8e89f77ecbf4ed18 Mon Sep 17 00:00:00 2001
 From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Date: Thu, 26 Jan 2023 02:10:01 +0100
-Subject: [PATCH 55/94] media: imx-mipi-csis: Use V4L2 subdev active state
+Subject: [PATCH 055/111] media: imx-mipi-csis: Use V4L2 subdev active state
 
 Use the V4L2 subdev active state API to store the active format. This
 simplifies the driver not only by dropping the mipi_csis_device csis_fmt
@@ -350,5 +350,5 @@ index 38ed88646632a..9e424cb1c4b10 100644
  
  	return 0;
 -- 
-2.39.2
+2.42.0
 

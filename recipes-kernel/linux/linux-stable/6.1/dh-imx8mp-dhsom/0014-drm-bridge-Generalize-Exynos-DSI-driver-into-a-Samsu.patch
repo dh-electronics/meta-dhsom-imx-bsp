@@ -1,7 +1,7 @@
-From a6779e1d17e052837c030b084ecbe568ba72abe3 Mon Sep 17 00:00:00 2001
+From 98ddcc5666fd7b2158ea9bb513c018bcd8fb886a Mon Sep 17 00:00:00 2001
 From: Jagan Teki <jagan@amarulasolutions.com>
 Date: Wed, 8 Mar 2023 22:09:49 +0530
-Subject: [PATCH 14/94] drm: bridge: Generalize Exynos-DSI driver into a
+Subject: [PATCH 014/111] drm: bridge: Generalize Exynos-DSI driver into a
  Samsung DSIM bridge
 
 Samsung MIPI DSIM controller is common DSI IP that can be used in various
@@ -34,7 +34,7 @@ Signed-off-by: Inki Dae <inki.dae@samsung.com>
  create mode 100644 include/drm/bridge/samsung-dsim.h
 
 diff --git a/MAINTAINERS b/MAINTAINERS
-index 350d7e3ba94f9..47dcacf0cb312 100644
+index 07a9c274c0e29..97c7607b32405 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
 @@ -6665,6 +6665,15 @@ T:	git git://anongit.freedesktop.org/drm/drm-misc
@@ -4290,5 +4290,5 @@ index 0000000000000..3e395d38e1df1
 +
 +#endif /* __SAMSUNG_DSIM__ */
 -- 
-2.39.2
+2.42.0
 

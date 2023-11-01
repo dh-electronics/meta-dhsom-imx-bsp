@@ -1,7 +1,7 @@
-From b5433aca68369dfdb1c74696dcfef12f09ddf065 Mon Sep 17 00:00:00 2001
+From add57b10f11f0545abbe4afb7aed84bce8dae1de Mon Sep 17 00:00:00 2001
 From: "Guoniu.zhou" <guoniu.zhou@nxp.com>
 Date: Fri, 2 Dec 2022 13:00:00 +0000
-Subject: [PATCH 49/94] media: ov5640: report correct frame rate to user
+Subject: [PATCH 049/111] media: ov5640: report correct frame rate to user
 
 In commit 3145efcdb4d0 ("media: ov5640: Rework timings programming"),
 it defines max_fps field in ov5640_mode_info structure to store maximum
@@ -21,10 +21,10 @@ Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
  1 file changed, 12 insertions(+), 10 deletions(-)
 
 diff --git a/drivers/media/i2c/ov5640.c b/drivers/media/i2c/ov5640.c
-index 267f514023e72..16ca9dbf15442 100644
+index 2ee832426736d..6154071341f93 100644
 --- a/drivers/media/i2c/ov5640.c
 +++ b/drivers/media/i2c/ov5640.c
-@@ -2739,20 +2739,20 @@ static int ov5640_sensor_resume(struct device *dev)
+@@ -2735,20 +2735,20 @@ static int ov5640_sensor_resume(struct device *dev)
  
  static int ov5640_try_frame_interval(struct ov5640_dev *sensor,
  				     struct v4l2_fract *fi,
@@ -49,7 +49,7 @@ index 267f514023e72..16ca9dbf15442 100644
  		goto find_mode;
  	}
  
-@@ -2773,7 +2773,7 @@ static int ov5640_try_frame_interval(struct ov5640_dev *sensor,
+@@ -2769,7 +2769,7 @@ static int ov5640_try_frame_interval(struct ov5640_dev *sensor,
  	fi->denominator = best_fps;
  
  find_mode:
@@ -58,7 +58,7 @@ index 267f514023e72..16ca9dbf15442 100644
  	return mode ? rate : -EINVAL;
  }
  
-@@ -3578,6 +3578,7 @@ static int ov5640_enum_frame_interval(
+@@ -3574,6 +3574,7 @@ static int ov5640_enum_frame_interval(
  	struct v4l2_subdev_frame_interval_enum *fie)
  {
  	struct ov5640_dev *sensor = to_ov5640_dev(sd);
@@ -66,7 +66,7 @@ index 267f514023e72..16ca9dbf15442 100644
  	struct v4l2_fract tpf;
  	int ret;
  
-@@ -3586,11 +3587,14 @@ static int ov5640_enum_frame_interval(
+@@ -3582,11 +3583,14 @@ static int ov5640_enum_frame_interval(
  	if (fie->index >= OV5640_NUM_FRAMERATES)
  		return -EINVAL;
  
@@ -83,7 +83,7 @@ index 267f514023e72..16ca9dbf15442 100644
  	if (ret < 0)
  		return -EINVAL;
  
-@@ -3629,9 +3633,7 @@ static int ov5640_s_frame_interval(struct v4l2_subdev *sd,
+@@ -3625,9 +3629,7 @@ static int ov5640_s_frame_interval(struct v4l2_subdev *sd,
  
  	mode = sensor->current_mode;
  
@@ -95,5 +95,5 @@ index 267f514023e72..16ca9dbf15442 100644
  		/* Always return a valid frame interval value */
  		fi->interval = sensor->frame_interval;
 -- 
-2.39.2
+2.42.0
 

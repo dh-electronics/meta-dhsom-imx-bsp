@@ -1,7 +1,7 @@
-From 789e70011a6efdb3965f1ae8243f4f71e677338a Mon Sep 17 00:00:00 2001
+From a105e7657026360b7cfe63ef7f4851e98cdf5791 Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
 Date: Mon, 27 Feb 2023 16:54:21 +0100
-Subject: [PATCH 92/94] soc: imx: imx8m-blk-ctrl: Scan subnodes and bind
+Subject: [PATCH 092/111] soc: imx: imx8m-blk-ctrl: Scan subnodes and bind
  drivers to them
 
 This particular block can have DT subnodes describing the LVDS LDB
@@ -33,5 +33,5 @@ index 00879615a7015..328161b337395 100644
  
  cleanup_provider:
 -- 
-2.39.2
+2.42.0
 

@@ -1,7 +1,7 @@
-From 4040a2f72dace351dda7c4015f7f2ab907a4fdc6 Mon Sep 17 00:00:00 2001
+From 7b588e8a53867ba602f3f7c4703a7d852ef6f48b Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
 Date: Fri, 17 Feb 2023 20:26:46 +0100
-Subject: [PATCH 84/94] arm64: dts: imx8mp: Add EQoS RMII pin mux on i.MX8MP
+Subject: [PATCH 084/111] arm64: dts: imx8mp: Add EQoS RMII pin mux on i.MX8MP
  DHCOM
 
 The i.MX8MP DHCOM SoM may come with either KSZ9131RNXI RGMII PHY
@@ -62,5 +62,5 @@ index 8ec99811a0714..2dd54421a5e26 100644
  		fsl,pins = <
  			MX8MP_IOMUXC_SD1_RESET_B__GPIO2_IO10		0x22
 -- 
-2.39.2
+2.42.0
 

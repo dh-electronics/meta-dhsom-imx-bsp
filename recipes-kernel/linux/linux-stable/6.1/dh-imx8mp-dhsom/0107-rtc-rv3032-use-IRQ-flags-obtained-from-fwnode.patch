@@ -1,7 +1,7 @@
-From 4831233b289562ff62607e2f98ec279ef7a836f7 Mon Sep 17 00:00:00 2001
+From d183b5a9496ec1a1eb746a898b60690637828f7f Mon Sep 17 00:00:00 2001
 From: Alexandre Belloni <alexandre.belloni@bootlin.com>
 Date: Mon, 23 Jan 2023 21:02:16 +0100
-Subject: [PATCH 106/110] rtc: rv3032: use IRQ flags obtained from fwnode
+Subject: [PATCH 107/111] rtc: rv3032: use IRQ flags obtained from fwnode
 
 Allow the IRQ type to be passed from the device tree if available as there
 may be components changing the trigger type of the interrupt between the
@@ -35,5 +35,5 @@ index c3bee305eacc6..bf6954ec5943e 100644
  		if (ret) {
  			dev_warn(&client->dev, "unable to request IRQ, alarms disabled\n");
 -- 
-2.40.1
+2.42.0
 

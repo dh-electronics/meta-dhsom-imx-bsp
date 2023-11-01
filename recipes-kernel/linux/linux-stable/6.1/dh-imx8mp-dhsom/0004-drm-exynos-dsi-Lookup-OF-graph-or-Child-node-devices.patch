@@ -1,7 +1,8 @@
-From ae7520af8f3b17f71ccccef6af7bd552856266db Mon Sep 17 00:00:00 2001
+From 9c3ae180177e59defd5f3d429a71c506cc7e2976 Mon Sep 17 00:00:00 2001
 From: Jagan Teki <jagan@amarulasolutions.com>
 Date: Wed, 8 Mar 2023 22:09:39 +0530
-Subject: [PATCH 04/94] drm: exynos: dsi: Lookup OF-graph or Child node devices
+Subject: [PATCH 004/111] drm: exynos: dsi: Lookup OF-graph or Child node
+ devices
 
 In general, for MIPI DSI there are three ways to represent the
 pipeline for an upstream bridge to find the connected downstream
@@ -197,5 +198,5 @@ index df15501b10752..bb0d2502ea02d 100644
  		ret = PTR_ERR(dsi->out_bridge);
  		DRM_DEV_ERROR(dev, "failed to find the bridge: %d\n", ret);
 -- 
-2.39.2
+2.42.0
 

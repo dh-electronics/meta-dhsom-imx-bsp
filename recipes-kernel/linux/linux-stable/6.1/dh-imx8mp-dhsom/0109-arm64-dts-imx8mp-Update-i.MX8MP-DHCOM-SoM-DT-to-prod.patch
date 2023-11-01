@@ -1,7 +1,7 @@
-From 0bc052577c183a72cdbb2e683164601e5515beed Mon Sep 17 00:00:00 2001
+From da969b6311af22601cdb99e706a4efce0affded0 Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
 Date: Tue, 8 Aug 2023 00:39:46 +0200
-Subject: [PATCH 108/110] arm64: dts: imx8mp: Update i.MX8MP DHCOM SoM DT to
+Subject: [PATCH 109/111] arm64: dts: imx8mp: Update i.MX8MP DHCOM SoM DT to
  production rev.200
 
 The current imx8mp-dhcom-som.dtsi describes prototype rev.100 SoM,
@@ -310,5 +310,5 @@ index 014158d84b2ce..ab81ae56a4afa 100644
  	};
  
 -- 
-2.40.1
+2.42.0
 

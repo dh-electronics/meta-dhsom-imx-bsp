@@ -1,7 +1,7 @@
-From 436c5406afe3a5c4e4a3ab3dacfea54fc9461489 Mon Sep 17 00:00:00 2001
+From 0e472b083307369a155017884bcc5ec2b0b863ed Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
 Date: Wed, 5 Apr 2023 18:52:14 +0200
-Subject: [PATCH 24/94] arm64: dts: imx8mp: Add display pipeline components
+Subject: [PATCH 024/111] arm64: dts: imx8mp: Add display pipeline components
 
 Add LCDIF scanout engine and DSIM bridge nodes for i.MX8M Plus.
 This makes the DSI display pipeline available on this SoC.
@@ -81,5 +81,5 @@ index 903582d63e2fa..a43fe16e06fd0 100644
  				compatible = "fsl,imx8mp-lcdif";
  				reg = <0x32e90000 0x10000>;
 -- 
-2.39.2
+2.42.0
 

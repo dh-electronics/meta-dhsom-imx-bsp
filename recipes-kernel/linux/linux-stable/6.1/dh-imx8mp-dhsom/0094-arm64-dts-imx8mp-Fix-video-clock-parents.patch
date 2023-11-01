@@ -1,7 +1,7 @@
-From 2d8722e1a4243ecac352331de55ac1997de54986 Mon Sep 17 00:00:00 2001
+From 8442e31151168dea2b004e6705c17307d11100a0 Mon Sep 17 00:00:00 2001
 From: Adam Ford <aford173@gmail.com>
 Date: Thu, 11 May 2023 20:04:23 -0500
-Subject: [PATCH] arm64: dts: imx8mp: Fix video clock parents
+Subject: [PATCH 094/111] arm64: dts: imx8mp: Fix video clock parents
 
 There are a few clocks whose parents are set in mipi_dsi
 and lcdif nodes, but these clocks are used by the media_blk_ctrl
@@ -85,5 +85,5 @@ index 3d73e883c7968..ab74306c952e5 100644
  
  				lvds_bridge: bridge@5c {
 -- 
-2.39.2
+2.42.0
 

@@ -1,7 +1,7 @@
-From 05511c39ebf5cf03dd9d343b78cab13898a8bda0 Mon Sep 17 00:00:00 2001
+From 18050d9f22df94c589e2b6936f510f80f1d180d3 Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
 Date: Tue, 8 Aug 2023 00:39:46 +0200
-Subject: [PATCH 110/110] arm64: dts: imx8mp: Add DT overlay describing i.MX8MP
+Subject: [PATCH 111/111] arm64: dts: imx8mp: Add DT overlay describing i.MX8MP
  DHCOM SoM rev.100
 
 The current imx8mp-dhcom-som.dtsi describes production rev.200 SoM,
@@ -19,10 +19,10 @@ Signed-off-by: Marek Vasut <marex@denx.de>
  create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-dhcom-som-overlay-rev100.dts
 
 diff --git a/arch/arm64/boot/dts/freescale/Makefile b/arch/arm64/boot/dts/freescale/Makefile
-index c0d748c0af356..15ba0eebdc1b6 100644
+index 41e40e1e26649..b8df89cf65409 100644
 --- a/arch/arm64/boot/dts/freescale/Makefile
 +++ b/arch/arm64/boot/dts/freescale/Makefile
-@@ -85,7 +85,8 @@ dtb-$(CONFIG_ARCH_MXC) += imx8mn-tqma8mqnl-mba8mx.dtb
+@@ -86,7 +86,8 @@ dtb-$(CONFIG_ARCH_MXC) += imx8mn-tqma8mqnl-mba8mx.dtb
  dtb-$(CONFIG_ARCH_MXC) += imx8mn-var-som-symphony.dtb
  dtb-$(CONFIG_ARCH_MXC) += imx8mn-venice-gw7902.dtb
  dtb-$(CONFIG_ARCH_MXC) += imx8mp-dhcom-som-overlay-eth1xfast.dtbo \
@@ -32,7 +32,7 @@ index c0d748c0af356..15ba0eebdc1b6 100644
  dtb-$(CONFIG_ARCH_MXC) += imx8mp-dhcom-pdk-overlay-eth2xfast.dtbo
  dtb-$(CONFIG_ARCH_MXC) += imx8mp-dhcom-pdk2.dtb \
  			  imx8mp-dhcom-pdk2-overlay-505-200-x12-ch101olhlwh.dtbo \
-@@ -99,7 +100,8 @@ dtb-$(CONFIG_ARCH_MXC) += imx8mp-dhcom-pdk3.dtb \
+@@ -100,7 +101,8 @@ dtb-$(CONFIG_ARCH_MXC) += imx8mp-dhcom-pdk3.dtb \
  			  imx8mp-dhcom-pdk3-overlay-560-300-x36.dtbo \
  			  imx8mp-dhcom-pdk3-overlay-ea-murata-2ae-x20.dtbo \
  			  imx8mp-dhcom-pdk3-overlay-nxp-spf-29678-c1-ov5640-x29.dtbo \
@@ -185,5 +185,5 @@ index 0000000000000..2b6ea54720c05
 +	};
 +};
 -- 
-2.40.1
+2.42.0
 

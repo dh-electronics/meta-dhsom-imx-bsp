@@ -1,7 +1,7 @@
-From 80bda1c78c1203889a09b0dc6f703f9295ad519c Mon Sep 17 00:00:00 2001
+From 12ea48ca27697eeef10ff3dfa2476e02a12ba3b6 Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
 Date: Fri, 17 Feb 2023 20:26:47 +0100
-Subject: [PATCH 85/94] arm64: dts: imx8mp: Add FEC RMII pin mux on i.MX8MP
+Subject: [PATCH 085/111] arm64: dts: imx8mp: Add FEC RMII pin mux on i.MX8MP
  DHCOM
 
 The i.MX8MP DHCOM SoM may come with either external RGMII PHY or
@@ -80,5 +80,5 @@ index 2dd54421a5e26..f84dab0fca16d 100644
  		fsl,pins = <
  			MX8MP_IOMUXC_SPDIF_RX__CAN1_RX			0x154
 -- 
-2.39.2
+2.42.0
 

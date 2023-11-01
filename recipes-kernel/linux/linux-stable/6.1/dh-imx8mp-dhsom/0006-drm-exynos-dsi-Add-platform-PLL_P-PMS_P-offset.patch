@@ -1,7 +1,7 @@
-From 7cc6d8e9d6fa3844c54a594b08664d1239854f16 Mon Sep 17 00:00:00 2001
+From fd0c57dfda431481cf048368f8b427d5e8580c7c Mon Sep 17 00:00:00 2001
 From: Jagan Teki <jagan@amarulasolutions.com>
 Date: Wed, 8 Mar 2023 22:09:41 +0530
-Subject: [PATCH 06/94] drm: exynos: dsi: Add platform PLL_P (PMS_P) offset
+Subject: [PATCH 006/111] drm: exynos: dsi: Add platform PLL_P (PMS_P) offset
 
 Look like PLL PMS_P offset value varies between platforms that have
 Samsung DSIM IP.
@@ -110,5 +110,5 @@ index 1615640e25d63..90ff40af005ce 100644
  	if (driver_data->has_freqband) {
  		static const unsigned long freq_bands[] = {
 -- 
-2.39.2
+2.42.0
 

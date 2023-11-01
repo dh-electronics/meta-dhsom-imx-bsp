@@ -1,7 +1,7 @@
-From 13979792ddccecb42b4c93ad186cd84f37282a0a Mon Sep 17 00:00:00 2001
+From 4a8c5fe61486634ae83972c4a59762b8622e0079 Mon Sep 17 00:00:00 2001
 From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Date: Thu, 26 Jan 2023 02:10:01 +0100
-Subject: [PATCH 56/94] media: imx-mipi-csis: Implement .init_cfg() using
+Subject: [PATCH 056/111] media: imx-mipi-csis: Implement .init_cfg() using
  .set_fmt()
 
 The .set_fmt() handler is responsible for adjusting the requested format
@@ -92,5 +92,5 @@ index 9e424cb1c4b10..e99633565463e 100644
  {
  	struct mipi_csis_device *csis = sd_to_mipi_csis_device(sd);
 -- 
-2.39.2
+2.42.0
 

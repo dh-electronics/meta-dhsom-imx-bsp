@@ -1,7 +1,7 @@
-From 9e5e047aa25c2f9c12f8924e9a90cd83bd894d43 Mon Sep 17 00:00:00 2001
+From 5a4eb46ca4bf06b8f4a85433a3a445020980762b Mon Sep 17 00:00:00 2001
 From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Date: Mon, 13 Dec 2021 15:11:56 +0100
-Subject: [PATCH 74/94] media: v4l2-subdev: Add subdev
+Subject: [PATCH 074/111] media: v4l2-subdev: Add subdev
  .(enable|disable)_streams() operations
 
 Add two new subdev pad operations, .enable_streams() and
@@ -395,5 +395,5 @@ index 5fda9f6535739..48a7adb9fe89b 100644
  
  #endif /* CONFIG_MEDIA_CONTROLLER */
 -- 
-2.39.2
+2.42.0
 

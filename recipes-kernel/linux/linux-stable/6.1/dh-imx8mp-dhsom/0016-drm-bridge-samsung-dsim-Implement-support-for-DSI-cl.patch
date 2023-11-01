@@ -1,7 +1,7 @@
-From 9b3325a2deceebeee523300001dbecaa3dfae0e7 Mon Sep 17 00:00:00 2001
+From 0a6a737a00b5c51d8798bc6b6063ef083e7a686b Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
 Date: Sat, 12 Feb 2022 17:40:44 +0100
-Subject: [PATCH 16/94] drm: bridge: samsung-dsim: Implement support for DSI
+Subject: [PATCH 016/111] drm: bridge: samsung-dsim: Implement support for DSI
  clock and data lane polarity swap
 
 Implement support for DSI clock and data lane DN/DP polarity swap by
@@ -12,26 +12,6 @@ a check which verifies all data lanes have the same polarity.
 
 Upstream-Status: Inappropriate [Upstream DSIM driver still in development]
 Signed-off-by: Marek Vasut <marex@denx.de>
----
-Cc: Adam Ford <aford173@gmail.com>
-Cc: Andrzej Hajda <andrzej.hajda@intel.com>
-Cc: Frieder Schrempf <frieder.schrempf@kontron.de>
-Cc: Inki Dae <inki.dae@samsung.com>
-Cc: Jagan Teki <jagan@amarulasolutions.com>
-Cc: Kyungmin Park <kyungmin.park@samsung.com>
-Cc: Laurent Pinchart <Laurent.pinchart@ideasonboard.com>
-Cc: Marek Szyprowski <m.szyprowski@samsung.com>
-Cc: Matteo Lisi <matteo.lisi@engicam.com>
-Cc: Michael Nazzareno Trimarchi <michael@amarulasolutions.com>
-Cc: NXP Linux Team <linux-imx@nxp.com>
-Cc: Robert Foss <robert.foss@linaro.org>
-Cc: Seung-Woo Kim <sw0312.kim@samsung.com>
-Cc: Tim Harvey <tharvey@gateworks.com>
-Cc: Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
-Cc: linux-amarula <linux-amarula@amarulasolutions.com>
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: linux-samsung-soc@vger.kernel.org
-To: dri-devel@lists.freedesktop.org
 ---
  drivers/gpu/drm/bridge/samsung-dsim.c | 29 ++++++++++++++++++++++++++-
  include/drm/bridge/samsung-dsim.h     |  3 +++
@@ -113,5 +93,5 @@ index 3e395d38e1df1..e50bfca93c5ed 100644
  	struct drm_property *brightness;
  	struct completion completed;
 -- 
-2.39.2
+2.42.0
 

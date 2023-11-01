@@ -1,7 +1,7 @@
-From ed170e80a7c28dbdf77403f3f72d72f6ad3fc686 Mon Sep 17 00:00:00 2001
+From 68f5e9bb0bb79db663d2b0ab95cb87313725ffa0 Mon Sep 17 00:00:00 2001
 From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Date: Sat, 14 Jan 2023 23:38:53 +0200
-Subject: [PATCH 77/94] media: v4l2-subdev: Enable the streams API
+Subject: [PATCH 077/111] media: v4l2-subdev: Enable the streams API
 
 The ISI driver depends on the stream API. Enable it manually, until it
 stabilizes upstream and gets enabled by default.
@@ -26,5 +26,5 @@ index 1bebcda2bd20c..6c5ef58478d49 100644
  
  /*
 -- 
-2.39.2
+2.42.0
 

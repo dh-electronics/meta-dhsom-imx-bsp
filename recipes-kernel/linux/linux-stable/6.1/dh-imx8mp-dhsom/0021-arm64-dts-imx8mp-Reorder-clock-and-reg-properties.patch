@@ -1,7 +1,7 @@
-From 8da1416f2cc6c5671fb5c30585774f080fd530a9 Mon Sep 17 00:00:00 2001
+From ac74d25b60e6035bc98205e159e96625ffd1a337 Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
 Date: Mon, 27 Feb 2023 16:54:23 +0100
-Subject: [PATCH 21/94] arm64: dts: imx8mp: Reorder clock and reg properties
+Subject: [PATCH 021/111] arm64: dts: imx8mp: Reorder clock and reg properties
 
 Align the clock and reg properties order with example bindings
 and the rest of the imx8mp.dtsi . No functional change.
@@ -33,5 +33,5 @@ index 3761f94f68911..faeb5288255ce 100644
  					assigned-clock-parents = <&clk IMX8MP_VIDEO_PLL1_OUT>;
  					status = "disabled";
 -- 
-2.39.2
+2.42.0
 

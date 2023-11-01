@@ -1,7 +1,7 @@
-From a2cb501130b2a9c8c4bedc62de7c53e141388d74 Mon Sep 17 00:00:00 2001
+From 718f7e3409401754962dc13562c18723467271a1 Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
 Date: Mon, 8 May 2023 13:42:35 +0200
-Subject: [PATCH 37/94] arm64: dts: imx8mp: Add SAI, SDMA, AudioMIX
+Subject: [PATCH 037/111] arm64: dts: imx8mp: Add SAI, SDMA, AudioMIX
 
 Add all SAI nodes, SDMA2 and SDMA3 nodes, and AudioMIX node. This is
 needed to get audio operational on i.MX8MP .
@@ -198,5 +198,5 @@ index 85e2c174bbcb6..eaf97ee7a6fbd 100644
  			compatible = "fsl,aips-bus", "simple-bus";
  			reg = <0x32c00000 0x400000>;
 -- 
-2.39.2
+2.42.0
 

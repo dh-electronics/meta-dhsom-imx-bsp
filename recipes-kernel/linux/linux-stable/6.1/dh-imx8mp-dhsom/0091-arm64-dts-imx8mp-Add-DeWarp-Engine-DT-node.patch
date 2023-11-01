@@ -1,25 +1,12 @@
-From c39929eca223c193702f840b0fee6973a34cf4b5 Mon Sep 17 00:00:00 2001
+From fde426dbba94d841532bd42d491a4665503bba50 Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
 Date: Thu, 9 Mar 2023 20:11:09 +0100
-Subject: [PATCH 91/94] arm64: dts: imx8mp: Add DeWarp Engine DT node
+Subject: [PATCH 091/111] arm64: dts: imx8mp: Add DeWarp Engine DT node
 
 Add DT node for the DeWarp Engine of the i.MX8MP.
 
 Upstream-Status: Submitted [https://lore.kernel.org/linux-arm-kernel/20230515163224.70300-1-marex@denx.de/]
 Signed-off-by: Marek Vasut <marex@denx.de>
----
-Cc: Conor Dooley <conor+dt@kernel.org>
-Cc: Fabio Estevam <festevam@gmail.com>
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc: Laurent Pinchart <Laurent.pinchart@ideasonboard.com>
-Cc: NXP Linux Team <linux-imx@nxp.com>
-Cc: Pengutronix Kernel Team <kernel@pengutronix.de>
-Cc: Richard Cochran <richardcochran@gmail.com>
-Cc: Rob Herring <robh+dt@kernel.org>
-Cc: Sascha Hauer <s.hauer@pengutronix.de>
-Cc: Shawn Guo <shawnguo@kernel.org>
-Cc: devicetree@vger.kernel.org
-Cc: linux-arm-kernel@lists.infradead.org
 ---
  arch/arm64/boot/dts/freescale/imx8mp.dtsi | 10 ++++++++++
  1 file changed, 10 insertions(+)
@@ -46,5 +33,5 @@ index 89853f66cf61c..3d73e883c7968 100644
  				compatible = "fsl,imx8mp-mipi-csi2", "fsl,imx8mm-mipi-csi2";
  				reg = <0x32e40000 0x10000>;
 -- 
-2.39.2
+2.42.0
 

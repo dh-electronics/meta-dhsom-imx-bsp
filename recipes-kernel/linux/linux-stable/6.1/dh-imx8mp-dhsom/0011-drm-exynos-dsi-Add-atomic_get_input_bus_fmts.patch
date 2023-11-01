@@ -1,7 +1,7 @@
-From e353b97acb52bdf4acb0a542f1663afcc4c6c061 Mon Sep 17 00:00:00 2001
+From c31534e55841b12e6502c9ef923342c21ce52f0c Mon Sep 17 00:00:00 2001
 From: Jagan Teki <jagan@amarulasolutions.com>
 Date: Wed, 8 Mar 2023 22:09:46 +0530
-Subject: [PATCH 11/94] drm: exynos: dsi: Add atomic_get_input_bus_fmts
+Subject: [PATCH 011/111] drm: exynos: dsi: Add atomic_get_input_bus_fmts
 
 Finding the right input bus format throughout the pipeline is hard
 so add atomic_get_input_bus_fmts callback and initialize with the
@@ -114,5 +114,5 @@ index 0c480be5f0704..bd3bb8622ca3f 100644
  	.atomic_pre_enable		= exynos_dsi_atomic_pre_enable,
  	.atomic_enable			= exynos_dsi_atomic_enable,
 -- 
-2.39.2
+2.42.0
 

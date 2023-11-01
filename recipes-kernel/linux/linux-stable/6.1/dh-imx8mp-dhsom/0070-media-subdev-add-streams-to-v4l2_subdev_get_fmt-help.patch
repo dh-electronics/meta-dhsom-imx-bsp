@@ -1,7 +1,7 @@
-From 78b53e78b465883ab70a9312a401d96f473697cf Mon Sep 17 00:00:00 2001
+From 468956e07b3be39088be814ca92f8846194b4c0d Mon Sep 17 00:00:00 2001
 From: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 Date: Tue, 21 Dec 2021 11:23:13 +0100
-Subject: [PATCH 70/94] media: subdev: add streams to v4l2_subdev_get_fmt()
+Subject: [PATCH 070/111] media: subdev: add streams to v4l2_subdev_get_fmt()
  helper function
 
 Add streams support to v4l2_subdev_get_fmt() helper function. Subdev
@@ -38,5 +38,5 @@ index 7bb7c0db0bb20..be9bd0568c44c 100644
  		return -EINVAL;
  
 -- 
-2.39.2
+2.42.0
 

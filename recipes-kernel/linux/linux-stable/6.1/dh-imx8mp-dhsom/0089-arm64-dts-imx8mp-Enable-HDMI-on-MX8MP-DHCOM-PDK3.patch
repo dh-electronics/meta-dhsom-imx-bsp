@@ -1,7 +1,7 @@
-From e43afc3b475abcd45d3cb165acc09d5788479764 Mon Sep 17 00:00:00 2001
+From 829c36a92a85e4ee6cd57401cc0f76710888574a Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
 Date: Sat, 18 Feb 2023 20:20:53 +0100
-Subject: [PATCH 89/94] arm64: dts: imx8mp: Enable HDMI on MX8MP DHCOM PDK3
+Subject: [PATCH 089/111] arm64: dts: imx8mp: Enable HDMI on MX8MP DHCOM PDK3
 
 Enable HDMI output on MX8MP DHCOM PDK3. The I2C mux port 1 is used
 instead of HDMI DDC I2C5 to permit connection of other I2C devices
@@ -41,5 +41,5 @@ index 6bcf17ffc9393..5ba7b2d9175d8 100644
  	clocks = <&pcieclk 1>;
  	clock-names = "ref";
 -- 
-2.39.2
+2.42.0
 

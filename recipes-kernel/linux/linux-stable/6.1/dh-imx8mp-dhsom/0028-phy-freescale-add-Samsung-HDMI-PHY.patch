@@ -1,7 +1,7 @@
-From 55862deb3fa42662a295a0fa77d7336f8412a331 Mon Sep 17 00:00:00 2001
+From 61e561d441318f0db1361c39366c192138929d8a Mon Sep 17 00:00:00 2001
 From: Lucas Stach <l.stach@pengutronix.de>
 Date: Fri, 6 May 2022 20:10:31 +0200
-Subject: [PATCH 28/94] phy: freescale: add Samsung HDMI PHY
+Subject: [PATCH 028/111] phy: freescale: add Samsung HDMI PHY
 
 This adds the driver for the Samsung HDMI PHY found on the
 i.MX8MP SoC.
@@ -1127,5 +1127,5 @@ index 0000000000000..6d20a5ce44e61
 +MODULE_DESCRIPTION("SAMSUNG HDMI 2.0 Transmitter PHY Driver");
 +MODULE_LICENSE("GPL v2");
 -- 
-2.39.2
+2.42.0
 

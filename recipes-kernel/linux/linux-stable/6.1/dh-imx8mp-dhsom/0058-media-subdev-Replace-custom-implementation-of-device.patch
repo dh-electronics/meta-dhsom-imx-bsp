@@ -1,7 +1,7 @@
-From 9b45f0db6ea36cc45330eadf0fe013d6636e79ca Mon Sep 17 00:00:00 2001
+From 61e8e9439f4451a46c8cfdc90c1758d20f9612b2 Mon Sep 17 00:00:00 2001
 From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Date: Tue, 27 Sep 2022 18:16:18 +0100
-Subject: [PATCH 58/94] media: subdev: Replace custom implementation of
+Subject: [PATCH 058/111] media: subdev: Replace custom implementation of
  device_match_fwnode()
 
 Replace custom implementation of the device_match_fwnode().
@@ -28,5 +28,5 @@ index 8a4ca2bd1584d..4988a25bd8f46 100644
  
  	return -ENXIO;
 -- 
-2.39.2
+2.42.0
 

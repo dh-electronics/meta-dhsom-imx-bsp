@@ -1,7 +1,7 @@
-From 14c804ddb435842c5e85be32f1afc336f752f668 Mon Sep 17 00:00:00 2001
+From ea56a7fee2f14b01dc29d4d3045e6c1c02582803 Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
 Date: Sat, 12 Mar 2022 16:32:28 +0100
-Subject: [PATCH 46/94] arm64: dts: imx8mp: Add DT overlays for i.MX8MP DHCOM
+Subject: [PATCH 046/111] arm64: dts: imx8mp: Add DT overlays for i.MX8MP DHCOM
  PDK2
 
 Add DT overlays to support:
@@ -35,10 +35,10 @@ Signed-off-by: Marek Vasut <marex@denx.de>
  create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk2-overlay-560-300-x12.dts
 
 diff --git a/arch/arm64/boot/dts/freescale/Makefile b/arch/arm64/boot/dts/freescale/Makefile
-index 3ea9edc87909a..049e42d9e0487 100644
+index ac6f780dc1914..f8768440b19f6 100644
 --- a/arch/arm64/boot/dts/freescale/Makefile
 +++ b/arch/arm64/boot/dts/freescale/Makefile
-@@ -84,7 +84,11 @@ dtb-$(CONFIG_ARCH_MXC) += imx8mn-ddr4-evk.dtb
+@@ -85,7 +85,11 @@ dtb-$(CONFIG_ARCH_MXC) += imx8mn-ddr4-evk.dtb
  dtb-$(CONFIG_ARCH_MXC) += imx8mn-tqma8mqnl-mba8mx.dtb
  dtb-$(CONFIG_ARCH_MXC) += imx8mn-var-som-symphony.dtb
  dtb-$(CONFIG_ARCH_MXC) += imx8mn-venice-gw7902.dtb
@@ -53,7 +53,7 @@ index 3ea9edc87909a..049e42d9e0487 100644
  dtb-$(CONFIG_ARCH_MXC) += imx8mp-msc-sm2s-ep1.dtb
 diff --git a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-overlay-panel-ch101olhlwh.dtsi b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-overlay-panel-ch101olhlwh.dtsi
 new file mode 100644
-index 0000000000000..99a923f17b1f3
+index 0000000000000..da365bd8a3fa2
 --- /dev/null
 +++ b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-overlay-panel-ch101olhlwh.dtsi
 @@ -0,0 +1,51 @@
@@ -413,5 +413,5 @@ index 0000000000000..ef4718c593879
 +	>;
 +};
 -- 
-2.39.2
+2.42.0
 

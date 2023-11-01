@@ -1,7 +1,7 @@
-From 6e04aef7c4f8a4a92f86978e53e5c835cf8820e1 Mon Sep 17 00:00:00 2001
+From 34351e8dfebe26be81c65491808452609ef9f523 Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
 Date: Thu, 7 Apr 2022 04:58:39 +0200
-Subject: [PATCH 42/94] arm64: dts: imx8mp: Enable weak pullup until R269 is
+Subject: [PATCH 042/111] arm64: dts: imx8mp: Enable weak pullup until R269 is
  populated
 
 External RTC IRQ line pull up R269 is not populated on the prototype
@@ -33,5 +33,5 @@ index 0f13ee3627715..590f580656785 100644
  	};
  
 -- 
-2.39.2
+2.42.0
 

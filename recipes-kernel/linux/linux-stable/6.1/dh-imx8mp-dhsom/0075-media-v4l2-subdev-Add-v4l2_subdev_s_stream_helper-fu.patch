@@ -1,7 +1,7 @@
-From c8a0acb01f62070d5b9f56f2ec7f51de22097376 Mon Sep 17 00:00:00 2001
+From 9a83bd0123476d44e5c8b442b73552c00ec06643 Mon Sep 17 00:00:00 2001
 From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Date: Tue, 18 Jan 2022 01:16:14 +0100
-Subject: [PATCH 75/94] media: v4l2-subdev: Add v4l2_subdev_s_stream_helper()
+Subject: [PATCH 075/111] media: v4l2-subdev: Add v4l2_subdev_s_stream_helper()
  function
 
 The v4l2_subdev_s_stream_helper() helper can be used by subdevs that
@@ -99,5 +99,5 @@ index 48a7adb9fe89b..99c380dc4a2c6 100644
  
  #endif /* CONFIG_MEDIA_CONTROLLER */
 -- 
-2.39.2
+2.42.0
 

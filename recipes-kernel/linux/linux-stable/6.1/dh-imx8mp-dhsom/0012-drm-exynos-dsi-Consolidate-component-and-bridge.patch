@@ -1,7 +1,7 @@
-From 4c26aaa29fdbe6f9e1008882b18370208049dd19 Mon Sep 17 00:00:00 2001
+From 1a0a3e4907fa1b2c25992ef66a961692cf16aa8f Mon Sep 17 00:00:00 2001
 From: Jagan Teki <jagan@amarulasolutions.com>
 Date: Wed, 8 Mar 2023 22:09:47 +0530
-Subject: [PATCH 12/94] drm: exynos: dsi: Consolidate component and bridge
+Subject: [PATCH 012/111] drm: exynos: dsi: Consolidate component and bridge
 
 DSI host registration, attach and detach operations are quite
 different for the component and bridge-based DRM drivers.
@@ -289,5 +289,5 @@ index bd3bb8622ca3f..01ed1677a4fd9 100644
  
  static const struct of_device_id exynos_dsi_of_match[] = {
 -- 
-2.39.2
+2.42.0
 

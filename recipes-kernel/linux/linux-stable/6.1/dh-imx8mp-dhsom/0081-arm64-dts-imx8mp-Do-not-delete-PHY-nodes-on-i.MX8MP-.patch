@@ -1,8 +1,8 @@
-From 6a864d182e608bad0341de2cc70bf005a2313108 Mon Sep 17 00:00:00 2001
+From 120e17bac4fbac600638ede9568d02e18b51d4cd Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
 Date: Fri, 17 Feb 2023 20:26:43 +0100
-Subject: [PATCH 81/94] arm64: dts: imx8mp: Do not delete PHY nodes on i.MX8MP
- DHCOM PDK2
+Subject: [PATCH 081/111] arm64: dts: imx8mp: Do not delete PHY nodes on
+ i.MX8MP DHCOM PDK2
 
 The PHY nodes may be activated via DTO in case another SoM variant
 is populated into the development kit. Do not delete the nodes.
@@ -38,5 +38,5 @@ index d4c1eebb35015..933102ecc89bb 100644
  	phy-handle = <&ethphypdk>;
  
 -- 
-2.39.2
+2.42.0
 

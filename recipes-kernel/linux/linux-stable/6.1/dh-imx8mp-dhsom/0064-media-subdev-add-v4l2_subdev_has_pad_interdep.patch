@@ -1,7 +1,7 @@
-From 7752be675c6468751b2f9aead1d2e8067f3824e0 Mon Sep 17 00:00:00 2001
+From 39ff7911252ca0ed0a64836a8933bcfe37c01e16 Mon Sep 17 00:00:00 2001
 From: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 Date: Thu, 15 Jul 2021 15:39:19 +0200
-Subject: [PATCH 64/94] media: subdev: add v4l2_subdev_has_pad_interdep()
+Subject: [PATCH 064/111] media: subdev: add v4l2_subdev_has_pad_interdep()
 
 Add a v4l2_subdev_has_pad_interdep() helper function which can be used
 for media_entity_operations.has_pad_interdep op.
@@ -89,5 +89,5 @@ index 91b2d9e794760..23d4e04dca427 100644
   * __v4l2_subdev_state_alloc - allocate v4l2_subdev_state
   *
 -- 
-2.39.2
+2.42.0
 

@@ -1,7 +1,7 @@
-From b792e39c471996a93154de3669795f329c602405 Mon Sep 17 00:00:00 2001
+From 3908d32ba99393ac8e56c24a0c92082dd6b76729 Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
 Date: Sun, 27 Aug 2023 23:17:34 +0200
-Subject: [PATCH 109/110] arm64: dts: imx8mp: Drop i.MX8MP DHCOM rev.100 PHY
+Subject: [PATCH 110/111] arm64: dts: imx8mp: Drop i.MX8MP DHCOM rev.100 PHY
  address workaround from PDK3 DT
 
 In case the i.MX8MP DHCOM rev.100 has been populated on the PDK3
@@ -32,5 +32,5 @@ index 29d3b7ed56d5c..f10e7df104986 100644
  	pinctrl-0 = <&pinctrl_fec_rgmii>;
  	phy-handle = <&ethphypdk>;
 -- 
-2.40.1
+2.42.0
 

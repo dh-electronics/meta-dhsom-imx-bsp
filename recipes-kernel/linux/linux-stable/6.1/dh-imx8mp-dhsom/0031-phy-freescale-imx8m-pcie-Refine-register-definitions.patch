@@ -1,7 +1,8 @@
-From ec77f06e42853cfd8fd39bd8dd7cad05518963aa Mon Sep 17 00:00:00 2001
+From 0b33420c6482d3d3d08d89d6e3c29546c24e4c9c Mon Sep 17 00:00:00 2001
 From: Richard Zhu <hongxing.zhu@nxp.com>
 Date: Thu, 13 Oct 2022 09:47:00 +0800
-Subject: [PATCH 31/94] phy: freescale: imx8m-pcie: Refine register definitions
+Subject: [PATCH 031/111] phy: freescale: imx8m-pcie: Refine register
+ definitions
 
 No function changes, refine PHY register definitions.
 - Keep align with other CMN PHY registers, refine the definitions of
@@ -53,5 +54,5 @@ index c93286483b425..3c8c255499cda 100644
  }
  
 -- 
-2.39.2
+2.42.0
 

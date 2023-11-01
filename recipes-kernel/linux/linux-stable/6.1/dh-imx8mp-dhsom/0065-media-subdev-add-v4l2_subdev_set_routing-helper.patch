@@ -1,7 +1,7 @@
-From 313d3ae7eca4192ac5b87c08b3f9bdd3d25c589d Mon Sep 17 00:00:00 2001
+From 8d8fee85955dfa63074c84ce410ea71c1d29dd05 Mon Sep 17 00:00:00 2001
 From: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 Date: Tue, 21 Dec 2021 11:18:43 +0100
-Subject: [PATCH 65/94] media: subdev: add v4l2_subdev_set_routing helper()
+Subject: [PATCH 065/111] media: subdev: add v4l2_subdev_set_routing helper()
 
 Add a helper function to set the subdev routing. The helper can be used
 from subdev driver's set_routing op to store the routing table.
@@ -92,5 +92,5 @@ index 23d4e04dca427..c10f9b2959553 100644
  
  #endif /* CONFIG_MEDIA_CONTROLLER */
 -- 
-2.39.2
+2.42.0
 

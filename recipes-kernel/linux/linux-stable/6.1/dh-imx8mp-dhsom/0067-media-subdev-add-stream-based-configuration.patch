@@ -1,7 +1,7 @@
-From 96a67792b0bee36618e65255f1ec7e74b9a5696d Mon Sep 17 00:00:00 2001
+From 2bb4bc2aec2c58047972fd80e208f864f31be1e5 Mon Sep 17 00:00:00 2001
 From: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 Date: Tue, 21 Dec 2021 11:20:53 +0100
-Subject: [PATCH 67/94] media: subdev: add stream based configuration
+Subject: [PATCH 067/111] media: subdev: add stream based configuration
 
 Add support to manage configurations (format, crop, compose) per stream,
 instead of per pad. This is accomplished with data structures that hold
@@ -615,5 +615,5 @@ index 61c338a7f0dd9..14d9cac93277c 100644
  
  /**
 -- 
-2.39.2
+2.42.0
 

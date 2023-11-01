@@ -1,7 +1,7 @@
-From 7a16679b4a1c3d2d6866b8584c59c42d90e86962 Mon Sep 17 00:00:00 2001
+From a2079359cc5c6a2bc5a304dca1fb37deeaa261ba Mon Sep 17 00:00:00 2001
 From: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 Date: Thu, 29 Jul 2021 15:02:04 +0200
-Subject: [PATCH 60/94] media: add V4L2_SUBDEV_FL_STREAMS
+Subject: [PATCH 060/111] media: add V4L2_SUBDEV_FL_STREAMS
 
 Add subdev flag V4L2_SUBDEV_FL_STREAMS. It is used to indicate that the
 subdev supports the new API with multiplexed streams (routing, stream
@@ -38,5 +38,5 @@ index ccac82e0ad1e1..6345a5321ce35 100644
  struct regulator_bulk_data;
  
 -- 
-2.39.2
+2.42.0
 

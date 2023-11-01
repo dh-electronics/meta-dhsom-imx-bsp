@@ -1,8 +1,8 @@
-From c2aa6b173f80318ea7ceadc328c1128d711c93d7 Mon Sep 17 00:00:00 2001
+From fd1251e6c260c66a356b8e9a89ae8a8f26051c08 Mon Sep 17 00:00:00 2001
 From: Lucas Stach <l.stach@pengutronix.de>
 Date: Fri, 16 Dec 2022 21:08:20 +0100
-Subject: [PATCH 96/98] soc: imx: imx8mp-blk-ctrl: expose high performance PLL
- clock
+Subject: [PATCH 096/111] soc: imx: imx8mp-blk-ctrl: expose high performance
+ PLL clock
 
 Expose the high performance PLL as a regular Linux clock, so the
 PCIe PHY can use it when there is no external refclock provided.
@@ -161,5 +161,5 @@ index b48c1cb3331fd..923e03dae3afc 100644
  	.power_off = imx8mp_hsio_blk_ctrl_power_off,
  	.power_notifier_fn = imx8mp_hsio_power_notifier,
 -- 
-2.40.1
+2.42.0
 

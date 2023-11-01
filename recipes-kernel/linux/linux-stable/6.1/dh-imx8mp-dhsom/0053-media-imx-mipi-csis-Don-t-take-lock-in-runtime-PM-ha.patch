@@ -1,7 +1,7 @@
-From 332fa97504f10c0ad5b1eb30c8fca11c3eea1253 Mon Sep 17 00:00:00 2001
+From 4c418ec2b8cc5eb4ebc862b5c20ec986cb25f604 Mon Sep 17 00:00:00 2001
 From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Date: Thu, 26 Jan 2023 02:10:01 +0100
-Subject: [PATCH 53/94] media: imx-mipi-csis: Don't take lock in runtime PM
+Subject: [PATCH 053/111] media: imx-mipi-csis: Don't take lock in runtime PM
  handlers
 
 The runtime PM handlers don't need manual locking as
@@ -78,5 +78,5 @@ index d949b2de8e743..4e1363ff5646e 100644
  
  static const struct dev_pm_ops mipi_csis_pm_ops = {
 -- 
-2.39.2
+2.42.0
 

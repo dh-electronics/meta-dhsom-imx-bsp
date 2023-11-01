@@ -1,7 +1,7 @@
-From 2192530b37aacc42c7fecf4e8ed280d82e573bef Mon Sep 17 00:00:00 2001
+From db907f0aed543b0ab39f604b46f9afc7a4b8a081 Mon Sep 17 00:00:00 2001
 From: Andrey Skvortsov <andrej.skvortzov@gmail.com>
 Date: Sun, 15 Jan 2023 18:30:10 +0100
-Subject: [PATCH 51/94] media: ov5640: Update last busy timestamp to reset
+Subject: [PATCH 051/111] media: ov5640: Update last busy timestamp to reset
  autosuspend timer
 
 Otherwise autosuspend delay doesn't work and power is cut off
@@ -16,10 +16,10 @@ Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
  1 file changed, 6 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/media/i2c/ov5640.c b/drivers/media/i2c/ov5640.c
-index fd43e0bdce295..1536649b9e90f 100644
+index 2850b9fb01c02..bf50705ad6d36 100644
 --- a/drivers/media/i2c/ov5640.c
 +++ b/drivers/media/i2c/ov5640.c
-@@ -3351,6 +3351,7 @@ static int ov5640_g_volatile_ctrl(struct v4l2_ctrl *ctrl)
+@@ -3347,6 +3347,7 @@ static int ov5640_g_volatile_ctrl(struct v4l2_ctrl *ctrl)
  		break;
  	}
  
@@ -27,7 +27,7 @@ index fd43e0bdce295..1536649b9e90f 100644
  	pm_runtime_put_autosuspend(&sensor->i2c_client->dev);
  
  	return 0;
-@@ -3426,6 +3427,7 @@ static int ov5640_s_ctrl(struct v4l2_ctrl *ctrl)
+@@ -3422,6 +3423,7 @@ static int ov5640_s_ctrl(struct v4l2_ctrl *ctrl)
  		break;
  	}
  
@@ -35,7 +35,7 @@ index fd43e0bdce295..1536649b9e90f 100644
  	pm_runtime_put_autosuspend(&sensor->i2c_client->dev);
  
  	return ret;
-@@ -3745,8 +3747,10 @@ static int ov5640_s_stream(struct v4l2_subdev *sd, int enable)
+@@ -3741,8 +3743,10 @@ static int ov5640_s_stream(struct v4l2_subdev *sd, int enable)
  out:
  	mutex_unlock(&sensor->lock);
  
@@ -47,7 +47,7 @@ index fd43e0bdce295..1536649b9e90f 100644
  
  	return ret;
  }
-@@ -3951,6 +3955,7 @@ static int ov5640_probe(struct i2c_client *client)
+@@ -3947,6 +3951,7 @@ static int ov5640_probe(struct i2c_client *client)
  
  	pm_runtime_set_autosuspend_delay(dev, 1000);
  	pm_runtime_use_autosuspend(dev);
@@ -56,5 +56,5 @@ index fd43e0bdce295..1536649b9e90f 100644
  
  	return 0;
 -- 
-2.39.2
+2.42.0
 

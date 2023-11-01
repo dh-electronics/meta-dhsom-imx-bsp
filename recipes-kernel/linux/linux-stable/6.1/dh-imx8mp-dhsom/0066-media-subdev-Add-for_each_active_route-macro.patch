@@ -1,7 +1,7 @@
-From 3bb6d982b8ea9eb22de35e06415c366813fd0589 Mon Sep 17 00:00:00 2001
+From 2f9fe49c19ce8c26acea8392702b6f63a802f653 Mon Sep 17 00:00:00 2001
 From: Jacopo Mondi <jacopo+renesas@jmondi.org>
 Date: Sun, 17 Oct 2021 20:24:42 +0200
-Subject: [PATCH 66/94] media: subdev: Add for_each_active_route() macro
+Subject: [PATCH 066/111] media: subdev: Add for_each_active_route() macro
 
 Add a for_each_active_route() macro to replace the repeated pattern
 of iterating on the active routes of a routing table.
@@ -84,5 +84,5 @@ index c10f9b2959553..e159e478cd544 100644
  
  #endif /* CONFIG_MEDIA_CONTROLLER */
 -- 
-2.39.2
+2.42.0
 

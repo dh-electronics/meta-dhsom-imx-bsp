@@ -1,7 +1,7 @@
-From 232d8bb671f92a519d035e36a078d4ddfc0d3251 Mon Sep 17 00:00:00 2001
+From e881f0981f1536f8ba5c0a96033cff274d97b8dd Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
 Date: Wed, 18 Jan 2023 20:15:21 +0100
-Subject: [PATCH 48/94] clk: si521xx: Clock driver for Skyworks Si521xx I2C
+Subject: [PATCH 048/111] clk: si521xx: Clock driver for Skyworks Si521xx I2C
  PCIe clock generators
 
 Add driver for the Skyworks Si521xx PCIe clock generators. Supported models
@@ -21,7 +21,7 @@ Signed-off-by: Stephen Boyd <sboyd@kernel.org>
  create mode 100644 drivers/clk/clk-si521xx.c
 
 diff --git a/drivers/clk/Kconfig b/drivers/clk/Kconfig
-index 5da82f2bdd211..291303fb6b220 100644
+index a5dcc7293a836..196d14e6b00b6 100644
 --- a/drivers/clk/Kconfig
 +++ b/drivers/clk/Kconfig
 @@ -368,6 +368,15 @@ config COMMON_CLK_RS9_PCIE
@@ -454,5 +454,5 @@ index 0000000000000..ac8d4c59cd3d8
 +MODULE_DESCRIPTION("Skyworks Si521xx PCIe clock generator driver");
 +MODULE_LICENSE("GPL");
 -- 
-2.39.2
+2.42.0
 

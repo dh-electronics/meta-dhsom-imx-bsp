@@ -1,7 +1,7 @@
-From df1c0aa93320e9316bd3a78f40b968c496f21930 Mon Sep 17 00:00:00 2001
+From 0a047b7ad99f442fe134e6b3229b5544e1a26a4b Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
 Date: Tue, 20 Dec 2022 15:56:38 +0100
-Subject: [PATCH 38/94] arm64: dts: imx8mp: Add Hantro G1, G2 DT nodes
+Subject: [PATCH 038/111] arm64: dts: imx8mp: Add Hantro G1, G2 DT nodes
 
 Add DT nodes for the Hantro VPU found in i.MX8MP SoC.
 
@@ -58,5 +58,5 @@ index eaf97ee7a6fbd..5fcc17dce5532 100644
  					<&noc IMX8MP_ICM_VPU_G2 &noc IMX8MP_ICN_VIDEO>,
  					<&noc IMX8MP_ICM_VPU_H1 &noc IMX8MP_ICN_VIDEO>;
 -- 
-2.39.2
+2.42.0
 

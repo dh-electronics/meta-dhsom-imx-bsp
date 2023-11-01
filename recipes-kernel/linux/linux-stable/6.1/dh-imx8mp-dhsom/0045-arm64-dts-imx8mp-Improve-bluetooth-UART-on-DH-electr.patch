@@ -1,7 +1,7 @@
-From c0acbbbc7c2ad44759c5534bcdb3ea38e56c2488 Mon Sep 17 00:00:00 2001
+From 7516fc7b1d0f711ec2a492dad392f086dc57510c Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
 Date: Tue, 17 Jan 2023 23:39:42 +0100
-Subject: [PATCH 45/94] arm64: dts: imx8mp: Improve bluetooth UART on DH
+Subject: [PATCH 045/111] arm64: dts: imx8mp: Improve bluetooth UART on DH
  electronics i.MX8M Plus DHCOM
 
 Use PLL1_80M instead of PLL3 to drive UART2 clock divided down to 80 MHz
@@ -53,5 +53,5 @@ index ef245c1fd2520..59ce375da5532 100644
  	bluetooth {
  		pinctrl-names = "default";
 -- 
-2.39.2
+2.42.0
 

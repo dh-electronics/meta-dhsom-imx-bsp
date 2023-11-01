@@ -1,7 +1,7 @@
-From 55cd45236f2341fd04c553ca440d0fd7ae1a5c38 Mon Sep 17 00:00:00 2001
+From be8eed2f7b6fd37f6f0911180ae756c4a2b0dba6 Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
 Date: Mon, 28 Aug 2023 04:48:34 +0200
-Subject: [PATCH 107/110] iio: adc: ti-ads1015: Add edge trigger support
+Subject: [PATCH 108/111] iio: adc: ti-ads1015: Add edge trigger support
 
 The comparator generates an edge on the IRQ like and stays in the
 configured state until cleared. Support edge triggered IRQs as well
@@ -32,5 +32,5 @@ index 8bceba6940260..95cb0a82273eb 100644
  					ADS1015_CFG_COMP_POL_SHIFT;
  			break;
 -- 
-2.40.1
+2.42.0
 

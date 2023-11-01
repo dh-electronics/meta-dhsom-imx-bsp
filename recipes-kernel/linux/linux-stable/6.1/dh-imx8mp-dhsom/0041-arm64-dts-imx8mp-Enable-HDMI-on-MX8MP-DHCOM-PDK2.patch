@@ -1,7 +1,7 @@
-From 2d91f9fbbec5420ded205cd9fd363735ae16e2ce Mon Sep 17 00:00:00 2001
+From d74275e594fffa75baf89b343c3073342b5e32f1 Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
 Date: Fri, 22 Apr 2022 20:18:14 +0200
-Subject: [PATCH 41/94] arm64: dts: imx8mp: Enable HDMI on MX8MP DHCOM PDK2
+Subject: [PATCH 041/111] arm64: dts: imx8mp: Enable HDMI on MX8MP DHCOM PDK2
 
 Enable HDMI output on MX8MP DHCOM PDK2. The I2C5 is used in regular I2C
 mode instead of HDMI DDC mode to permit connection of other I2C devices
@@ -41,5 +41,5 @@ index fdf18b7f208d5..d4c1eebb35015 100644
  	clock-names = "ref";
  	clocks = <&clk IMX8MP_SYS_PLL2_100M>;
 -- 
-2.39.2
+2.42.0
 

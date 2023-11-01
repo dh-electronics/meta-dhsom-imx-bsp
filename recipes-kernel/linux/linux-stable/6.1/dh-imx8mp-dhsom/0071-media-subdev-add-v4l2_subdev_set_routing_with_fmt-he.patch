@@ -1,7 +1,7 @@
-From e9525cdf7f6d694cda28a052aeb1423a5fd080c1 Mon Sep 17 00:00:00 2001
+From 70418e4fb7ba310590c5c870f357eb7388847b8c Mon Sep 17 00:00:00 2001
 From: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 Date: Wed, 25 Aug 2021 12:24:09 +0200
-Subject: [PATCH 71/94] media: subdev: add v4l2_subdev_set_routing_with_fmt()
+Subject: [PATCH 071/111] media: subdev: add v4l2_subdev_set_routing_with_fmt()
  helper
 
 v4l2_subdev_set_routing_with_fmt() is the same as
@@ -79,5 +79,5 @@ index bf89c452861db..02b38af786204 100644
   * v4l2_subdev_state_get_stream_format() - Get pointer to a stream format
   * @state: subdevice state
 -- 
-2.39.2
+2.42.0
 

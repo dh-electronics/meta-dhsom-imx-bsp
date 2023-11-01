@@ -1,7 +1,7 @@
-From 1a98977e2b6efaf8605c6edcf13b02922ceed316 Mon Sep 17 00:00:00 2001
+From 722ea1b1f93baa5dd3d638fe6db996cad7579681 Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
 Date: Mon, 27 Feb 2023 16:54:22 +0100
-Subject: [PATCH 20/94] arm64: dts: imx8mp: Drop simple-bus from
+Subject: [PATCH 020/111] arm64: dts: imx8mp: Drop simple-bus from
  fsl,imx8mp-media-blk-ctrl
 
 This block should not be compatible with simple-bus and misuse it that way.
@@ -32,5 +32,5 @@ index 8fca629103054..3761f94f68911 100644
  				#address-cells = <1>;
  				#size-cells = <1>;
 -- 
-2.39.2
+2.42.0
 

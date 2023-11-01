@@ -1,7 +1,7 @@
-From f05127bf6db42ba851c3ed4e7b8bc1dacc31e629 Mon Sep 17 00:00:00 2001
+From 73720f0d9c4f814fcf809bac1e987fe86bc40748 Mon Sep 17 00:00:00 2001
 From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Date: Fri, 23 Apr 2021 09:15:54 +0200
-Subject: [PATCH 62/94] media: subdev: Add [GS]_ROUTING subdev ioctls and
+Subject: [PATCH 062/111] media: subdev: Add [GS]_ROUTING subdev ioctls and
  operations
 
 Add support for subdev internal routing. A route is defined as a single
@@ -334,5 +334,5 @@ index 89af27f50a41e..61c338a7f0dd9 100644
  #define VIDIOC_SUBDEV_G_STD			_IOR('V', 23, v4l2_std_id)
  #define VIDIOC_SUBDEV_S_STD			_IOW('V', 24, v4l2_std_id)
 -- 
-2.39.2
+2.42.0
 

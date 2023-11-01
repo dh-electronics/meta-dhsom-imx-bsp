@@ -1,7 +1,7 @@
-From 224abb35a1a15ffddcc334ab2480e2f46ae4d2e6 Mon Sep 17 00:00:00 2001
+From c813861a9b4a3482e4dd9dcf72c97882ff48bf0c Mon Sep 17 00:00:00 2001
 From: Lucas Stach <l.stach@pengutronix.de>
 Date: Fri, 6 May 2022 20:10:33 +0200
-Subject: [PATCH 30/94] arm64: dts: imx8mp: add HDMI display pipeline
+Subject: [PATCH 030/111] arm64: dts: imx8mp: add HDMI display pipeline
 
 This adds the DT nodes for all the peripherals that make up the
 HDMI display pipeline.
@@ -105,5 +105,5 @@ index c64070634b8c0..85e2c174bbcb6 100644
  
  		pcie: pcie@33800000 {
 -- 
-2.39.2
+2.42.0
 

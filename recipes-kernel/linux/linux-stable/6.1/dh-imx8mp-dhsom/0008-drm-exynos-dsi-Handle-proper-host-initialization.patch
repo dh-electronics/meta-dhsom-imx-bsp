@@ -1,7 +1,7 @@
-From e8b718aebb5482aca4481ccc4161087bf62e519d Mon Sep 17 00:00:00 2001
+From 16afc39b532f0ef9b2203b44d2e978eed89b058b Mon Sep 17 00:00:00 2001
 From: Marek Szyprowski <m.szyprowski@samsung.com>
 Date: Wed, 8 Mar 2023 22:09:43 +0530
-Subject: [PATCH 08/94] drm: exynos: dsi: Handle proper host initialization
+Subject: [PATCH 008/111] drm: exynos: dsi: Handle proper host initialization
 
 Host transfer() in the DSI master will invoke only when the DSI commands
 are sent from DSI devices like DSI Panel or DSI bridges and this host
@@ -95,5 +95,5 @@ index 0f0834ebbdf33..eb33c2bcac16d 100644
  	ret = mipi_dsi_create_packet(&xfer.packet, msg);
  	if (ret < 0)
 -- 
-2.39.2
+2.42.0
 

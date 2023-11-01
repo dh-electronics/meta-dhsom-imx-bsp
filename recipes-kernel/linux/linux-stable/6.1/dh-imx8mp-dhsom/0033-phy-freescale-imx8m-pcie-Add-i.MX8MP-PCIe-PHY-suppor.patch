@@ -1,7 +1,7 @@
-From f0645f822f7ff2312fdd5578b2da6c6a0cc80593 Mon Sep 17 00:00:00 2001
+From 8174c6ab10645b2f6bca3e62e101a33de881cb99 Mon Sep 17 00:00:00 2001
 From: Richard Zhu <hongxing.zhu@nxp.com>
 Date: Thu, 13 Oct 2022 09:47:02 +0800
-Subject: [PATCH 33/94] phy: freescale: imx8m-pcie: Add i.MX8MP PCIe PHY
+Subject: [PATCH 033/111] phy: freescale: imx8m-pcie: Add i.MX8MP PCIe PHY
  support
 
 Add i.MX8MP PCIe PHY support.
@@ -104,5 +104,5 @@ index 3e494612db3c0..7585e8080b77d 100644
  	imx8_phy->base = devm_ioremap_resource(dev, res);
  	if (IS_ERR(imx8_phy->base))
 -- 
-2.39.2
+2.42.0
 

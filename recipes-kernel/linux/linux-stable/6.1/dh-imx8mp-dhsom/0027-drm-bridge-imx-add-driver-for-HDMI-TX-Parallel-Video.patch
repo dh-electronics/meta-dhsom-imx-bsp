@@ -1,8 +1,8 @@
-From d63983614e03a48971dd86ce7b5f48e63d4dd805 Mon Sep 17 00:00:00 2001
+From 771c53a756cd53a1b24d4d7037dcd669a60dacad Mon Sep 17 00:00:00 2001
 From: Lucas Stach <l.stach@pengutronix.de>
 Date: Fri, 16 Dec 2022 22:07:42 +0100
-Subject: [PATCH 27/94] drm/bridge: imx: add driver for HDMI TX Parallel Video
- Interface
+Subject: [PATCH 027/111] drm/bridge: imx: add driver for HDMI TX Parallel
+ Video Interface
 
 This IP block is found in the HDMI subsystem of the i.MX8MP SoC. It has a
 full timing generator and can switch between different video sources. On
@@ -254,5 +254,5 @@ index 0000000000000..30d40c21dabb0
 +MODULE_DESCRIPTION("i.MX8MP HDMI TX Parallel Video Interface bridge driver");
 +MODULE_LICENSE("GPL");
 -- 
-2.39.2
+2.42.0
 

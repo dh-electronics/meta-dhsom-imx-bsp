@@ -1,7 +1,7 @@
-From 211634436369ffd6d512e82834cb090bf81b7c26 Mon Sep 17 00:00:00 2001
+From a4f989858fb34c2c3433606d44dcd9114386ac2b Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
 Date: Wed, 8 Mar 2023 22:09:53 +0530
-Subject: [PATCH 17/94] drm: bridge: samsung-dsim: Add i.MX8M Plus support
+Subject: [PATCH 017/111] drm: bridge: samsung-dsim: Add i.MX8M Plus support
 
 Add extras to support i.MX8M Plus. The main change is the removal of
 HS/VS/DE signal inversion in the LCDIFv3-DSIM glue logic, otherwise
@@ -105,5 +105,5 @@ index e50bfca93c5ed..fb9fca7f38c43 100644
  };
  
 -- 
-2.39.2
+2.42.0
 

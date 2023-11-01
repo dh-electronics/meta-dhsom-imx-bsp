@@ -1,7 +1,7 @@
-From 8332d244e01cd6d68f157e37a532fdcaf37f9f57 Mon Sep 17 00:00:00 2001
+From 47b12a97e06d57dc37a697da61041b80adc8ec67 Mon Sep 17 00:00:00 2001
 From: "Guoniu.zhou" <guoniu.zhou@nxp.com>
 Date: Mon, 12 Dec 2022 05:05:26 +0100
-Subject: [PATCH 50/94] media: ov5640: set correct default format for CSI-2
+Subject: [PATCH 050/111] media: ov5640: set correct default format for CSI-2
  mode
 
 In commit a89f14bbcfa5 ("media: ov5640: Split DVP and CSI-2 formats"),
@@ -21,7 +21,7 @@ Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
  1 file changed, 18 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/media/i2c/ov5640.c b/drivers/media/i2c/ov5640.c
-index 16ca9dbf15442..fd43e0bdce295 100644
+index 6154071341f93..2850b9fb01c02 100644
 --- a/drivers/media/i2c/ov5640.c
 +++ b/drivers/media/i2c/ov5640.c
 @@ -521,7 +521,18 @@ static u32 ov5640_code_to_bpp(struct ov5640_dev *sensor, u32 code)
@@ -44,7 +44,7 @@ index 16ca9dbf15442..fd43e0bdce295 100644
  	.code = MEDIA_BUS_FMT_UYVY8_2X8,
  	.width = 640,
  	.height = 480,
-@@ -3743,11 +3754,13 @@ static int ov5640_s_stream(struct v4l2_subdev *sd, int enable)
+@@ -3739,11 +3750,13 @@ static int ov5640_s_stream(struct v4l2_subdev *sd, int enable)
  static int ov5640_init_cfg(struct v4l2_subdev *sd,
  			   struct v4l2_subdev_state *state)
  {
@@ -59,7 +59,7 @@ index 16ca9dbf15442..fd43e0bdce295 100644
  
  	crop->left = OV5640_PIXEL_ARRAY_LEFT;
  	crop->top = OV5640_PIXEL_ARRAY_TOP;
-@@ -3836,7 +3849,6 @@ static int ov5640_probe(struct i2c_client *client)
+@@ -3832,7 +3845,6 @@ static int ov5640_probe(struct i2c_client *client)
  	 * default init sequence initialize sensor to
  	 * YUV422 UYVY VGA@30fps
  	 */
@@ -67,7 +67,7 @@ index 16ca9dbf15442..fd43e0bdce295 100644
  	sensor->frame_interval.numerator = 1;
  	sensor->frame_interval.denominator = ov5640_framerates[OV5640_30_FPS];
  	sensor->current_fr = OV5640_30_FPS;
-@@ -3869,6 +3881,9 @@ static int ov5640_probe(struct i2c_client *client)
+@@ -3865,6 +3877,9 @@ static int ov5640_probe(struct i2c_client *client)
  		return -EINVAL;
  	}
  
@@ -78,5 +78,5 @@ index 16ca9dbf15442..fd43e0bdce295 100644
  	sensor->xclk = devm_clk_get(dev, "xclk");
  	if (IS_ERR(sensor->xclk)) {
 -- 
-2.39.2
+2.42.0
 

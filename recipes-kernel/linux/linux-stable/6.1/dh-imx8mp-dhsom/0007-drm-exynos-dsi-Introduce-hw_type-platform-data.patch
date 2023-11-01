@@ -1,7 +1,7 @@
-From 747536e240904108f03ba0437418fd002947c9f1 Mon Sep 17 00:00:00 2001
+From 20748e8b5e3ff9b86b9cce9a56b93ba213ca99b3 Mon Sep 17 00:00:00 2001
 From: Jagan Teki <jagan@amarulasolutions.com>
 Date: Wed, 8 Mar 2023 22:09:42 +0530
-Subject: [PATCH 07/94] drm: exynos: dsi: Introduce hw_type platform data
+Subject: [PATCH 007/111] drm: exynos: dsi: Introduce hw_type platform data
 
 Samsung MIPI DSIM controller is common DSI IP that can be used
 in various SoCs like Exynos, i.MX8M Mini/Nano/Plus.
@@ -157,5 +157,5 @@ index 90ff40af005ce..0f0834ebbdf33 100644
  	.probe = exynos_dsi_probe,
  	.remove = exynos_dsi_remove,
 -- 
-2.39.2
+2.42.0
 

@@ -1,7 +1,7 @@
-From 142c76f5c3d8d781cfeb668dacd0c63cd6254930 Mon Sep 17 00:00:00 2001
+From 37317dcee3d2c9c220a2f2010c5158ab550a0cd7 Mon Sep 17 00:00:00 2001
 From: Richard Zhu <hongxing.zhu@nxp.com>
 Date: Thu, 13 Oct 2022 09:47:01 +0800
-Subject: [PATCH 32/94] phy: freescale: imx8m-pcie: Refine i.MX8MM PCIe PHY
+Subject: [PATCH 032/111] phy: freescale: imx8m-pcie: Refine i.MX8MM PCIe PHY
  driver
 
 To make it more flexible and easy to expand. Refine i.MX8MM PCIe PHY
@@ -201,5 +201,5 @@ index 3c8c255499cda..3e494612db3c0 100644
  	.probe	= imx8_pcie_phy_probe,
  	.driver = {
 -- 
-2.39.2
+2.42.0
 

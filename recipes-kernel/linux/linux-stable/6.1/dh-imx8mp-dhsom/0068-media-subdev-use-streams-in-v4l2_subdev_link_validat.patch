@@ -1,7 +1,7 @@
-From 7f15b85dde939642697739594740afb6fb62b87d Mon Sep 17 00:00:00 2001
+From 3710abb795607269246c4d2919d5a876759c0d08 Mon Sep 17 00:00:00 2001
 From: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 Date: Thu, 15 Jul 2021 15:40:37 +0200
-Subject: [PATCH 68/94] media: subdev: use streams in
+Subject: [PATCH 068/111] media: subdev: use streams in
  v4l2_subdev_link_validate()
 
 Update v4l2_subdev_link_validate() to use routing and streams for
@@ -237,5 +237,5 @@ index a3e412c737151..0429da031baf9 100644
  EXPORT_SYMBOL_GPL(v4l2_subdev_link_validate);
  
 -- 
-2.39.2
+2.42.0
 

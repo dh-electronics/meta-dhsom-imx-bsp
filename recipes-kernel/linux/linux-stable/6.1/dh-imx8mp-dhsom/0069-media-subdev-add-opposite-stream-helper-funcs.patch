@@ -1,7 +1,7 @@
-From db7148ff0955ad91a0a8ff296934d6eecd3831a6 Mon Sep 17 00:00:00 2001
+From c2c4dadc0deeeb44322ad0542e46de14cd4034e9 Mon Sep 17 00:00:00 2001
 From: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 Date: Tue, 21 Dec 2021 11:22:06 +0100
-Subject: [PATCH 69/94] media: subdev: add "opposite" stream helper funcs
+Subject: [PATCH 069/111] media: subdev: add "opposite" stream helper funcs
 
 Add two helper functions to make dealing with streams easier:
 
@@ -130,5 +130,5 @@ index 5d1d5fd4446c0..bf89c452861db 100644
  
  #endif /* CONFIG_MEDIA_CONTROLLER */
 -- 
-2.39.2
+2.42.0
 

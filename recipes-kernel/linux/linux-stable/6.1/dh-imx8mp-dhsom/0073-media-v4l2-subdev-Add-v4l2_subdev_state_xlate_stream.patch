@@ -1,7 +1,7 @@
-From 158a8fc1667d16ec0d4c1478a46ab917ccf15ad1 Mon Sep 17 00:00:00 2001
+From 81412a68080bc6529041c6bb48f6a775de3ca63e Mon Sep 17 00:00:00 2001
 From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Date: Tue, 18 Jan 2022 00:51:23 +0100
-Subject: [PATCH 73/94] media: v4l2-subdev: Add
+Subject: [PATCH 073/111] media: v4l2-subdev: Add
  v4l2_subdev_state_xlate_streams() helper
 
 Add a helper function to translate streams between two pads of a subdev,
@@ -88,5 +88,5 @@ index c0dc62624bd9d..5fda9f6535739 100644
   * enum v4l2_subdev_routing_restriction - Subdevice internal routing restrictions
   *
 -- 
-2.39.2
+2.42.0
 

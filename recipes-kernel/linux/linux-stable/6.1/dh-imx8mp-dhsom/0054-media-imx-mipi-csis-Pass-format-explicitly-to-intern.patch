@@ -1,7 +1,7 @@
-From 4dcaa2d4adf27dfc05dd5c3212c07f371c20ddcb Mon Sep 17 00:00:00 2001
+From db7e25bcf98805b6863b5427ac5dc3817da4649a Mon Sep 17 00:00:00 2001
 From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Date: Thu, 26 Jan 2023 02:10:01 +0100
-Subject: [PATCH 54/94] media: imx-mipi-csis: Pass format explicitly to
+Subject: [PATCH 054/111] media: imx-mipi-csis: Pass format explicitly to
  internal functions
 
 To prepare for usage of the subdev active state that will replace the
@@ -131,5 +131,5 @@ index 4e1363ff5646e..38ed88646632a 100644
  	if (ret < 0)
  		goto error;
 -- 
-2.39.2
+2.42.0
 

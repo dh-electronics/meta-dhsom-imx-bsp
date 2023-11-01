@@ -1,7 +1,7 @@
-From 01c508893de5c30f26f025e0bb156402b7a2e290 Mon Sep 17 00:00:00 2001
+From e231725824e7edb2b8e1dfaf0fa6ef1daf98c6fe Mon Sep 17 00:00:00 2001
 From: Jagan Teki <jagan@amarulasolutions.com>
 Date: Mon, 12 Dec 2022 23:59:23 +0530
-Subject: [PATCH 02/94] drm: exynos: dsi: Restore proper bridge chain order
+Subject: [PATCH 002/111] drm: exynos: dsi: Restore proper bridge chain order
 
 Restore the proper bridge chain by finding the previous bridge
 in the chain instead of passing NULL.
@@ -54,5 +54,5 @@ index 320c370cfe24a..06d6513ddaae3 100644
  	ret = component_add(dev, &exynos_dsi_component_ops);
  	if (ret)
 -- 
-2.39.2
+2.42.0
 

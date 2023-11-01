@@ -1,7 +1,7 @@
-From 8a57b1233daffa1cb0dfb72bfd960e7ac8f49e30 Mon Sep 17 00:00:00 2001
+From 9cd9e2caf3cb02d7afb8a020228e6b5724bd8090 Mon Sep 17 00:00:00 2001
 From: Jagan Teki <jagan@amarulasolutions.com>
 Date: Mon, 12 Dec 2022 20:27:45 +0530
-Subject: [PATCH 01/94] drm: exynos: dsi: Properly name HSA/HBP/HFP/HSE bits
+Subject: [PATCH 001/111] drm: exynos: dsi: Properly name HSA/HBP/HFP/HSE bits
 
 HSA/HBP/HFP/HSE mode bits in Processor Reference Manuals specify
 a naming conversion as 'disable mode bit' due to its bit definition,
@@ -84,5 +84,5 @@ index b5305b145ddbd..320c370cfe24a 100644
  
  	if (dsi->mode_flags & MIPI_DSI_MODE_NO_EOT_PACKET)
 -- 
-2.39.2
+2.42.0
 

@@ -1,7 +1,7 @@
-From 63dd9b923bf5a8f62123d3dbbce51d32e3854d1d Mon Sep 17 00:00:00 2001
+From cf56aee1a599c83c0e26491a9de71982f846ecba Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
 Date: Thu, 31 Aug 2023 21:44:13 +0200
-Subject: [PATCH 105/105] arm64: dts: imx8mp: Simplify USB C on DH i.MX8M Plus
+Subject: [PATCH 105/111] arm64: dts: imx8mp: Simplify USB C on DH i.MX8M Plus
  DHCOM PDK3
 
 Remove the connector as well as all the links and only connect the
@@ -13,22 +13,6 @@ patch, the platform would hang on resume of 'connector'.
 
 Upstream-Status: Submitted [https://patchwork.kernel.org/project/linux-arm-kernel/patch/20230831195509.196883-1-marex@denx.de/]
 Signed-off-by: Marek Vasut <marex@denx.de>
----
-Cc: Conor Dooley <conor+dt@kernel.org>
-Cc: Fabio Estevam <festevam@gmail.com>
-Cc: Frieder Schrempf <frieder.schrempf@kontron.de>
-Cc: Geert Uytterhoeven <geert+renesas@glider.be>
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc: Magnus Damm <magnus.damm@gmail.com>
-Cc: Marek Vasut <marex@denx.de>
-Cc: NXP Linux Team <linux-imx@nxp.com>
-Cc: Peng Fan <peng.fan@nxp.com>
-Cc: Pengutronix Kernel Team <kernel@pengutronix.de>
-Cc: Rob Herring <robh+dt@kernel.org>
-Cc: Sascha Hauer <s.hauer@pengutronix.de>
-Cc: Shawn Guo <shawnguo@kernel.org>
-Cc: devicetree@vger.kernel.org
-Cc: linux-arm-kernel@lists.infradead.org
 ---
  .../boot/dts/freescale/imx8mp-dhcom-pdk3.dts  | 58 ++-----------------
  1 file changed, 4 insertions(+), 54 deletions(-)
@@ -118,5 +102,5 @@ index 1c0386fd50d88..29d3b7ed56d5c 100644
  		};
  	};
 -- 
-2.40.1
+2.42.0
 

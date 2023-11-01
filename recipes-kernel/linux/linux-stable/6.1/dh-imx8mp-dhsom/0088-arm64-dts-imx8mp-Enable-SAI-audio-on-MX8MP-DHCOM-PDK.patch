@@ -1,7 +1,7 @@
-From 7c3a2a99a28ac1240a7ad8a116c27ef733cefa05 Mon Sep 17 00:00:00 2001
+From c36b92ab61bc10bbfb56de47a51d61763827fd55 Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
 Date: Sat, 18 Feb 2023 20:30:01 +0100
-Subject: [PATCH 88/94] arm64: dts: imx8mp: Enable SAI audio on MX8MP DHCOM
+Subject: [PATCH 088/111] arm64: dts: imx8mp: Enable SAI audio on MX8MP DHCOM
  PDK2 and PDK3
 
 Add SAI I2S and audio bindings on MX8MP DHCOM PDK2 and PDK3.
@@ -16,17 +16,6 @@ is the VDDA supply and it is the same on both carrier boards.
 
 Upstream-Status: Submitted [https://patchwork.kernel.org/project/linux-arm-kernel/patch/20230515155205.61275-1-marex@denx.de/]
 Signed-off-by: Marek Vasut <marex@denx.de>
----
-Cc: Conor Dooley <conor+dt@kernel.org>
-Cc: Fabio Estevam <festevam@gmail.com>
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc: NXP Linux Team <linux-imx@nxp.com>
-Cc: Pengutronix Kernel Team <kernel@pengutronix.de>
-Cc: Rob Herring <robh+dt@kernel.org>
-Cc: Sascha Hauer <s.hauer@pengutronix.de>
-Cc: Shawn Guo <shawnguo@kernel.org>
-Cc: devicetree@vger.kernel.org
-Cc: linux-arm-kernel@lists.infradead.org
 ---
  .../boot/dts/freescale/imx8mp-dhcom-pdk2.dts  | 54 +++++++++++++++++++
  .../boot/dts/freescale/imx8mp-dhcom-pdk3.dts  | 47 +++++++++++++++-
@@ -231,5 +220,5 @@ index f84dab0fca16d..5dfafc6c681d4 100644
  		fsl,pins = <
  			/* #TOUCH_INT */
 -- 
-2.39.2
+2.42.0
 

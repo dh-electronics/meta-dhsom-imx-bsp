@@ -1,7 +1,7 @@
-From 5bb144e1f7fb6f5b8f70065ae04136dc7c61d1ef Mon Sep 17 00:00:00 2001
+From 318ca1b5e6b2cd8c751d25cd0a78452138240d39 Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
 Date: Thu, 16 Feb 2023 02:44:01 +0100
-Subject: [PATCH 78/94] media: imx-mipi-csis: Check csis_fmt validity before
+Subject: [PATCH 078/111] media: imx-mipi-csis: Check csis_fmt validity before
  use
 
 The find_csis_format() may return NULL in case supported format is not
@@ -32,5 +32,5 @@ index e99633565463e..be2768a479951 100644
  	fd->num_entries = 1;
  
 -- 
-2.39.2
+2.42.0
 

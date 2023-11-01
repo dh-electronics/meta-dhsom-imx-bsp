@@ -1,7 +1,7 @@
-From 9213304683026a902edfed42872a44f055eb6145 Mon Sep 17 00:00:00 2001
+From f3fc657b1d05a0f2f43b86c14ebd6f4d0d8fea03 Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
 Date: Fri, 17 Feb 2023 20:26:44 +0100
-Subject: [PATCH 82/94] arm64: dts: imx8mp: Adjust EQoS reset comment on
+Subject: [PATCH 082/111] arm64: dts: imx8mp: Adjust EQoS reset comment on
  i.MX8MP DHCOM
 
 Fix copy-paste error in the EQoS reset comment, align with SoM schematic.
@@ -31,5 +31,5 @@ index 59ce375da5532..d92b2568b7e33 100644
  		>;
  	};
 -- 
-2.39.2
+2.42.0
 

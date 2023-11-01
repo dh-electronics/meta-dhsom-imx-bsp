@@ -1,7 +1,7 @@
-From a995777bb91a487363f624e97e600d69cec1cdd6 Mon Sep 17 00:00:00 2001
+From 9d294b54b948729680aba0cb6693f2e3d3f8c325 Mon Sep 17 00:00:00 2001
 From: Jagan Teki <jagan@amarulasolutions.com>
 Date: Wed, 8 Mar 2023 22:09:40 +0530
-Subject: [PATCH 05/94] drm: exynos: dsi: Mark PHY as optional
+Subject: [PATCH 005/111] drm: exynos: dsi: Mark PHY as optional
 
 The same Samsung MIPI DSIM master can also be used in NXP's
 i.MX8M Mini/Nano/Plus SoC.
@@ -36,5 +36,5 @@ index bb0d2502ea02d..1615640e25d63 100644
  		dev_info(dev, "failed to get dsim phy\n");
  		return PTR_ERR(dsi->phy);
 -- 
-2.39.2
+2.42.0
 

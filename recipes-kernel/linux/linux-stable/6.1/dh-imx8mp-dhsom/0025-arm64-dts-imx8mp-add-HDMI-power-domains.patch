@@ -1,7 +1,7 @@
-From e5a43379d46acc1319412e837ec9b5d5665714fb Mon Sep 17 00:00:00 2001
+From ff172b9638daeb8bbc96ffe0cdfd08c2a0ed546d Mon Sep 17 00:00:00 2001
 From: Lucas Stach <l.stach@pengutronix.de>
 Date: Wed, 6 Apr 2022 17:34:02 +0200
-Subject: [PATCH 25/94] arm64: dts: imx8mp: add HDMI power-domains
+Subject: [PATCH 025/111] arm64: dts: imx8mp: add HDMI power-domains
 
 This adds the PGC and HDMI blk-ctrl nodes providing power control for
 HDMI subsystem peripherals.
@@ -66,5 +66,5 @@ index a43fe16e06fd0..7e90045e46d03 100644
  
  		pcie: pcie@33800000 {
 -- 
-2.39.2
+2.42.0
 

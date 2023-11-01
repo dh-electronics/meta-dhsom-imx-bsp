@@ -1,7 +1,7 @@
-From a6ef2331f7c6f30d2f18eca10348200c802bf0e7 Mon Sep 17 00:00:00 2001
+From deb26a234f615b5f692eb946232c18249cd6928d Mon Sep 17 00:00:00 2001
 From: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 Date: Mon, 26 Sep 2022 07:51:45 +0200
-Subject: [PATCH 59/94] media: v4l2-subdev: Sort includes
+Subject: [PATCH 059/111] media: v4l2-subdev: Sort includes
 
 Sort the includes alphabetically.
 
@@ -43,5 +43,5 @@ index 4988a25bd8f46..24acb4aa08958 100644
  #if defined(CONFIG_VIDEO_V4L2_SUBDEV_API)
  static int subdev_fh_init(struct v4l2_subdev_fh *fh, struct v4l2_subdev *sd)
 -- 
-2.39.2
+2.42.0
 

@@ -1,7 +1,7 @@
-From c86f83461e5c2eef1c084d83cb32f528745a6b0a Mon Sep 17 00:00:00 2001
+From 38d39a6e38aa96d41009ae699876a52b6c75e43f Mon Sep 17 00:00:00 2001
 From: Jagan Teki <jagan@amarulasolutions.com>
 Date: Wed, 8 Mar 2023 22:09:45 +0530
-Subject: [PATCH 10/94] drm: exynos: dsi: Add input_bus_flags
+Subject: [PATCH 010/111] drm: exynos: dsi: Add input_bus_flags
 
 LCDIF-DSIM glue logic inverts the HS/VS/DE signals and expecting
 the i.MX8M Mini/Nano DSI host to add additional Data Enable signal
@@ -49,5 +49,5 @@ index df4d95ae8aada..0c480be5f0704 100644
  	if (ret)
  		goto err_disable_runtime;
 -- 
-2.39.2
+2.42.0
 

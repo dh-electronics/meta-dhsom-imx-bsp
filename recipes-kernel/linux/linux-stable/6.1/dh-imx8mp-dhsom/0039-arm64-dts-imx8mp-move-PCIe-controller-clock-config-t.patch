@@ -1,7 +1,7 @@
-From 201ccb0246bba0f76923078449570d2ce1293cb5 Mon Sep 17 00:00:00 2001
+From 21f2eb02e54627298998b48ff6119705a294877f Mon Sep 17 00:00:00 2001
 From: Lucas Stach <l.stach@pengutronix.de>
 Date: Fri, 16 Dec 2022 20:59:32 +0100
-Subject: [PATCH 39/94] arm64: dts: imx8mp: move PCIe controller clock config
+Subject: [PATCH 039/111] arm64: dts: imx8mp: move PCIe controller clock config
  to SoC dtsi
 
 The only difference in PCIe clock configuration between boards is how
@@ -75,5 +75,5 @@ index 5fcc17dce5532..403a6c35ce7bf 100644
  			#size-cells = <2>;
  			device_type = "pci";
 -- 
-2.39.2
+2.42.0
 

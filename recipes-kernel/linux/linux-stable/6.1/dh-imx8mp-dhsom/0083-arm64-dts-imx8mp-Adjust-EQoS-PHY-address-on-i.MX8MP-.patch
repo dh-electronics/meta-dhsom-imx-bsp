@@ -1,8 +1,8 @@
-From 07387b4066bcf71b98766306eeafad7fda953b03 Mon Sep 17 00:00:00 2001
+From 0128da596e62b72ba469d8220e074fd171134007 Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
 Date: Fri, 17 Feb 2023 20:26:45 +0100
-Subject: [PATCH 83/94] arm64: dts: imx8mp: Adjust EQoS PHY address on i.MX8MP
- DHCOM
+Subject: [PATCH 083/111] arm64: dts: imx8mp: Adjust EQoS PHY address on
+ i.MX8MP DHCOM
 
 The current variant of the SoM has LAN8740Ai PHY connected to EQoS
 strapped to MDIO address 0 , adjust the MDIO address to match the
@@ -37,5 +37,5 @@ index d92b2568b7e33..8ec99811a0714 100644
  			reset-deassert-us = <1000>;
  			reset-gpios = <&gpio3 20 GPIO_ACTIVE_LOW>;
 -- 
-2.39.2
+2.42.0
 

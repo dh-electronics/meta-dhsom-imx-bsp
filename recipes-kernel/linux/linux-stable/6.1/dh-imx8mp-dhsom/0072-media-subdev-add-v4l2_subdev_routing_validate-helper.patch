@@ -1,7 +1,7 @@
-From 9889b58aee5a1b62fbc49f0c54093d90615d20a8 Mon Sep 17 00:00:00 2001
+From 1ddbf9168b5da90e8fd21d028230baa0e7adc70f Mon Sep 17 00:00:00 2001
 From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Date: Tue, 21 Dec 2021 11:23:58 +0100
-Subject: [PATCH 72/94] media: subdev: add v4l2_subdev_routing_validate()
+Subject: [PATCH 072/111] media: subdev: add v4l2_subdev_routing_validate()
  helper
 
 Add a v4l2_subdev_routing_validate() helper for verifying routing for
@@ -181,5 +181,5 @@ index 02b38af786204..c0dc62624bd9d 100644
  
  #endif /* CONFIG_MEDIA_CONTROLLER */
 -- 
-2.39.2
+2.42.0
 

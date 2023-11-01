@@ -1,7 +1,7 @@
-From e1f1cc9863c3a12fbc1c7650515d6d911c80d320 Mon Sep 17 00:00:00 2001
+From cb39b1d86d621c02b48b879757ba92e7df19fd79 Mon Sep 17 00:00:00 2001
 From: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
 Date: Mon, 22 Nov 2021 16:18:23 +0100
-Subject: [PATCH 61/94] media: add V4L2_SUBDEV_CAP_STREAMS
+Subject: [PATCH 061/111] media: add V4L2_SUBDEV_CAP_STREAMS
 
 Add a subdev capability flag to expose to userspace if a subdev supports
 multiplexed streams.
@@ -52,5 +52,5 @@ index 658106f5b5dc9..89af27f50a41e 100644
  #define v4l2_subdev_edid v4l2_edid
  
 -- 
-2.39.2
+2.42.0
 
