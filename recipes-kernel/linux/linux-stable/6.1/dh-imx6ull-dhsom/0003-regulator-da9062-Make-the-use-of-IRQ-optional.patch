@@ -1,18 +1,18 @@
-From 3bd9de8a4c8e1ef3efeb2f9b291c0dd925266a40 Mon Sep 17 00:00:00 2001
+From 5852aa71da2a25477e6bbe0b5e6564ae57894ad0 Mon Sep 17 00:00:00 2001
 From: Christoph Niedermaier <cniedermaier@dh-electronics.com>
-Date: Wed, 16 Nov 2022 11:07:26 +0100
+Date: Thu, 13 Jul 2023 11:03:28 +0200
 Subject: [PATCH 03/12] regulator: da9062: Make the use of IRQ optional
 
 This patch makes the use of IRQ optional to make the DA9061/62 usable
 for designs that don't have the IRQ pin connected, because the regulator
 is usable without IRQ.
 
-Upstream-Status: Submitted [https://lore.kernel.org/lkml/20230309092254.56279-3-cniedermaier@dh-electronics.com]
+Upstream-Status: Backport [497897cb200d03b89524e6b4dfb71c77af324766]
 Signed-off-by: Christoph Niedermaier <cniedermaier@dh-electronics.com>
-Acked-by: Mark Brown <broonie@kernel.org>
 Reviewed-by: Adam Ward <DLG-Adam.Ward.opensource@dm.renesas.com>
-Reported-by: kernel test robot <lkp@intel.com>
-Link: https://lore.kernel.org/oe-kbuild-all/202303082246.GuLdPL0t-lkp@intel.com/
+Reviewed-by: Marek Vasut <marex@denx.de>
+Link: https://lore.kernel.org/r/20230713090328.3879-1-cniedermaier@dh-electronics.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
  drivers/regulator/da9062-regulator.c | 11 +++++------
  1 file changed, 5 insertions(+), 6 deletions(-)

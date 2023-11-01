@@ -1,6 +1,6 @@
-From 86a95fd0b1feabddd05e1463b06f2d78697ea470 Mon Sep 17 00:00:00 2001
+From 7cac41615cb502cca8a57e2568e68f916d586f5c Mon Sep 17 00:00:00 2001
 From: Christoph Niedermaier <cniedermaier@dh-electronics.com>
-Date: Wed, 26 Apr 2023 11:03:14 +0200
+Date: Tue, 2 May 2023 13:14:24 +0200
 Subject: [PATCH 10/12] ARM: dts: imx6ull-dhcor: Set and limit the mode for
  PMIC buck 1, 2 and 3
 
@@ -10,10 +10,11 @@ depending on the hardware revision. It is recommended to set a defined
 mode such as PFM or PWM permanently. So set and limit the mode for
 buck 1, 2 and 3 to a fixed one.
 
-Upstream-Status: Submitted [https://lore.kernel.org/lkml/20230502111424.3114-1-cniedermaier@dh-electronics.com]
+Upstream-Status: Backport [892943d7729bbfb2edeed9e323eba9a5cec21c49]
 Fixes: 611b6c891e40 ("ARM: dts: imx6ull-dhcom: Add DH electronics DHCOM i.MX6ULL SoM and PDK2 board")
 Signed-off-by: Christoph Niedermaier <cniedermaier@dh-electronics.com>
 Reviewed-by: Marek Vasut <marex@denx.de>
+Signed-off-by: Shawn Guo <shawnguo@kernel.org>
 ---
  arch/arm/boot/dts/imx6ull-dhcor-som.dtsi | 7 +++++++
  1 file changed, 7 insertions(+)

@@ -1,14 +1,17 @@
-From 6c93152c7b94c563e38fbb8a5caa8d260abdeff0 Mon Sep 17 00:00:00 2001
+From eab000b89a67de726248f6541d5a2faaf041a5c9 Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
-Date: Mon, 7 Nov 2022 01:31:33 +0100
+Date: Tue, 23 May 2023 20:31:51 +0200
 Subject: [PATCH 06/12] leds: gpio: Configure per-LED pin control
 
 Each gpio-leds DT node DT subnode can have a pinctrl property assigned
 to it, parse the DT subnode pinctrl properties and configure each pin
 accordingly.
 
-Upstream-Status: Submitted [https://lore.kernel.org/linux-leds/20221107003133.377704-1-marex@denx.de]
+Upstream-Status: Backport [2d6180147e924b76b75b8b1e59bbf0c59c2a29d2]
+Tested-by: Christoph Niedermaier <cniedermaier@dh-electronics.com>
 Signed-off-by: Marek Vasut <marex@denx.de>
+Link: https://lore.kernel.org/r/20230523183151.5460-1-marex@denx.de
+Signed-off-by: Lee Jones <lee@kernel.org>
 ---
  drivers/leds/leds-gpio.c | 18 ++++++++++++++++++
  1 file changed, 18 insertions(+)
