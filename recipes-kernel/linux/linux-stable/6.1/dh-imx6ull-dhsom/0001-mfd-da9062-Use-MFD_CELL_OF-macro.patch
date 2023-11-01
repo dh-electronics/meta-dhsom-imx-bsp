@@ -1,7 +1,7 @@
-From 02aea0e85b746fa638e06168fd1ff34053a45d5e Mon Sep 17 00:00:00 2001
+From 3ffd5211d054c1c4c7cd93380cb03edfe899af4e Mon Sep 17 00:00:00 2001
 From: Christoph Niedermaier <cniedermaier@dh-electronics.com>
 Date: Thu, 9 Mar 2023 10:22:52 +0100
-Subject: [PATCH 01/10] mfd: da9062: Use MFD_CELL_OF macro
+Subject: [PATCH 01/12] mfd: da9062: Use MFD_CELL_OF macro
 
 Use MFD_CELL_OF macro helper instead of plain struct properties, which makes
 the code a bit shorter and to have commonly defined MFD cell attributes.
@@ -126,5 +126,5 @@ index a26e473507c71..fd2769592a4f8 100644
  
  static int da9062_clear_fault_log(struct da9062 *chip)
 -- 
-2.39.2
+2.42.0
 

@@ -1,7 +1,7 @@
-From f08ae697f731cb36d36dfa932c6ca91df708a826 Mon Sep 17 00:00:00 2001
+From bb46ed48730767c556ceb667a930b5fbb277c45a Mon Sep 17 00:00:00 2001
 From: Christoph Niedermaier <cniedermaier@dh-electronics.com>
 Date: Fri, 2 Dec 2022 11:41:26 +0100
-Subject: [PATCH 05/10] serial: imx: Add support for RS485 RX_DURING_TX output
+Subject: [PATCH 05/12] serial: imx: Add support for RS485 RX_DURING_TX output
  GPIO
 
 If a RX_DURING_TX GPIO is defined by the DT property "rs485-rx-during-tx-gpios"
@@ -19,10 +19,10 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
  1 file changed, 8 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/tty/serial/imx.c b/drivers/tty/serial/imx.c
-index f07c4f9ff13c0..528c393f42fd7 100644
+index d2137f6eff327..10ddeade884b6 100644
 --- a/drivers/tty/serial/imx.c
 +++ b/drivers/tty/serial/imx.c
-@@ -476,7 +476,8 @@ static void imx_uart_stop_tx(struct uart_port *port)
+@@ -487,7 +487,8 @@ static void imx_uart_stop_tx(struct uart_port *port)
  				imx_uart_rts_inactive(sport, &ucr2);
  			imx_uart_writel(sport, ucr2, UCR2);
  
@@ -32,7 +32,7 @@ index f07c4f9ff13c0..528c393f42fd7 100644
  
  			sport->tx_state = OFF;
  		}
-@@ -708,7 +709,8 @@ static void imx_uart_start_tx(struct uart_port *port)
+@@ -719,7 +720,8 @@ static void imx_uart_start_tx(struct uart_port *port)
  				imx_uart_rts_inactive(sport, &ucr2);
  			imx_uart_writel(sport, ucr2, UCR2);
  
@@ -42,7 +42,7 @@ index f07c4f9ff13c0..528c393f42fd7 100644
  				imx_uart_stop_rx(port);
  
  			sport->tx_state = WAIT_AFTER_RTS;
-@@ -1958,6 +1960,10 @@ static int imx_uart_rs485_config(struct uart_port *port, struct ktermios *termio
+@@ -1966,6 +1968,10 @@ static int imx_uart_rs485_config(struct uart_port *port, struct ktermios *termio
  	    rs485conf->flags & SER_RS485_RX_DURING_TX)
  		imx_uart_start_rx(port);
  
@@ -54,5 +54,5 @@ index f07c4f9ff13c0..528c393f42fd7 100644
  }
  
 -- 
-2.39.2
+2.42.0
 

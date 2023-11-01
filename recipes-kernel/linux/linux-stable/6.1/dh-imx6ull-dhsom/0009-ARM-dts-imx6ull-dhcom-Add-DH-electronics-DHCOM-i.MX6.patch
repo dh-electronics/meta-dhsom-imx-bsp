@@ -1,7 +1,7 @@
-From 6ff555ea49f922f013103106313009e4aaa0f6c2 Mon Sep 17 00:00:00 2001
+From 6d302c74d9be52b992d17ea25db2b470dd606960 Mon Sep 17 00:00:00 2001
 From: Christoph Niedermaier <cniedermaier@dh-electronics.com>
 Date: Sun, 22 Jan 2023 17:20:11 +0100
-Subject: [PATCH 09/10] ARM: dts: imx6ull-dhcom: Add DH electronics DHCOM
+Subject: [PATCH 09/12] ARM: dts: imx6ull-dhcom: Add DH electronics DHCOM
  i.MX6ULL SoM and PDK2 board
 
 Add support for DH electronics DHCOM SoM and PDK2 rev. 400 carrier
@@ -23,10 +23,10 @@ Signed-off-by: Shawn Guo <shawnguo@kernel.org>
  create mode 100644 arch/arm/boot/dts/imx6ull-dhcor-som.dtsi
 
 diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index 6aa7dc4db2fc8..9c64e771fb08d 100644
+index df6d905eeb877..04549bb11b96b 100644
 --- a/arch/arm/boot/dts/Makefile
 +++ b/arch/arm/boot/dts/Makefile
-@@ -736,6 +736,7 @@ dtb-$(CONFIG_SOC_IMX6UL) += \
+@@ -737,6 +737,7 @@ dtb-$(CONFIG_SOC_IMX6UL) += \
  	imx6ull-colibri-wifi-eval-v3.dtb \
  	imx6ull-colibri-wifi-iris.dtb \
  	imx6ull-colibri-wifi-iris-v2.dtb \
@@ -1163,5 +1163,5 @@ index 0000000000000..5882c7565f649
 +	};
 +};
 -- 
-2.39.2
+2.42.0
 

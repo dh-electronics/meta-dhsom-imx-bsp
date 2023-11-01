@@ -1,7 +1,7 @@
-From c47c2963e97bec23af3183dc68e47d51f5dec5c5 Mon Sep 17 00:00:00 2001
+From 3bd9de8a4c8e1ef3efeb2f9b291c0dd925266a40 Mon Sep 17 00:00:00 2001
 From: Christoph Niedermaier <cniedermaier@dh-electronics.com>
 Date: Wed, 16 Nov 2022 11:07:26 +0100
-Subject: [PATCH 03/10] regulator: da9062: Make the use of IRQ optional
+Subject: [PATCH 03/12] regulator: da9062: Make the use of IRQ optional
 
 This patch makes the use of IRQ optional to make the DA9061/62 usable
 for designs that don't have the IRQ pin connected, because the regulator
@@ -48,5 +48,5 @@ index 1a63240010275..ae7955afce865 100644
  					IRQF_TRIGGER_LOW | IRQF_ONESHOT,
  					"LDO_LIM", regulators);
 -- 
-2.39.2
+2.42.0
 

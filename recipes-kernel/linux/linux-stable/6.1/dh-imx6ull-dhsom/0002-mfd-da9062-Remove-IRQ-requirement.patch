@@ -1,7 +1,7 @@
-From 5270994a18bb524dda8620665c1d4f8655a4c476 Mon Sep 17 00:00:00 2001
+From b33544700d50f03692eeccddc60a313f818d088d Mon Sep 17 00:00:00 2001
 From: Christoph Niedermaier <cniedermaier@dh-electronics.com>
 Date: Thu, 9 Mar 2023 10:22:53 +0100
-Subject: [PATCH 02/10] mfd: da9062: Remove IRQ requirement
+Subject: [PATCH 02/12] mfd: da9062: Remove IRQ requirement
 
 This patch removes the requirement for an IRQ, because for the core
 functionality IRQ isn't needed. So this makes the DA9061/62 chip
@@ -167,5 +167,5 @@ index fd2769592a4f8..07801696e879a 100644
  	}
  
 -- 
-2.39.2
+2.42.0
 

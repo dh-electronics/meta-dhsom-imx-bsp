@@ -1,7 +1,7 @@
-From 39b560be62e628178601f3aaa07a38f93e1685dd Mon Sep 17 00:00:00 2001
+From fe6c22c02c06be8f54ac03ff360b45d06247fbfd Mon Sep 17 00:00:00 2001
 From: Christoph Niedermaier <cniedermaier@dh-electronics.com>
 Date: Wed, 7 Oct 2020 17:10:43 +0200
-Subject: [PATCH 08/10] clk: imx6ul: Separate both ethernet clocks from each
+Subject: [PATCH 08/12] clk: imx6ul: Separate both ethernet clocks from each
  other
 
 Upstream-Status: Inappropriate [Rework necessary for upstreaming]
@@ -63,5 +63,5 @@ index 79094338e6f1e..b44920f1edb0d 100644
  
  #endif /* __DT_BINDINGS_CLOCK_IMX6UL_H */
 -- 
-2.39.2
+2.42.0
 

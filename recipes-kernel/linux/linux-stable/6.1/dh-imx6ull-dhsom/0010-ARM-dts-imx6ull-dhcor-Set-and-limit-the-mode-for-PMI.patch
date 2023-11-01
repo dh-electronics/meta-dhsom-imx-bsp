@@ -1,7 +1,7 @@
-From 41bebf901bbad2d5404e10b1b1606c47efa9a6e8 Mon Sep 17 00:00:00 2001
+From 86a95fd0b1feabddd05e1463b06f2d78697ea470 Mon Sep 17 00:00:00 2001
 From: Christoph Niedermaier <cniedermaier@dh-electronics.com>
 Date: Wed, 26 Apr 2023 11:03:14 +0200
-Subject: [PATCH 10/10] ARM: dts: imx6ull-dhcor: Set and limit the mode for
+Subject: [PATCH 10/12] ARM: dts: imx6ull-dhcor: Set and limit the mode for
  PMIC buck 1, 2 and 3
 
 According to Renesas Electronics (formerly Dialog Semiconductor), the
@@ -63,5 +63,5 @@ index 5882c7565f649..32a6022625d97 100644
  				regulator-min-microvolt = <1500000>;
  				regulator-name = "vcc_ddr_1v35";
 -- 
-2.39.2
+2.42.0
 

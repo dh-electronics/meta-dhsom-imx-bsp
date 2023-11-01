@@ -1,7 +1,7 @@
-From 8a6db4808c49b8379d851debb7de45177f6a3b52 Mon Sep 17 00:00:00 2001
+From a94fa7ba3e9290a4c7d30a41e360efa428dabd3e Mon Sep 17 00:00:00 2001
 From: Christoph Niedermaier <cniedermaier@dh-electronics.com>
 Date: Tue, 25 Oct 2022 18:14:25 +0200
-Subject: [PATCH 10/12] ARM: dts: imx6ull-dhcom: Add DHCOM based PicoITX board
+Subject: [PATCH 11/12] ARM: dts: imx6ull-dhcom: Add DHCOM based PicoITX board
 
 Add DT for DH PicoITX unit, which is a bare-bones carrier board for
 the DHCOM. The board has ethernet port, USB, CAN, LED and a custom
@@ -15,18 +15,18 @@ Upstream-Status: Backport [bae9847e120aee3a101fb3e42f9ac131d93351ac]
 Signed-off-by: Christoph Niedermaier <cniedermaier@dh-electronics.com>
 Reviewed-by: Marek Vasut <marex@denx.de>
 ---
- arch/arm/boot/dts/Makefile                         |   1 +
- arch/arm/boot/dts/imx6ull-dhcom-picoitx.dts        | 101 +++++++++++++++++++++
- .../arm/boot/dts/imx6ull-dhcom-som-cfg-sdcard.dtsi |  97 ++++++++++++++++++++
+ arch/arm/boot/dts/Makefile                    |   1 +
+ arch/arm/boot/dts/imx6ull-dhcom-picoitx.dts   | 101 ++++++++++++++++++
+ .../dts/imx6ull-dhcom-som-cfg-sdcard.dtsi     |  97 +++++++++++++++++
  3 files changed, 199 insertions(+)
  create mode 100644 arch/arm/boot/dts/imx6ull-dhcom-picoitx.dts
  create mode 100644 arch/arm/boot/dts/imx6ull-dhcom-som-cfg-sdcard.dtsi
 
 diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index 9c64e771fb08..3a6d6921dfc1 100644
+index 04549bb11b96b..07ec184161a19 100644
 --- a/arch/arm/boot/dts/Makefile
 +++ b/arch/arm/boot/dts/Makefile
-@@ -737,6 +737,7 @@ dtb-$(CONFIG_SOC_IMX6UL) += \
+@@ -738,6 +738,7 @@ dtb-$(CONFIG_SOC_IMX6UL) += \
  	imx6ull-colibri-wifi-iris.dtb \
  	imx6ull-colibri-wifi-iris-v2.dtb \
  	imx6ull-dhcom-pdk2.dtb \
@@ -36,7 +36,7 @@ index 9c64e771fb08..3a6d6921dfc1 100644
  	imx6ull-myir-mys-6ulx-eval.dtb \
 diff --git a/arch/arm/boot/dts/imx6ull-dhcom-picoitx.dts b/arch/arm/boot/dts/imx6ull-dhcom-picoitx.dts
 new file mode 100644
-index 000000000000..e4cc2223583a
+index 0000000000000..e4cc2223583aa
 --- /dev/null
 +++ b/arch/arm/boot/dts/imx6ull-dhcom-picoitx.dts
 @@ -0,0 +1,101 @@
@@ -143,7 +143,7 @@ index 000000000000..e4cc2223583a
 +};
 diff --git a/arch/arm/boot/dts/imx6ull-dhcom-som-cfg-sdcard.dtsi b/arch/arm/boot/dts/imx6ull-dhcom-som-cfg-sdcard.dtsi
 new file mode 100644
-index 000000000000..040421f9c970
+index 0000000000000..040421f9c9700
 --- /dev/null
 +++ b/arch/arm/boot/dts/imx6ull-dhcom-som-cfg-sdcard.dtsi
 @@ -0,0 +1,97 @@
@@ -245,5 +245,5 @@ index 000000000000..040421f9c970
 +	};
 +};
 -- 
-2.11.0
+2.42.0
 
