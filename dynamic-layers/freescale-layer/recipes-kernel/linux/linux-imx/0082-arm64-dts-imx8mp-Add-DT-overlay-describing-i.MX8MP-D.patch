@@ -32,12 +32,12 @@ index 8adac7dff93d5..4409ab651c04d 100644
  dtb-$(CONFIG_ARCH_MXC) += imx8mp-dhcom-pdk-overlay-eth2xfast.dtbo
  dtb-$(CONFIG_ARCH_MXC) += imx8mp-dhcom-pdk2.dtb \
  			  imx8mp-dhcom-pdk2-overlay-505-200-x12-ch101olhlwh.dtbo \
-@@ -116,7 +117,8 @@ dtb-$(CONFIG_ARCH_MXC) += imx8mp-dhcom-pdk3.dtb \
- 			  imx8mp-dhcom-pdk3-overlay-560-300-x36.dtbo \
- 			  imx8mp-dhcom-pdk3-overlay-ea-murata-2ae-x20.dtbo \
- 			  imx8mp-dhcom-pdk3-overlay-nxp-spf-29678-c1-ov5640-x29.dtbo \
--			  imx8mp-dhcom-pdk3-overlay-nxp-spf-29678-c1-ov5640-x31.dtbo
-+			  imx8mp-dhcom-pdk3-overlay-nxp-spf-29678-c1-ov5640-x31.dtbo \
+@@ -119,7 +120,8 @@ dtb-$(CONFIG_ARCH_MXC) += imx8mp-dhcom-pdk3.dtb \
+ 			  imx8mp-dhcom-pdk3-overlay-nxp-spf-29678-c1-ov5640-x31.dtbo \
+ 			  imx8mp-dhcom-pdk3-rev100-overlay.dtbo \
+ 			  imx8mp-dhcom-pdk3-rev100-overlay-nxp-spf-29678-c1-ov5640-x29.dtbo \
+-			  imx8mp-dhcom-pdk3-rev100-overlay-nxp-spf-29678-c1-ov5640-x31.dtbo
++			  imx8mp-dhcom-pdk3-rev100-overlay-nxp-spf-29678-c1-ov5640-x31.dtbo \
 +			  imx8mp-dhcom-pdk3-overlay-rev100.dtbo
  dtb-$(CONFIG_ARCH_MXC) += imx8mp-evk.dtb imx8mp-evk-rm67191.dtb imx8mp-evk-it6263-lvds-dual-channel.dtb \
  			  imx8mp-evk-pcie-ep.dtb  imx8mp-evk-rpmsg.dtb imx8mp-evk-ecspi-slave.dtb \

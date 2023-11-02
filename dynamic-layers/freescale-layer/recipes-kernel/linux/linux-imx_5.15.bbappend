@@ -83,6 +83,7 @@ SRC_URI:append:dh-imx8mp-dhsom = " \
 	file://0080-arm64-dts-imx8mp-Update-i.MX8MP-DHCOM-SoM-DT-to-prod.patch \
 	file://0081-arm64-dts-imx8mp-Drop-i.MX8MP-DHCOM-rev.100-PHY-addr.patch \
 	file://0082-arm64-dts-imx8mp-Add-DT-overlay-describing-i.MX8MP-D.patch \
+	file://0083-arm64-dts-imx8mp-Describe-CSI2-GPIO-expander-on-i.MX.patch \
 	"
 
 # Inject extra config options into kernel config this way,

@@ -109,3 +109,4 @@ patch 0108-iio-adc-ti-ads1015-Add-edge-trigger-support.patch
 patch 0109-arm64-dts-imx8mp-Update-i.MX8MP-DHCOM-SoM-DT-to-prod.patch
 patch 0110-arm64-dts-imx8mp-Drop-i.MX8MP-DHCOM-rev.100-PHY-addr.patch
 patch 0111-arm64-dts-imx8mp-Add-DT-overlay-describing-i.MX8MP-D.patch
+patch 0112-arm64-dts-imx8mp-Describe-CSI2-GPIO-expander-on-i.MX.patch

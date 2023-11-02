@@ -1,0 +1,54 @@
+From 1ea9b234c648a0fa9f5d35de643e5469cb1657cf Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Thu, 2 Nov 2023 23:48:53 +0100
+Subject: [PATCH 84/84] arm64: dts: imx8mp: Describe CSI2 GPIO expander on
+ i.MX8MP DHCOM PDK3 board
+
+The production PDK3 carrier board rev.200 contains additional GPIO
+expander to control power and reset signals for each CSI2 plug
+separately. Describe this expander in the carrier board DT. The
+label is used by sensor DTOs to reference the expander and its
+signals.
+
+Upstream-Status: Pending
+Signed-off-by: Marek Vasut <marex@denx.de>
+---
+Cc: Conor Dooley <conor+dt@kernel.org>
+Cc: Fabio Estevam <festevam@gmail.com>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc: Marek Vasut <marex@denx.de>
+Cc: NXP Linux Team <linux-imx@nxp.com>
+Cc: Pengutronix Kernel Team <kernel@pengutronix.de>
+Cc: Rob Herring <robh+dt@kernel.org>
+Cc: Sascha Hauer <s.hauer@pengutronix.de>
+Cc: Shawn Guo <shawnguo@kernel.org>
+Cc: devicetree@vger.kernel.org
+Cc: linux-arm-kernel@lists.infradead.org
+---
+ arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3.dts | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3.dts b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3.dts
+index 0c2e0895be0a5..bdebcf96602f9 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3.dts
++++ b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3.dts
+@@ -167,6 +167,16 @@ sgtl5000: codec@a {
+ 				VDDIO-supply = <&reg_vdd_3p3v_awo>;
+ 			};
+ 
++			csi2exp: gpio@24 {
++				compatible = "nxp,pca9570";
++				reg = <0x24>;
++				gpio-controller;
++				#gpio-cells = <2>;
++				gpio-line-names =
++					"CSI2_#RESET", "CSI2_#PWDN",
++					"CSI_#PWDN", "CSI_#RESET";
++			};
++
+ 			typec@3d {
+ 				compatible = "nxp,ptn5150";
+ 				reg = <0x3d>;
+-- 
+2.42.0
+
