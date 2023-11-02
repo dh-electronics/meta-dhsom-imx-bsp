@@ -74,6 +74,17 @@ if test -z "${loaddtos}" ; then
       fi
     fi
 
+    if test "${dh_compatible}" = "dh,imx8mp-dhcom-pdk3" ; then
+      i2c dev 4
+      i2c mw 0x70 0 4
+      if i2c probe 0x24 ; then
+        echo "DH i.MX8M Plus on PDK3 rev.200 or newer detected"
+      else
+        echo "DH i.MX8M Plus on PDK3 rev.100 detected, disabling CSI2 GPIO expander."
+        setenv loaddtos "${loaddtos}#conf-freescale_imx8mp-dhcom-pdk3-rev100-overlay.dtbo"
+      fi
+    fi
+
     # Determine SoM revision from SoM coding GPIOs
     gpio input GPIO3_25
     setexpr dh_som_rev $? * 2
