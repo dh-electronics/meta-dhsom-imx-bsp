@@ -117,4 +117,5 @@ do_copy_defconfig:append:dh-imx8mp-dhsom () {
     echo "CONFIG_VIDEO_IMX_MIPI_CSIS=y" >> ${B}/.config
     echo "CONFIG_VIDEO_OV5640=y" >> ${B}/.config
     echo "CONFIG_COMMON_CLK_SI521XX=y" >> ${B}/.config
+    echo "CONFIG_GPIO_PCA9570=y" >> ${B}/.config
 }
