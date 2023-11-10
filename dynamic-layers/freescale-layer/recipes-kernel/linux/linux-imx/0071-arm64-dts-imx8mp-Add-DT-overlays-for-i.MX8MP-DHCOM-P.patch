@@ -10,8 +10,8 @@ Add DT overlays to support:
 - DH 531-200 SPI/I2C board in header X22
 - DH 560-300 Display board in edge connector X12
 - EA muRata 2AE M.2 A/E-Key card in connector X20
-- NXP SPF-29678-C1 MINISASTOCSI with OV5640 sensor in connector X31
-- NXP SPF-29678-C1 MINISASTOCSI with OV5640 sensor in connector X29
+- NXP SPF-29853-C1 MINISASTOCSI with OV5640 sensor in connector X31
+- NXP SPF-29853-C1 MINISASTOCSI with OV5640 sensor in connector X29
 
 Upstream-Status: Inappropriate
 Signed-off-by: Marek Vasut <marex@denx.de>
@@ -24,12 +24,12 @@ Signed-off-by: Marek Vasut <marex@denx.de>
  .../imx8mp-dhcom-pdk3-overlay-531-100-x41.dts | 33 +++++++++++
  .../imx8mp-dhcom-pdk3-overlay-560-300-x36.dts | 26 +++++++++
  ...p-dhcom-pdk3-overlay-ea-murata-2ae-x20.dts | 56 +++++++++++++++++++
- ...k3-overlay-nxp-spf-29678-c1-ov5640-x29.dts | 30 ++++++++++
- ...k3-overlay-nxp-spf-29678-c1-ov5640-x31.dts | 30 ++++++++++
- ...-pdk3-overlay-nxp-spf-29678-c1-ov5640.dtsi | 35 ++++++++++++
- ...00-overlay-nxp-spf-29678-c1-ov5640-x29.dts |  7 +++
- ...00-overlay-nxp-spf-29678-c1-ov5640-x31.dts |  7 +++
- ...ev100-overlay-nxp-spf-29678-c1-ov5640.dtsi | 11 ++++
+ ...k3-overlay-nxp-spf-29853-c1-ov5640-x29.dts | 30 ++++++++++
+ ...k3-overlay-nxp-spf-29853-c1-ov5640-x31.dts | 30 ++++++++++
+ ...-pdk3-overlay-nxp-spf-29853-c1-ov5640.dtsi | 35 ++++++++++++
+ ...00-overlay-nxp-spf-29853-c1-ov5640-x29.dts |  7 +++
+ ...00-overlay-nxp-spf-29853-c1-ov5640-x31.dts |  7 +++
+ ...ev100-overlay-nxp-spf-29853-c1-ov5640.dtsi | 11 ++++
  .../imx8mp-dhcom-pdk3-rev100-overlay.dts      | 10 ++++
  15 files changed, 347 insertions(+), 6 deletions(-)
  create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-overlay-505-200-x36-ch101olhlwh.dts
@@ -37,12 +37,12 @@ Signed-off-by: Marek Vasut <marex@denx.de>
  create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-overlay-531-100-x41.dts
  create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-overlay-560-300-x36.dts
  create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-overlay-ea-murata-2ae-x20.dts
- create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-overlay-nxp-spf-29678-c1-ov5640-x29.dts
- create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-overlay-nxp-spf-29678-c1-ov5640-x31.dts
- create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-overlay-nxp-spf-29678-c1-ov5640.dtsi
- create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-rev100-overlay-nxp-spf-29678-c1-ov5640-x29.dts
- create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-rev100-overlay-nxp-spf-29678-c1-ov5640-x31.dts
- create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-rev100-overlay-nxp-spf-29678-c1-ov5640.dtsi
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-overlay-nxp-spf-29853-c1-ov5640-x29.dts
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-overlay-nxp-spf-29853-c1-ov5640-x31.dts
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-overlay-nxp-spf-29853-c1-ov5640.dtsi
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-rev100-overlay-nxp-spf-29853-c1-ov5640-x29.dts
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-rev100-overlay-nxp-spf-29853-c1-ov5640-x31.dts
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-rev100-overlay-nxp-spf-29853-c1-ov5640.dtsi
  create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-rev100-overlay.dts
 
 diff --git a/arch/arm64/boot/dts/freescale/Makefile b/arch/arm64/boot/dts/freescale/Makefile
@@ -60,11 +60,11 @@ index 593ea21d400d7..a5300cc3260ec 100644
 +			  imx8mp-dhcom-pdk3-overlay-531-100-x41.dtbo \
 +			  imx8mp-dhcom-pdk3-overlay-560-300-x36.dtbo \
 +			  imx8mp-dhcom-pdk3-overlay-ea-murata-2ae-x20.dtbo \
-+			  imx8mp-dhcom-pdk3-overlay-nxp-spf-29678-c1-ov5640-x29.dtbo \
-+			  imx8mp-dhcom-pdk3-overlay-nxp-spf-29678-c1-ov5640-x31.dtbo \
++			  imx8mp-dhcom-pdk3-overlay-nxp-spf-29853-c1-ov5640-x29.dtbo \
++			  imx8mp-dhcom-pdk3-overlay-nxp-spf-29853-c1-ov5640-x31.dtbo \
 +			  imx8mp-dhcom-pdk3-rev100-overlay.dtbo \
-+			  imx8mp-dhcom-pdk3-rev100-overlay-nxp-spf-29678-c1-ov5640-x29.dtbo \
-+			  imx8mp-dhcom-pdk3-rev100-overlay-nxp-spf-29678-c1-ov5640-x31.dtbo
++			  imx8mp-dhcom-pdk3-rev100-overlay-nxp-spf-29853-c1-ov5640-x29.dtbo \
++			  imx8mp-dhcom-pdk3-rev100-overlay-nxp-spf-29853-c1-ov5640-x31.dtbo
  dtb-$(CONFIG_ARCH_MXC) += imx8mp-evk.dtb imx8mp-evk-rm67191.dtb imx8mp-evk-it6263-lvds-dual-channel.dtb \
  			  imx8mp-evk-pcie-ep.dtb  imx8mp-evk-rpmsg.dtb imx8mp-evk-ecspi-slave.dtb \
  			  imx8mp-evk-jdi-wuxga-lvds-panel.dtb imx8mp-evk-flexcan2.dtb \
@@ -338,11 +338,11 @@ index 0000000000000..c918081dbc052
 +		reset-gpios = <&gpio4 27 GPIO_ACTIVE_LOW>; /* GPIO D */
 +	};
 +};
-diff --git a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-overlay-nxp-spf-29678-c1-ov5640-x29.dts b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-overlay-nxp-spf-29678-c1-ov5640-x29.dts
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-overlay-nxp-spf-29853-c1-ov5640-x29.dts b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-overlay-nxp-spf-29853-c1-ov5640-x29.dts
 new file mode 100644
 index 0000000000000..0907c42e09018
 --- /dev/null
-+++ b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-overlay-nxp-spf-29678-c1-ov5640-x29.dts
++++ b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-overlay-nxp-spf-29853-c1-ov5640-x29.dts
 @@ -0,0 +1,30 @@
 +// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
 +/*
@@ -351,7 +351,7 @@ index 0000000000000..0907c42e09018
 +/dts-v1/;
 +/plugin/;
 +
-+#include "imx8mp-dhcom-pdk3-overlay-nxp-spf-29678-c1-ov5640.dtsi"
++#include "imx8mp-dhcom-pdk3-overlay-nxp-spf-29853-c1-ov5640.dtsi"
 +
 +&ov5640 {
 +	powerdown-gpios = <&csi2exp 1 GPIO_ACTIVE_HIGH>;
@@ -374,11 +374,11 @@ index 0000000000000..0907c42e09018
 +		};
 +	};
 +};
-diff --git a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-overlay-nxp-spf-29678-c1-ov5640-x31.dts b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-overlay-nxp-spf-29678-c1-ov5640-x31.dts
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-overlay-nxp-spf-29853-c1-ov5640-x31.dts b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-overlay-nxp-spf-29853-c1-ov5640-x31.dts
 new file mode 100644
 index 0000000000000..f4609131768b3
 --- /dev/null
-+++ b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-overlay-nxp-spf-29678-c1-ov5640-x31.dts
++++ b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-overlay-nxp-spf-29853-c1-ov5640-x31.dts
 @@ -0,0 +1,30 @@
 +// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
 +/*
@@ -387,7 +387,7 @@ index 0000000000000..f4609131768b3
 +/dts-v1/;
 +/plugin/;
 +
-+#include "imx8mp-dhcom-pdk3-overlay-nxp-spf-29678-c1-ov5640.dtsi"
++#include "imx8mp-dhcom-pdk3-overlay-nxp-spf-29853-c1-ov5640.dtsi"
 +
 +&ov5640 {
 +	powerdown-gpios = <&csi2exp 2 GPIO_ACTIVE_HIGH>;
@@ -410,11 +410,11 @@ index 0000000000000..f4609131768b3
 +		};
 +	};
 +};
-diff --git a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-overlay-nxp-spf-29678-c1-ov5640.dtsi b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-overlay-nxp-spf-29678-c1-ov5640.dtsi
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-overlay-nxp-spf-29853-c1-ov5640.dtsi b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-overlay-nxp-spf-29853-c1-ov5640.dtsi
 new file mode 100644
 index 0000000000000..5d73373f58caf
 --- /dev/null
-+++ b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-overlay-nxp-spf-29678-c1-ov5640.dtsi
++++ b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-overlay-nxp-spf-29853-c1-ov5640.dtsi
 @@ -0,0 +1,35 @@
 +// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
 +/*
@@ -451,37 +451,37 @@ index 0000000000000..5d73373f58caf
 +&isi_0 {
 +	status = "okay";
 +};
-diff --git a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-rev100-overlay-nxp-spf-29678-c1-ov5640-x29.dts b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-rev100-overlay-nxp-spf-29678-c1-ov5640-x29.dts
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-rev100-overlay-nxp-spf-29853-c1-ov5640-x29.dts b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-rev100-overlay-nxp-spf-29853-c1-ov5640-x29.dts
 new file mode 100644
 index 0000000000000..083537e90755a
 --- /dev/null
-+++ b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-rev100-overlay-nxp-spf-29678-c1-ov5640-x29.dts
++++ b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-rev100-overlay-nxp-spf-29853-c1-ov5640-x29.dts
 @@ -0,0 +1,7 @@
 +// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
 +/*
 + * Copyright (C) 2023 Marek Vasut <marex@denx.de>
 + */
-+#include "imx8mp-dhcom-pdk3-overlay-nxp-spf-29678-c1-ov5640-x29.dts"
++#include "imx8mp-dhcom-pdk3-overlay-nxp-spf-29853-c1-ov5640-x29.dts"
 +/* Switch to native SoC PWDN and RESET GPIOs on PDK3 rev.100 */
-+#include "imx8mp-dhcom-pdk3-rev100-overlay-nxp-spf-29678-c1-ov5640.dtsi"
-diff --git a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-rev100-overlay-nxp-spf-29678-c1-ov5640-x31.dts b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-rev100-overlay-nxp-spf-29678-c1-ov5640-x31.dts
++#include "imx8mp-dhcom-pdk3-rev100-overlay-nxp-spf-29853-c1-ov5640.dtsi"
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-rev100-overlay-nxp-spf-29853-c1-ov5640-x31.dts b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-rev100-overlay-nxp-spf-29853-c1-ov5640-x31.dts
 new file mode 100644
 index 0000000000000..083537e90755a
 --- /dev/null
-+++ b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-rev100-overlay-nxp-spf-29678-c1-ov5640-x31.dts
++++ b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-rev100-overlay-nxp-spf-29853-c1-ov5640-x31.dts
 @@ -0,0 +1,7 @@
 +// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
 +/*
 + * Copyright (C) 2023 Marek Vasut <marex@denx.de>
 + */
-+#include "imx8mp-dhcom-pdk3-overlay-nxp-spf-29678-c1-ov5640-x29.dts"
++#include "imx8mp-dhcom-pdk3-overlay-nxp-spf-29853-c1-ov5640-x29.dts"
 +/* Switch to native SoC PWDN and RESET GPIOs on PDK3 rev.100 */
-+#include "imx8mp-dhcom-pdk3-rev100-overlay-nxp-spf-29678-c1-ov5640.dtsi"
-diff --git a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-rev100-overlay-nxp-spf-29678-c1-ov5640.dtsi b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-rev100-overlay-nxp-spf-29678-c1-ov5640.dtsi
++#include "imx8mp-dhcom-pdk3-rev100-overlay-nxp-spf-29853-c1-ov5640.dtsi"
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-rev100-overlay-nxp-spf-29853-c1-ov5640.dtsi b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-rev100-overlay-nxp-spf-29853-c1-ov5640.dtsi
 new file mode 100644
 index 0000000000000..7a2bf03a88089
 --- /dev/null
-+++ b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-rev100-overlay-nxp-spf-29678-c1-ov5640.dtsi
++++ b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-rev100-overlay-nxp-spf-29853-c1-ov5640.dtsi
 @@ -0,0 +1,11 @@
 +// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
 +/*

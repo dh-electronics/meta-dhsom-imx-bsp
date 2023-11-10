@@ -12,14 +12,14 @@ Upstream-Status: Inappropriate
 Signed-off-by: Marek Vasut <marex@denx.de>
 ---
  .../imx8mp-dhcom-pdk3-downstream.dtsi         | 19 +++++++++++++++++++
- ...ay-nxp-spf-29678-c1-ov5640-downstream.dtsi | 18 ++++++++++++++++++
- ...k3-overlay-nxp-spf-29678-c1-ov5640-x29.dts | 19 ++++++++++---------
- ...k3-overlay-nxp-spf-29678-c1-ov5640-x31.dts | 19 ++++++++++---------
- ...-pdk3-overlay-nxp-spf-29678-c1-ov5640.dtsi |  2 ++
+ ...ay-nxp-spf-29853-c1-ov5640-downstream.dtsi | 18 ++++++++++++++++++
+ ...k3-overlay-nxp-spf-29853-c1-ov5640-x29.dts | 19 ++++++++++---------
+ ...k3-overlay-nxp-spf-29853-c1-ov5640-x31.dts | 19 ++++++++++---------
+ ...-pdk3-overlay-nxp-spf-29853-c1-ov5640.dtsi |  2 ++
  .../boot/dts/freescale/imx8mp-dhcom-pdk3.dts  |  2 +-
  6 files changed, 60 insertions(+), 19 deletions(-)
  create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-downstream.dtsi
- create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-overlay-nxp-spf-29678-c1-ov5640-downstream.dtsi
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-overlay-nxp-spf-29853-c1-ov5640-downstream.dtsi
 
 diff --git a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-downstream.dtsi b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-downstream.dtsi
 new file mode 100644
@@ -46,11 +46,11 @@ index 0000000000000..0473dd8ad543e
 +	clock-names = "pcie", "pcie_aux", "pcie_phy", "pcie_bus";
 +	ext_osc = <1>;
 +};
-diff --git a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-overlay-nxp-spf-29678-c1-ov5640-downstream.dtsi b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-overlay-nxp-spf-29678-c1-ov5640-downstream.dtsi
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-overlay-nxp-spf-29853-c1-ov5640-downstream.dtsi b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-overlay-nxp-spf-29853-c1-ov5640-downstream.dtsi
 new file mode 100644
 index 0000000000000..5ebdccdebfb7d
 --- /dev/null
-+++ b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-overlay-nxp-spf-29678-c1-ov5640-downstream.dtsi
++++ b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-overlay-nxp-spf-29853-c1-ov5640-downstream.dtsi
 @@ -0,0 +1,18 @@
 +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
 +/*
@@ -70,10 +70,10 @@ index 0000000000000..5ebdccdebfb7d
 +		status = "okay";
 +	};
 +};
-diff --git a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-overlay-nxp-spf-29678-c1-ov5640-x29.dts b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-overlay-nxp-spf-29678-c1-ov5640-x29.dts
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-overlay-nxp-spf-29853-c1-ov5640-x29.dts b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-overlay-nxp-spf-29853-c1-ov5640-x29.dts
 index 0907c42e09018..a6f22f5d513cd 100644
---- a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-overlay-nxp-spf-29678-c1-ov5640-x29.dts
-+++ b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-overlay-nxp-spf-29678-c1-ov5640-x29.dts
+--- a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-overlay-nxp-spf-29853-c1-ov5640-x29.dts
++++ b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-overlay-nxp-spf-29853-c1-ov5640-x29.dts
 @@ -10,16 +10,17 @@
  &mipi_csi_1 {
  	status = "okay";
@@ -101,10 +101,10 @@ index 0907c42e09018..a6f22f5d513cd 100644
  		};
  	};
  };
-diff --git a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-overlay-nxp-spf-29678-c1-ov5640-x31.dts b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-overlay-nxp-spf-29678-c1-ov5640-x31.dts
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-overlay-nxp-spf-29853-c1-ov5640-x31.dts b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-overlay-nxp-spf-29853-c1-ov5640-x31.dts
 index f4609131768b3..2cae0338ccdf1 100644
---- a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-overlay-nxp-spf-29678-c1-ov5640-x31.dts
-+++ b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-overlay-nxp-spf-29678-c1-ov5640-x31.dts
+--- a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-overlay-nxp-spf-29853-c1-ov5640-x31.dts
++++ b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-overlay-nxp-spf-29853-c1-ov5640-x31.dts
 @@ -10,16 +10,17 @@
  &mipi_csi_0 {
  	status = "okay";
@@ -132,16 +132,16 @@ index f4609131768b3..2cae0338ccdf1 100644
  		};
  	};
  };
-diff --git a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-overlay-nxp-spf-29678-c1-ov5640.dtsi b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-overlay-nxp-spf-29678-c1-ov5640.dtsi
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-overlay-nxp-spf-29853-c1-ov5640.dtsi b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-overlay-nxp-spf-29853-c1-ov5640.dtsi
 index 5d73373f58caf..2b8a5ab87da27 100644
---- a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-overlay-nxp-spf-29678-c1-ov5640.dtsi
-+++ b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-overlay-nxp-spf-29678-c1-ov5640.dtsi
+--- a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-overlay-nxp-spf-29853-c1-ov5640.dtsi
++++ b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-overlay-nxp-spf-29853-c1-ov5640.dtsi
 @@ -35,3 +35,5 @@ ov5640_to_mipi_csi2: endpoint {
  &isi_0 {
  	status = "okay";
  };
 +
-+#include "imx8mp-dhcom-pdk3-overlay-nxp-spf-29678-c1-ov5640-downstream.dtsi"
++#include "imx8mp-dhcom-pdk3-overlay-nxp-spf-29853-c1-ov5640-downstream.dtsi"
 diff --git a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3.dts b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3.dts
 index 75937c5766210..9d834deea19a9 100644
 --- a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3.dts
