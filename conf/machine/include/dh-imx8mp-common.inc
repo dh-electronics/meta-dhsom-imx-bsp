@@ -8,7 +8,7 @@ require conf/machine/include/dh-imx-common.inc
 DEFAULTTUNE ?= "cortexa53-crypto"
 SOC_FAMILY ?= "imx8mp"
 
-require conf/machine/include/${@'arm/armv8a/' if (d.getVar('LAYERSERIES_CORENAMES') in ["kirkstone"]) else ''}tune-cortexa53.inc
+require conf/machine/include/${@'' if (d.getVar('LAYERSERIES_CORENAMES') in ["dunfell"]) else 'arm/armv8a/'}tune-cortexa53.inc
 require conf/machine/include/soc-family.inc
 
 SERIAL_CONSOLE = "115200 ttymxc0"
