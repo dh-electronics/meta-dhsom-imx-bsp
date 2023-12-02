@@ -1,0 +1,55 @@
+From 235846a5670d0518ceb6dae41a789c5940760602 Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Thu, 30 Nov 2023 21:11:02 +0100
+Subject: [PATCH 09/11] ddr: imx: Add 3600 MTps rate support
+
+Add PLL settings for DDR 3600 MTps . This is very similar to 3200 MTps
+PLL setting, except the divider is not 9 but 8 .
+
+Upstream-Status: Backport [41b0f3454b2241ee323d7d10ef168199c8ca4f60]
+Signed-off-by: Marek Vasut <marex@denx.de>
+---
+Cc: "NXP i.MX U-Boot Team" <uboot-imx@nxp.com>
+Cc: Fabio Estevam <festevam@gmail.com>
+Cc: Jacky Bai <ping.bai@nxp.com>
+Cc: Peng Fan <peng.fan@nxp.com>
+Cc: Ramon Fried <rfried.dev@gmail.com>
+Cc: Rasmus Villemoes <rasmus.villemoes@prevas.dk>
+Cc: Stefano Babic <sbabic@denx.de>
+Cc: Ye Li <ye.li@nxp.com>
+Cc: u-boot@lists.denx.de
+---
+ arch/arm/mach-imx/imx8m/clock_imx8mm.c | 1 +
+ drivers/ddr/imx/phy/ddrphy_utils.c     | 4 ++++
+ 2 files changed, 5 insertions(+)
+
+diff --git a/arch/arm/mach-imx/imx8m/clock_imx8mm.c b/arch/arm/mach-imx/imx8m/clock_imx8mm.c
+index 31c34b6031f..b9f92d1c7a5 100644
+--- a/arch/arm/mach-imx/imx8m/clock_imx8mm.c
++++ b/arch/arm/mach-imx/imx8m/clock_imx8mm.c
+@@ -56,6 +56,7 @@ int enable_i2c_clk(unsigned char enable, unsigned i2c_num)
+ static struct imx_int_pll_rate_table imx8mm_fracpll_tbl[] = {
+ 	PLL_1443X_RATE(1000000000U, 250, 3, 1, 0),
+ 	PLL_1443X_RATE(933000000U, 311, 4, 1, 0),
++	PLL_1443X_RATE(900000000U, 300, 8, 0, 0),
+ 	PLL_1443X_RATE(800000000U, 300, 9, 0, 0),
+ 	PLL_1443X_RATE(750000000U, 250, 8, 0, 0),
+ 	PLL_1443X_RATE(650000000U, 325, 3, 2, 0),
+diff --git a/drivers/ddr/imx/phy/ddrphy_utils.c b/drivers/ddr/imx/phy/ddrphy_utils.c
+index fd8b4113b7b..387048d7b4a 100644
+--- a/drivers/ddr/imx/phy/ddrphy_utils.c
++++ b/drivers/ddr/imx/phy/ddrphy_utils.c
+@@ -116,6 +116,10 @@ void ddrphy_init_set_dfi_clk(unsigned int drate)
+ 		dram_pll_init(MHZ(933));
+ 		dram_disable_bypass();
+ 		break;
++	case 3600:
++		dram_pll_init(MHZ(900));
++		dram_disable_bypass();
++		break;
+ 	case 3200:
+ 		dram_pll_init(MHZ(800));
+ 		dram_disable_bypass();
+-- 
+2.42.0
+

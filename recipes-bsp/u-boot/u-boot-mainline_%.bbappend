@@ -12,6 +12,9 @@ SRC_URI:append:dh-imx-dhsom = " \
 	file://0006-arm64-dts-imx8mp-Drop-i.MX8MP-DHCOM-rev.100-PHY-addr.patch \
 	file://0007-arm64-dts-imx8mp-Add-DT-overlay-describing-i.MX8MP-D.patch \
 	file://0008-ARM-imx-Enable-CAAM-on-DH-i.MX8M-Plus-DHCOM.patch \
+	file://0009-ddr-imx-Add-3600-MTps-rate-support.patch \
+	file://0010-ARM-imx-Force-DRAM-regulators-into-FPWM-mode-on-DH-i.patch \
+	file://0011-ARM-imx-Update-DRAM-timings-with-inline-ECC-on-DH-i..patch \
 	"
 
 EXTRA_OEMAKE:append:dh-imx8mp-dhsom = " ATF_LOAD_ADDR=0x970000"
@@ -28,4 +31,4 @@ do_compile:prepend:dh-imx8mp-dhsom () {
 # format is -${MACHINE}-date.extraversion. The date is in the
 # format YYYYMMDD, the extraversion is used in case there are
 # multiple releases during a single day, which is unlikely.
-UBOOT_LOCALVERSION:dh-imx-dhsom ?= "-${MACHINE}-20231202.01"
+UBOOT_LOCALVERSION:dh-imx-dhsom ?= "-${MACHINE}-20231216.01"
