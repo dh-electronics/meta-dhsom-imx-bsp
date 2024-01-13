@@ -15,6 +15,8 @@ SRC_URI:append:dh-imx-dhsom = " \
 	file://0009-ddr-imx-Add-3600-MTps-rate-support.patch \
 	file://0010-ARM-imx-Force-DRAM-regulators-into-FPWM-mode-on-DH-i.patch \
 	file://0011-ARM-imx-Update-DRAM-timings-with-inline-ECC-on-DH-i..patch \
+	file://0012-imx-spl_imx_romapi-avoid-tricky-use-of-spl_load_simp.patch \
+	file://0013-imx-spl_imx_romapi-fix-emmc-fast-boot-mode-case.patch \
 	"
 
 EXTRA_OEMAKE:append:dh-imx8mp-dhsom = " ATF_LOAD_ADDR=0x970000"
@@ -31,4 +33,4 @@ do_compile:prepend:dh-imx8mp-dhsom () {
 # format is -${MACHINE}-date.extraversion. The date is in the
 # format YYYYMMDD, the extraversion is used in case there are
 # multiple releases during a single day, which is unlikely.
-UBOOT_LOCALVERSION:dh-imx-dhsom ?= "-${MACHINE}-20231216.01"
+UBOOT_LOCALVERSION:dh-imx-dhsom ?= "-${MACHINE}-20240113.01"
