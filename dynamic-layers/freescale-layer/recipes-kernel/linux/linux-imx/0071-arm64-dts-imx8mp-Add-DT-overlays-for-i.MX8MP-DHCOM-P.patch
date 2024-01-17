@@ -319,7 +319,7 @@ index 0000000000000..c918081dbc052
 +	pinctrl-names = "default";
 +	pinctrl-0 = <&pinctrl_usdhc2>;
 +	cap-power-off-card;
-+       	cd-gpios;	/* cd-gpios property cannot be deleted using DTO */
++	cd-gpios;	/* cd-gpios property cannot be deleted using DTO */
 +	keep-power-in-suspend;
 +	non-removable;
 +	vmmc-supply = <&buck4>;
@@ -327,7 +327,7 @@ index 0000000000000..c918081dbc052
 +	#address-cells = <1>;
 +	#size-cells = <0>;
 +
-+	bcrmf@1 {       /* muRata 2AE */
++	bcrmf@1 {	/* muRata 2AE */
 +		reg = <1>;
 +		compatible = "cypress,cyw4373-fmac", "brcm,bcm4329-fmac";
 +		/*
