@@ -210,7 +210,7 @@ index 0000000000000..35acdb2884d08
 +};
 +
 +&display_bl {
-+	pwms = <&pwm1 0 5000000 0>;
++	pwms = <&pwm1 0 5000000 PWM_POLARITY_INVERTED>;
 +};
 +
 +&DH_OVERLAY_PANEL_I2C_BUS {
