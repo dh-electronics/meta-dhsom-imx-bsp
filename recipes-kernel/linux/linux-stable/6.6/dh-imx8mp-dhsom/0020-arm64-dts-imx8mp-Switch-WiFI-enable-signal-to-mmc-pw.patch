@@ -1,0 +1,54 @@
+From db380094cee9694dbf0dff4ffbb6a6739d9739c0 Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Thu, 31 Aug 2023 20:20:19 +0200
+Subject: [PATCH 20/26] arm64: dts: imx8mp: Switch WiFI enable signal to
+ mmc-pwrseq-simple on i.MX8MP DHCOM SoM
+
+The reset-gpio is connected to WL_REG_EN signal of the WiFi MAC, the
+mmc-pwrseq-simple driver is better suited to operate this signal as
+it is tied to the slot instead of the MAC, and it can enable the MAC
+before the brcmfmac driver binds to it. Make use of the MMC power
+sequencer.
+
+Upstream-Status: Backport [dfd948b99846bcce72929d2312199535ed55868e]
+Signed-off-by: Marek Vasut <marex@denx.de>
+Signed-off-by: Shawn Guo <shawnguo@kernel.org>
+---
+ arch/arm64/boot/dts/freescale/imx8mp-dhcom-som.dtsi | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-som.dtsi b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-som.dtsi
+index 1644b56c3953d..df43741d04bb9 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-som.dtsi
++++ b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-som.dtsi
+@@ -57,6 +57,11 @@ reg_vdd_3p3v_awo: regulator-vdd-3p3v-awo {	/* VDD_3V3_AWO */
+ 		regulator-max-microvolt = <3300000>;
+ 		regulator-name = "VDD_3P3V_AWO";
+ 	};
++
++	wlan_pwrseq: wifi-pwrseq {
++		compatible = "mmc-pwrseq-simple";
++		reset-gpios = <&gpio1 13 GPIO_ACTIVE_LOW>;
++	};
+ };
+ 
+ &A53_0 {
+@@ -543,6 +548,7 @@ &usdhc1 {
+ 	pinctrl-0 = <&pinctrl_usdhc1>;
+ 	pinctrl-1 = <&pinctrl_usdhc1_100mhz>;
+ 	pinctrl-2 = <&pinctrl_usdhc1_200mhz>;
++	mmc-pwrseq = <&wlan_pwrseq>;
+ 	vmmc-supply = <&buck4>;
+ 	bus-width = <4>;
+ 	non-removable;
+@@ -561,7 +567,6 @@ brcmf: bcrmf@1 {	/* muRata 2AE */
+ 		 * connected to the SoC, but can be connected on to
+ 		 * SoC pin on the carrier board.
+ 		 */
+-		reset-gpios = <&gpio1 13 GPIO_ACTIVE_LOW>;
+ 	};
+ };
+ 
+-- 
+2.43.0
+

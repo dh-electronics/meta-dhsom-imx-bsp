@@ -1,0 +1,38 @@
+From d5eb301fa1359a8f69e4d47100deee2aabb8bfdc Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Thu, 31 Aug 2023 20:25:02 +0200
+Subject: [PATCH 01/26] iio: adc: ti-ads1015: Add edge trigger support
+
+The comparator generates an edge on the IRQ like and stays in the
+configured state until cleared. Support edge triggered IRQs as well
+as not all controllers do support level triggered IRQ.
+
+Upstream-Status: Backport [17f961a6555ae38490cfcc39f12c0c014cbd2617]
+Signed-off-by: Marek Vasut <marex@denx.de>
+Link: https://lore.kernel.org/r/20230831182502.154899-1-marex@denx.de
+Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+---
+ drivers/iio/adc/ti-ads1015.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/drivers/iio/adc/ti-ads1015.c b/drivers/iio/adc/ti-ads1015.c
+index 075c75a875449..addee45ed40ad 100644
+--- a/drivers/iio/adc/ti-ads1015.c
++++ b/drivers/iio/adc/ti-ads1015.c
+@@ -1047,11 +1047,13 @@ static int ads1015_probe(struct i2c_client *client)
+ 			1 << ADS1015_CFG_COMP_LAT_SHIFT;
+ 
+ 		switch (irq_trig) {
++		case IRQF_TRIGGER_FALLING:
+ 		case IRQF_TRIGGER_LOW:
+ 			cfg_comp |= ADS1015_CFG_COMP_POL_LOW <<
+ 					ADS1015_CFG_COMP_POL_SHIFT;
+ 			break;
+ 		case IRQF_TRIGGER_HIGH:
++		case IRQF_TRIGGER_RISING:
+ 			cfg_comp |= ADS1015_CFG_COMP_POL_HIGH <<
+ 					ADS1015_CFG_COMP_POL_SHIFT;
+ 			break;
+-- 
+2.43.0
+

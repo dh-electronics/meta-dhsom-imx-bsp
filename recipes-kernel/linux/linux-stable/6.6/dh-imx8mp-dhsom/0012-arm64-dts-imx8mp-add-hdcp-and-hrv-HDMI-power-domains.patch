@@ -1,0 +1,37 @@
+From a274d78fe08d46a8a5829873854389b9fd79b578 Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Wed, 17 Jan 2024 21:11:16 +0100
+Subject: [PATCH 12/26] arm64: dts: imx8mp: add hdcp and hrv HDMI power-domains
+
+Fix "arm64: dts: imx8mp: add HDMI power-domains" and fill in missing
+HDCP and HRV power domains so that the i.MX8MP HDMI block controller
+could correctly suspend those two domains.
+
+Upstream-Status: Pending [Will be squashed into "arm64: dts: imx8mp: add HDMI power-domains"]
+Signed-off-by: Marek Vasut <marex@denx.de>
+---
+ arch/arm64/boot/dts/freescale/imx8mp.dtsi | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp.dtsi b/arch/arm64/boot/dts/freescale/imx8mp.dtsi
+index 6cc120b099123..d42e7a8aff83c 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mp.dtsi
++++ b/arch/arm64/boot/dts/freescale/imx8mp.dtsi
+@@ -1378,10 +1378,12 @@ hdmi_blk_ctrl: blk-ctrl@32fc0000 {
+ 				power-domains = <&pgc_hdmimix>, <&pgc_hdmimix>,
+ 						<&pgc_hdmimix>, <&pgc_hdmimix>,
+ 						<&pgc_hdmimix>, <&pgc_hdmimix>,
+-						<&pgc_hdmimix>, <&pgc_hdmi_phy>;
++						<&pgc_hdmimix>, <&pgc_hdmi_phy>,
++						<&pgc_hdmimix>, <&pgc_hdmimix>;
+ 				power-domain-names = "bus", "irqsteer", "lcdif",
+ 						     "pai", "pvi", "trng",
+-						     "hdmi-tx", "hdmi-tx-phy";
++						     "hdmi-tx", "hdmi-tx-phy",
++						     "hdcp", "hrv";
+ 				#power-domain-cells = <1>;
+ 			};
+ 		};
+-- 
+2.43.0
+

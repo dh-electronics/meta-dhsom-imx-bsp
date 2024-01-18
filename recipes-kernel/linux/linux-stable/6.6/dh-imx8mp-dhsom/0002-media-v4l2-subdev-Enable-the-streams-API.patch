@@ -1,0 +1,30 @@
+From b6c8c8b3cfe450fb941098bb053831a424923997 Mon Sep 17 00:00:00 2001
+From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Date: Sat, 14 Jan 2023 23:38:53 +0200
+Subject: [PATCH 02/26] media: v4l2-subdev: Enable the streams API
+
+The ISI driver depends on the stream API. Enable it manually, until it
+stabilizes upstream and gets enabled by default.
+
+Upstream-Status: Inappropriate
+Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+---
+ drivers/media/v4l2-core/v4l2-subdev.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/media/v4l2-core/v4l2-subdev.c b/drivers/media/v4l2-core/v4l2-subdev.c
+index 31752c06d1f0c..b829a445c7e2c 100644
+--- a/drivers/media/v4l2-core/v4l2-subdev.c
++++ b/drivers/media/v4l2-core/v4l2-subdev.c
+@@ -31,7 +31,7 @@
+  * 'v4l2_subdev_enable_streams_api' to 1 below.
+  */
+ 
+-static bool v4l2_subdev_enable_streams_api;
++static bool v4l2_subdev_enable_streams_api = true;
+ #endif
+ 
+ /*
+-- 
+2.43.0
+
