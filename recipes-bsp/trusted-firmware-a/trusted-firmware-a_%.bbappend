@@ -11,7 +11,5 @@ do_compile:prepend:dh-imx8mp-dhsom() {
 EXTRA_OEMAKE:append:dh-imx8mp-dhsom = " IMX_BOOT_UART_BASE=0x30860000 "
 
 SRC_URI:append:dh-imx8mp-dhsom = " \
-	file://0001-feat-imx8m-add-more-dram-pll-setting.patch \
-	file://0002-feat-imx8m-move-the-gpc-reg-macro-to-a-separate-head.patch \
-	file://0003-feat-imx8m-add-3600-MTps-DDR-PLL-rate.patch \
+	file://0001-feat-imx8m-add-3600-MTps-DDR-PLL-rate.patch \
 	"

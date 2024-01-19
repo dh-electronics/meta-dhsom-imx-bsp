@@ -27,7 +27,7 @@ SRC_URI[tfa.sha256sum] = "7c4c00a4f28d3cfbb235fd1a1fb28c4d2fc1d657c9301686e7d882
 SRC_URI[mbedtls.md5sum] = "37cdec398ae9ebdd4640df74af893c95"
 SRC_URI[mbedtls.sha256sum] = "a6834fcd7b7e64b83dfaaa6ee695198cb5019a929b2806cb0162e049f98206a4"
 
-SRCREV_tfa = "d3e71ead6ea5bc3555ac90a446efec84ef6c6122"
+SRCREV_tfa = "b6c0948400594e3cc4dbb5a4ef04b815d2675808"
 SRCREV_mbedtls = "d81c11b8ab61fd5b2da8133aa73c5fe33a0633eb"
 
 S = "${WORKDIR}/git"
