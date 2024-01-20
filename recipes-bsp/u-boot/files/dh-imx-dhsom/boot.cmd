@@ -97,7 +97,10 @@ if test -z "${loaddtos}" ; then
     if test "${dh_som_rev}" = "0" ; then
       echo "DH i.MX8M Plus rev.100 SoM detected, applying rev.100 SoM DTO."
       setenv loaddtos "${loaddtos}#conf-freescale_imx8mp-dhcom-som-overlay-rev100.dtbo"
-      if test "${dh_compatible}" = "dh,imx8mp-dhcom-pdk3" ; then
+      if test "${dh_compatible}" = "dh,imx8mp-dhcom-pdk2" ; then
+        echo "DH i.MX8M Plus rev.100 SoM on PDK2 detected, applying rev.100 SoM on PDK2 DTO."
+        setenv loaddtos "${loaddtos}#conf-freescale_imx8mp-dhcom-pdk2-overlay-rev100.dtbo"
+      elif test "${dh_compatible}" = "dh,imx8mp-dhcom-pdk3" ; then
         echo "DH i.MX8M Plus rev.100 SoM on PDK3 detected, applying rev.100 SoM on PDK3 DTO."
         setenv loaddtos "${loaddtos}#conf-freescale_imx8mp-dhcom-pdk3-overlay-rev100.dtbo"
       fi
