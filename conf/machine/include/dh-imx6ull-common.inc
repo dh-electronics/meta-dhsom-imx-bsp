@@ -17,3 +17,6 @@ PREFERRED_VERSION_u-boot-dhsom := "2018.05%"
 
 require conf/machine/include/${@'' if (d.getVar('LAYERSERIES_CORENAMES') in ["dunfell"]) else 'arm/armv7a/'}tune-cortexa7.inc
 require conf/machine/include/dh-imx6-common.inc
+
+# Linux kernel
+PREFERRED_VERSION_linux-stable := "6.1%"

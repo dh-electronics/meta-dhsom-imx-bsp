@@ -5,7 +5,9 @@ require conf/machine/include/soc-family.inc
 SERIAL_CONSOLE = "115200 ttymxc0"
 
 # Linux kernel
-PREFERRED_VERSION_linux-stable ?= "6.1%"
+PREFERRED_VERSION_linux-stable ?= "6.6%"
+KERNEL_DEVICETREE_PATH_PREFIX = "${@'nxp/imx/' if (d.getVar('PREFERRED_VERSION_linux-stable') in ["6.6%"]) else ''}"
+KERNEL_DTBVENDORED = "0"
 KERNEL_DTC_FLAGS += "-@"
 
 # U-Boot bootloader
