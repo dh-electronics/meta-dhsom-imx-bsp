@@ -474,7 +474,7 @@ index 0000000000000..083537e90755a
 +/*
 + * Copyright (C) 2023 Marek Vasut <marex@denx.de>
 + */
-+#include "imx8mp-dhcom-pdk3-overlay-nxp-spf-29853-c1-ov5640-x29.dts"
++#include "imx8mp-dhcom-pdk3-overlay-nxp-spf-29853-c1-ov5640-x31.dts"
 +/* Switch to native SoC PWDN and RESET GPIOs on PDK3 rev.100 */
 +#include "imx8mp-dhcom-pdk3-rev100-overlay-nxp-spf-29853-c1-ov5640.dtsi"
 diff --git a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-rev100-overlay-nxp-spf-29853-c1-ov5640.dtsi b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-rev100-overlay-nxp-spf-29853-c1-ov5640.dtsi
