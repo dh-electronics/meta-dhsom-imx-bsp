@@ -11,10 +11,12 @@ prototype rev.100 SoMs to be used until they get phased out.
 Upstream-Status: Pending
 Signed-off-by: Marek Vasut <marex@denx.de>
 ---
- arch/arm64/boot/dts/freescale/Makefile        |   6 +-
+ arch/arm64/boot/dts/freescale/Makefile        |   9 +-
+ .../imx8mp-dhcom-pdk2-overlay-rev100.dts      |  11 ++
  .../imx8mp-dhcom-pdk3-overlay-rev100.dts      |  10 ++
  .../imx8mp-dhcom-som-overlay-rev100.dts       | 120 ++++++++++++++++++
- 3 files changed, 134 insertions(+), 2 deletions(-)
+ 4 files changed, 147 insertions(+), 3 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk2-overlay-rev100.dts
  create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-overlay-rev100.dts
  create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-dhcom-som-overlay-rev100.dts
 
@@ -22,7 +24,7 @@ diff --git a/arch/arm64/boot/dts/freescale/Makefile b/arch/arm64/boot/dts/freesc
 index 8adac7dff93d5..4409ab651c04d 100644
 --- a/arch/arm64/boot/dts/freescale/Makefile
 +++ b/arch/arm64/boot/dts/freescale/Makefile
-@@ -102,7 +102,8 @@ dtb-$(CONFIG_ARCH_MXC) += imx8mn-evk-root.dtb imx8mn-evk-inmate.dtb imx8mn-evk-l
+@@ -102,13 +102,15 @@ dtb-$(CONFIG_ARCH_MXC) += imx8mn-evk-root.dtb imx8mn-evk-inmate.dtb imx8mn-evk-l
  dtb-$(CONFIG_ARCH_MXC) += imx8mn-ab2.dtb imx8mn-ddr4-ab2.dtb imx8mn-ddr3l-ab2.dtb
  dtb-$(CONFIG_ARCH_MXC) += imx8mn-var-som-symphony.dtb
  dtb-$(CONFIG_ARCH_MXC) += imx8mp-dhcom-som-overlay-eth1xfast.dtbo \
@@ -32,7 +34,15 @@ index 8adac7dff93d5..4409ab651c04d 100644
  dtb-$(CONFIG_ARCH_MXC) += imx8mp-dhcom-pdk-overlay-eth2xfast.dtbo
  dtb-$(CONFIG_ARCH_MXC) += imx8mp-dhcom-pdk2.dtb \
  			  imx8mp-dhcom-pdk2-overlay-505-200-x12-ch101olhlwh.dtbo \
-@@ -119,7 +120,8 @@ dtb-$(CONFIG_ARCH_MXC) += imx8mp-dhcom-pdk3.dtb \
+ 			  imx8mp-dhcom-pdk2-overlay-531-100-x21.dtbo \
+ 			  imx8mp-dhcom-pdk2-overlay-531-100-x22.dtbo \
+-			  imx8mp-dhcom-pdk2-overlay-560-300-x12.dtbo
++			  imx8mp-dhcom-pdk2-overlay-560-300-x12.dtbo \
++			  imx8mp-dhcom-pdk2-overlay-rev100.dtbo
+ dtb-$(CONFIG_ARCH_MXC) += imx8mp-dhcom-pdk3.dtb \
+ 			  imx8mp-dhcom-pdk3-overlay-505-200-x36-ch101olhlwh.dtbo \
+ 			  imx8mp-dhcom-pdk3-overlay-531-100-x40.dtbo \
+@@ -119,7 +121,8 @@ dtb-$(CONFIG_ARCH_MXC) += imx8mp-dhcom-pdk3.dtb \
  			  imx8mp-dhcom-pdk3-overlay-nxp-spf-29853-c1-ov5640-x31.dtbo \
  			  imx8mp-dhcom-pdk3-rev100-overlay.dtbo \
  			  imx8mp-dhcom-pdk3-rev100-overlay-nxp-spf-29853-c1-ov5640-x29.dtbo \
@@ -42,6 +52,23 @@ index 8adac7dff93d5..4409ab651c04d 100644
  dtb-$(CONFIG_ARCH_MXC) += imx8mp-evk.dtb imx8mp-evk-rm67191.dtb imx8mp-evk-it6263-lvds-dual-channel.dtb \
  			  imx8mp-evk-pcie-ep.dtb  imx8mp-evk-rpmsg.dtb imx8mp-evk-ecspi-slave.dtb \
  			  imx8mp-evk-jdi-wuxga-lvds-panel.dtb imx8mp-evk-flexcan2.dtb \
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk2-overlay-rev100.dts b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk2-overlay-rev100.dts
+new file mode 100644
+index 0000000000000..814219345b4c0
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk2-overlay-rev100.dts
+@@ -0,0 +1,11 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
++/*
++ * Copyright (C) 2023 Marek Vasut <marex@denx.de>
++ */
++/dts-v1/;
++/plugin/;
++
++&iomuxc {
++	pinctrl-0 = <&pinctrl_hog_base &pinctrl_dhcom_g &pinctrl_dhcom_j
++		     &pinctrl_dhcom_k &pinctrl_dhcom_l &pinctrl_dhcom_int>;
++};
 diff --git a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-overlay-rev100.dts b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-overlay-rev100.dts
 new file mode 100644
 index 0000000000000..f27e6429abe42
