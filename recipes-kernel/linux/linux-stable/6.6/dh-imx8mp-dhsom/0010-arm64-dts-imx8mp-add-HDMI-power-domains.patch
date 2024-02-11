@@ -1,27 +1,27 @@
-From 019f3982e6985ef08d7b42e8fbf827e49b16e71a Mon Sep 17 00:00:00 2001
+From 494396787b2af53312facc4881974e76a4868af8 Mon Sep 17 00:00:00 2001
 From: Lucas Stach <l.stach@pengutronix.de>
-Date: Sat, 6 Jan 2024 16:39:50 -0600
-Subject: [PATCH 11/26] arm64: dts: imx8mp: add HDMI power-domains
+Date: Sat, 10 Feb 2024 14:45:59 -0600
+Subject: [PATCH 10/12] arm64: dts: imx8mp: add HDMI power-domains
 
 This adds the PGC and HDMI blk-ctrl nodes providing power control for
 HDMI subsystem peripherals.
 
-Upstream-Status: Submitted [https://patchwork.kernel.org/project/linux-arm-kernel/patch/20240106223951.387067-3-aford173@gmail.com/]
-Signed-off-by: Lucas Stach <l.stach@pengutronix.de>
+Upstream-Status: Submitted [https://patchwork.kernel.org/project/linux-arm-kernel/patch/20240210204606.11944-4-aford173@gmail.com/]
 Signed-off-by: Adam Ford <aford173@gmail.com>
+Signed-off-by: Lucas Stach <l.stach@pengutronix.de>
 ---
- arch/arm64/boot/dts/freescale/imx8mp.dtsi | 36 +++++++++++++++++++++++
- 1 file changed, 36 insertions(+)
+ arch/arm64/boot/dts/freescale/imx8mp.dtsi | 38 +++++++++++++++++++++++
+ 1 file changed, 38 insertions(+)
 
 diff --git a/arch/arm64/boot/dts/freescale/imx8mp.dtsi b/arch/arm64/boot/dts/freescale/imx8mp.dtsi
-index 4b50920ac2049..6cc120b099123 100644
+index 4b50920ac2049..aa942d7c73469 100644
 --- a/arch/arm64/boot/dts/freescale/imx8mp.dtsi
 +++ b/arch/arm64/boot/dts/freescale/imx8mp.dtsi
 @@ -832,6 +832,23 @@ pgc_mediamix: power-domain@10 {
  							 <&clk IMX8MP_CLK_MEDIA_APB_ROOT>;
  					};
  
-+					pgc_hdmimix: power-domains@14 {
++					pgc_hdmimix: power-domain@14 {
 +						#power-domain-cells = <0>;
 +						reg = <IMX8MP_POWER_DOMAIN_HDMIMIX>;
 +						clocks = <&clk IMX8MP_CLK_HDMI_ROOT>,
@@ -33,7 +33,7 @@ index 4b50920ac2049..6cc120b099123 100644
 +						assigned-clock-rates = <500000000>, <133000000>;
 +					};
 +
-+					pgc_hdmi_phy: power-domains@15 {
++					pgc_hdmi_phy: power-domain@15 {
 +						#power-domain-cells = <0>;
 +						reg = <IMX8MP_POWER_DOMAIN_HDMI_PHY>;
 +					};
@@ -41,14 +41,14 @@ index 4b50920ac2049..6cc120b099123 100644
  					pgc_mipi_phy2: power-domain@16 {
  						#power-domain-cells = <0>;
  						reg = <IMX8MP_POWER_DOMAIN_MIPI_PHY2>;
-@@ -1348,6 +1365,25 @@ eqos: ethernet@30bf0000 {
- 				intf_mode = <&gpr 0x4>;
- 				status = "disabled";
+@@ -1831,6 +1848,27 @@ hsio_blk_ctrl: blk-ctrl@32f10000 {
+ 				#power-domain-cells = <1>;
+ 				#clock-cells = <0>;
  			};
 +
 +			hdmi_blk_ctrl: blk-ctrl@32fc0000 {
 +				compatible = "fsl,imx8mp-hdmi-blk-ctrl", "syscon";
-+				reg = <0x32fc0000 0x23c>;
++				reg = <0x32fc0000 0x1000>;
 +				clocks = <&clk IMX8MP_CLK_HDMI_APB>,
 +					 <&clk IMX8MP_CLK_HDMI_ROOT>,
 +					 <&clk IMX8MP_CLK_HDMI_REF_266M>,
@@ -58,15 +58,17 @@ index 4b50920ac2049..6cc120b099123 100644
 +				power-domains = <&pgc_hdmimix>, <&pgc_hdmimix>,
 +						<&pgc_hdmimix>, <&pgc_hdmimix>,
 +						<&pgc_hdmimix>, <&pgc_hdmimix>,
-+						<&pgc_hdmimix>, <&pgc_hdmi_phy>;
++						<&pgc_hdmimix>, <&pgc_hdmi_phy>,
++						<&pgc_hdmimix>, <&pgc_hdmimix>;
 +				power-domain-names = "bus", "irqsteer", "lcdif",
 +						     "pai", "pvi", "trng",
-+						     "hdmi-tx", "hdmi-tx-phy";
++						     "hdmi-tx", "hdmi-tx-phy",
++						     "hdcp", "hrv";
 +				#power-domain-cells = <1>;
 +			};
  		};
  
- 		aips5: bus@30c00000 {
+ 		pcie: pcie@33800000 {
 -- 
 2.43.0
 

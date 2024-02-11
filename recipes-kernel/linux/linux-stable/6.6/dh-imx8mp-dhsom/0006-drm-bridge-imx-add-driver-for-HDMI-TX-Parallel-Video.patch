@@ -1,7 +1,7 @@
-From 369dda75cdc8db98065402bd9b6b950f0bc583f2 Mon Sep 17 00:00:00 2001
+From 82766b68aa69f924c25c0c4666031f1dee7fb358 Mon Sep 17 00:00:00 2001
 From: Lucas Stach <l.stach@pengutronix.de>
-Date: Sat, 6 Jan 2024 15:51:45 -0600
-Subject: [PATCH 08/26] drm/bridge: imx: add driver for HDMI TX Parallel Video
+Date: Sat, 3 Feb 2024 10:52:48 -0600
+Subject: [PATCH 06/12] drm/bridge: imx: add driver for HDMI TX Parallel Video
  Interface
 
 This IP block is found in the HDMI subsystem of the i.MX8MP SoC. It has a
@@ -10,19 +10,21 @@ the i.MX8MP however the only supported source is the LCDIF. The block
 just needs to be powered up and told about the polarity of the video
 sync signals to act in bypass mode.
 
-Upstream-Status: Submitted [https://patchwork.freedesktop.org/patch/573603/]
+Upstream-Status: Backport [059c53e877ca6e723e10490c27c1487a63e66efe]
 Signed-off-by: Lucas Stach <l.stach@pengutronix.de>
-Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com> (v2)
-Tested-by: Marek Vasut <marex@denx.de> (v1)
-Tested-by: Luca Ceresoli <luca.ceresoli@bootlin.com> (v2)
-Tested-by: Richard Leitner <richard.leitner@skidata.com> (v2)
-Tested-by: Frieder Schrempf <frieder.schrempf@kontron.de> (v2)
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com> (v3)
+Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+Tested-by: Marek Vasut <marex@denx.de>
+Tested-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+Tested-by: Richard Leitner <richard.leitner@skidata.com>
+Tested-by: Frieder Schrempf <frieder.schrempf@kontron.de>
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
 Tested-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
 Tested-by: Fabio Estevam <festevam@gmail.com>
 Signed-off-by: Adam Ford <aford173@gmail.com>
-Tested-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+Link: https://lore.kernel.org/r/20240203165307.7806-9-aford173@gmail.com
+Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+Link: https://patchwork.freedesktop.org/patch/msgid/20240203165307.7806-9-aford173@gmail.com
 ---
  drivers/gpu/drm/bridge/imx/Kconfig           |   7 +
  drivers/gpu/drm/bridge/imx/Makefile          |   1 +
@@ -31,7 +33,7 @@ Tested-by: Alexander Stein <alexander.stein@ew.tq-group.com>
  create mode 100644 drivers/gpu/drm/bridge/imx/imx8mp-hdmi-pvi.c
 
 diff --git a/drivers/gpu/drm/bridge/imx/Kconfig b/drivers/gpu/drm/bridge/imx/Kconfig
-index 00b69a920c8b4..52df854c25be1 100644
+index 9fae28db6aa7f..3a4e663d922aa 100644
 --- a/drivers/gpu/drm/bridge/imx/Kconfig
 +++ b/drivers/gpu/drm/bridge/imx/Kconfig
 @@ -3,6 +3,13 @@ if ARCH_MXC || COMPILE_TEST
@@ -49,7 +51,7 @@ index 00b69a920c8b4..52df854c25be1 100644
  	tristate "Freescale i.MX8QM LVDS display bridge"
  	depends on OF
 diff --git a/drivers/gpu/drm/bridge/imx/Makefile b/drivers/gpu/drm/bridge/imx/Makefile
-index 5ca5e33095241..3ab7c1499698c 100644
+index 8e2ebf3399a15..be9b4f9adb50c 100644
 --- a/drivers/gpu/drm/bridge/imx/Makefile
 +++ b/drivers/gpu/drm/bridge/imx/Makefile
 @@ -1,4 +1,5 @@

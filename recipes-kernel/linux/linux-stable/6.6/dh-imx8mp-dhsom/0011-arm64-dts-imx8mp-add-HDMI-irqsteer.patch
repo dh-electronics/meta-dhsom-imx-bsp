@@ -1,25 +1,26 @@
-From e9526bba1659f4b5b817f8089e620b2141e03e51 Mon Sep 17 00:00:00 2001
+From 008d99b94d1bbcc1ae2fa00c8b41da4f1ffad85f Mon Sep 17 00:00:00 2001
 From: Lucas Stach <l.stach@pengutronix.de>
-Date: Fri, 6 May 2022 20:10:32 +0200
-Subject: [PATCH 13/26] arm64: dts: imx8mp: add HDMI irqsteer
+Date: Sat, 10 Feb 2024 14:46:00 -0600
+Subject: [PATCH 11/12] arm64: dts: imx8mp: add HDMI irqsteer
 
 The HDMI irqsteer is a secondary interrupt controller within the HDMI
 subsystem that maps all HDMI peripheral IRQs into a single upstream
 IRQ line.
 
-Upstream-Status: Submitted [https://patchwork.freedesktop.org/patch/485392/]
+Upstream-Status: Submitted [https://patchwork.kernel.org/project/linux-arm-kernel/patch/20240210204606.11944-5-aford173@gmail.com/]
 Signed-off-by: Lucas Stach <l.stach@pengutronix.de>
+Signed-off-by: Adam Ford <aford173@gmail.com>
 ---
  arch/arm64/boot/dts/freescale/imx8mp.dtsi | 13 +++++++++++++
  1 file changed, 13 insertions(+)
 
 diff --git a/arch/arm64/boot/dts/freescale/imx8mp.dtsi b/arch/arm64/boot/dts/freescale/imx8mp.dtsi
-index d42e7a8aff83c..e76658aa81c1e 100644
+index aa942d7c73469..0c50d49294b6a 100644
 --- a/arch/arm64/boot/dts/freescale/imx8mp.dtsi
 +++ b/arch/arm64/boot/dts/freescale/imx8mp.dtsi
-@@ -1869,6 +1869,19 @@ hsio_blk_ctrl: blk-ctrl@32f10000 {
+@@ -1869,6 +1869,19 @@ hdmi_blk_ctrl: blk-ctrl@32fc0000 {
+ 						     "hdcp", "hrv";
  				#power-domain-cells = <1>;
- 				#clock-cells = <0>;
  			};
 +
 +			irqsteer_hdmi: interrupt-controller@32fc2000 {

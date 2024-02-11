@@ -1,13 +1,15 @@
-From 322d1a25d86e6353a8cc0ea3dcff175a222709f4 Mon Sep 17 00:00:00 2001
+From 40ba15c8ba4fbd3c5be57d65633898cc497343e4 Mon Sep 17 00:00:00 2001
 From: Lucas Stach <l.stach@pengutronix.de>
-Date: Wed, 6 Sep 2023 20:42:11 +0200
-Subject: [PATCH 09/26] phy: freescale: add Samsung HDMI PHY
+Date: Sat, 10 Feb 2024 14:45:58 -0600
+Subject: [PATCH 09/12] phy: freescale: add Samsung HDMI PHY
 
 This adds the driver for the Samsung HDMI PHY found on the
 i.MX8MP SoC. Based on downstream implementation from
-Sandor Yu <Sandor.yu@nxp.com>.
+Sandor Yu <Sandor.yu@nxp.com>.  According to the TRM, the PHY
+receives parallel data from the link and serializes it.  It
+also sets the PLL clock needed for the TX serializer.
 
-Upstream-Status: Submitted [https://patchwork.kernel.org/project/linux-phy/patch/20230906184211.1857585-2-l.stach@pengutronix.de/]
+Upstream-Status: Submitted [https://patchwork.kernel.org/project/linux-arm-kernel/patch/20240210204606.11944-3-aford173@gmail.com/]
 Tested-by: Luca Ceresoli <luca.ceresoli@bootlin.com> (v2)
 Tested-by: Richard Leitner <richard.leitner@skidata.com> (v2)
 Co-developed-by: Marco Felsch <m.felsch@pengutronix.de>
@@ -16,11 +18,12 @@ Signed-off-by: Lucas Stach <l.stach@pengutronix.de>
 Tested-by: Alexander Stein <alexander.stein@ew.tq-group.com>
 Tested-by: Frieder Schrempf <frieder.schrempf@kontron.de> # Kontron BL
 Tested-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+Signed-off-by: Adam Ford <aford173@gmail.com>
 ---
  drivers/phy/freescale/Kconfig                |   6 +
  drivers/phy/freescale/Makefile               |   1 +
- drivers/phy/freescale/phy-fsl-samsung-hdmi.c | 717 +++++++++++++++++++
- 3 files changed, 724 insertions(+)
+ drivers/phy/freescale/phy-fsl-samsung-hdmi.c | 721 +++++++++++++++++++
+ 3 files changed, 728 insertions(+)
  create mode 100644 drivers/phy/freescale/phy-fsl-samsung-hdmi.c
 
 diff --git a/drivers/phy/freescale/Kconfig b/drivers/phy/freescale/Kconfig
@@ -51,10 +54,10 @@ index cedb328bc4d28..c4386bfdb853e 100644
 +obj-$(CONFIG_PHY_FSL_SAMSUNG_HDMI_PHY)	+= phy-fsl-samsung-hdmi.o
 diff --git a/drivers/phy/freescale/phy-fsl-samsung-hdmi.c b/drivers/phy/freescale/phy-fsl-samsung-hdmi.c
 new file mode 100644
-index 0000000000000..ce712cfefd62c
+index 0000000000000..91cf8e4668b28
 --- /dev/null
 +++ b/drivers/phy/freescale/phy-fsl-samsung-hdmi.c
-@@ -0,0 +1,717 @@
+@@ -0,0 +1,721 @@
 +// SPDX-License-Identifier: GPL-2.0+
 +/*
 + * Copyright 2020 NXP
@@ -69,8 +72,6 @@ index 0000000000000..ce712cfefd62c
 +#include <linux/io.h>
 +#include <linux/iopoll.h>
 +#include <linux/module.h>
-+#include <linux/of_device.h>
-+#include <linux/of.h>
 +#include <linux/platform_device.h>
 +#include <linux/pm_runtime.h>
 +
@@ -90,7 +91,7 @@ index 0000000000000..ce712cfefd62c
 +
 +#define PHY_REG_14		0x38
 +#define  REG14_TOL_MASK		GENMASK(7, 4)
-+#define  REG14_RP_CODE_MASK	GENMASK(2, 1)
++#define  REG14_RP_CODE_MASK	GENMASK(3, 1)
 +#define  REG14_TG_CODE_HIGH_MASK	GENMASK(0, 0)
 +
 +#define PHY_REG_15		0x3c
@@ -115,6 +116,12 @@ index 0000000000000..ce712cfefd62c
 +#define PHY_REG_30		0x78
 +#define PHY_REG_31		0x7c
 +#define PHY_REG_32		0x80
++
++/*
++ * REG33 does not match the ref manual. According to Sandor Yu from NXP,
++ * "There is a doc issue on the i.MX8MP latest RM"
++ * REG33 is being used per guidance from Sandor
++ */
 +
 +#define PHY_REG_33		0x84
 +#define  REG33_MODE_SET_DONE	BIT(7)
