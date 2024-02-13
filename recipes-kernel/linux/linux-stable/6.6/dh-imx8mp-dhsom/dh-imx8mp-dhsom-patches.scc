@@ -1,6 +1,6 @@
 patch 0001-iio-adc-ti-ads1015-Add-edge-trigger-support.patch
 patch 0002-media-v4l2-subdev-Enable-the-streams-API.patch
-patch 0003-media-nxp-isi-Check-whether-pad-is-non-NULL-before-a.patch
+patch 0003-media-nxp-imx8-isi-Check-whether-crossbar-pad-is-non.patch
 patch 0004-drm-lcdif-Do-not-disable-clock-on-already-suspended-.patch
 patch 0005-drm-bridge-tc358767-Limit-the-Pixel-PLL-input-range.patch
 patch 0006-drm-bridge-imx-add-bridge-wrapper-driver-for-i.MX8MP.patch

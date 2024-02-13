@@ -8,8 +8,11 @@ the Pixel PLL input clock have to be in range 6..40 MHz. The sheet
 calculates those PLL input clock as reference clock divided by both
 pre-dividers. Add the extra limit.
 
-Upstream-Status: Submitted [https://patchwork.freedesktop.org/patch/575092/]
+Upstream-Status: Backport [f86ae204bec4e72f14f7d4fd586d7ef9729614dc]
 Signed-off-by: Marek Vasut <marex@denx.de>
+Reviewed-by: Lucas Stach <l.stach@pengutronix.de>
+Signed-off-by: Robert Foss <rfoss@kernel.org>
+Link: https://patchwork.freedesktop.org/patch/msgid/20240118220243.203655-1-marex@denx.de
 ---
  drivers/gpu/drm/bridge/tc358767.c | 7 ++++++-
  1 file changed, 6 insertions(+), 1 deletion(-)
