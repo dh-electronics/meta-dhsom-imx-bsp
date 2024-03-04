@@ -13,10 +13,9 @@ allow to change it. Should set the clock after PMIC setting done.
 Default is 400 MHz (system_pll1_800m with div = 2) set by ROM for
 ND VDD_SOC.
 
-Upstream-Status: Submitted [https://patchwork.ozlabs.org/project/uboot/patch/20240119160814.11387-1-marex@denx.de/]
+Upstream-Status: Backport [4dd80cb09ec333035a0cb812cae123dac568807c]
 Signed-off-by: Marek Vasut <marex@denx.de>
----
-V2: Duplicate code comment into commit message
+Reviewed-by: Fabio Estevam <festevam@denx.de>
 ---
  configs/imx8mp_dhcom_pdk2_defconfig | 1 +
  configs/imx8mp_dhcom_pdk3_defconfig | 1 +

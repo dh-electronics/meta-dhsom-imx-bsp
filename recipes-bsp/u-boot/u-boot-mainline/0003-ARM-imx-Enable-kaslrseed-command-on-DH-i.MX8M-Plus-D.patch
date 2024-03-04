@@ -12,8 +12,9 @@ Enable the 'kaslrseed' command so a random number seed can be pulled
 from CAAM and inserted into the /chosen node 'kaslr-seed' property of
 Linux kernel DT before boot, thus letting KASLR work properly.
 
-Upstream-Status: Submitted [https://patchwork.ozlabs.org/project/uboot/patch/20240120003610.124981-1-marex@denx.de/]
+Upstream-Status: Backport [a80e0e7711a2b2890a583d88dcd9af978ddada32]
 Signed-off-by: Marek Vasut <marex@denx.de>
+Reviewed-by: Fabio Estevam <festevam@denx.de>
 ---
  configs/imx8mp_dhcom_pdk2_defconfig | 2 ++
  configs/imx8mp_dhcom_pdk3_defconfig | 2 ++
