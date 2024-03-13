@@ -1,5 +1,7 @@
 # Mainline BSP overrides
 
+MACHINE_FEATURES += " mainline"
+
 # Mesa
 PREFERRED_PROVIDER_virtual/egl ?= "mesa-mainline"
 PREFERRED_PROVIDER_virtual/libgl ?= "mesa-mainline"
