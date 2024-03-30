@@ -38,10 +38,10 @@ MACHINE_ESSENTIAL_EXTRA_RDEPENDS += " \
 IMAGE_FSTYPES ?= "tar.xz wic.xz wic.gz"
 INITRAMFS_FSTYPES ?= "cpio.xz"
 
-EXTRA_IMAGEDEPENDS += "virtual/bootloader"
+EXTRA_IMAGEDEPENDS += "u-boot-mainline"
 IMAGE_BOOT_FILES ?= "${KERNEL_IMAGETYPE}"
-IMAGE_INSTALL:append = " kernel-devicetree kernel-image-fitimage virtual/bootloader "
-do_image_wic[depends] += "mtools-native:do_populate_sysroot dosfstools-native:do_populate_sysroot virtual/bootloader:do_deploy"
+IMAGE_INSTALL:append = " kernel-devicetree kernel-image-fitimage u-boot-mainline "
+do_image_wic[depends] += "mtools-native:do_populate_sysroot dosfstools-native:do_populate_sysroot u-boot-mainline:do_deploy"
 
 # Add any optional config files that might be present e.g. in other layers
 include conf/machine/${MACHINE}-extra.conf
