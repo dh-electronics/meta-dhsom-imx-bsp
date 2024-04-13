@@ -38,10 +38,11 @@ MACHINE_ESSENTIAL_EXTRA_RDEPENDS += " \
 IMAGE_FSTYPES ?= "tar.xz wic.xz wic.gz"
 INITRAMFS_FSTYPES ?= "cpio.xz"
 
-EXTRA_IMAGEDEPENDS += "u-boot-mainline"
+DH_UBOOT_RECIPE ?= "u-boot-mainline"
+EXTRA_IMAGEDEPENDS += "${DH_UBOOT_RECIPE}"
 IMAGE_BOOT_FILES ?= "${KERNEL_IMAGETYPE}"
-IMAGE_INSTALL:append = " kernel-devicetree kernel-image-fitimage u-boot-mainline "
-do_image_wic[depends] += "mtools-native:do_populate_sysroot dosfstools-native:do_populate_sysroot u-boot-mainline:do_deploy"
+IMAGE_INSTALL:append = " kernel-devicetree kernel-image-fitimage ${DH_UBOOT_RECIPE} "
+do_image_wic[depends] += "mtools-native:do_populate_sysroot dosfstools-native:do_populate_sysroot ${DH_UBOOT_RECIPE}:do_deploy"
 
 # Add any optional config files that might be present e.g. in other layers
 include conf/machine/${MACHINE}-extra.conf

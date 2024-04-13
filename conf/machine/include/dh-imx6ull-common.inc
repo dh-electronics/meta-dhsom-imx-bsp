@@ -15,6 +15,7 @@ PREFERRED_PROVIDER_virtual/bootloader := "u-boot-dhsom"
 PREFERRED_PROVIDER_u-boot := "u-boot-dhsom"
 PREFERRED_VERSION_u-boot-dhsom := "2018.05%"
 
+DH_UBOOT_RECIPE = "u-boot-dhsom"
 require conf/machine/include/${@'' if (d.getVar('LAYERSERIES_CORENAMES') in ["dunfell"]) else 'arm/armv7a/'}tune-cortexa7.inc
 require conf/machine/include/dh-imx6-common.inc
 
