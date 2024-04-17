@@ -10,13 +10,13 @@ DEPENDS:append = " lzop-native"
 PV = "${LINUX_VERSION}+git${SRCPV}"
 
 # board specific branches
-KBRANCH = "release/5.10.106_dhsom/20220324"
+KBRANCH = "release/6.1.80_dhsom/20240315"
 
 SRC_URI = "git://github.com/dh-electronics/linux-imx6qdl.git;protocol=https;name=machine;branch=${KBRANCH};"
 
-SRCREV_machine = "ff31a486a58449b7d645399fc6c2b40108abe799"
+SRCREV_machine = "3d7e3946499693422be9a1bc7706b232a33b051c"
 
-LINUX_VERSION ?= "5.10.106"
+LINUX_VERSION ?= "6.1.80"
 
 # use in-tree-defconfig
 KCONFIG_MODE = "--alldefconfig"
