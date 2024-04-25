@@ -7,26 +7,27 @@ LICENSE:${PN}-sdma-imx7d = "Firmware-nxp-imx-firmware"
 LICENSE:${PN}-vpu-imx6d = "Firmware-nxp-imx-firmware"
 LICENSE:${PN}-vpu-imx6q = "Firmware-nxp-imx-firmware"
 
-LIC_FILES_CHKSUM = "file://firmware-imx-${PV}/COPYING;md5=63a38e9f392d8813d6f1f4d0d6fbe657"
+LIC_FILES_CHKSUM = "file://COPYING;md5=63a38e9f392d8813d6f1f4d0d6fbe657"
 
 SRC_URI = "http://www.freescale.com/lgfiles/NMG/MAD/YOCTO/firmware-imx-${PV}.bin"
 SRC_URI[md5sum] = "25c50f3371450b2324401ee06ff1bf6a"
 SRC_URI[sha256sum] = "f6dc6a5c8fd9b913a15360d3ccd53d188db05a08a8594c518e57622478c72383"
 
+S = "${WORKDIR}/firmware-imx-${PV}"
+
 inherit allarch deploy
 
 do_extra_unpack() {
-	dd if=${S}/../firmware-imx-${PV}.bin of=${S}/firmware-imx-${PV}.tar.bz2 \
-		bs=$(grep -boam 1 'BZh' ${S}/../firmware-imx-${PV}.bin | cut -d ":" -f 1) \
+	dd if=${WORKDIR}/firmware-imx-${PV}.bin of=${WORKDIR}/firmware-imx-${PV}.tar.bz2 \
+		bs=$(grep -boam 1 'BZh' ${WORKDIR}/firmware-imx-${PV}.bin | cut -d ":" -f 1) \
 		skip=1
-	tar -C ${S} -xf ${S}/firmware-imx-${PV}.tar.bz2
+	tar -C ${WORKDIR} -xf ${WORKDIR}/firmware-imx-${PV}.tar.bz2
 }
 addtask extra_unpack after do_unpack before do_patch
 
 do_compile[noexec] = "1"
 
 do_install() {
-	cd ${S}/firmware-imx-${PV}/
 	install -d ${D}${nonarch_base_libdir}/firmware/
 
 	# License
@@ -45,13 +46,12 @@ do_install() {
 }
 
 do_deploy() {
-	cd ${S}/firmware-imx-${PV}/
 	install -m 0644 firmware/ddr/synopsys/*.bin ${DEPLOYDIR}
 	install -m 0644 firmware/hdmi/cadence/*.bin ${DEPLOYDIR}
 }
 addtask deploy after do_install before do_build
 
-NO_GENERIC_LICENSE[Firmware-nxp-imx-firmware] = "firmware-imx-${PV}/COPYING"
+NO_GENERIC_LICENSE[Firmware-nxp-imx-firmware] = "COPYING"
 
 ALLOW_EMPTY:${PN} = "1"
 PACKAGES = " \
