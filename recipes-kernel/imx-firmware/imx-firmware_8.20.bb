@@ -23,7 +23,10 @@ do_extra_unpack() {
 		skip=1
 	tar -C ${WORKDIR} -xf ${WORKDIR}/firmware-imx-${PV}.tar.bz2
 }
-addtask extra_unpack after do_unpack before do_patch
+
+do_unpack:append() {
+    bb.build.exec_func('do_extra_unpack', d)
+}
 
 do_compile[noexec] = "1"
 
