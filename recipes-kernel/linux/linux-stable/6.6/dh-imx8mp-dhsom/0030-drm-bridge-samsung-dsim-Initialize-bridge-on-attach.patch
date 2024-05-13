@@ -1,0 +1,54 @@
+From fbfea20f3dfb396f7ed2a0024a7e802e29f6f487 Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Fri, 3 May 2024 00:47:34 +0200
+Subject: [PATCH] drm: bridge: samsung-dsim: Initialize bridge on attach
+
+Initialize the bridge on attach already, to force lanes into LP11
+state, since attach does trigger attach of downstream bridges which
+may trigger (e)DP AUX channel mode read.
+
+This fixes a corner case where DSIM with TC9595 attached to it fails
+to operate the DP AUX channel, because the TC9595 enters some debug
+mode when it is released from reset without lanes in LP11 mode. By
+ensuring the DSIM lanes are in LP11, the TC9595 (tc358767.c driver)
+can be reset in its attach callback called from DSIM attach callback,
+and recovered out of the debug mode just before TC9595 performs first
+AUX channel access later in its attach callback.
+
+Upstream-Status: Submitted [https://patchwork.freedesktop.org/patch/593718/]
+Signed-off-by: Marek Vasut <marex@denx.de>
+---
+ drivers/gpu/drm/bridge/samsung-dsim.c | 16 ++++++++++++++--
+ 1 file changed, 14 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/gpu/drm/bridge/samsung-dsim.c b/drivers/gpu/drm/bridge/samsung-dsim.c
+index f24666b481938..fd938255527ca 100644
+--- a/drivers/gpu/drm/bridge/samsung-dsim.c
++++ b/drivers/gpu/drm/bridge/samsung-dsim.c
+@@ -1588,9 +1588,21 @@ static int samsung_dsim_attach(struct drm_bridge *bridge,
+ 			       enum drm_bridge_attach_flags flags)
+ {
+ 	struct samsung_dsim *dsi = bridge_to_dsi(bridge);
++	int ret;
++
++	ret = pm_runtime_resume_and_get(dsi->dev);
++	if (ret < 0)
++		return ret;
+ 
+-	return drm_bridge_attach(bridge->encoder, dsi->out_bridge, bridge,
+-				 flags);
++	ret = samsung_dsim_init(dsi);
++	if (ret < 0)
++		goto err;
++
++	ret = drm_bridge_attach(bridge->encoder, dsi->out_bridge, bridge,
++				flags);
++err:
++	pm_runtime_put_sync(dsi->dev);
++	return ret;
+ }
+ 
+ static const struct drm_bridge_funcs samsung_dsim_bridge_funcs = {
+-- 
+2.43.0
+

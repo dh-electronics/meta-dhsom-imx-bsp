@@ -24,3 +24,5 @@ patch 0026-arm64-dts-imx8mp-Add-DT-overlays-for-i.MX8MP-DHCOM.patch
 patch 0027-arm64-dts-imx8mp-Fix-TC9595-reset-GPIO-on-DH-i.MX8M-.patch
 patch 0028-arm64-dts-imx8mp-Fix-TC9595-input-clock-on-DH-i.MX8M.patch
 patch 0029-drm-bridge-tc358767-Enable-FRMSYNC-timing-generator.patch
+patch 0030-drm-bridge-samsung-dsim-Initialize-bridge-on-attach.patch
+patch 0031-drm-bridge-tc358767-Reset-chip-again-on-attach.patch
