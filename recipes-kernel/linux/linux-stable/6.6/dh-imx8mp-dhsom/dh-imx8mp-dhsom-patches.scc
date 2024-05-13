@@ -21,3 +21,5 @@ patch 0023-arm64-dts-imx8mp-Update-i.MX8MP-DHCOM-SoM-DT-to-prod.patch
 patch 0024-arm64-dts-imx8mp-Drop-i.MX8MP-DHCOM-rev.100-PHY-addr.patch
 patch 0025-arm64-dts-imx8mp-Describe-CSI2-GPIO-expander-on-i.MX.patch
 patch 0026-arm64-dts-imx8mp-Add-DT-overlays-for-i.MX8MP-DHCOM.patch
+patch 0027-arm64-dts-imx8mp-Fix-TC9595-reset-GPIO-on-DH-i.MX8M-.patch
+patch 0028-arm64-dts-imx8mp-Fix-TC9595-input-clock-on-DH-i.MX8M.patch

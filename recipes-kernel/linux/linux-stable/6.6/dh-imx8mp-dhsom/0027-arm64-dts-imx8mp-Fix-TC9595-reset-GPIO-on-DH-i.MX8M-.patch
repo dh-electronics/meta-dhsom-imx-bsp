@@ -1,0 +1,44 @@
+From 8551fece88dd80b9124a29ebf37f48372db20cb4 Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Fri, 23 Feb 2024 18:50:46 +0100
+Subject: [PATCH] arm64: dts: imx8mp: Fix TC9595 reset GPIO on DH i.MX8M Plus
+ DHCOM SoM
+
+The TC9595 reset GPIO is SAI1_RXC / GPIO4_IO01, fix the DT accordingly.
+The SAI5_RXD0 / GPIO3_IO21 is thus far unused TC9595 interrupt line.
+
+Upstream-Status: Submitted [https://patchwork.kernel.org/project/linux-arm-kernel/patch/20240225033359.416169-1-marex@denx.de/]
+Fixes: 20d0b83e712b ("arm64: dts: imx8mp: Add TC9595 bridge on DH electronics i.MX8M Plus DHCOM")
+Signed-off-by: Marek Vasut <marex@denx.de>
+---
+Cc: Conor Dooley <conor+dt@kernel.org>
+Cc: Fabio Estevam <festevam@gmail.com>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc: NXP Linux Team <linux-imx@nxp.com>
+Cc: Pengutronix Kernel Team <kernel@pengutronix.de>
+Cc: Rob Herring <robh@kernel.org>
+Cc: Sascha Hauer <s.hauer@pengutronix.de>
+Cc: Shawn Guo <shawnguo@kernel.org>
+Cc: devicetree@vger.kernel.org
+Cc: kernel@dh-electronics.com
+Cc: linux-arm-kernel@lists.infradead.org
+---
+ arch/arm64/boot/dts/freescale/imx8mp-dhcom-som.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-som.dtsi b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-som.dtsi
+index d8963f32ec84c..1f3fbfb9749d3 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-som.dtsi
++++ b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-som.dtsi
+@@ -255,7 +255,7 @@ tc_bridge: bridge@f {
+ 				  <&clk IMX8MP_AUDIO_PLL2_OUT>;
+ 		assigned-clock-parents = <&clk IMX8MP_AUDIO_PLL2_OUT>;
+ 		assigned-clock-rates = <13000000>, <13000000>, <156000000>;
+-		reset-gpios = <&gpio3 21 GPIO_ACTIVE_HIGH>;
++		reset-gpios = <&gpio4 1 GPIO_ACTIVE_HIGH>;
+ 		status = "disabled";
+ 
+ 		ports {
+-- 
+2.43.0
+
