@@ -18,5 +18,5 @@ MACHINE_ESSENTIAL_EXTRA_RDEPENDS += " \
 	imx-firmware-vpu-imx6q \
 	"
 
-require conf/machine/include/${@'' if (d.getVar('LAYERSERIES_CORENAMES') in ["dunfell"]) else 'arm/armv7a/'}tune-cortexa9.inc
+require conf/machine/include/arm/armv7a/tune-cortexa9.inc
 require conf/machine/include/dh-imx6-common.inc

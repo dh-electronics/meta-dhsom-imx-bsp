@@ -2,8 +2,8 @@ require recipes-kernel/linux/linux-yocto.inc
 
 SUMMARY = "Legacy downstream Linux kernel version"
 
-LICENSE = "${@'GPLv2' if (d.getVar('LAYERSERIES_CORENAMES') in ["dunfell"]) else 'GPL-2.0-only'}"
-LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/GPL-2.0${@'' if (d.getVar('LAYERSERIES_CORENAMES') in ["dunfell"]) else '-only'};md5=801f80980d171dd6425610833a22dbe6"
+LICENSE = "GPL-2.0-only"
+LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/GPL-2.0-only;md5=801f80980d171dd6425610833a22dbe6"
 
 DEPENDS:append = " lzop-native"
 

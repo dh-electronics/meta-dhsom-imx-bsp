@@ -4,7 +4,7 @@ require u-boot-dhsom-common.inc
 
 SUMMARY = "Legacy downstream U-Boot version"
 
-LICENSE = "${@'GPLv2+' if (d.getVar('LAYERSERIES_CORENAMES') in ["dunfell"]) else 'GPL-2.0-or-later'}"
+LICENSE = "GPL-2.0-or-later"
 LIC_FILES_CHKSUM = "file://Licenses/README;md5=a2c678cfd4a4d97135585cad908541c6"
 
 DEPENDS += "bc-native dtc-native"
