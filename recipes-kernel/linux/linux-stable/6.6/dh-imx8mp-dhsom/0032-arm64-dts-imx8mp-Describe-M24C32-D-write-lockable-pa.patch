@@ -1,0 +1,43 @@
+From c8718b99cc3140f259c4538191e2d2b753f91c54 Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Sun, 15 Oct 2023 22:01:24 +0200
+Subject: [PATCH] arm64: dts: imx8mp: Describe M24C32-D write-lockable page in
+ DH i.MX8MP DHCOM DT
+
+The i.MX8MP DHCOM SoM production rev.200 is populated with M24C32-D
+EEPROMs which have Additional Write lockable page at separate I2C
+address. Describe the page in DT to make it available.
+
+Upstream-Status: Backport [f6862104ff3a56656edefd003bf1be6d89fabda4]
+Signed-off-by: Marek Vasut <marex@denx.de>
+Signed-off-by: Shawn Guo <shawnguo@kernel.org>
+---
+ arch/arm64/boot/dts/freescale/imx8mp-dhcom-som.dtsi | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-som.dtsi b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-som.dtsi
+index f52542b5e2321..c2fd6b4c2a6e1 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-som.dtsi
++++ b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-som.dtsi
+@@ -420,6 +420,18 @@ eeprom1: eeprom@53 {	/* EEPROM with FEC MAC address */
+ 		reg = <0x53>;
+ 	};
+ 
++	eeprom0wl: eeprom@58 {
++		compatible = "atmel,24c32d-wl";	/* M24C32-D WL page of 0x50 */
++		pagesize = <32>;
++		reg = <0x58>;
++	};
++
++	eeprom1wl: eeprom@5b {
++		compatible = "atmel,24c32d-wl";	/* M24C32-D WL page of 0x53 */
++		pagesize = <32>;
++		reg = <0x5b>;
++	};
++
+ 	ioexp: gpio@74 {
+ 		compatible = "nxp,pca9539";
+ 		reg = <0x74>;
+-- 
+2.43.0
+
