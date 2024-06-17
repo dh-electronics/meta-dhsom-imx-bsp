@@ -1,0 +1,52 @@
+From ded265ce4edc1653abbbf9039fd497e8f019a51e Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Tue, 10 Oct 2023 21:09:26 +0200
+Subject: [PATCH] eeprom: at24: add ST M24C32-D Additional Write lockable page
+ support
+
+The ST M24C32-D behaves as a regular M24C32, except for the -D variant
+which uses up another I2C address for Additional Write lockable page.
+This page is 32 Bytes long and can contain additional data. Add entry
+for it, so users can describe that page in DT. Note that users still
+have to describe the main M24C32 area separately as that is on separate
+I2C address from this page.
+
+Upstream-Status: Backport [4791146e9055dd4c21a1a725514512167b8ee75b]
+Signed-off-by: Marek Vasut <marex@denx.de>
+Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+---
+ drivers/misc/eeprom/at24.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/drivers/misc/eeprom/at24.c b/drivers/misc/eeprom/at24.c
+index c290e849b2ed8..6504fcac2460f 100644
+--- a/drivers/misc/eeprom/at24.c
++++ b/drivers/misc/eeprom/at24.c
+@@ -191,6 +191,8 @@ AT24_CHIP_DATA(at24_data_24c16, 16384 / 8, 0);
+ AT24_CHIP_DATA(at24_data_24cs16, 16,
+ 	AT24_FLAG_SERIAL | AT24_FLAG_READONLY);
+ AT24_CHIP_DATA(at24_data_24c32, 32768 / 8, AT24_FLAG_ADDR16);
++/* M24C32-D Additional Write lockable page (M24C32-D order codes) */
++AT24_CHIP_DATA(at24_data_24c32d_wlp, 32, AT24_FLAG_ADDR16);
+ AT24_CHIP_DATA(at24_data_24cs32, 16,
+ 	AT24_FLAG_ADDR16 | AT24_FLAG_SERIAL | AT24_FLAG_READONLY);
+ AT24_CHIP_DATA(at24_data_24c64, 65536 / 8, AT24_FLAG_ADDR16);
+@@ -222,6 +224,7 @@ static const struct i2c_device_id at24_ids[] = {
+ 	{ "24c16",	(kernel_ulong_t)&at24_data_24c16 },
+ 	{ "24cs16",	(kernel_ulong_t)&at24_data_24cs16 },
+ 	{ "24c32",	(kernel_ulong_t)&at24_data_24c32 },
++	{ "24c32d-wl",	(kernel_ulong_t)&at24_data_24c32d_wlp },
+ 	{ "24cs32",	(kernel_ulong_t)&at24_data_24cs32 },
+ 	{ "24c64",	(kernel_ulong_t)&at24_data_24c64 },
+ 	{ "24cs64",	(kernel_ulong_t)&at24_data_24cs64 },
+@@ -252,6 +255,7 @@ static const struct of_device_id at24_of_match[] = {
+ 	{ .compatible = "atmel,24c16",		.data = &at24_data_24c16 },
+ 	{ .compatible = "atmel,24cs16",		.data = &at24_data_24cs16 },
+ 	{ .compatible = "atmel,24c32",		.data = &at24_data_24c32 },
++	{ .compatible = "atmel,24c32d-wl",	.data = &at24_data_24c32d_wlp },
+ 	{ .compatible = "atmel,24cs32",		.data = &at24_data_24cs32 },
+ 	{ .compatible = "atmel,24c64",		.data = &at24_data_24c64 },
+ 	{ .compatible = "atmel,24cs64",		.data = &at24_data_24cs64 },
+-- 
+2.43.0
+
