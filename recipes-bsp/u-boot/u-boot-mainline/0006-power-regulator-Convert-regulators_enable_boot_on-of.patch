@@ -1,0 +1,117 @@
+From 2549e19cb601d2067e0f1597c577278e0aa89dbe Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Thu, 27 Jun 2024 01:03:05 +0200
+Subject: [PATCH 6/8] power: regulator: Convert regulators_enable_boot_on/off()
+ to regulator_post_probe
+
+Turn regulators_enable_boot_on() and regulators_enable_boot_off() into
+empty functions. Implement matching functionality in regulator_post_probe()
+instead. The regulator_post_probe() is called for all regulators after they
+probe, and regulators that have regulator-always-on or regulator-boot-on DT
+properties now always probe due to DM_FLAG_PROBE_AFTER_BIND being set on
+such regulators in regulator_post_bind().
+
+Finally, fold regulator_unset() functionality into regulator_autoset().
+
+Upstream-Status: Submitted [https://patchwork.ozlabs.org/project/uboot/patch/20240626235717.272219-2-marex@denx.de/]
+Signed-off-by: Marek Vasut <marex@denx.de>
+---
+ drivers/power/regulator/regulator-uclass.c | 60 +++++++---------------
+ 1 file changed, 19 insertions(+), 41 deletions(-)
+
+diff --git a/drivers/power/regulator/regulator-uclass.c b/drivers/power/regulator/regulator-uclass.c
+index a3e2c43ffcb..21d53f3dc41 100644
+--- a/drivers/power/regulator/regulator-uclass.c
++++ b/drivers/power/regulator/regulator-uclass.c
+@@ -309,6 +309,11 @@ int regulator_autoset(struct udevice *dev)
+ 			return ret;
+ 	}
+ 
++	if (uc_pdata->force_off) {
++		ret = regulator_set_enable(dev, false);
++		goto out;
++	}
++
+ 	if (!uc_pdata->always_on && !uc_pdata->boot_on) {
+ 		ret = -EMEDIUMTYPE;
+ 		goto out;
+@@ -513,56 +518,28 @@ static int regulator_pre_probe(struct udevice *dev)
+ 	return 0;
+ }
+ 
+-int regulators_enable_boot_on(bool verbose)
++static int regulator_post_probe(struct udevice *dev)
+ {
+-	struct udevice *dev;
+-	struct uclass *uc;
+ 	int ret;
+ 
+-	ret = uclass_get(UCLASS_REGULATOR, &uc);
+-	if (ret)
++	ret = regulator_autoset(dev);
++	if (ret && ret != -EMEDIUMTYPE && ret != ENOSYS)
+ 		return ret;
+-	for (uclass_first_device(UCLASS_REGULATOR, &dev);
+-	     dev;
+-	     uclass_next_device(&dev)) {
+-		ret = regulator_autoset(dev);
+-		if (ret == -EMEDIUMTYPE) {
+-			ret = 0;
+-			continue;
+-		}
+-		if (verbose)
+-			regulator_show(dev, ret);
+-		if (ret == -ENOSYS)
+-			ret = 0;
+-	}
+ 
+-	return ret;
++	if (_DEBUG)
++		regulator_show(dev, ret);
++
++	return 0;
+ }
+ 
+-int regulators_enable_boot_off(bool verbose)
++int regulators_enable_boot_on(bool verbose)
+ {
+-	struct udevice *dev;
+-	struct uclass *uc;
+-	int ret;
+-
+-	ret = uclass_get(UCLASS_REGULATOR, &uc);
+-	if (ret)
+-		return ret;
+-	for (uclass_first_device(UCLASS_REGULATOR, &dev);
+-	     dev;
+-	     uclass_next_device(&dev)) {
+-		ret = regulator_unset(dev);
+-		if (ret == -EMEDIUMTYPE) {
+-			ret = 0;
+-			continue;
+-		}
+-		if (verbose)
+-			regulator_show(dev, ret);
+-		if (ret == -ENOSYS)
+-			ret = 0;
+-	}
++	return 0;
++}
+ 
+-	return ret;
++int regulators_enable_boot_off(bool verbose)
++{
++	return 0;
+ }
+ 
+ UCLASS_DRIVER(regulator) = {
+@@ -570,5 +547,6 @@ UCLASS_DRIVER(regulator) = {
+ 	.name		= "regulator",
+ 	.post_bind	= regulator_post_bind,
+ 	.pre_probe	= regulator_pre_probe,
++	.post_probe	= regulator_post_probe,
+ 	.per_device_plat_auto	= sizeof(struct dm_regulator_uclass_plat),
+ };
+-- 
+2.43.0
+
