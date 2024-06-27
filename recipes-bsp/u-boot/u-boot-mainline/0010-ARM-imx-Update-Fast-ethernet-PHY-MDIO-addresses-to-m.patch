@@ -1,0 +1,102 @@
+From 6a8b63ce5dfcfa4a9764213c8775781fc0234149 Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Thu, 27 Jun 2024 00:22:07 +0200
+Subject: [PATCH] ARM: imx: Update Fast ethernet PHY MDIO addresses to match DH
+ i.MX8MP DHCOM rev.200
+
+The production DH i.MX8MP DHCOM SoM rev.200 uses updated PHY MDIO addresses
+for the Fast ethernet PHYs. Update the base SoM DT and SoM rev.100 backward
+compatibility DTO to cater for this change.
+
+Since the MDIO address adjustment is now also in the rev.100 SoM DTO, not
+only in the rev.100 PDK3 DTO, update Makefile accordingly as well, else the
+DTC would complain about the DTO overriding the 'reg' property without also
+updating the node unit-address, which is not doable without duplicating the
+entire PHY node in the DTO, which leads to large amount of duplication with
+no gain.
+
+Upstream-Status: Submitted [https://patchwork.ozlabs.org/project/uboot/patch/20240627001403.279340-2-marex@denx.de/]
+Fixes: 9de599ec3d59 ("arm64: dts: imx8mp: Update i.MX8MP DHCOM SoM DT to production rev.200")
+Signed-off-by: Marek Vasut <marex@denx.de>
+---
+ arch/arm/dts/Makefile                            | 1 +
+ arch/arm/dts/imx8mp-dhcom-som-overlay-rev100.dts | 5 +++++
+ arch/arm/dts/imx8mp-dhcom-som.dtsi               | 8 ++++----
+ 3 files changed, 10 insertions(+), 4 deletions(-)
+
+diff --git a/arch/arm/dts/Makefile b/arch/arm/dts/Makefile
+index 9d28a485bec..d3c1def6fdf 100644
+--- a/arch/arm/dts/Makefile
++++ b/arch/arm/dts/Makefile
+@@ -1510,6 +1510,7 @@ targets += $(dtb-y)
+ # Add any required device tree compiler flags here
+ DTC_FLAGS += -a 0x8
+ 
++DTC_FLAGS_imx8mp-dhcom-som-overlay-rev100 += -Wno-avoid_default_addr_size -Wno-reg_format
+ DTC_FLAGS_imx8mp-dhcom-pdk3-overlay-rev100 += -Wno-avoid_default_addr_size -Wno-reg_format
+ 
+ PHONY += dtbs
+diff --git a/arch/arm/dts/imx8mp-dhcom-som-overlay-rev100.dts b/arch/arm/dts/imx8mp-dhcom-som-overlay-rev100.dts
+index 0e5d329b149..b2154d57e48 100644
+--- a/arch/arm/dts/imx8mp-dhcom-som-overlay-rev100.dts
++++ b/arch/arm/dts/imx8mp-dhcom-som-overlay-rev100.dts
+@@ -35,6 +35,7 @@
+ &ethphy0f { /* SMSC LAN8740Ai */
+ 	pinctrl-0 = <&pinctrl_ethphy0 &pinctrl_ioexp>;
+ 	reset-gpios = <&gpio3 20 GPIO_ACTIVE_LOW>;
++	reg = <0>;
+ };
+ 
+ &ethphy0g { /* Micrel KSZ9131RNXI */
+@@ -42,6 +43,10 @@
+ 	reset-gpios = <&gpio3 20 GPIO_ACTIVE_LOW>;
+ };
+ 
++&ethphy1f { /* SMSC LAN8740Ai */
++	reg = <1>;
++};
++
+ &i2c3 {
+ 	adc@48 {
+ 		compatible = "ti,tla2024";
+diff --git a/arch/arm/dts/imx8mp-dhcom-som.dtsi b/arch/arm/dts/imx8mp-dhcom-som.dtsi
+index b504d36818b..f2d99d05854 100644
+--- a/arch/arm/dts/imx8mp-dhcom-som.dtsi
++++ b/arch/arm/dts/imx8mp-dhcom-som.dtsi
+@@ -100,14 +100,14 @@
+ 		#size-cells = <0>;
+ 
+ 		/* Up to one of these two PHYs may be populated. */
+-		ethphy0f: ethernet-phy@0 { /* SMSC LAN8740Ai */
++		ethphy0f: ethernet-phy@1 { /* SMSC LAN8740Ai */
+ 			compatible = "ethernet-phy-id0007.c110",
+ 				     "ethernet-phy-ieee802.3-c22";
+ 			interrupt-parent = <&gpio3>;
+ 			interrupts = <19 IRQ_TYPE_LEVEL_LOW>;
+ 			pinctrl-0 = <&pinctrl_ethphy0>;
+ 			pinctrl-names = "default";
+-			reg = <0>;
++			reg = <1>;
+ 			reset-assert-us = <1000>;
+ 			reset-deassert-us = <1000>;
+ 			reset-gpios = <&ioexp 4 GPIO_ACTIVE_LOW>;
+@@ -146,14 +146,14 @@
+ 		#size-cells = <0>;
+ 
+ 		/* Up to one PHY may be populated. */
+-		ethphy1f: ethernet-phy@1 { /* SMSC LAN8740Ai */
++		ethphy1f: ethernet-phy@2 { /* SMSC LAN8740Ai */
+ 			compatible = "ethernet-phy-id0007.c110",
+ 				     "ethernet-phy-ieee802.3-c22";
+ 			interrupt-parent = <&gpio4>;
+ 			interrupts = <3 IRQ_TYPE_LEVEL_LOW>;
+ 			pinctrl-0 = <&pinctrl_ethphy1>;
+ 			pinctrl-names = "default";
+-			reg = <1>;
++			reg = <2>;
+ 			reset-assert-us = <1000>;
+ 			reset-deassert-us = <1000>;
+ 			reset-gpios = <&gpio4 2 GPIO_ACTIVE_LOW>;
+-- 
+2.43.0
+
