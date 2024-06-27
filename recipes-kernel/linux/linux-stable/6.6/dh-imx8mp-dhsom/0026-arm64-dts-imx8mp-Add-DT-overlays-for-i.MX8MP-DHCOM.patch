@@ -52,8 +52,8 @@ Signed-off-by: Marek Vasut <marex@denx.de>
  .../imx8mp-dhcom-pdk3-rev100-overlay.dtso     |  10 ++
  .../imx8mp-dhcom-som-overlay-eth1xfast.dtso   |  85 +++++++++++++
  .../imx8mp-dhcom-som-overlay-eth2xfast.dtso   |  31 +++++
- .../imx8mp-dhcom-som-overlay-rev100.dtso      | 128 ++++++++++++++++++
- 28 files changed, 951 insertions(+), 2 deletions(-)
+ .../imx8mp-dhcom-som-overlay-rev100.dtso      | 133 ++++++++++++++++++
+ 28 files changed, 956 insertions(+), 2 deletions(-)
  create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-dhcom-overlay-panel-ch101olhlwh.dtsi
  create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-dhcom-overlay-panel-common.dtsi
  create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-dhcom-overlay-panel-dpi.dtsi
@@ -1079,7 +1079,7 @@ new file mode 100644
 index 0000000000000..2b6ea54720c05
 --- /dev/null
 +++ b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-som-overlay-rev100.dtso
-@@ -0,0 +1,128 @@
+@@ -0,0 +1,133 @@
 +// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
 +/*
 + * Copyright (C) 2023 Marek Vasut <marex@denx.de>
@@ -1113,11 +1113,16 @@ index 0000000000000..2b6ea54720c05
 +&ethphy0f { /* SMSC LAN8740Ai */
 +	pinctrl-0 = <&pinctrl_ethphy0 &pinctrl_ioexp>;
 +	reset-gpios = <&gpio3 20 GPIO_ACTIVE_LOW>;
++	reg = <0>;
 +};
 +
 +&ethphy0g { /* Micrel KSZ9131RNXI */
 +	pinctrl-0 = <&pinctrl_ethphy0 &pinctrl_ioexp>;
 +	reset-gpios = <&gpio3 20 GPIO_ACTIVE_LOW>;
++};
++
++&ethphy1f { /* SMSC LAN8740Ai */
++	reg = <1>;
 +};
 +
 +&i2c3 {

@@ -27,3 +27,4 @@ patch 0029-drm-bridge-tc358767-Enable-FRMSYNC-timing-generator.patch
 patch 0030-drm-bridge-samsung-dsim-Initialize-bridge-on-attach.patch
 patch 0031-drm-bridge-tc358767-Reset-chip-again-on-attach.patch
 patch 0032-arm64-dts-imx8mp-Describe-M24C32-D-write-lockable-pa.patch
+patch 0033-arm64-dts-imx8mp-Update-Fast-ethernet-PHY-MDIO-addre.patch

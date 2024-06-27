@@ -1,0 +1,59 @@
+From 53e5276b7bd674b1193ce98900cdef9df931de3e Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Thu, 27 Jun 2024 01:19:46 +0200
+Subject: [PATCH] arm64: dts: imx8mp: Update Fast ethernet PHY MDIO addresses
+ to match DH i.MX8MP DHCOM rev.200
+
+The production DH i.MX8MP DHCOM SoM rev.200 uses updated PHY MDIO addresses
+for the Fast ethernet PHYs. Update the base SoM DT to cater for this change.
+Prototype rev.100 SoM was never publicly available and was manufactured in
+limited series, anything currently available is rev.200 or newer, so it is
+safe to update the DT this way.
+
+Upstream-Status: Submitted [https://patchwork.kernel.org/project/linux-arm-kernel/patch/20240627233045.80551-1-marex@denx.de/]
+Signed-off-by: Marek Vasut <marex@denx.de>
+---
+ arch/arm64/boot/dts/freescale/imx8mp-dhcom-som.dtsi | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-som.dtsi b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-som.dtsi
+index c2fd6b4c2a6e1..6744cea7bf2a9 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-som.dtsi
++++ b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-som.dtsi
+@@ -105,14 +105,14 @@ mdio {
+ 		#size-cells = <0>;
+ 
+ 		/* Up to one of these two PHYs may be populated. */
+-		ethphy0f: ethernet-phy@0 { /* SMSC LAN8740Ai */
++		ethphy0f: ethernet-phy@1 { /* SMSC LAN8740Ai */
+ 			compatible = "ethernet-phy-id0007.c110",
+ 				     "ethernet-phy-ieee802.3-c22";
+ 			interrupt-parent = <&gpio3>;
+ 			interrupts = <19 IRQ_TYPE_LEVEL_LOW>;
+ 			pinctrl-0 = <&pinctrl_ethphy0>;
+ 			pinctrl-names = "default";
+-			reg = <0>;
++			reg = <1>;
+ 			reset-assert-us = <1000>;
+ 			reset-deassert-us = <1000>;
+ 			reset-gpios = <&ioexp 4 GPIO_ACTIVE_LOW>;
+@@ -151,14 +151,14 @@ mdio {
+ 		#size-cells = <0>;
+ 
+ 		/* Up to one PHY may be populated. */
+-		ethphy1f: ethernet-phy@1 { /* SMSC LAN8740Ai */
++		ethphy1f: ethernet-phy@2 { /* SMSC LAN8740Ai */
+ 			compatible = "ethernet-phy-id0007.c110",
+ 				     "ethernet-phy-ieee802.3-c22";
+ 			interrupt-parent = <&gpio4>;
+ 			interrupts = <3 IRQ_TYPE_LEVEL_LOW>;
+ 			pinctrl-0 = <&pinctrl_ethphy1>;
+ 			pinctrl-names = "default";
+-			reg = <1>;
++			reg = <2>;
+ 			reset-assert-us = <1000>;
+ 			reset-deassert-us = <1000>;
+ 			reset-gpios = <&gpio4 2 GPIO_ACTIVE_LOW>;
+-- 
+2.43.0
+
