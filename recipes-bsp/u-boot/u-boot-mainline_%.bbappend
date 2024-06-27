@@ -12,6 +12,7 @@ SRC_URI:append:dh-imx-dhsom = " \
 	file://0006-power-regulator-Convert-regulators_enable_boot_on-of.patch \
 	file://0007-power-regulator-Drop-regulator_unset.patch \
 	file://0008-power-regulator-Drop-regulators_enable_boot_on-off.patch \
+	file://0009-ARM-imx-Enable-PCA953x-driver-on-DH-i.MX8MP-DHCOM-PD.patch \
 	"
 
 EXTRA_OEMAKE:append:dh-imx8mp-dhsom = " ATF_LOAD_ADDR=0x970000"
@@ -28,4 +29,4 @@ do_compile:prepend:dh-imx8mp-dhsom () {
 # format is -${MACHINE}-date.extraversion. The date is in the
 # format YYYYMMDD, the extraversion is used in case there are
 # multiple releases during a single day, which is unlikely.
-UBOOT_LOCALVERSION:dh-imx-dhsom ?= "-${MACHINE}-20240627.01"
+UBOOT_LOCALVERSION:dh-imx-dhsom ?= "-${MACHINE}-20240627.02"
