@@ -73,6 +73,7 @@ DISTRO = "nodistro"
 
 Note that MACHINE must be either of:
 
+* dh-imx6-dhcom-drc02
 * dh-imx6-dhcom-pdk2
 * dh-imx6-dhcom-picoitx
 * dh-imx6ull-dhcom-drc02
