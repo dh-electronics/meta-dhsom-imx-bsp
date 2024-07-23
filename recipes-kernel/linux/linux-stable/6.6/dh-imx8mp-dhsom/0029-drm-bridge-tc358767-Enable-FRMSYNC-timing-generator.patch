@@ -19,8 +19,11 @@ generate pixel clock with limited accuracy, it may therefore be necessary
 to reduce the HFP to fit into line length of input pixel data, to avoid any
 possible overflows, which make the output video look striped horizontally.
 
-Upstream-Status: Submitted [https://patchwork.freedesktop.org/patch/593714/]
+Upstream-Status: Backport [d9ca4b760ef6d93766b9d87df8cf5a33c807ea51]
 Signed-off-by: Marek Vasut <marex@denx.de>
+Reviewed-by: Robert Foss <rfoss@kernel.org>
+Signed-off-by: Robert Foss <rfoss@kernel.org>
+Link: https://patchwork.freedesktop.org/patch/msgid/20240513021607.129111-1-marex@denx.de
 ---
  drivers/gpu/drm/bridge/tc358767.c | 23 ++++++++++++++++++++---
  1 file changed, 20 insertions(+), 3 deletions(-)

@@ -1,0 +1,40 @@
+From 9013dc780cb9d23c604b525c82223b85565f8023 Mon Sep 17 00:00:00 2001
+From: Alexander Stein <alexander.stein@ew.tq-group.com>
+Date: Tue, 12 Dec 2023 08:52:55 +0100
+Subject: [PATCH 41/54] drm/bridge: tc358767: Add more volatile registers
+
+These registers might change their value without any host write operation.
+
+Upstream-Status: Backport [ef34c0eb0b58dfdd846093b1a26e63a08acaaf22]
+Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+Reviewed-by: Robert Foss <rfoss@kernel.org>
+Signed-off-by: Robert Foss <rfoss@kernel.org>
+Link: https://patchwork.freedesktop.org/patch/msgid/20231212075257.75084-6-alexander.stein@ew.tq-group.com
+---
+ drivers/gpu/drm/bridge/tc358767.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/drivers/gpu/drm/bridge/tc358767.c b/drivers/gpu/drm/bridge/tc358767.c
+index a312e62f8d475..a265ac1396512 100644
+--- a/drivers/gpu/drm/bridge/tc358767.c
++++ b/drivers/gpu/drm/bridge/tc358767.c
+@@ -2141,9 +2141,16 @@ static bool tc_readable_reg(struct device *dev, unsigned int reg)
+ }
+ 
+ static const struct regmap_range tc_volatile_ranges[] = {
++	regmap_reg_range(PPI_BUSYPPI, PPI_BUSYPPI),
++	regmap_reg_range(DSI_BUSYDSI, DSI_BUSYDSI),
++	regmap_reg_range(DSI_LANESTATUS0, DSI_INTSTATUS),
++	regmap_reg_range(DSIERRCNT, DSIERRCNT),
+ 	regmap_reg_range(VFUEN0, VFUEN0),
++	regmap_reg_range(SYSSTAT, SYSSTAT),
+ 	regmap_reg_range(GPIOI, GPIOI),
+ 	regmap_reg_range(INTSTS_G, INTSTS_G),
++	regmap_reg_range(DP0_VMNGENSTATUS, DP0_VMNGENSTATUS),
++	regmap_reg_range(DP0_AMNGENSTATUS, DP0_AMNGENSTATUS),
+ 	regmap_reg_range(DP0_AUXWDATA(0), DP0_AUXSTATUS),
+ 	regmap_reg_range(DP0_LTSTAT, DP0_SNKLTCHGREQ),
+ 	regmap_reg_range(DP_PHY_CTRL, DP_PHY_CTRL),
+-- 
+2.43.0
+

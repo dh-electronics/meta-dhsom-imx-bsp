@@ -25,35 +25,36 @@ Add DT overlays to support:
 Upstream-Status: Pending
 Signed-off-by: Marek Vasut <marex@denx.de>
 ---
- arch/arm64/boot/dts/freescale/Makefile        |  26 +++-
- ...mx8mp-dhcom-overlay-panel-ch101olhlwh.dtsi |  51 ++++++++
- .../imx8mp-dhcom-overlay-panel-common.dtsi    |  31 +++++
- .../imx8mp-dhcom-overlay-panel-dpi.dtsi       |  34 +++++
- ...8mp-dhcom-overlay-panel-etm0700g0edh6.dtsi |  61 +++++++++
- .../imx8mp-dhcom-overlay-panel-lvds.dtsi      |  22 ++++
+ arch/arm64/boot/dts/freescale/Makefile        |  27 +++-
+ ...mx8mp-dhcom-overlay-panel-ch101olhlwh.dtsi |  51 +++++++
+ .../imx8mp-dhcom-overlay-panel-common.dtsi    |  31 ++++
+ .../imx8mp-dhcom-overlay-panel-dpi.dtsi       |  47 +++++++
+ ...8mp-dhcom-overlay-panel-etm0700g0edh6.dtsi |  53 +++++++
+ .../imx8mp-dhcom-overlay-panel-lvds.dtsi      |  22 +++
  .../imx8mp-dhcom-pdk-overlay-eth2xfast.dtso   |  10 ++
- ...-pdk2-overlay-505-200-x12-ch101olhlwh.dtso |  31 +++++
+ ...-pdk2-overlay-505-200-x12-ch101olhlwh.dtso |  31 ++++
  ...imx8mp-dhcom-pdk2-overlay-531-100-x21.dtso |  33 +++++
  ...imx8mp-dhcom-pdk2-overlay-531-100-x22.dtso |  33 +++++
  ...imx8mp-dhcom-pdk2-overlay-560-300-x12.dtso |  27 ++++
  .../imx8mp-dhcom-pdk2-overlay-rev100.dtso     |  11 ++
- ...-pdk3-overlay-505-200-x36-ch101olhlwh.dtso |  46 +++++++
+ ...-pdk3-overlay-505-200-x36-ch101olhlwh.dtso |  46 ++++++
  ...imx8mp-dhcom-pdk3-overlay-531-100-x40.dtso |  33 +++++
  ...imx8mp-dhcom-pdk3-overlay-531-100-x41.dtso |  33 +++++
  ...imx8mp-dhcom-pdk3-overlay-560-300-x36.dtso |  26 ++++
+ ...imx8mp-dhcom-pdk3-overlay-732-100-x36.dtso |  49 +++++++
  ...-dhcom-pdk3-overlay-ea-murata-2ae-x20.dtso |  56 ++++++++
- ...3-overlay-nxp-spf-29853-c1-ov5640-x29.dtso |  30 +++++
- ...3-overlay-nxp-spf-29853-c1-ov5640-x31.dtso |  30 +++++
+ ...3-overlay-nxp-spf-29853-c1-ov5640-x29.dtso |  30 ++++
+ ...3-overlay-nxp-spf-29853-c1-ov5640-x31.dtso |  30 ++++
  ...-pdk3-overlay-nxp-spf-29853-c1-ov5640.dtsi |  35 +++++
- .../imx8mp-dhcom-pdk3-overlay-rev100.dtso     |  15 +++
+ .../imx8mp-dhcom-pdk3-overlay-rev100.dtso     |  15 ++
  ...0-overlay-nxp-spf-29853-c1-ov5640-x29.dtso |   7 +
  ...0-overlay-nxp-spf-29853-c1-ov5640-x31.dtso |   7 +
  ...ev100-overlay-nxp-spf-29853-c1-ov5640.dtsi |  11 ++
  .../imx8mp-dhcom-pdk3-rev100-overlay.dtso     |  10 ++
- .../imx8mp-dhcom-som-overlay-eth1xfast.dtso   |  85 +++++++++++++
- .../imx8mp-dhcom-som-overlay-eth2xfast.dtso   |  31 +++++
+ .../imx8mp-dhcom-som-overlay-eth1xfast.dtso   |  85 +++++++++++
+ .../imx8mp-dhcom-som-overlay-eth2xfast.dtso   |  31 ++++
  .../imx8mp-dhcom-som-overlay-rev100.dtso      | 133 ++++++++++++++++++
- 28 files changed, 956 insertions(+), 2 deletions(-)
+ 29 files changed, 1011 insertions(+), 2 deletions(-)
  create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-dhcom-overlay-panel-ch101olhlwh.dtsi
  create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-dhcom-overlay-panel-common.dtsi
  create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-dhcom-overlay-panel-dpi.dtsi
@@ -69,6 +70,7 @@ Signed-off-by: Marek Vasut <marex@denx.de>
  create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-overlay-531-100-x40.dtso
  create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-overlay-531-100-x41.dtso
  create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-overlay-560-300-x36.dtso
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-overlay-732-100-x36.dtso
  create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-overlay-ea-murata-2ae-x20.dtso
  create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-overlay-nxp-spf-29853-c1-ov5640-x29.dtso
  create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-overlay-nxp-spf-29853-c1-ov5640-x31.dtso
@@ -86,7 +88,7 @@ diff --git a/arch/arm64/boot/dts/freescale/Makefile b/arch/arm64/boot/dts/freesc
 index 89aee6c925760..469ef91cd3497 100644
 --- a/arch/arm64/boot/dts/freescale/Makefile
 +++ b/arch/arm64/boot/dts/freescale/Makefile
-@@ -96,8 +96,30 @@ dtb-$(CONFIG_ARCH_MXC) += imx8mp-beacon-kit.dtb
+@@ -96,8 +96,31 @@ dtb-$(CONFIG_ARCH_MXC) += imx8mp-beacon-kit.dtb
  dtb-$(CONFIG_ARCH_MXC) += imx8mp-data-modul-edm-sbc.dtb
  dtb-$(CONFIG_ARCH_MXC) += imx8mp-debix-model-a.dtb
  dtb-$(CONFIG_ARCH_MXC) += imx8mp-debix-som-a-bmb-08.dtb
@@ -107,6 +109,7 @@ index 89aee6c925760..469ef91cd3497 100644
 +			  imx8mp-dhcom-pdk3-overlay-531-100-x40.dtbo \
 +			  imx8mp-dhcom-pdk3-overlay-531-100-x41.dtbo \
 +			  imx8mp-dhcom-pdk3-overlay-560-300-x36.dtbo \
++			  imx8mp-dhcom-pdk3-overlay-732-100-x36.dtbo \
 +			  imx8mp-dhcom-pdk3-overlay-ea-murata-2ae-x20.dtbo \
 +			  imx8mp-dhcom-pdk3-overlay-nxp-spf-29853-c1-ov5640-x29.dtbo \
 +			  imx8mp-dhcom-pdk3-overlay-nxp-spf-29853-c1-ov5640-x31.dtbo \
@@ -218,7 +221,7 @@ new file mode 100644
 index 0000000000000..2f7615c232090
 --- /dev/null
 +++ b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-overlay-panel-dpi.dtsi
-@@ -0,0 +1,34 @@
+@@ -0,0 +1,47 @@
 +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
 +/*
 + * Copyright (C) 2022 Marek Vasut <marex@denx.de>
@@ -236,6 +239,19 @@ index 0000000000000..2f7615c232090
 +
 +&panel_in {
 +	remote-endpoint = <&tc_bridge_out>;
++};
++
++&media_blk_ctrl {
++	assigned-clocks = <&clk IMX8MP_CLK_MEDIA_AXI>,
++			  <&clk IMX8MP_CLK_MEDIA_APB>,
++			  <&clk IMX8MP_CLK_MEDIA_DISP1_PIX>,
++			  <&clk IMX8MP_CLK_MEDIA_DISP2_PIX>;
++	assigned-clock-parents = <&clk IMX8MP_SYS_PLL2_1000M>,
++				 <&clk IMX8MP_SYS_PLL1_800M>,
++				 <&clk IMX8MP_VIDEO_PLL1_OUT>,
++				 <&clk IMX8MP_SYS_PLL3_OUT>;
++	assigned-clock-rates = <500000000>, <200000000>,
++			       <0>, <0>;
 +};
 +
 +&tc_bridge {
@@ -258,7 +274,7 @@ new file mode 100644
 index 0000000000000..c714e49e810f2
 --- /dev/null
 +++ b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-overlay-panel-etm0700g0edh6.dtsi
-@@ -0,0 +1,61 @@
+@@ -0,0 +1,53 @@
 +// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
 +/*
 + * Copyright (C) 2022 Marek Vasut <marex@denx.de>
@@ -266,6 +282,7 @@ index 0000000000000..c714e49e810f2
 +/dts-v1/;
 +/plugin/;
 +
++#include <dt-bindings/clock/imx8mp-clock.h>
 +#include "imx8mp-dhcom-overlay-panel-dpi.dtsi"
 +
 +&{/} {
@@ -296,21 +313,12 @@ index 0000000000000..c714e49e810f2
 +	};
 +};
 +
-+&media_blk_ctrl {
-+	/*
-+	 * The EDT ETM0700G0EDH6 panel requires 33.26 MHz pixel clock.
-+	 * Set IMX8MP_VIDEO_PLL1 to 532.16 MHz , since 532.16 MHz / 16 = 33.26 MHz .
-+	 * Note that the divider factor 16 is completely arbitrary integer divider.
-+	 */
-+	assigned-clock-rates = <500000000>, <200000000>, <0>, <0>, <532160000>;
-+};
-+
 +&mipi_dsi {
 +	/*
 +	 * This is DSIM PLL frequency, DSI HS clock lane frequency
 +	 * is half of the "samsung,burst-clock-frequency" value.
 +	 */
-+	samsung,burst-clock-frequency = <195000000>;
++	samsung,burst-clock-frequency = <500000000>;
 +};
 +
 +&panel {
@@ -688,6 +696,61 @@ index 0000000000000..7a39f001cea4a
 +		led-2 {
 +			/* LED2 GPIO conflicts with BL-ON1 GPIO-G */
 +			status = "disabled";
++		};
++	};
++};
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-overlay-732-100-x36.dtso b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-overlay-732-100-x36.dtso
+new file mode 100644
+index 0000000000000..0036878bc5ed5
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk3-overlay-732-100-x36.dtso
+@@ -0,0 +1,49 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Copyright (C) 2024 Marek Vasut <marex@denx.de>
++ */
++/dts-v1/;
++/plugin/;
++
++#include <dt-bindings/clock/imx8mp-clock.h>
++
++&lcdif1 {
++	status = "okay";
++};
++
++&media_blk_ctrl {
++	assigned-clocks = <&clk IMX8MP_CLK_MEDIA_AXI>,
++			  <&clk IMX8MP_CLK_MEDIA_APB>,
++			  <&clk IMX8MP_CLK_MEDIA_DISP1_PIX>,
++			  <&clk IMX8MP_CLK_MEDIA_DISP2_PIX>;
++	assigned-clock-parents = <&clk IMX8MP_SYS_PLL2_1000M>,
++				 <&clk IMX8MP_SYS_PLL1_800M>,
++				 <&clk IMX8MP_VIDEO_PLL1_OUT>,
++				 <&clk IMX8MP_SYS_PLL3_OUT>;
++	assigned-clock-rates = <500000000>, <200000000>,
++			       <0>, <0>;
++};
++
++&mipi_dsi {
++	samsung,burst-clock-frequency = <1000000000>;
++	status = "okay";
++};
++
++&tc_bridge {
++	assigned-clock-rates = <26000000>, <26000000>, <416000000>;
++	toshiba,hpd-pin = <0>;
++	status = "okay";
++
++	ports {
++		#address-cells = <1>;
++		#size-cells = <0>;
++
++		port@2 {
++			reg = <2>;
++
++			endpoint {
++				toshiba,pre-emphasis = /bits/ 8 <1 1>;
++			};
 +		};
 +	};
 +};

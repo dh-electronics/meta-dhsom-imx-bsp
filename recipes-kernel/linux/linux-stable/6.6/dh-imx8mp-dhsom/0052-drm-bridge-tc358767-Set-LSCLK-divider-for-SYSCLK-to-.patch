@@ -1,0 +1,37 @@
+From 0fb5ef3dfa5d5a82b6038b16ec0d54a4b8179b49 Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Tue, 25 Jun 2024 14:02:33 +0200
+Subject: [PATCH 52/54] drm/bridge: tc358767: Set LSCLK divider for SYSCLK to 1
+
+The only information in the datasheet regarding this divider is a note
+in SYS_PLLPARAM register documentation which states that when LSCLK is
+270 MHz, LSCLK_DIV should be 1. What should LSCLK_DIV be set to when
+LSCLK is 162 MHz (for DP 1.62G mode) is unclear, but empirical test
+confirms using LSCLK_DIV 1 has no adverse effects either. In the worst
+case, the internal TC358767 clock would run faster.
+
+Upstream-Status: Backport [9c433c87e81c2dfc005b72b9fe822b065ffa044e]
+Reviewed-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+Signed-off-by: Marek Vasut <marex@denx.de>
+Signed-off-by: Robert Foss <rfoss@kernel.org>
+Link: https://patchwork.freedesktop.org/patch/msgid/20240625120334.145320-4-marex@denx.de
+---
+ drivers/gpu/drm/bridge/tc358767.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/gpu/drm/bridge/tc358767.c b/drivers/gpu/drm/bridge/tc358767.c
+index 19684b8400bef..0c6912bd5ec9e 100644
+--- a/drivers/gpu/drm/bridge/tc358767.c
++++ b/drivers/gpu/drm/bridge/tc358767.c
+@@ -738,7 +738,7 @@ static int tc_stream_clock_calc(struct tc_data *tc)
+ static int tc_set_syspllparam(struct tc_data *tc)
+ {
+ 	unsigned long rate;
+-	u32 pllparam = SYSCLK_SEL_LSCLK | LSCLK_DIV_2;
++	u32 pllparam = SYSCLK_SEL_LSCLK | LSCLK_DIV_1;
+ 
+ 	rate = clk_get_rate(tc->refclk);
+ 	switch (rate) {
+-- 
+2.43.0
+

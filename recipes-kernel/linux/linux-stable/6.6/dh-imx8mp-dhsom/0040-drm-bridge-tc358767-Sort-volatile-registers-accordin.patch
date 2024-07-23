@@ -1,0 +1,42 @@
+From b0e32005d0a80af81fff01e707b633358c9f503c Mon Sep 17 00:00:00 2001
+From: Alexander Stein <alexander.stein@ew.tq-group.com>
+Date: Tue, 12 Dec 2023 08:52:54 +0100
+Subject: [PATCH 40/54] drm/bridge: tc358767: Sort volatile registers according
+ to address
+
+Sort the list by the starting address to ease adding new entries.
+No functional change intended.
+
+Upstream-Status: Backport [b36bc498d1837398e5b355c019dc400201040811]
+Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+Reviewed-by: Robert Foss <rfoss@kernel.org>
+Signed-off-by: Robert Foss <rfoss@kernel.org>
+Link: https://patchwork.freedesktop.org/patch/msgid/20231212075257.75084-5-alexander.stein@ew.tq-group.com
+---
+ drivers/gpu/drm/bridge/tc358767.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/gpu/drm/bridge/tc358767.c b/drivers/gpu/drm/bridge/tc358767.c
+index 62e96b3487663..a312e62f8d475 100644
+--- a/drivers/gpu/drm/bridge/tc358767.c
++++ b/drivers/gpu/drm/bridge/tc358767.c
+@@ -2141,13 +2141,13 @@ static bool tc_readable_reg(struct device *dev, unsigned int reg)
+ }
+ 
+ static const struct regmap_range tc_volatile_ranges[] = {
++	regmap_reg_range(VFUEN0, VFUEN0),
++	regmap_reg_range(GPIOI, GPIOI),
++	regmap_reg_range(INTSTS_G, INTSTS_G),
+ 	regmap_reg_range(DP0_AUXWDATA(0), DP0_AUXSTATUS),
+ 	regmap_reg_range(DP0_LTSTAT, DP0_SNKLTCHGREQ),
+ 	regmap_reg_range(DP_PHY_CTRL, DP_PHY_CTRL),
+ 	regmap_reg_range(DP0_PLLCTRL, PXL_PLLCTRL),
+-	regmap_reg_range(VFUEN0, VFUEN0),
+-	regmap_reg_range(INTSTS_G, INTSTS_G),
+-	regmap_reg_range(GPIOI, GPIOI),
+ };
+ 
+ static const struct regmap_access_table tc_volatile_table = {
+-- 
+2.43.0
+

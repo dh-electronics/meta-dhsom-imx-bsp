@@ -1,0 +1,31 @@
+From dbdfe51ad466c6720dbb2a9ccf20955883cb821b Mon Sep 17 00:00:00 2001
+From: Jani Nikula <jani.nikula@intel.com>
+Date: Tue, 23 Jan 2024 21:37:42 +0200
+Subject: [PATCH 44/54] drm/bridge: tc358767: update the EDID property
+
+The EDID property should be updated between reading the EDID and adding
+the modes.
+
+Upstream-Status: Backport [867a3ad827dfd6f63c8234d7386c765fa26aa643]
+Signed-off-by: Jani Nikula <jani.nikula@intel.com>
+Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
+Link: https://patchwork.freedesktop.org/patch/msgid/95dc1f219d8cb31e4ff30ce1f516e6f4b5e06802.1706038510.git.jani.nikula@intel.com
+---
+ drivers/gpu/drm/bridge/tc358767.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/gpu/drm/bridge/tc358767.c b/drivers/gpu/drm/bridge/tc358767.c
+index a9b6cce01c3c4..7f580c080aa33 100644
+--- a/drivers/gpu/drm/bridge/tc358767.c
++++ b/drivers/gpu/drm/bridge/tc358767.c
+@@ -1696,6 +1696,7 @@ static int tc_connector_get_modes(struct drm_connector *connector)
+ 	}
+ 
+ 	edid = tc_get_edid(&tc->bridge, connector);
++	drm_connector_update_edid_property(connector, edid);
+ 	num_modes = drm_add_edid_modes(connector, edid);
+ 	kfree(edid);
+ 
+-- 
+2.43.0
+

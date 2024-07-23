@@ -1,0 +1,34 @@
+From dc2b64a118ee0b1e6f7e37d6ce7f17cb687cfbac Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Fri, 31 May 2024 22:32:01 +0200
+Subject: [PATCH 46/54] drm/bridge: tc358767: Fix comment in tc_edp_mode_valid
+
+Fix comment copy-paste error in tc_edp_mode_valid(), this function
+is validating DP/eDP clock, not DPI clock frequency. Update the
+comment to match. No functional change.
+
+Upstream-Status: Backport [004370a82ae1f5a0fd5abc1077733f9b1a42e7c0]
+Signed-off-by: Marek Vasut <marex@denx.de>
+Reviewed-by: Robert Foss <rfoss@kernel.org>
+Signed-off-by: Robert Foss <rfoss@kernel.org>
+Link: https://patchwork.freedesktop.org/patch/msgid/20240531203213.277421-1-marex@denx.de
+---
+ drivers/gpu/drm/bridge/tc358767.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/gpu/drm/bridge/tc358767.c b/drivers/gpu/drm/bridge/tc358767.c
+index 8139c23884d2f..a6be7213df5bd 100644
+--- a/drivers/gpu/drm/bridge/tc358767.c
++++ b/drivers/gpu/drm/bridge/tc358767.c
+@@ -1646,7 +1646,7 @@ tc_edp_mode_valid(struct drm_bridge *bridge,
+ 	u32 req, avail;
+ 	u32 bits_per_pixel = 24;
+ 
+-	/* DPI interface clock limitation: upto 154 MHz */
++	/* DPI->(e)DP interface clock limitation: up to 154 MHz */
+ 	if (mode->clock > 154000)
+ 		return MODE_CLOCK_HIGH;
+ 
+-- 
+2.43.0
+

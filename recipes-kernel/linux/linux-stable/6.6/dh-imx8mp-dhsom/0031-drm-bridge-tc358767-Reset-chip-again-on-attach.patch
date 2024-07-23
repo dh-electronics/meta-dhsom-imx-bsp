@@ -21,17 +21,18 @@ Toggle the RESX signal here and reconfigure the AUX channel. That way,
 the AUX channel communication from this point on does surely run at
 10 MHz as it should.
 
-Upstream-Status: Submitted [https://patchwork.freedesktop.org/patch/593719/]
+Upstream-Status: Submitted [https://patchwork.freedesktop.org/patch/600807/]
+Reviewed-by: Alexander Stein <alexander.stein@ew.tq-group.com>
 Signed-off-by: Marek Vasut <marex@denx.de>
 ---
- drivers/gpu/drm/bridge/tc358767.c | 50 +++++++++++++++++++++++++++++++
- 1 file changed, 50 insertions(+)
+ drivers/gpu/drm/bridge/tc358767.c | 70 +++++++++++++++++++++++++++++++
+ 1 file changed, 70 insertions(+)
 
 diff --git a/drivers/gpu/drm/bridge/tc358767.c b/drivers/gpu/drm/bridge/tc358767.c
-index a370c3acfa6f2..8fb67fe9a3881 100644
+index a370c3acfa6f2..e8e869833a94f 100644
 --- a/drivers/gpu/drm/bridge/tc358767.c
 +++ b/drivers/gpu/drm/bridge/tc358767.c
-@@ -1677,10 +1677,30 @@ static const struct drm_connector_funcs tc_connector_funcs = {
+@@ -1677,10 +1677,50 @@ static const struct drm_connector_funcs tc_connector_funcs = {
  	.atomic_destroy_state = drm_atomic_helper_connector_destroy_state,
  };
  
@@ -44,6 +45,26 @@ index a370c3acfa6f2..8fb67fe9a3881 100644
 +	usleep_range(10000, 11000);
 +	gpiod_set_value_cansleep(tc->reset_gpio, 1);
 +	usleep_range(5000, 10000);
++
++	if (tc->hpd_pin < 0)
++		return;
++
++	regcache_drop_region(tc->regmap, 0x0, 0xfff);
++	regcache_mark_dirty(tc->regmap);
++
++	u32 lcnt_reg = tc->hpd_pin == 0 ? INT_GP0_LCNT : INT_GP1_LCNT;
++	u32 h_lc = INT_GPIO_H(tc->hpd_pin) | INT_GPIO_LC(tc->hpd_pin);
++
++	/* Set LCNT to 2ms */
++	regmap_write(tc->regmap, lcnt_reg,
++		     clk_get_rate(tc->refclk) * 2 / 1000);
++	/* We need the "alternate" mode for HPD */
++	regmap_write(tc->regmap, GPIOM, BIT(tc->hpd_pin));
++
++	if (tc->have_irq) {
++		/* enable H & LC */
++		regmap_update_bits(tc->regmap, INTCTL_G, h_lc, h_lc);
++	}
 +}
 +
  static int tc_dpi_bridge_attach(struct drm_bridge *bridge,
@@ -62,7 +83,7 @@ index a370c3acfa6f2..8fb67fe9a3881 100644
  
  	if (!tc->panel_bridge)
  		return 0;
-@@ -1697,6 +1717,36 @@ static int tc_edp_bridge_attach(struct drm_bridge *bridge,
+@@ -1697,6 +1737,36 @@ static int tc_edp_bridge_attach(struct drm_bridge *bridge,
  	struct drm_device *drm = bridge->dev;
  	int ret;
  
