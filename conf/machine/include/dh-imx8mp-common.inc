@@ -11,7 +11,7 @@ SOC_FAMILY ?= "imx8mp"
 require conf/machine/include/arm/armv8a/tune-cortexa53.inc
 require conf/machine/include/soc-family.inc
 
-SERIAL_CONSOLE = "115200 ttymxc0"
+SERIAL_CONSOLES = "115200;ttymxc0"
 
 # Linux kernel
 PREFERRED_VERSION_linux-stable ?= "6.6%"
