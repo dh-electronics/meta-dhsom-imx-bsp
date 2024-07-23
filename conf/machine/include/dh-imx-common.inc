@@ -35,8 +35,8 @@ MACHINE_ESSENTIAL_EXTRA_RDEPENDS += " \
 	"
 
 # List of images to be built
-IMAGE_FSTYPES ?= "tar.xz wic.xz wic.gz"
-INITRAMFS_FSTYPES ?= "cpio.xz"
+IMAGE_FSTYPES ?= "tar.zst wic.zst wic.gz wic.bmap"
+INITRAMFS_FSTYPES ?= "cpio.zst"
 
 DH_UBOOT_RECIPE ?= "u-boot-mainline"
 EXTRA_IMAGEDEPENDS += "${DH_UBOOT_RECIPE}"
