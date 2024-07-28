@@ -44,3 +44,4 @@ patch 0051-drm-bridge-tc358767-Drop-line_pixel_subtract.patch
 patch 0052-drm-bridge-tc358767-Set-LSCLK-divider-for-SYSCLK-to-.patch
 patch 0053-Revert-drm-bridge-tc358767-Set-default-CLRSIPO-count.patch
 patch 0054-drm-bridge-tc358767-Add-configurable-default-preemph.patch
+patch 0055-arm64-dts-imx8mp-Add-DH-i.MX8MP-DHCOM-SoM-on-DRC02-c.patch
