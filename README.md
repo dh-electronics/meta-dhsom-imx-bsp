@@ -79,6 +79,7 @@ Note that MACHINE must be either of:
 * dh-imx6ull-dhcom-drc02
 * dh-imx6ull-dhcom-pdk2
 * dh-imx6ull-dhcom-picoitx
+* dh-imx8mp-dhcom-drc02
 * dh-imx8mp-dhcom-pdk2
 * dh-imx8mp-dhcom-pdk3
 
