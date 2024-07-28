@@ -15,6 +15,7 @@ SRC_URI:append:dh-imx-dhsom = " \
 	file://0009-ARM-imx-Enable-PCA953x-driver-on-DH-i.MX8MP-DHCOM-PD.patch \
 	file://0010-ARM-imx-Update-Fast-ethernet-PHY-MDIO-addresses-to-m.patch \
 	file://0011-net-fec_mxc-Avoid-enable-regulator-failure.patch \
+	file://0012-arm64-dts-imx8mp-Add-DH-i.MX8MP-DHCOM-SoM-on-DRC02-c.patch \
 	"
 
 EXTRA_OEMAKE:append:dh-imx8mp-dhsom = " ATF_LOAD_ADDR=0x970000"
@@ -31,4 +32,4 @@ do_compile:prepend:dh-imx8mp-dhsom () {
 # format is -${MACHINE}-date.extraversion. The date is in the
 # format YYYYMMDD, the extraversion is used in case there are
 # multiple releases during a single day, which is unlikely.
-UBOOT_LOCALVERSION:dh-imx-dhsom ?= "-${MACHINE}-20240728.01"
+UBOOT_LOCALVERSION:dh-imx-dhsom ?= "-${MACHINE}-20240925.01"
