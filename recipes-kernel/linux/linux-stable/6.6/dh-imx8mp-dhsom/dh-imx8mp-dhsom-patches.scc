@@ -6,10 +6,8 @@ patch 0006-drm-bridge-imx-add-driver-for-HDMI-TX-Parallel-Video.patch
 patch 0007-drm-bridge-imx8mp-hdmi-pvi-Fix-build-warnings.patch
 patch 0008-drm-bridge-imx-add-bridge-wrapper-driver-for-i.MX8MP.patch
 patch 0009-phy-freescale-add-Samsung-HDMI-PHY.patch
-patch 0010-arm64-dts-imx8mp-add-HDMI-power-domains.patch
 patch 0011-arm64-dts-imx8mp-add-HDMI-irqsteer.patch
 patch 0012-arm64-dts-imx8mp-add-HDMI-display-pipeline.patch
-patch 0015-arm64-dts-imx8mp-Add-NPU-Node.patch
 patch 0016-arm64-dts-imx8mp-Enable-HDMI-on-MX8MP-DHCOM-PDK2-and.patch
 patch 0017-arm64-dts-imx8mp-Switch-PCIe-to-HSIO-PLL-on-i.MX8MP-.patch
 patch 0018-arm64-dts-imx8mp-Describe-VDD_ARM-run-and-standby-vo.patch
