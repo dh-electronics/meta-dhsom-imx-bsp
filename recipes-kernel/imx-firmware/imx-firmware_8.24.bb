@@ -7,21 +7,22 @@ LICENSE:${PN}-sdma-imx7d = "Firmware-nxp-imx-firmware"
 LICENSE:${PN}-vpu-imx6d = "Firmware-nxp-imx-firmware"
 LICENSE:${PN}-vpu-imx6q = "Firmware-nxp-imx-firmware"
 
-LIC_FILES_CHKSUM = "file://COPYING;md5=63a38e9f392d8813d6f1f4d0d6fbe657"
+LIC_FILES_CHKSUM = "file://COPYING;md5=10c0fda810c63b052409b15a5445671a"
 
-SRC_URI = "http://www.freescale.com/lgfiles/NMG/MAD/YOCTO/firmware-imx-${PV}.bin"
-SRC_URI[md5sum] = "25c50f3371450b2324401ee06ff1bf6a"
-SRC_URI[sha256sum] = "f6dc6a5c8fd9b913a15360d3ccd53d188db05a08a8594c518e57622478c72383"
+EXTRA_HASH = "fbe0a4c"
+SRC_URI = "http://www.freescale.com/lgfiles/NMG/MAD/YOCTO/firmware-imx-${PV}-${EXTRA_HASH}.bin"
+SRC_URI[md5sum] = "440b125e897614d77fac663d90bcffc8"
+SRC_URI[sha256sum] = "2e27962332197ebebbb30138f6dfb365361d48d7efa565df97c4f79285b1ca50"
 
-S = "${WORKDIR}/firmware-imx-${PV}"
+S = "${WORKDIR}/firmware-imx-${PV}-${EXTRA_HASH}"
 
 inherit allarch deploy
 
 do_extra_unpack() {
-	dd if=${WORKDIR}/firmware-imx-${PV}.bin of=${WORKDIR}/firmware-imx-${PV}.tar.bz2 \
-		bs=$(grep -boam 1 'BZh' ${WORKDIR}/firmware-imx-${PV}.bin | cut -d ":" -f 1) \
+	dd if=${WORKDIR}/firmware-imx-${PV}-${EXTRA_HASH}.bin of=${WORKDIR}/firmware-imx-${PV}-${EXTRA_HASH}.tar.bz2 \
+		bs=$(grep -boam 1 'BZh' ${WORKDIR}/firmware-imx-${PV}-${EXTRA_HASH}.bin | cut -d ":" -f 1) \
 		skip=1
-	tar -C ${WORKDIR} -xf ${WORKDIR}/firmware-imx-${PV}.tar.bz2
+	tar -C ${WORKDIR} -xf ${WORKDIR}/firmware-imx-${PV}-${EXTRA_HASH}.tar.bz2
 }
 
 do_unpack:append() {
