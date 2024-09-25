@@ -37,7 +37,6 @@ patch 0043-drm-bridge-tc358767-Add-descriptions-to-register-def.patch
 patch 0044-drm-bridge-tc358767-update-the-EDID-property.patch
 patch 0045-drm-bridge-tc358767-switch-to-edid_read-callback.patch
 patch 0046-drm-bridge-tc358767-Fix-comment-in-tc_edp_mode_valid.patch
-patch 0047-drm-bridge-tc358767-Check-if-fully-initialized-befor.patch
 patch 0048-drm-bridge-tc358767-Add-format-negotiation-hooks-for.patch
 patch 0049-drm-bridge-tc358767-Split-tc_pxl_pll_en-into-paramet.patch
 patch 0050-drm-bridge-tc358767-Use-tc_pxl_pll_calc-to-correct-a.patch
