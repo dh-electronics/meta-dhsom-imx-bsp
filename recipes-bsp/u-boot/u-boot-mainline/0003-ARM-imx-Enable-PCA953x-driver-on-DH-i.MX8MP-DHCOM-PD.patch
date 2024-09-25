@@ -1,14 +1,14 @@
-From f82ba50bc85c65761b56684e25141182cbac3ab9 Mon Sep 17 00:00:00 2001
+From 296db585fa3fb23df97b9f3db9911f18b57d0fe8 Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
 Date: Thu, 27 Jun 2024 00:03:56 +0200
-Subject: [PATCH] ARM: imx: Enable PCA953x driver on DH i.MX8MP DHCOM PDK2
+Subject: [PATCH 3/5] ARM: imx: Enable PCA953x driver on DH i.MX8MP DHCOM PDK2
 
 Enable PCA953x GPIO expander driver in DH i.MX8MP DHCOM PDK2 configuration.
 The PCA9539 GPIO expander is used on production DH i.MX8MP DHCOM SoM rev.200.
 This is already enabled in DH i.MX8MP DHCOM PDK3 configuration so align the
 two configurations.
 
-Upstream-Status: Submitted [https://patchwork.ozlabs.org/project/uboot/patch/20240627001403.279340-1-marex@denx.de/]
+Upstream-Status: Backport [80c588f000cfa1f6c6c1b147a92fd894fa2f418b]
 Fixes: 9de599ec3d59 ("arm64: dts: imx8mp: Update i.MX8MP DHCOM SoM DT to production rev.200")
 Signed-off-by: Marek Vasut <marex@denx.de>
 ---
@@ -16,10 +16,10 @@ Signed-off-by: Marek Vasut <marex@denx.de>
  1 file changed, 1 insertion(+)
 
 diff --git a/configs/imx8mp_dhcom_pdk2_defconfig b/configs/imx8mp_dhcom_pdk2_defconfig
-index 994be05eaf9..181d616b0ac 100644
+index 0bfca4d0402..75842ec3b84 100644
 --- a/configs/imx8mp_dhcom_pdk2_defconfig
 +++ b/configs/imx8mp_dhcom_pdk2_defconfig
-@@ -179,6 +179,7 @@ CONFIG_FASTBOOT_FLASH_MMC_DEV=0
+@@ -180,6 +180,7 @@ CONFIG_FASTBOOT_FLASH_MMC_DEV=0
  CONFIG_GPIO_HOG=y
  CONFIG_SPL_GPIO_HOG=y
  CONFIG_MXC_GPIO=y
@@ -28,5 +28,5 @@ index 994be05eaf9..181d616b0ac 100644
  # CONFIG_INPUT is not set
  CONFIG_LED=y
 -- 
-2.43.0
+2.45.2
 

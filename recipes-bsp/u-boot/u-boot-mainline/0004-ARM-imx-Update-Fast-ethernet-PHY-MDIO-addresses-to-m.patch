@@ -1,8 +1,8 @@
-From 6a8b63ce5dfcfa4a9764213c8775781fc0234149 Mon Sep 17 00:00:00 2001
+From 100d108a01a0f839e106f6c6cce966a83bae284f Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
 Date: Thu, 27 Jun 2024 00:22:07 +0200
-Subject: [PATCH] ARM: imx: Update Fast ethernet PHY MDIO addresses to match DH
- i.MX8MP DHCOM rev.200
+Subject: [PATCH 4/5] ARM: imx: Update Fast ethernet PHY MDIO addresses to
+ match DH i.MX8MP DHCOM rev.200
 
 The production DH i.MX8MP DHCOM SoM rev.200 uses updated PHY MDIO addresses
 for the Fast ethernet PHYs. Update the base SoM DT and SoM rev.100 backward
@@ -15,7 +15,7 @@ updating the node unit-address, which is not doable without duplicating the
 entire PHY node in the DTO, which leads to large amount of duplication with
 no gain.
 
-Upstream-Status: Submitted [https://patchwork.ozlabs.org/project/uboot/patch/20240627001403.279340-2-marex@denx.de/]
+Upstream-Status: Backport [ddc869ebe9e62bcf7b028dcb2404df4c5a59a54b]
 Fixes: 9de599ec3d59 ("arm64: dts: imx8mp: Update i.MX8MP DHCOM SoM DT to production rev.200")
 Signed-off-by: Marek Vasut <marex@denx.de>
 ---
@@ -25,10 +25,10 @@ Signed-off-by: Marek Vasut <marex@denx.de>
  3 files changed, 10 insertions(+), 4 deletions(-)
 
 diff --git a/arch/arm/dts/Makefile b/arch/arm/dts/Makefile
-index 9d28a485bec..d3c1def6fdf 100644
+index 8fb6a8a1f17..daf273b31dd 100644
 --- a/arch/arm/dts/Makefile
 +++ b/arch/arm/dts/Makefile
-@@ -1510,6 +1510,7 @@ targets += $(dtb-y)
+@@ -1311,6 +1311,7 @@ targets += $(dtb-y)
  # Add any required device tree compiler flags here
  DTC_FLAGS += -a 0x8
  
@@ -98,5 +98,5 @@ index b504d36818b..f2d99d05854 100644
  			reset-deassert-us = <1000>;
  			reset-gpios = <&gpio4 2 GPIO_ACTIVE_LOW>;
 -- 
-2.43.0
+2.45.2
 

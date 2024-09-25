@@ -1,8 +1,8 @@
-From a44e991d3978047772cda59e28f49109c4c9447a Mon Sep 17 00:00:00 2001
+From fa3d1ce9d525be228a351454f982a44b9a9e119e Mon Sep 17 00:00:00 2001
 From: Marek Vasut <marex@denx.de>
 Date: Sun, 28 Jul 2024 18:41:32 +0200
-Subject: [PATCH] arm64: dts: imx8mp: Add DH i.MX8MP DHCOM SoM on DRC02 carrier
- board
+Subject: [PATCH 5/5] arm64: dts: imx8mp: Add DH i.MX8MP DHCOM SoM on DRC02
+ carrier board
 
 Add support for DH electronics i.MX8MP DHCOM SoM on DRC02 carrier board.
 This system is populated with two ethernet ports, two CANs, RS485 and RS232,
@@ -21,13 +21,13 @@ Signed-off-by: Marek Vasut <marex@denx.de>
  create mode 100644 configs/imx8mp_dhcom_drc02_defconfig
 
 diff --git a/arch/arm/dts/Makefile b/arch/arm/dts/Makefile
-index d3c1def6fdf..33118d9ef27 100644
+index daf273b31dd..b023af5246d 100644
 --- a/arch/arm/dts/Makefile
 +++ b/arch/arm/dts/Makefile
-@@ -1105,6 +1105,7 @@ dtb-$(CONFIG_ARCH_IMX8M) += \
- 	imx8mp-dhcom-som-overlay-eth1xfast.dtbo \
+@@ -936,6 +936,7 @@ dtb-$(CONFIG_ARCH_IMX8M) += \
  	imx8mp-dhcom-som-overlay-eth2xfast.dtbo \
  	imx8mp-dhcom-pdk-overlay-eth2xfast.dtbo \
+ 	imx8mp-debix-model-a.dtb \
 +	imx8mp-dhcom-drc02.dtb \
  	imx8mp-dhcom-pdk2.dtb \
  	imx8mp-dhcom-pdk3.dtb \
@@ -55,7 +55,7 @@ index 00000000000..21e5f899bc0
 + * Copyright (C) 2024 Marek Vasut <marex@denx.de>
 + *
 + * DHCOM iMX8MP variant:
-+ * DHCM-iMX8ML8-C160-R204-F1638-SPI16-E2-CAN2-RTC-I-01D2
++ * DHCM-iMX8ML8-FIXME
 + * DHCOM PCB number: 660-100 or newer
 + * DRC02 PCB number: 568-100 or newer
 + */
@@ -556,5 +556,5 @@ index 00000000000..be72a74e7ce
 +CONFIG_USB_ETH_CDC=y
 +CONFIG_IMX_WATCHDOG=y
 -- 
-2.43.0
+2.45.2
 
