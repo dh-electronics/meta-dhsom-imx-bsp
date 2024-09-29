@@ -82,6 +82,7 @@ Note that MACHINE must be either of:
 * dh-imx8mp-dhcom-drc02
 * dh-imx8mp-dhcom-pdk2
 * dh-imx8mp-dhcom-pdk3
+* dh-imx8mp-dhcom-picoitx
 
 Adapt the suffixes of all the files and names of directories further in
 this documentation according to MACHINE.
