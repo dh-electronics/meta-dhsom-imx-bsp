@@ -13,7 +13,7 @@ SRC_URI:append:dh-imx-dhsom = " \
 
 EXTRA_OEMAKE:append:dh-imx8mp-dhsom = " ATF_LOAD_ADDR=0x970000"
 
-do_compile[depends] += "${@'imx-firmware:do_deploy trusted-firmware-a:do_deploy' if (('dh-imx8mp-dhsom' in d.getVar('MACHINEOVERRIDES', True).split(':')) and not (d.getVar('IMX_DEFAULT_BSP') in ["nxp"])) else ' '}"
+do_compile[depends] += "${@'imx-firmware:do_deploy trusted-firmware-a:do_deploy' if ('dh-imx8mp-dhsom' in d.getVar('MACHINEOVERRIDES', True).split(':')) else ' '}"
 
 do_compile:prepend:dh-imx8mp-dhsom () {
 	cp -Lv ${DEPLOY_DIR_IMAGE}/lpddr4_pmu_train_*mem*202006.bin ${B}/
