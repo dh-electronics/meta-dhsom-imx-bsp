@@ -21,10 +21,10 @@ diff --git a/arch/arm64/boot/dts/freescale/Makefile b/arch/arm64/boot/dts/freesc
 index bdb3b665e76ed..66a881d4da923 100644
 --- a/arch/arm64/boot/dts/freescale/Makefile
 +++ b/arch/arm64/boot/dts/freescale/Makefile
-@@ -122,6 +122,7 @@ dtb-$(CONFIG_ARCH_MXC) += imx8mp-dhcom-pdk3.dtb \
- 			  imx8mp-dhcom-pdk3-overlay-rev100.dtbo
- DTC_FLAGS_imx8mp-dhcom-pdk3-overlay-rev100 += -Wno-avoid_default_addr_size -Wno-reg_format
- 
+@@ -99,6 +99,7 @@ dtb-$(CONFIG_ARCH_MXC) += imx8mp-debix-som-a-bmb-08.dtb
+ dtb-$(CONFIG_ARCH_MXC) += imx8mp-dhcom-drc02.dtb
+ dtb-$(CONFIG_ARCH_MXC) += imx8mp-dhcom-pdk2.dtb
+ dtb-$(CONFIG_ARCH_MXC) += imx8mp-dhcom-pdk3.dtb
 +dtb-$(CONFIG_ARCH_MXC) += imx8mp-dhcom-picoitx.dtb
  dtb-$(CONFIG_ARCH_MXC) += imx8mp-evk.dtb
  dtb-$(CONFIG_ARCH_MXC) += imx8mp-icore-mx8mp-edimm2.2.dtb

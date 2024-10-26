@@ -26,9 +26,9 @@ index 15a26fa79ef73..bdb3b665e76ed 100644
  dtb-$(CONFIG_ARCH_MXC) += imx8mp-debix-model-a.dtb
  dtb-$(CONFIG_ARCH_MXC) += imx8mp-debix-som-a-bmb-08.dtb
 +dtb-$(CONFIG_ARCH_MXC) += imx8mp-dhcom-drc02.dtb
- dtb-$(CONFIG_ARCH_MXC) += imx8mp-dhcom-som-overlay-eth1xfast.dtbo \
- 			  imx8mp-dhcom-som-overlay-eth2xfast.dtbo \
- 			  imx8mp-dhcom-som-overlay-rev100.dtbo
+ dtb-$(CONFIG_ARCH_MXC) += imx8mp-dhcom-pdk2.dtb
+ dtb-$(CONFIG_ARCH_MXC) += imx8mp-dhcom-pdk3.dtb
+ dtb-$(CONFIG_ARCH_MXC) += imx8mp-evk.dtb
 diff --git a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-drc02.dts b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-drc02.dts
 new file mode 100644
 index 0000000000000..777bd8c78fb8b

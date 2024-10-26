@@ -18,7 +18,6 @@ patch 0022-arm64-dts-imx8mp-Simplify-USB-C-on-DH-i.MX8M-Plus-DH.patch
 patch 0023-arm64-dts-imx8mp-Update-i.MX8MP-DHCOM-SoM-DT-to-prod.patch
 patch 0024-arm64-dts-imx8mp-Drop-i.MX8MP-DHCOM-rev.100-PHY-addr.patch
 patch 0025-arm64-dts-imx8mp-Describe-CSI2-GPIO-expander-on-i.MX.patch
-patch 0026-arm64-dts-imx8mp-Add-DT-overlays-for-i.MX8MP-DHCOM.patch
 patch 0029-drm-bridge-tc358767-Enable-FRMSYNC-timing-generator.patch
 patch 0030-drm-bridge-samsung-dsim-Initialize-bridge-on-attach.patch
 patch 0031-drm-bridge-tc358767-Reset-chip-again-on-attach.patch
@@ -46,3 +45,4 @@ patch 0053-Revert-drm-bridge-tc358767-Set-default-CLRSIPO-count.patch
 patch 0054-drm-bridge-tc358767-Add-configurable-default-preemph.patch
 patch 0055-arm64-dts-imx8mp-Add-DH-i.MX8MP-DHCOM-SoM-on-DRC02-c.patch
 patch 0056-arm64-dts-imx8mp-Add-support-for-DH-electronics-i.MX.patch
+patch 0060-arm64-dts-imx8mp-Add-DT-overlays-for-i.MX8MP-DHCOM.patch
