@@ -8,8 +8,9 @@ Add support for DH electronics i.MX8MP DHCOM SoM on DRC02 carrier board.
 This system is populated with two ethernet ports, two CANs, RS485 and RS232,
 USB, capacitive buttons and an OLED display.
 
-Upstream-Status: Submitted [https://patchwork.kernel.org/project/linux-arm-kernel/patch/20240925001628.669604-2-marex@denx.de/]
+Upstream-Status: Backport [05be20ccf779cdf942dd3f1d4fdfcf1585ba4d24]
 Signed-off-by: Marek Vasut <marex@denx.de>
+Signed-off-by: Shawn Guo <shawnguo@kernel.org>
 ---
  arch/arm64/boot/dts/freescale/Makefile        |   1 +
  .../boot/dts/freescale/imx8mp-dhcom-drc02.dts | 255 ++++++++++++++++++
@@ -24,7 +25,7 @@ index 15a26fa79ef73..bdb3b665e76ed 100644
  dtb-$(CONFIG_ARCH_MXC) += imx8mp-data-modul-edm-sbc.dtb
  dtb-$(CONFIG_ARCH_MXC) += imx8mp-debix-model-a.dtb
  dtb-$(CONFIG_ARCH_MXC) += imx8mp-debix-som-a-bmb-08.dtb
-+dtb-$(CONFIG_ARCH_MXC) += imx8mp-dhcom-drc02.dtb \
++dtb-$(CONFIG_ARCH_MXC) += imx8mp-dhcom-drc02.dtb
  dtb-$(CONFIG_ARCH_MXC) += imx8mp-dhcom-som-overlay-eth1xfast.dtbo \
  			  imx8mp-dhcom-som-overlay-eth2xfast.dtbo \
  			  imx8mp-dhcom-som-overlay-rev100.dtbo

@@ -6,18 +6,23 @@ Subject: [PATCH 12/12] arm64: dts: imx8mp: add HDMI display pipeline
 This adds the DT nodes for all the peripherals that make up the
 HDMI display pipeline.
 
-Upstream-Status: Submitted [https://patchwork.kernel.org/project/linux-arm-kernel/patch/20240210204606.11944-6-aford173@gmail.com/]
+Upstream-Status: Backport [14c46854e7575d1c270c04c4962ff14ad3f475a3]
 Signed-off-by: Lucas Stach <l.stach@pengutronix.de>
 Signed-off-by: Adam Ford <aford173@gmail.com>
+Tested-by: Marek Vasut <marex@denx.de>
+Tested-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+Tested-by: Tommaso Merciai <tomm.merciai@gmail.com>
+Signed-off-by: Shawn Guo <shawnguo@kernel.org>
 ---
- arch/arm64/boot/dts/freescale/imx8mp.dtsi | 94 +++++++++++++++++++++++
- 1 file changed, 94 insertions(+)
+ arch/arm64/boot/dts/freescale/imx8mp.dtsi | 96 +++++++++++++++++++++++
+ 1 file changed, 96 insertions(+)
 
 diff --git a/arch/arm64/boot/dts/freescale/imx8mp.dtsi b/arch/arm64/boot/dts/freescale/imx8mp.dtsi
 index 0c50d49294b6a..6d2fb321bd863 100644
 --- a/arch/arm64/boot/dts/freescale/imx8mp.dtsi
 +++ b/arch/arm64/boot/dts/freescale/imx8mp.dtsi
-@@ -1882,6 +1882,100 @@ irqsteer_hdmi: interrupt-controller@32fc2000 {
+@@ -1892,6 +1892,102 @@ irqsteer_hdmi: interrupt-controller@32fc2000 {
  				clock-names = "ipg";
  				power-domains = <&hdmi_blk_ctrl IMX8MP_HDMIBLK_PD_IRQSTEER>;
  			};
@@ -28,6 +33,7 @@ index 0c50d49294b6a..6d2fb321bd863 100644
 +				interrupt-parent = <&irqsteer_hdmi>;
 +				interrupts = <12>;
 +				power-domains = <&hdmi_blk_ctrl IMX8MP_HDMIBLK_PD_PVI>;
++				status = "disabled";
 +
 +				ports {
 +					#address-cells = <1>;
@@ -59,6 +65,7 @@ index 0c50d49294b6a..6d2fb321bd863 100644
 +					 <&clk IMX8MP_CLK_HDMI_ROOT>;
 +				clock-names = "pix", "axi", "disp_axi";
 +				power-domains = <&hdmi_blk_ctrl IMX8MP_HDMIBLK_PD_LCDIF>;
++				status = "disabled";
 +
 +				port {
 +					lcdif3_to_pvi: endpoint {

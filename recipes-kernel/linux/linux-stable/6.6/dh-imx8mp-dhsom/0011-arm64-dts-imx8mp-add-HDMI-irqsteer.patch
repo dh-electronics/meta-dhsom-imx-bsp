@@ -7,9 +7,13 @@ The HDMI irqsteer is a secondary interrupt controller within the HDMI
 subsystem that maps all HDMI peripheral IRQs into a single upstream
 IRQ line.
 
-Upstream-Status: Submitted [https://patchwork.kernel.org/project/linux-arm-kernel/patch/20240210204606.11944-5-aford173@gmail.com/]
+Upstream-Status: Backport [cc1de24853245e79ed06a9975cebea197c622166]
 Signed-off-by: Lucas Stach <l.stach@pengutronix.de>
 Signed-off-by: Adam Ford <aford173@gmail.com>
+Tested-by: Marek Vasut <marex@denx.de>
+Tested-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+Tested-by: Tommaso Merciai <tomm.merciai@gmail.com>
+Signed-off-by: Shawn Guo <shawnguo@kernel.org>
 ---
  arch/arm64/boot/dts/freescale/imx8mp.dtsi | 13 +++++++++++++
  1 file changed, 13 insertions(+)
@@ -18,14 +22,14 @@ diff --git a/arch/arm64/boot/dts/freescale/imx8mp.dtsi b/arch/arm64/boot/dts/fre
 index aa942d7c73469..0c50d49294b6a 100644
 --- a/arch/arm64/boot/dts/freescale/imx8mp.dtsi
 +++ b/arch/arm64/boot/dts/freescale/imx8mp.dtsi
-@@ -1869,6 +1869,19 @@ hdmi_blk_ctrl: blk-ctrl@32fc0000 {
+@@ -1879,6 +1879,19 @@ hdmi_blk_ctrl: blk-ctrl@32fc0000 {
  						     "hdcp", "hrv";
  				#power-domain-cells = <1>;
  			};
 +
 +			irqsteer_hdmi: interrupt-controller@32fc2000 {
 +				compatible = "fsl,imx-irqsteer";
-+				reg = <0x32fc2000 0x44>;
++				reg = <0x32fc2000 0x1000>;
 +				interrupts = <GIC_SPI 43 IRQ_TYPE_LEVEL_HIGH>;
 +				interrupt-controller;
 +				#interrupt-cells = <1>;

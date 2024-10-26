@@ -10,8 +10,11 @@ Prototype rev.100 SoM was never publicly available and was manufactured in
 limited series, anything currently available is rev.200 or newer, so it is
 safe to update the DT this way.
 
-Upstream-Status: Submitted [https://patchwork.kernel.org/project/linux-arm-kernel/patch/20240627233045.80551-1-marex@denx.de/]
+Upstream-Status: Backport [a38d101e46080fd32135b139d8eafb778a214f68]
 Signed-off-by: Marek Vasut <marex@denx.de>
+Reviewed-by: Peng Fan <peng.fan@nxp.com>
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+Signed-off-by: Shawn Guo <shawnguo@kernel.org>
 ---
  arch/arm64/boot/dts/freescale/imx8mp-dhcom-som.dtsi | 8 ++++----
  1 file changed, 4 insertions(+), 4 deletions(-)

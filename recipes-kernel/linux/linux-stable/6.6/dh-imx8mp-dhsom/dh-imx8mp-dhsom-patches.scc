@@ -8,7 +8,7 @@ patch 0008-drm-bridge-imx-add-bridge-wrapper-driver-for-i.MX8MP.patch
 patch 0009-phy-freescale-add-Samsung-HDMI-PHY.patch
 patch 0011-arm64-dts-imx8mp-add-HDMI-irqsteer.patch
 patch 0012-arm64-dts-imx8mp-add-HDMI-display-pipeline.patch
-patch 0016-arm64-dts-imx8mp-Enable-HDMI-on-MX8MP-DHCOM-PDK2-and.patch
+patch 0016-arm64-dts-imx8mp-Enable-HDMI-on-i.MX8MP-DHCOM-PDK2-a.patch
 patch 0017-arm64-dts-imx8mp-Switch-PCIe-to-HSIO-PLL-on-i.MX8MP-.patch
 patch 0018-arm64-dts-imx8mp-Describe-VDD_ARM-run-and-standby-vo.patch
 patch 0019-arm64-dts-imx8mp-Fix-property-indent-on-DH-i.MX8M-Pl.patch

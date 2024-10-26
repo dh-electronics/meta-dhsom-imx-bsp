@@ -8,23 +8,23 @@ Add support for DH electronics i.MX8M Plus DHCOM SoM on PicoITX carrier board.
 This system is populated with serial console, EQoS ethernet, eMMC, SD, SPI NOR,
 LEDs and USB 3.0 host used in USB 2.0 mode on PicoITX.
 
-Upstream-Status: Submitted [https://patchwork.kernel.org/project/linux-arm-kernel/patch/20240928234949.357893-2-marex@denx.de/]
+Upstream-Status: Backport [004ccf439d2022228b9ff3fac06a2b6cfabff6cf]
 Signed-off-by: Marek Vasut <marex@denx.de>
+Signed-off-by: Shawn Guo <shawnguo@kernel.org>
 ---
- arch/arm64/boot/dts/freescale/Makefile        |   2 +-
+ arch/arm64/boot/dts/freescale/Makefile        |   1 +
  .../dts/freescale/imx8mp-dhcom-picoitx.dts    | 176 ++++++++++++++++++
- 2 files changed, 177 insertions(+), 1 deletion(-)
+ 2 files changed, 177 insertions(+)
  create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-dhcom-picoitx.dts
 
 diff --git a/arch/arm64/boot/dts/freescale/Makefile b/arch/arm64/boot/dts/freescale/Makefile
 index bdb3b665e76ed..66a881d4da923 100644
 --- a/arch/arm64/boot/dts/freescale/Makefile
 +++ b/arch/arm64/boot/dts/freescale/Makefile
-@@ -121,7 +121,7 @@ dtb-$(CONFIG_ARCH_MXC) += imx8mp-dhcom-pdk3.dtb \
- 			  imx8mp-dhcom-pdk3-rev100-overlay-nxp-spf-29853-c1-ov5640-x31.dtbo \
+@@ -122,6 +122,7 @@ dtb-$(CONFIG_ARCH_MXC) += imx8mp-dhcom-pdk3.dtb \
  			  imx8mp-dhcom-pdk3-overlay-rev100.dtbo
  DTC_FLAGS_imx8mp-dhcom-pdk3-overlay-rev100 += -Wno-avoid_default_addr_size -Wno-reg_format
--
+ 
 +dtb-$(CONFIG_ARCH_MXC) += imx8mp-dhcom-picoitx.dtb
  dtb-$(CONFIG_ARCH_MXC) += imx8mp-evk.dtb
  dtb-$(CONFIG_ARCH_MXC) += imx8mp-icore-mx8mp-edimm2.2.dtb

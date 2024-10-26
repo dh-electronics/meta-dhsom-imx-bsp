@@ -9,21 +9,25 @@ Sandor Yu <Sandor.yu@nxp.com>.  According to the TRM, the PHY
 receives parallel data from the link and serializes it.  It
 also sets the PLL clock needed for the TX serializer.
 
-Upstream-Status: Submitted [https://patchwork.kernel.org/project/linux-arm-kernel/patch/20240210204606.11944-3-aford173@gmail.com/]
-Tested-by: Luca Ceresoli <luca.ceresoli@bootlin.com> (v2)
-Tested-by: Richard Leitner <richard.leitner@skidata.com> (v2)
+Upstream-Status: Backport [6ad082bee9025fa8e0ef8ee478c5a614b9db9e3d]
+Tested-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+Tested-by: Richard Leitner <richard.leitner@skidata.com>
 Co-developed-by: Marco Felsch <m.felsch@pengutronix.de>
 Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
 Signed-off-by: Lucas Stach <l.stach@pengutronix.de>
 Tested-by: Alexander Stein <alexander.stein@ew.tq-group.com>
 Tested-by: Frieder Schrempf <frieder.schrempf@kontron.de> # Kontron BL
-Tested-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
 Signed-off-by: Adam Ford <aford173@gmail.com>
+Tested-by: Marek Vasut <marex@denx.de>
+Tested-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+Tested-by: Tommaso Merciai <tomm.merciai@gmail.com>
+Link: https://lore.kernel.org/r/20240227220444.77566-3-aford173@gmail.com
+Signed-off-by: Vinod Koul <vkoul@kernel.org>
 ---
  drivers/phy/freescale/Kconfig                |   6 +
  drivers/phy/freescale/Makefile               |   1 +
- drivers/phy/freescale/phy-fsl-samsung-hdmi.c | 721 +++++++++++++++++++
- 3 files changed, 728 insertions(+)
+ drivers/phy/freescale/phy-fsl-samsung-hdmi.c | 720 +++++++++++++++++++
+ 3 files changed, 727 insertions(+)
  create mode 100644 drivers/phy/freescale/phy-fsl-samsung-hdmi.c
 
 diff --git a/drivers/phy/freescale/Kconfig b/drivers/phy/freescale/Kconfig
@@ -36,7 +40,7 @@ index 853958fb2c063..5c2b73042dfc1 100644
  
 +config PHY_FSL_SAMSUNG_HDMI_PHY
 +	tristate "Samsung HDMI PHY support"
-+	depends on OF && HAS_IOMEM
++	depends on OF && HAS_IOMEM && COMMON_CLK
 +	help
 +	  Enable this to add support for the Samsung HDMI PHY in i.MX8MP.
 +
@@ -57,7 +61,7 @@ new file mode 100644
 index 0000000000000..91cf8e4668b28
 --- /dev/null
 +++ b/drivers/phy/freescale/phy-fsl-samsung-hdmi.c
-@@ -0,0 +1,721 @@
+@@ -0,0 +1,720 @@
 +// SPDX-License-Identifier: GPL-2.0+
 +/*
 + * Copyright 2020 NXP
@@ -69,7 +73,6 @@ index 0000000000000..91cf8e4668b28
 +#include <linux/clk.h>
 +#include <linux/clk-provider.h>
 +#include <linux/delay.h>
-+#include <linux/io.h>
 +#include <linux/iopoll.h>
 +#include <linux/module.h>
 +#include <linux/platform_device.h>
@@ -153,7 +156,7 @@ index 0000000000000..91cf8e4668b28
 +	u8	pll_div_regs[PHY_PLL_DIV_REGS_NUM];
 +};
 +
-+const struct phy_config phy_pll_cfg[] = {
++static const struct phy_config phy_pll_cfg[] = {
 +	{
 +		.pixclk = 22250000,
 +		.pll_div_regs = { 0x4b, 0xf1, 0x89, 0x88, 0x80, 0x40 },
@@ -429,7 +432,7 @@ index 0000000000000..91cf8e4668b28
 +	u8 val;
 +};
 +
-+const struct reg_settings common_phy_cfg[] = {
++static const struct reg_settings common_phy_cfg[] = {
 +	{ PHY_REG_00, 0x00 }, { PHY_REG_01, 0xd1 },
 +	{ PHY_REG_08, 0x4f }, { PHY_REG_09, 0x30 },
 +	{ PHY_REG_10, 0x33 }, { PHY_REG_11, 0x65 },
@@ -476,7 +479,7 @@ index 0000000000000..91cf8e4668b28
 +fsl_samsung_hdmi_phy_configure_pixclk(struct fsl_samsung_hdmi_phy *phy,
 +				      const struct phy_config *cfg)
 +{
-+	u8 div;
++	u8 div = 0x1;
 +
 +	switch (cfg->pixclk) {
 +	case  22250000 ...  33750000:
@@ -513,7 +516,7 @@ index 0000000000000..91cf8e4668b28
 +	u32 pclk = cfg->pixclk;
 +	u32 fld_tg_code;
 +	u32 pclk_khz;
-+	u8 div;
++	u8 div = 1;
 +
 +	switch (cfg->pixclk) {
 +	case  22250000 ...  47500000:
@@ -658,7 +661,7 @@ index 0000000000000..91cf8e4668b28
 +		return dev_err_probe(dev, PTR_ERR(phyclk),
 +				     "failed to register clock\n");
 +
-+	ret = of_clk_add_provider(np, of_clk_src_simple_get, phyclk);
++	ret = of_clk_add_hw_provider(np, of_clk_hw_simple_get, phyclk);
 +	if (ret)
 +		return dev_err_probe(dev, ret,
 +				     "failed to register clock provider\n");
@@ -725,7 +728,7 @@ index 0000000000000..91cf8e4668b28
 +	return 0;
 +}
 +
-+static int fsl_samsung_hdmi_phy_suspend(struct device *dev)
++static int __maybe_unused fsl_samsung_hdmi_phy_suspend(struct device *dev)
 +{
 +	struct fsl_samsung_hdmi_phy *phy = dev_get_drvdata(dev);
 +
@@ -734,7 +737,7 @@ index 0000000000000..91cf8e4668b28
 +	return 0;
 +}
 +
-+static int fsl_samsung_hdmi_phy_resume(struct device *dev)
++static int __maybe_unused fsl_samsung_hdmi_phy_resume(struct device *dev)
 +{
 +	struct fsl_samsung_hdmi_phy *phy = dev_get_drvdata(dev);
 +	int ret = 0;
