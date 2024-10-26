@@ -45,4 +45,6 @@ patch 0053-Revert-drm-bridge-tc358767-Set-default-CLRSIPO-count.patch
 patch 0054-drm-bridge-tc358767-Add-configurable-default-preemph.patch
 patch 0055-arm64-dts-imx8mp-Add-DH-i.MX8MP-DHCOM-SoM-on-DRC02-c.patch
 patch 0056-arm64-dts-imx8mp-Add-support-for-DH-electronics-i.MX.patch
+patch 0057-drm-bridge-tc358767-Fix-odd-pixel-alignment.patch
+patch 0059-drm-bridge-tc358767-Improve-DPI-output-pixel-clock-a.patch
 patch 0060-arm64-dts-imx8mp-Add-DT-overlays-for-i.MX8MP-DHCOM.patch
