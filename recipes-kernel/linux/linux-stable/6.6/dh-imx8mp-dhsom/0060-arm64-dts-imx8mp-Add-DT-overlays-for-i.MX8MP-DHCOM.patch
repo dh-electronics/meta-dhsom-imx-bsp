@@ -411,10 +411,10 @@ index 0000000000000..d5068e7571a89
 +
 +&media_blk_ctrl {
 +	/*
-+	 * The Chefree CH101OLHLWH-002 panel requires 71.4 MHz LVDS clock.
-+	 * Set IMX8MP_VIDEO_PLL1 to 500 MHz , since 500 MHz / 7 = 71.42 MHz .
++	 * The Chefree CH101OLHLWH-002 panel requires 71.1 MHz LVDS clock.
++	 * Set IMX8MP_VIDEO_PLL1 to 497.7 MHz , since 497.7 MHz / 7 = 71.1 MHz .
 +	 */
-+	assigned-clock-rates = <500000000>, <200000000>, <0>, <0>, <500000000>;
++	assigned-clock-rates = <500000000>, <200000000>, <0>, <0>, <497700000>;
 +};
 diff --git a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk2-overlay-531-100-x21.dtso b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-pdk2-overlay-531-100-x21.dtso
 new file mode 100644
@@ -593,10 +593,10 @@ index 0000000000000..277c5a71de586
 +
 +&media_blk_ctrl {
 +	/*
-+	 * The Chefree CH101OLHLWH-002 panel requires 71.4 MHz LVDS clock.
-+	 * Set IMX8MP_VIDEO_PLL1 to 500 MHz , since 500 MHz / 7 = 71.42 MHz .
++	 * The Chefree CH101OLHLWH-002 panel requires 71.1 MHz LVDS clock.
++	 * Set IMX8MP_VIDEO_PLL1 to 497.7 MHz , since 497.7 MHz / 7 = 71.1 MHz .
 +	 */
-+	assigned-clock-rates = <500000000>, <200000000>, <0>, <0>, <500000000>;
++	assigned-clock-rates = <500000000>, <200000000>, <0>, <0>, <497700000>;
 +};
 +
 +&pinctrl_dhcom_c {
