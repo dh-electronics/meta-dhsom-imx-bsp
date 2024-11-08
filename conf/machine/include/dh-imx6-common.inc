@@ -15,6 +15,11 @@ UBOOT_MAKE_TARGET := "u-boot-with-spl.imx"
 UBOOT_BINARY := "u-boot-with-spl.imx"
 UBOOT_SUFFIX ?= "imx"
 
+# Ship firmware
+MACHINE_ESSENTIAL_EXTRA_RDEPENDS += " \
+	imx-firmware-sdma-imx6q \
+	"
+
 WKS_FILE ?= "sdimage-imx6.wks"
 
 # Add any optional config files that might be present e.g. in other layers

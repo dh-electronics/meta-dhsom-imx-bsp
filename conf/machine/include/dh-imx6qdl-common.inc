@@ -11,9 +11,8 @@ UBOOT_ENTRYPOINT := "0x17800000"
 UBOOT_DTB_LOADADDRESS = "0x1ff00000"
 UBOOT_DTBO_LOADADDRESS = "0x1ff80000"
 
-# Ship kernel modules
+# Ship firmware
 MACHINE_ESSENTIAL_EXTRA_RDEPENDS += " \
-	imx-firmware-sdma-imx6q \
 	imx-firmware-vpu-imx6d \
 	imx-firmware-vpu-imx6q \
 	"
