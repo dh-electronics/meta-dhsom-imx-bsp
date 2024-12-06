@@ -1,0 +1,67 @@
+From 0871bc44860a9de16fb79b23541166425f006e08 Mon Sep 17 00:00:00 2001
+From: Christoph Niedermaier <cniedermaier@dh-electronics.com>
+Date: Wed, 27 Nov 2024 16:04:58 +0100
+Subject: [PATCH] lib: hashtable: Prevent recursive calling of callback
+ functions
+
+In case there are two variables which each implement env callback
+that performs env_set() on the other variable, the callbacks will
+call each other recursively until the stack runs out. Prevent such
+a recursion from happening.
+
+Example which triggers this behavior:
+static int on_foo(...) { env_set("bar", 0); ... }
+static int on_bar(...) { env_set("foo", 0); ... }
+U_BOOT_ENV_CALLBACK(foo, on_foo);
+U_BOOT_ENV_CALLBACK(bar, on_bar);
+
+Upstream-Status: Backport [86f58ea539e35b47235dff0dd77ec20fe8894469]
+Signed-off-by: Christoph Niedermaier <cniedermaier@dh-electronics.com>
+Suggested-by: Marek Vasut <marex@denx.de>
+---
+ lib/hashtable.c | 27 ++++++++++++++++++++++++---
+ 1 file changed, 24 insertions(+), 3 deletions(-)
+
+diff --git a/lib/hashtable.c b/lib/hashtable.c
+index a0060f6a0d..42fbf804f2 100644
+--- a/lib/hashtable.c
++++ b/lib/hashtable.c
+@@ -223,11 +223,32 @@ static int
+ do_callback(const struct env_entry *e, const char *name, const char *value,
+ 	    enum env_op op, int flags)
+ {
++	int ret = 0;
++
+ #ifndef CONFIG_SPL_BUILD
+-	if (e->callback)
+-		return e->callback(name, value, op, flags);
++	static bool in_callback;
++
++	if (!e->callback || in_callback)
++		return 0;
++
++	/*
++	 * In case there are two variables which each implement env callback
++	 * that performs env_set() on the other variable, the callbacks will
++	 * call each other recursively until the stack runs out. Prevent such
++	 * a recursion from happening.
++	 *
++	 * Example which triggers this behavior:
++	 * static int on_foo(...) { env_set("bar", 0); ... }
++	 * static int on_bar(...) { env_set("foo", 0); ... }
++	 * U_BOOT_ENV_CALLBACK(foo, on_foo);
++	 * U_BOOT_ENV_CALLBACK(bar, on_bar);
++	 */
++	in_callback = true;
++	ret = e->callback(name, value, op, flags);
++	in_callback = false;
+ #endif
+-	return 0;
++
++	return ret;
+ }
+ 
+ /*
+-- 
+2.30.2
+

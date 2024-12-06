@@ -1,0 +1,479 @@
+From d1975291a12ee827e296d93217ea27a1b333c172 Mon Sep 17 00:00:00 2001
+From: Christoph Niedermaier <cniedermaier@dh-electronics.com>
+Date: Mon, 16 Oct 2023 01:44:06 +0200
+Subject: [PATCH] arm64: imx8mp: Read values from M24C32-D write-lockable page
+ on DHCOM i.MX8MP
+
+The new i.MX8M Plus DHCOM rev.200 is populated with M24C32-D EEPROM
+that contains an additional write-lockable page called ID page, which
+is populated with a structure containing ethernet MAC addresses, DH
+item number and DH serial number.
+
+Because the write-lockable page is not present on rev.100 i.MX8MP DHCOM
+SoM, test whether EEPROM ID page exists by setting up the i2c driver.
+
+There may be multiple EEPROMs with an ID page on this platform, always
+use the first one. The evaluation of the EEPROM ID page is done in two
+steps. First, the content is read and checked. This is done to cache
+the content of the EEPROM ID page. Second, the content is extracted
+from the EEPROM buffer by requesting it.
+
+For the ethernet MAC address the i.MX8M Plus DHCOM currently supports
+parsing address from multiple sources in the following priority order:
+
+1) U-Boot environment 'ethaddr'/'eth1addr' environment variable
+2) SoC OTP fuses
+3) On-SoM EEPROM
+
+Add support for parsing the content of this new EEPROM ID page and place
+it between 2) and 3) on the priority list. The new entry is 2.5) On-SoM
+EEPROM write-lockable page.
+
+Upstream-Status: Backport [489b965564ad73c7a2e8f8743908347775c5df3b]
+Signed-off-by: Christoph Niedermaier <cniedermaier@dh-electronics.com>
+Reviewed-by: Marek Vasut <marex@denx.de>
+---
+ board/dhelectronics/common/dh_common.c        | 149 +++++++++++++++++-
+ board/dhelectronics/common/dh_common.h        |  79 +++++++++-
+ board/dhelectronics/dh_imx6/dh_imx6.c         |   4 +-
+ .../dh_imx8mp/imx8mp_dhcom_pdk2.c             |  75 ++++++++-
+ 4 files changed, 297 insertions(+), 10 deletions(-)
+
+diff --git a/board/dhelectronics/common/dh_common.c b/board/dhelectronics/common/dh_common.c
+index 34094a020b..28ba991ada 100644
+--- a/board/dhelectronics/common/dh_common.c
++++ b/board/dhelectronics/common/dh_common.c
+@@ -8,6 +8,7 @@
+ #include <dm.h>
+ #include <i2c_eeprom.h>
+ #include <net.h>
++#include <u-boot/crc.h>
+ 
+ #include "dh_common.h"
+ 
+@@ -31,6 +32,149 @@ int dh_get_mac_is_enabled(const char *alias)
+ 	return 0;
+ }
+ 
++int dh_read_eeprom_id_page(u8 *eeprom_buffer, const char *alias)
++{
++	struct eeprom_id_page *eip = (struct eeprom_id_page *)eeprom_buffer;
++	struct udevice *dev;
++	size_t payload_len;
++	int eeprom_size;
++	u16 crc16_calc;
++	u16 crc16_eip;
++	u8 crc8_calc;
++	ofnode node;
++	int ret;
++
++	node = ofnode_path(alias);
++
++	ret = uclass_get_device_by_ofnode(UCLASS_I2C_EEPROM, node, &dev);
++	if (ret)
++		return ret;
++
++	eeprom_size = i2c_eeprom_size(dev);
++	if (eeprom_size < 0) {
++		printf("%s: Error getting EEPROM ID page size! ret = %d\n", __func__, ret);
++		return eeprom_size;
++	}
++
++	if (eeprom_size == 0 || eeprom_size > DH_EEPROM_ID_PAGE_MAX_SIZE) {
++		eeprom_size = DH_EEPROM_ID_PAGE_MAX_SIZE;
++		printf("Get invalid EEPROM ID page size %d bytes! Try to read %d bytes.\n",
++		       eeprom_size, DH_EEPROM_ID_PAGE_MAX_SIZE);
++	}
++
++	ret = i2c_eeprom_read(dev, 0x0, eeprom_buffer, eeprom_size);
++	if (ret) {
++		printf("%s: Error reading EEPROM ID page! ret = %d\n", __func__, ret);
++		return ret;
++	}
++
++	/* Validate header ID */
++	if (eip->hdr.id[0] != 'D' || eip->hdr.id[1] != 'H' || eip->hdr.id[2] != 'E') {
++		printf("%s: Error validating header ID! (got %c%c%c (0x%02x 0x%02x 0x%02x) != expected DHE)\n",
++		       __func__, isprint(eip->hdr.id[0]) ? eip->hdr.id[0] : '.',
++		       isprint(eip->hdr.id[1]) ? eip->hdr.id[1] : '.',
++		       isprint(eip->hdr.id[2]) ? eip->hdr.id[2] : '.',
++		       eip->hdr.id[0], eip->hdr.id[1], eip->hdr.id[2]);
++		return -EINVAL;
++	}
++
++	/* Validate header checksum */
++	crc8_calc = crc8(0xff, eeprom_buffer, offsetof(struct eeprom_id_page, hdr.crc8_hdr));
++	if (eip->hdr.crc8_hdr != crc8_calc) {
++		printf("%s: Error validating header checksum! (got 0x%02x != calc 0x%02x)\n",
++		       __func__, eip->hdr.crc8_hdr, crc8_calc);
++		return -EINVAL;
++	}
++
++	/*
++	 * Validate header version
++	 * The payload is defined by the version specified in the header.
++	 * Currently only version 0x10 is defined, so take the length of
++	 * the only defined payload as the payload length.
++	 */
++	if (eip->hdr.version != DH_EEPROM_ID_PAGE_V1_0) {
++		printf("%s: Error validating version! (0x%02X is not supported)\n",
++		       __func__, eip->hdr.version);
++		return -EINVAL;
++	}
++	payload_len = sizeof(eip->pl);
++
++	/* Validate payload checksum */
++	crc16_eip = (eip->hdr.crc16_pl[1] << 8) | eip->hdr.crc16_pl[0];
++	crc16_calc = crc16(0xffff, eeprom_buffer + sizeof(eip->hdr), payload_len);
++	if (crc16_eip != crc16_calc) {
++		printf("%s: Error validating data checksum! (got 0x%02x != calc 0x%02x)\n",
++		       __func__, crc16_eip, crc16_calc);
++		return -EINVAL;
++	}
++
++	return 0;
++}
++
++int dh_get_value_from_eeprom_buffer(enum eip_request_values request, u8 *data, int data_len,
++				    struct eeprom_id_page *eip)
++{
++	const char fin_chr = (eip->pl.item_prefix & DH_ITEM_PREFIX_FIN_BIT) ?
++			     DH_ITEM_PREFIX_FIN_FLASHED_CHR : DH_ITEM_PREFIX_FIN_HALF_CHR;
++	const u8 soc_coded = eip->pl.item_prefix & 0xf;
++	char soc_chr;
++
++	if (!eip)
++		return -EINVAL;
++
++	/* Copy requested data */
++	switch (request) {
++	case DH_MAC0:
++		if (!is_valid_ethaddr(eip->pl.mac0))
++			return -EINVAL;
++
++		if (data_len >= sizeof(eip->pl.mac0))
++			memcpy(data, eip->pl.mac0, sizeof(eip->pl.mac0));
++		else
++			return -EINVAL;
++		break;
++	case DH_MAC1:
++		if (!is_valid_ethaddr(eip->pl.mac1))
++			return -EINVAL;
++
++		if (data_len >= sizeof(eip->pl.mac1))
++			memcpy(data, eip->pl.mac1, sizeof(eip->pl.mac1));
++		else
++			return -EINVAL;
++		break;
++	case DH_ITEM_NUMBER:
++		if (data_len < 8) /* String length must be 7 characters + string termination */
++			return -EINVAL;
++
++		if (soc_coded == DH_ITEM_PREFIX_NXP)
++			soc_chr = DH_ITEM_PREFIX_NXP_CHR;
++		else if (soc_coded == DH_ITEM_PREFIX_ST)
++			soc_chr = DH_ITEM_PREFIX_ST_CHR;
++		else
++			return -EINVAL;
++
++		snprintf(data, data_len, "%c%c%05d", fin_chr, soc_chr,
++			 (eip->pl.item_num[0] << 16) | (eip->pl.item_num[1] << 8) |
++			 eip->pl.item_num[2]);
++		break;
++	case DH_SERIAL_NUMBER:
++		/*
++		 * data_len must be greater than the size of eip->pl.serial,
++		 * because there is a string termination needed.
++		 */
++		if (data_len <= sizeof(eip->pl.serial))
++			return -EINVAL;
++
++		data[sizeof(eip->pl.serial)] = 0;
++		memcpy(data, eip->pl.serial, sizeof(eip->pl.serial));
++		break;
++	default:
++		return -EINVAL;
++	}
++
++	return 0;
++}
++
+ int dh_get_mac_from_eeprom(unsigned char *enetaddr, const char *alias)
+ {
+ 	struct udevice *dev;
+@@ -63,7 +207,7 @@ int dh_get_mac_from_eeprom(unsigned char *enetaddr, const char *alias)
+ 	return 0;
+ }
+ 
+-__weak int dh_setup_mac_address(void)
++__weak int dh_setup_mac_address(struct eeprom_id_page *eip)
+ {
+ 	unsigned char enetaddr[6];
+ 
+@@ -73,6 +217,9 @@ __weak int dh_setup_mac_address(void)
+ 	if (dh_get_mac_is_enabled("ethernet0"))
+ 		return 0;
+ 
++	if (!dh_get_value_from_eeprom_buffer(DH_MAC0, enetaddr, sizeof(enetaddr), eip))
++		return eth_env_set_enetaddr("ethaddr", enetaddr);
++
+ 	if (!dh_get_mac_from_eeprom(enetaddr, "eeprom0"))
+ 		return eth_env_set_enetaddr("ethaddr", enetaddr);
+ 
+diff --git a/board/dhelectronics/common/dh_common.h b/board/dhelectronics/common/dh_common.h
+index a2de5b1553..c4693c6061 100644
+--- a/board/dhelectronics/common/dh_common.h
++++ b/board/dhelectronics/common/dh_common.h
+@@ -3,6 +3,52 @@
+  * Copyright 2022 DENX Software Engineering GmbH, Philip Oberfichtner <pro@denx.de>
+  */
+ 
++#define DH_EEPROM_ID_PAGE_MAX_SIZE	64
++
++enum eip_request_values {
++	DH_MAC0,
++	DH_MAC1,
++	DH_ITEM_NUMBER,
++	DH_SERIAL_NUMBER,
++};
++
++/* DH item: Vendor coding */
++#define DH_ITEM_PREFIX_NXP	0x01
++#define DH_ITEM_PREFIX_NXP_CHR	'I'
++#define DH_ITEM_PREFIX_ST	0x02
++#define DH_ITEM_PREFIX_ST_CHR	'S'
++
++/*
++ * DH item: Finished state coding
++ * Bit = 0 means half finished
++ *         Prefix is 'H'
++ * Bit = 1 means finished with a customer image flashed
++ *         Prefix is 'F'
++ */
++#define DH_ITEM_PREFIX_FIN_BIT		BIT(7)
++#define DH_ITEM_PREFIX_FIN_HALF_CHR	'H'
++#define DH_ITEM_PREFIX_FIN_FLASHED_CHR	'F'
++
++struct eeprom_id_page {
++	/* Header */
++	struct {
++		u8	id[3];		/* Identifier 'D', 'H', 'E' - 'D' is at index 0 */
++		u8	version;	/* 0x10 -- Version 1.0 */
++		u8	crc16_pl[2];	/* Checksum payload, [1] is MSbyte */
++		u8	crc8_hdr;	/* Checksum header */
++	} hdr;
++	/* Payload */
++	struct {
++		u8	mac0[6];
++		u8	mac1[6];
++		u8	item_prefix;	/* H/F is coded in MSbits, Vendor coding starts at LSbits */
++		u8	item_num[3];	/* [2] is MSbyte */
++		u8	serial[9];	/* [8] is MSbyte */
++	} pl;
++};
++
++#define DH_EEPROM_ID_PAGE_V1_0		0x10
++
+ /*
+  * dh_mac_is_in_env - Check if MAC address is already set
+  *
+@@ -28,9 +74,40 @@ int dh_get_mac_is_enabled(const char *alias);
+  */
+ int dh_get_mac_from_eeprom(unsigned char *enetaddr, const char *alias);
+ 
++/*
++ * dh_read_eeprom_id_page() - Read EEPROM ID page content into given buffer
++ * @eeprom_buffer:	Buffer for EEPROM ID page content
++ * @alias:		Alias for EEPROM ID page device tree node
++ *
++ * Read the content of the EEPROM ID page into the given buffer (parameter
++ * eeprom_buffer). The EEPROM ID page device is selected via alias device
++ * tree name (parameter alias). The data of the EEPROM ID page is verified.
++ * An error is returned for reading failures and invalid data.
++ *
++ * Return: 0 if OK, other value on error
++ */
++int dh_read_eeprom_id_page(u8 *eeprom_buffer, const char *alias);
++
++/*
++ * dh_get_value_from_eeprom_buffer() - Get value from EEPROM buffer
++ * @eip_request_values:	Requested value as enum
++ * @data:		Buffer where value is to be stored
++ * @data_len:		Length of the value buffer
++ * @eip:		Pointer to EEPROM ID page struct from which the data is parsed
++ *
++ * Gets the value specified by the parameter eip_request_values from the EEPROM
++ * data struct (parameter eip). The data is written to the specified data
++ * buffer (parameter data). If the length of the data (parameter data_len) is
++ * not sufficient to copy the data into the buffer, an error is returned.
++ *
++ * Return: 0 if OK, other value on error
++ */
++int dh_get_value_from_eeprom_buffer(enum eip_request_values request, u8 *data, int data_len,
++				    struct eeprom_id_page *eip);
++
+ /*
+  * dh_setup_mac_address - Try to get MAC address from various locations and write it to env
+  *
+  * Return: 0 if OK, other value on error
+  */
+-int dh_setup_mac_address(void);
++int dh_setup_mac_address(struct eeprom_id_page *eip);
+diff --git a/board/dhelectronics/dh_imx6/dh_imx6.c b/board/dhelectronics/dh_imx6/dh_imx6.c
+index 8c29b98503..d2bef2c310 100644
+--- a/board/dhelectronics/dh_imx6/dh_imx6.c
++++ b/board/dhelectronics/dh_imx6/dh_imx6.c
+@@ -86,7 +86,7 @@ int board_usb_phy_mode(int port)
+ }
+ #endif
+ 
+-int dh_setup_mac_address(void)
++int dh_setup_mac_address(struct eeprom_id_page *eip)
+ {
+ 	unsigned char enetaddr[6];
+ 
+@@ -175,7 +175,7 @@ int board_late_init(void)
+ 	u32 hw_code;
+ 	char buf[16];
+ 
+-	dh_setup_mac_address();
++	dh_setup_mac_address(NULL);
+ 
+ 	hw_code = board_get_hwcode();
+ 
+diff --git a/board/dhelectronics/dh_imx8mp/imx8mp_dhcom_pdk2.c b/board/dhelectronics/dh_imx8mp/imx8mp_dhcom_pdk2.c
+index 02ca487e92..fa43615d76 100644
+--- a/board/dhelectronics/dh_imx8mp/imx8mp_dhcom_pdk2.c
++++ b/board/dhelectronics/dh_imx8mp/imx8mp_dhcom_pdk2.c
+@@ -41,7 +41,7 @@ int board_phys_sdram_size(phys_size_t *size)
+ 	return 0;
+ }
+ 
+-static int dh_imx8_setup_ethaddr(void)
++static int dh_imx8_setup_ethaddr(struct eeprom_id_page *eip)
+ {
+ 	unsigned char enetaddr[6];
+ 
+@@ -54,6 +54,9 @@ static int dh_imx8_setup_ethaddr(void)
+ 	if (!dh_imx_get_mac_from_fuse(enetaddr))
+ 		goto out;
+ 
++	if (!dh_get_value_from_eeprom_buffer(DH_MAC0, enetaddr, sizeof(enetaddr), eip))
++		goto out;
++
+ 	if (!dh_get_mac_from_eeprom(enetaddr, "eeprom0"))
+ 		goto out;
+ 
+@@ -63,7 +66,7 @@ out:
+ 	return eth_env_set_enetaddr("ethaddr", enetaddr);
+ }
+ 
+-static int dh_imx8_setup_eth1addr(void)
++static int dh_imx8_setup_eth1addr(struct eeprom_id_page *eip)
+ {
+ 	unsigned char enetaddr[6];
+ 
+@@ -76,6 +79,9 @@ static int dh_imx8_setup_eth1addr(void)
+ 	if (!dh_imx_get_mac_from_fuse(enetaddr))
+ 		goto increment_out;
+ 
++	if (!dh_get_value_from_eeprom_buffer(DH_MAC1, enetaddr, sizeof(enetaddr), eip))
++		goto out;
++
+ 	if (!dh_get_mac_from_eeprom(enetaddr, "eeprom1"))
+ 		goto out;
+ 
+@@ -96,21 +102,58 @@ out:
+ 	return eth_env_set_enetaddr("eth1addr", enetaddr);
+ }
+ 
+-int dh_setup_mac_address(void)
++int dh_setup_mac_address(struct eeprom_id_page *eip)
+ {
+ 	int ret;
+ 
+-	ret = dh_imx8_setup_ethaddr();
++	ret = dh_imx8_setup_ethaddr(eip);
+ 	if (ret)
+ 		printf("%s: Unable to setup ethaddr! ret = %d\n", __func__, ret);
+ 
+-	ret = dh_imx8_setup_eth1addr();
++	ret = dh_imx8_setup_eth1addr(eip);
+ 	if (ret)
+ 		printf("%s: Unable to setup eth1addr! ret = %d\n", __func__, ret);
+ 
+ 	return ret;
+ }
+ 
++void dh_add_item_number_and_serial_to_env(struct eeprom_id_page *eip)
++{
++	char *item_number_env;
++	char item_number[8];	/* String with 7 characters + string termination */
++	char *serial_env;
++	char serial[10];	/* String with 9 characters + string termination */
++	int ret;
++
++	ret = dh_get_value_from_eeprom_buffer(DH_ITEM_NUMBER, item_number, sizeof(item_number),
++					      eip);
++	if (ret) {
++		printf("%s: Unable to get DHSOM item number from EEPROM ID page! ret = %d\n",
++		       __func__, ret);
++	} else {
++		item_number_env = env_get("dh_som_item_number");
++		if (!item_number_env)
++			env_set("dh_som_item_number", item_number);
++		else if (strcmp(item_number_env, item_number))
++			printf("Warning: Environment dh_som_item_number differs from EEPROM ID page value (%s != %s)\n",
++			       item_number_env, item_number);
++	}
++
++	ret = dh_get_value_from_eeprom_buffer(DH_SERIAL_NUMBER, serial, sizeof(serial),
++					      eip);
++	if (ret) {
++		printf("%s: Unable to get DHSOM serial number from EEPROM ID page! ret = %d\n",
++		       __func__, ret);
++	} else {
++		serial_env = env_get("dh_som_serial_number");
++		if (!serial_env)
++			env_set("dh_som_serial_number", serial);
++		else if (strcmp(serial_env, serial))
++			printf("Warning: Environment dh_som_serial_number differs from EEPROM ID page value (%s != %s)\n",
++			       serial_env, serial);
++	}
++}
++
+ int board_init(void)
+ {
+ 	regulators_enable_boot_on(_DEBUG);
+@@ -120,7 +163,27 @@ int board_init(void)
+ 
+ int board_late_init(void)
+ {
+-	dh_setup_mac_address();
++	u8 eeprom_buffer[DH_EEPROM_ID_PAGE_MAX_SIZE] = { 0 };
++	struct eeprom_id_page *eip = (struct eeprom_id_page *)eeprom_buffer;
++	int ret;
++
++	ret = dh_read_eeprom_id_page(eeprom_buffer, "eeprom0wl");
++	if (ret) {
++		/*
++		 * The EEPROM ID page is available on SoM rev. 200 and greater.
++		 * For SoM rev. 100 the return value will be -ENODEV. Suppress
++		 * the error message for that, because the absence cannot be
++		 * treated as an error.
++		 */
++		if (ret != -ENODEV)
++			printf("%s: Cannot read valid data from EEPROM ID page! ret = %d\n",
++			       __func__, ret);
++		dh_setup_mac_address(NULL);
++	} else {
++		dh_setup_mac_address(eip);
++		dh_add_item_number_and_serial_to_env(eip);
++	}
++
+ 	return 0;
+ }
+ 
+-- 
+2.30.2
+
