@@ -1,8 +1,8 @@
-From 8f43c3635949a756fc405f5365c9c2f7413f8d75 Mon Sep 17 00:00:00 2001
+From 5297ed419566b58089c6d456460c33e35e2fd896 Mon Sep 17 00:00:00 2001
 From: Christoph Niedermaier <cniedermaier@dh-electronics.com>
-Date: Fri, 15 Nov 2024 15:50:04 +0100
-Subject: [PATCH] arm64: dts: imx8mp: Add aliases for the access to the EEPROM
- ID page node
+Date: Sat, 7 Dec 2024 00:04:17 +0100
+Subject: [PATCH 3/8] arm64: dts: imx8mp: Add aliases for the access to the
+ EEPROM ID page node
 
 The new i.MX8M Plus DHCOM rev.200 is populated with M24C32-D EEPROM
 that contains an additional write-lockable page called ID page. Add
@@ -17,7 +17,7 @@ Reviewed-by: Marek Vasut <marex@denx.de>
  1 file changed, 2 insertions(+)
 
 diff --git a/arch/arm/dts/imx8mp-dhcom-u-boot.dtsi b/arch/arm/dts/imx8mp-dhcom-u-boot.dtsi
-index cb37e28f28..851c5aaa78 100644
+index c065fb82994..546490a4a81 100644
 --- a/arch/arm/dts/imx8mp-dhcom-u-boot.dtsi
 +++ b/arch/arm/dts/imx8mp-dhcom-u-boot.dtsi
 @@ -9,6 +9,8 @@
@@ -30,5 +30,5 @@ index cb37e28f28..851c5aaa78 100644
  		mmc1 = &usdhc3;	/* eMMC */
  		mmc2 = &usdhc1;	/* SDIO */
 -- 
-2.30.2
+2.47.2
 

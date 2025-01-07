@@ -1,7 +1,7 @@
-From 0871bc44860a9de16fb79b23541166425f006e08 Mon Sep 17 00:00:00 2001
+From 2dadcfe15a925dedf0b167cc8c565c3cc8ef1ae8 Mon Sep 17 00:00:00 2001
 From: Christoph Niedermaier <cniedermaier@dh-electronics.com>
-Date: Wed, 27 Nov 2024 16:04:58 +0100
-Subject: [PATCH] lib: hashtable: Prevent recursive calling of callback
+Date: Sat, 7 Dec 2024 00:04:19 +0100
+Subject: [PATCH 5/8] lib: hashtable: Prevent recursive calling of callback
  functions
 
 In case there are two variables which each implement env callback
@@ -23,16 +23,16 @@ Suggested-by: Marek Vasut <marex@denx.de>
  1 file changed, 24 insertions(+), 3 deletions(-)
 
 diff --git a/lib/hashtable.c b/lib/hashtable.c
-index a0060f6a0d..42fbf804f2 100644
+index e8a59e2dcac..75c263b5053 100644
 --- a/lib/hashtable.c
 +++ b/lib/hashtable.c
-@@ -223,11 +223,32 @@ static int
+@@ -221,11 +221,32 @@ static int
  do_callback(const struct env_entry *e, const char *name, const char *value,
  	    enum env_op op, int flags)
  {
 +	int ret = 0;
 +
- #ifndef CONFIG_SPL_BUILD
+ #ifndef CONFIG_XPL_BUILD
 -	if (e->callback)
 -		return e->callback(name, value, op, flags);
 +	static bool in_callback;
@@ -63,5 +63,5 @@ index a0060f6a0d..42fbf804f2 100644
  
  /*
 -- 
-2.30.2
+2.47.2
 

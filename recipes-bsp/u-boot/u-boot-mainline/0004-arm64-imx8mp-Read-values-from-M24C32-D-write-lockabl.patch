@@ -1,8 +1,8 @@
-From d1975291a12ee827e296d93217ea27a1b333c172 Mon Sep 17 00:00:00 2001
+From a5f66cf2445a7e87031a62edd94dd48b1c22b029 Mon Sep 17 00:00:00 2001
 From: Christoph Niedermaier <cniedermaier@dh-electronics.com>
-Date: Mon, 16 Oct 2023 01:44:06 +0200
-Subject: [PATCH] arm64: imx8mp: Read values from M24C32-D write-lockable page
- on DHCOM i.MX8MP
+Date: Sat, 7 Dec 2024 00:04:18 +0100
+Subject: [PATCH 4/8] arm64: imx8mp: Read values from M24C32-D write-lockable
+ page on DHCOM i.MX8MP
 
 The new i.MX8M Plus DHCOM rev.200 is populated with M24C32-D EEPROM
 that contains an additional write-lockable page called ID page, which
@@ -40,10 +40,10 @@ Reviewed-by: Marek Vasut <marex@denx.de>
  4 files changed, 297 insertions(+), 10 deletions(-)
 
 diff --git a/board/dhelectronics/common/dh_common.c b/board/dhelectronics/common/dh_common.c
-index 34094a020b..28ba991ada 100644
+index 32c50b4f0f5..6a942909ccf 100644
 --- a/board/dhelectronics/common/dh_common.c
 +++ b/board/dhelectronics/common/dh_common.c
-@@ -8,6 +8,7 @@
+@@ -7,6 +7,7 @@
  #include <dm.h>
  #include <i2c_eeprom.h>
  #include <net.h>
@@ -51,7 +51,7 @@ index 34094a020b..28ba991ada 100644
  
  #include "dh_common.h"
  
-@@ -31,6 +32,149 @@ int dh_get_mac_is_enabled(const char *alias)
+@@ -30,6 +31,149 @@ int dh_get_mac_is_enabled(const char *alias)
  	return 0;
  }
  
@@ -201,7 +201,7 @@ index 34094a020b..28ba991ada 100644
  int dh_get_mac_from_eeprom(unsigned char *enetaddr, const char *alias)
  {
  	struct udevice *dev;
-@@ -63,7 +207,7 @@ int dh_get_mac_from_eeprom(unsigned char *enetaddr, const char *alias)
+@@ -62,7 +206,7 @@ int dh_get_mac_from_eeprom(unsigned char *enetaddr, const char *alias)
  	return 0;
  }
  
@@ -210,7 +210,7 @@ index 34094a020b..28ba991ada 100644
  {
  	unsigned char enetaddr[6];
  
-@@ -73,6 +217,9 @@ __weak int dh_setup_mac_address(void)
+@@ -72,6 +216,9 @@ __weak int dh_setup_mac_address(void)
  	if (dh_get_mac_is_enabled("ethernet0"))
  		return 0;
  
@@ -221,7 +221,7 @@ index 34094a020b..28ba991ada 100644
  		return eth_env_set_enetaddr("ethaddr", enetaddr);
  
 diff --git a/board/dhelectronics/common/dh_common.h b/board/dhelectronics/common/dh_common.h
-index a2de5b1553..c4693c6061 100644
+index a2de5b1553e..c4693c60618 100644
 --- a/board/dhelectronics/common/dh_common.h
 +++ b/board/dhelectronics/common/dh_common.h
 @@ -3,6 +3,52 @@
@@ -320,10 +320,10 @@ index a2de5b1553..c4693c6061 100644
 -int dh_setup_mac_address(void);
 +int dh_setup_mac_address(struct eeprom_id_page *eip);
 diff --git a/board/dhelectronics/dh_imx6/dh_imx6.c b/board/dhelectronics/dh_imx6/dh_imx6.c
-index 8c29b98503..d2bef2c310 100644
+index f2b14bf701a..234824b38c2 100644
 --- a/board/dhelectronics/dh_imx6/dh_imx6.c
 +++ b/board/dhelectronics/dh_imx6/dh_imx6.c
-@@ -86,7 +86,7 @@ int board_usb_phy_mode(int port)
+@@ -84,7 +84,7 @@ int board_usb_phy_mode(int port)
  }
  #endif
  
@@ -332,7 +332,7 @@ index 8c29b98503..d2bef2c310 100644
  {
  	unsigned char enetaddr[6];
  
-@@ -175,7 +175,7 @@ int board_late_init(void)
+@@ -171,7 +171,7 @@ int board_late_init(void)
  	u32 hw_code;
  	char buf[16];
  
@@ -342,10 +342,10 @@ index 8c29b98503..d2bef2c310 100644
  	hw_code = board_get_hwcode();
  
 diff --git a/board/dhelectronics/dh_imx8mp/imx8mp_dhcom_pdk2.c b/board/dhelectronics/dh_imx8mp/imx8mp_dhcom_pdk2.c
-index 02ca487e92..fa43615d76 100644
+index 78aae412350..4af3cbe9fe2 100644
 --- a/board/dhelectronics/dh_imx8mp/imx8mp_dhcom_pdk2.c
 +++ b/board/dhelectronics/dh_imx8mp/imx8mp_dhcom_pdk2.c
-@@ -41,7 +41,7 @@ int board_phys_sdram_size(phys_size_t *size)
+@@ -40,7 +40,7 @@ int board_phys_sdram_size(phys_size_t *size)
  	return 0;
  }
  
@@ -354,7 +354,7 @@ index 02ca487e92..fa43615d76 100644
  {
  	unsigned char enetaddr[6];
  
-@@ -54,6 +54,9 @@ static int dh_imx8_setup_ethaddr(void)
+@@ -53,6 +53,9 @@ static int dh_imx8_setup_ethaddr(void)
  	if (!dh_imx_get_mac_from_fuse(enetaddr))
  		goto out;
  
@@ -364,7 +364,7 @@ index 02ca487e92..fa43615d76 100644
  	if (!dh_get_mac_from_eeprom(enetaddr, "eeprom0"))
  		goto out;
  
-@@ -63,7 +66,7 @@ out:
+@@ -62,7 +65,7 @@ out:
  	return eth_env_set_enetaddr("ethaddr", enetaddr);
  }
  
@@ -373,7 +373,7 @@ index 02ca487e92..fa43615d76 100644
  {
  	unsigned char enetaddr[6];
  
-@@ -76,6 +79,9 @@ static int dh_imx8_setup_eth1addr(void)
+@@ -75,6 +78,9 @@ static int dh_imx8_setup_eth1addr(void)
  	if (!dh_imx_get_mac_from_fuse(enetaddr))
  		goto increment_out;
  
@@ -383,7 +383,7 @@ index 02ca487e92..fa43615d76 100644
  	if (!dh_get_mac_from_eeprom(enetaddr, "eeprom1"))
  		goto out;
  
-@@ -96,21 +102,58 @@ out:
+@@ -95,21 +101,58 @@ out:
  	return eth_env_set_enetaddr("eth1addr", enetaddr);
  }
  
@@ -444,8 +444,8 @@ index 02ca487e92..fa43615d76 100644
 +
  int board_init(void)
  {
- 	regulators_enable_boot_on(_DEBUG);
-@@ -120,7 +163,27 @@ int board_init(void)
+ 	return 0;
+@@ -117,7 +160,27 @@ int board_init(void)
  
  int board_late_init(void)
  {
@@ -475,5 +475,5 @@ index 02ca487e92..fa43615d76 100644
  }
  
 -- 
-2.30.2
+2.47.2
 
