@@ -15,6 +15,7 @@ SRC_URI:append:dh-imx-dhsom = " \
 	file://0009-arm64-imx8mp-Read-values-from-M24C32-D-write-lockabl.patch \
 	file://0010-lib-hashtable-Prevent-recursive-calling-of-callback-.patch \
 	file://0011-board-dhelectronics-Sync-env-variable-dh_som_serial_.patch \
+	file://0012-mmc-Fix-size-calculation-for-sector-addressed-MMC-ve.patch \
 	"
 
 EXTRA_OEMAKE:append:dh-imx8mp-dhsom = " ATF_LOAD_ADDR=0x970000"
@@ -31,4 +32,4 @@ do_compile:prepend:dh-imx8mp-dhsom () {
 # format is -${MACHINE}-date.extraversion. The date is in the
 # format YYYYMMDD, the extraversion is used in case there are
 # multiple releases during a single day, which is unlikely.
-UBOOT_LOCALVERSION:dh-imx-dhsom ?= "-${MACHINE}-20241216.01"
+UBOOT_LOCALVERSION:dh-imx-dhsom ?= "-${MACHINE}-20250129.01"
