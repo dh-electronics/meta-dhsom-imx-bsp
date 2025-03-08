@@ -5,8 +5,8 @@ require conf/machine/include/soc-family.inc
 SERIAL_CONSOLES = "115200;ttymxc0"
 
 # Linux kernel
-PREFERRED_VERSION_linux-stable ?= "6.6%"
-KERNEL_DEVICETREE_PATH_PREFIX = "${@'nxp/imx/' if (d.getVar('PREFERRED_VERSION_linux-stable') in ["6.6%"]) else ''}"
+PREFERRED_VERSION_linux-stable ?= "6.12%"
+KERNEL_DEVICETREE_PATH_PREFIX = "${@'nxp/imx/' if (d.getVar('PREFERRED_VERSION_linux-stable') in ["6.6%", "6.12%"]) else ''}"
 KERNEL_DTBVENDORED = "0"
 KERNEL_DTC_FLAGS += "-@"
 

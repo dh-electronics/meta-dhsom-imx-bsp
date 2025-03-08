@@ -12,7 +12,7 @@ require conf/machine/include/soc-family.inc
 SERIAL_CONSOLES = "115200;ttymxc0"
 
 # Linux kernel
-PREFERRED_VERSION_linux-stable ?= "6.6%"
+PREFERRED_VERSION_linux-stable ?= "6.12%"
 KERNEL_DTBVENDORED = "1"
 KERNEL_DTC_FLAGS += "-@"
 
