@@ -1,0 +1,9 @@
+patch 0001-media-v4l2-subdev-Enable-the-streams-API.patch
+patch 0002-clk-imx-pll14xx-Add-208-MHz-and-416-MHz-entries-for-.patch
+patch 0003-drm-bridge-samsung-dsim-Initialize-bridge-on-attach.patch
+patch 0004-drm-bridge-tc358767-Reset-chip-again-on-attach.patch
+patch 0005-drm-bridge-tc358767-Fix-odd-pixel-alignment.patch
+patch 0006-drm-bridge-tc358767-Improve-DPI-output-pixel-clock-a.patch
+patch 0007-arm64-dts-imx8mp-Add-DH-i.MX8MP-DHCOM-SoM-on-DRC02-c.patch
+patch 0008-arm64-dts-imx8mp-Add-support-for-DH-electronics-i.MX.patch
+patch 0009-arm64-dts-imx8mp-Add-DT-overlays-for-i.MX8MP-DHCOM.patch

@@ -1,0 +1,413 @@
+From 294ef2f47b3027e533873ca1fd97e0309f4c11f2 Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@denx.de>
+Date: Fri, 9 Apr 2021 15:17:29 +0200
+Subject: [PATCH] ARM: dts: imx: Add DT overlays for i.MX6 DHSOM boards
+
+Add DH PDK2 DT overlays to support:
+ - DH 497-200 Display board in edge connector X12
+ - DH 505-200 Display board in edge connector X12
+ - DH 531-100 SPI/I2C board in header X21
+ - DH 531-200 SPI/I2C board in header X22
+ - DH 560-200 Display board in edge connector X12
+
+Add DH PicoITX DT overlays to support:
+ - DH 626-100 Display board in edge connector X2
+
+Upstream-Status: Inappropriate
+Signed-off-by: Marek Vasut <marex@denx.de>
+---
+ arch/arm/boot/dts/nxp/imx/Makefile            |  6 ++
+ ...l-dhcom-overlay-panel-dpi-ch101olhlwh.dtsi | 75 +++++++++++++++++++
+ .../imx/imx6qdl-dhcom-overlay-panel-dpi.dtsi  | 64 ++++++++++++++++
+ ...mx6qdl-dhcom-pdk2-overlay-497-200-x12.dtso | 30 ++++++++
+ ...-pdk2-overlay-505-200-x12-ch101olhlwh.dtso | 26 +++++++
+ ...mx6qdl-dhcom-pdk2-overlay-531-100-x21.dtso | 33 ++++++++
+ ...mx6qdl-dhcom-pdk2-overlay-531-100-x22.dtso | 33 ++++++++
+ ...mx6qdl-dhcom-pdk2-overlay-560-200-x12.dtso | 39 ++++++++++
+ ...icoitx-overlay-626-100-x2-ch101olhlwh.dtso |  8 ++
+ 9 files changed, 314 insertions(+)
+ create mode 100644 arch/arm/boot/dts/nxp/imx/imx6qdl-dhcom-overlay-panel-dpi-ch101olhlwh.dtsi
+ create mode 100644 arch/arm/boot/dts/nxp/imx/imx6qdl-dhcom-overlay-panel-dpi.dtsi
+ create mode 100644 arch/arm/boot/dts/nxp/imx/imx6qdl-dhcom-pdk2-overlay-497-200-x12.dtso
+ create mode 100644 arch/arm/boot/dts/nxp/imx/imx6qdl-dhcom-pdk2-overlay-505-200-x12-ch101olhlwh.dtso
+ create mode 100644 arch/arm/boot/dts/nxp/imx/imx6qdl-dhcom-pdk2-overlay-531-100-x21.dtso
+ create mode 100644 arch/arm/boot/dts/nxp/imx/imx6qdl-dhcom-pdk2-overlay-531-100-x22.dtso
+ create mode 100644 arch/arm/boot/dts/nxp/imx/imx6qdl-dhcom-pdk2-overlay-560-200-x12.dtso
+ create mode 100644 arch/arm/boot/dts/nxp/imx/imx6qdl-dhcom-picoitx-overlay-626-100-x2-ch101olhlwh.dtso
+
+diff --git a/arch/arm/boot/dts/nxp/imx/Makefile b/arch/arm/boot/dts/nxp/imx/Makefile
+index 3629e343d3225..99d02fc0a508e 100644
+--- a/arch/arm/boot/dts/nxp/imx/Makefile
++++ b/arch/arm/boot/dts/nxp/imx/Makefile
+@@ -160,6 +160,12 @@ dtb-$(CONFIG_SOC_IMX6Q) += \
+ 	imx6q-cubox-i-som-v15.dtb \
+ 	imx6q-dfi-fs700-m60.dtb \
+ 	imx6q-dhcom-pdk2.dtb \
++	imx6qdl-dhcom-pdk2-overlay-497-200-x12.dtbo \
++	imx6qdl-dhcom-pdk2-overlay-505-200-x12-ch101olhlwh.dtbo \
++	imx6qdl-dhcom-pdk2-overlay-531-100-x21.dtbo \
++	imx6qdl-dhcom-pdk2-overlay-531-100-x22.dtbo \
++	imx6qdl-dhcom-pdk2-overlay-560-200-x12.dtbo \
++	imx6qdl-dhcom-picoitx-overlay-626-100-x2-ch101olhlwh.dtbo \
+ 	imx6q-display5-tianma-tm070-1280x768.dtb \
+ 	imx6q-dmo-edmqmx6.dtb \
+ 	imx6q-dms-ba16.dtb \
+diff --git a/arch/arm/boot/dts/nxp/imx/imx6qdl-dhcom-overlay-panel-dpi-ch101olhlwh.dtsi b/arch/arm/boot/dts/nxp/imx/imx6qdl-dhcom-overlay-panel-dpi-ch101olhlwh.dtsi
+new file mode 100644
+index 0000000000000..60ff5c6e58fa0
+--- /dev/null
++++ b/arch/arm/boot/dts/nxp/imx/imx6qdl-dhcom-overlay-panel-dpi-ch101olhlwh.dtsi
+@@ -0,0 +1,75 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
++/*
++ * Copyright (C) 2021 Marek Vasut <marex@denx.de>
++ */
++/dts-v1/;
++/plugin/;
++
++#include "imx6qdl-dhcom-overlay-panel-dpi.dtsi"
++
++&{/} {
++	lvds-encoder {
++		compatible = "onsemi,fin3385", "lvds-encoder";
++		pclk-sample = <1>;
++
++		ports {
++			#address-cells = <1>;
++			#size-cells = <0>;
++
++			port@0 {
++				reg = <0>;
++
++				lvds_bridge_in: endpoint {
++					remote-endpoint = <&ipu1_dpi0_out>;
++				};
++			};
++
++			port@1 {
++				reg = <1>;
++
++				lvds_bridge_out: endpoint {
++					remote-endpoint = <&panel_in>;
++				};
++			};
++		};
++	};
++};
++
++&display_bl {
++	pwms = <&pwm1 0 5000000 0>;
++};
++
++&i2c2 {
++	#address-cells = <1>;
++	#size-cells = <0>;
++
++	touchscreen@41 {
++		compatible = "ilitek,ili251x";
++		reg = <0x41>;
++		interrupt-parent = <&gpio4>;
++		interrupts = <7 IRQ_TYPE_EDGE_FALLING>;
++		reset-gpios = <&gpio1 4 GPIO_ACTIVE_LOW>;
++		touchscreen-size-x = <16384>;
++		touchscreen-size-y = <9600>;
++		touchscreen-inverted-x;
++		touchscreen-inverted-y;
++	};
++
++	eeprom@50 {
++		compatible = "atmel,24c04";
++		reg = <0x50>;
++		pagesize = <16>;
++	};
++};
++
++&ipu1_dpi0_out {
++	remote-endpoint = <&lvds_bridge_in>;
++};
++
++&panel {
++	compatible = "chefree,ch101olhlwh-002";
++};
++
++&panel_in {
++	remote-endpoint = <&lvds_bridge_out>;
++};
+diff --git a/arch/arm/boot/dts/nxp/imx/imx6qdl-dhcom-overlay-panel-dpi.dtsi b/arch/arm/boot/dts/nxp/imx/imx6qdl-dhcom-overlay-panel-dpi.dtsi
+new file mode 100644
+index 0000000000000..1a1a188ce4526
+--- /dev/null
++++ b/arch/arm/boot/dts/nxp/imx/imx6qdl-dhcom-overlay-panel-dpi.dtsi
+@@ -0,0 +1,64 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
++/*
++ * Copyright (C) 2021 Marek Vasut <marex@denx.de>
++ */
++#include <dt-bindings/gpio/gpio.h>
++#include <dt-bindings/input/input.h>
++#include <dt-bindings/interrupt-controller/arm-gic.h>
++#include <dt-bindings/pwm/pwm.h>
++
++&{/} {
++	#address-cells = <1>;
++	#size-cells = <1>;
++
++	display_bl: display-bl {
++		compatible = "pwm-backlight";
++		brightness-levels = <0 16 22 30 40 55 75 102 138 188 255>;
++		default-brightness-level = <8>;
++		enable-gpios = <&gpio3 27 GPIO_ACTIVE_HIGH>;
++		status = "okay";
++	};
++
++	lcd_display: disp0 {
++		compatible = "fsl,imx-parallel-display";
++		#address-cells = <1>;
++		#size-cells = <0>;
++		interface-pix-fmt = "rgb24";
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_ipu1_lcdif>;
++		status = "okay";
++
++		port@0 {
++			reg = <0>;
++
++			ipu1_display_in: endpoint {
++				remote-endpoint = <&ipu1_di0_disp0>;
++			};
++		};
++
++		port@1 {
++			reg = <1>;
++
++			ipu1_dpi0_out: endpoint {
++				remote-endpoint = <&panel_in>;
++			};
++		};
++	};
++
++	panel: panel {
++		backlight = <&display_bl>;
++
++		port {
++			panel_in: endpoint {
++			};
++		};
++	};
++};
++
++&ipu1_di0_disp0 {
++	remote-endpoint = <&ipu1_display_in>;
++};
++
++&pwm1 {
++	status = "okay";
++};
+diff --git a/arch/arm/boot/dts/nxp/imx/imx6qdl-dhcom-pdk2-overlay-497-200-x12.dtso b/arch/arm/boot/dts/nxp/imx/imx6qdl-dhcom-pdk2-overlay-497-200-x12.dtso
+new file mode 100644
+index 0000000000000..55dd5fbf1b0d5
+--- /dev/null
++++ b/arch/arm/boot/dts/nxp/imx/imx6qdl-dhcom-pdk2-overlay-497-200-x12.dtso
+@@ -0,0 +1,30 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
++/*
++ * Copyright (C) 2021 Marek Vasut <marex@denx.de>
++ */
++/dts-v1/;
++/plugin/;
++
++#include "imx6qdl-dhcom-overlay-panel-dpi.dtsi"
++
++&display_bl {
++	pwms = <&pwm1 0 50000 PWM_POLARITY_INVERTED>;
++};
++
++&ipu1_dpi0_out {
++	remote-endpoint = <&panel_in>;
++};
++
++&panel {
++	compatible = "dataimage,scf0700c48ggu18";
++};
++
++&panel_in {
++	remote-endpoint = <&ipu1_dpi0_out>;
++};
++
++&i2c3 {
++	touchscreen@49 {	/* TSC2004 */
++		status = "okay";
++	};
++};
+diff --git a/arch/arm/boot/dts/nxp/imx/imx6qdl-dhcom-pdk2-overlay-505-200-x12-ch101olhlwh.dtso b/arch/arm/boot/dts/nxp/imx/imx6qdl-dhcom-pdk2-overlay-505-200-x12-ch101olhlwh.dtso
+new file mode 100644
+index 0000000000000..966c5544d2931
+--- /dev/null
++++ b/arch/arm/boot/dts/nxp/imx/imx6qdl-dhcom-pdk2-overlay-505-200-x12-ch101olhlwh.dtso
+@@ -0,0 +1,26 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
++/*
++ * Copyright (C) 2021 Marek Vasut <marex@denx.de>
++ */
++/dts-v1/;
++/plugin/;
++
++#include "imx6qdl-dhcom-overlay-panel-dpi-ch101olhlwh.dtsi"
++
++&{/} {
++	gpio-keys {
++		/* BUTTON1 GPIO-B conflicts with touchscreen reset */
++		button-1 {
++			/* Use status as /delete-node/ does not work in DTOs */
++			status = "disabled";
++		};
++	};
++
++	led {
++		/* LED7 GPIO-H conflicts with touchscreen IRQ */
++		led-7 {
++			/* Use status as /delete-node/ does not work in DTOs */
++			status = "disabled";
++		};
++	};
++};
+diff --git a/arch/arm/boot/dts/nxp/imx/imx6qdl-dhcom-pdk2-overlay-531-100-x21.dtso b/arch/arm/boot/dts/nxp/imx/imx6qdl-dhcom-pdk2-overlay-531-100-x21.dtso
+new file mode 100644
+index 0000000000000..c3ed42101d6fb
+--- /dev/null
++++ b/arch/arm/boot/dts/nxp/imx/imx6qdl-dhcom-pdk2-overlay-531-100-x21.dtso
+@@ -0,0 +1,33 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
++/*
++ * Copyright (C) 2021 Marek Vasut <marex@denx.de>
++ */
++/dts-v1/;
++/plugin/;
++
++&i2c2 {
++	#address-cells = <1>;
++	#size-cells = <0>;
++
++	eeprom@56 {
++		compatible = "atmel,24c04";
++		reg = <0x56>;
++		pagesize = <16>;
++	};
++};
++
++&ecspi1 {
++	status = "okay";
++	#address-cells = <1>;
++	#size-cells = <0>;
++
++	at25@1 {
++		compatible = "microchip,25aa010a", "atmel,at25";
++		reg = <1>;
++		spi-max-frequency = <5000000>;
++
++		at25,byte-len = <128>;
++		at25,addr-mode = <1>;
++		at25,page-size = <16>;
++	};
++};
+diff --git a/arch/arm/boot/dts/nxp/imx/imx6qdl-dhcom-pdk2-overlay-531-100-x22.dtso b/arch/arm/boot/dts/nxp/imx/imx6qdl-dhcom-pdk2-overlay-531-100-x22.dtso
+new file mode 100644
+index 0000000000000..cdfa9125d50a7
+--- /dev/null
++++ b/arch/arm/boot/dts/nxp/imx/imx6qdl-dhcom-pdk2-overlay-531-100-x22.dtso
+@@ -0,0 +1,33 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
++/*
++ * Copyright (C) 2021 Marek Vasut <marex@denx.de>
++ */
++/dts-v1/;
++/plugin/;
++
++&i2c1 {
++	#address-cells = <1>;
++	#size-cells = <0>;
++
++	eeprom@56 {
++		compatible = "atmel,24c04";
++		reg = <0x56>;
++		pagesize = <16>;
++	};
++};
++
++&ecspi2 {
++	status = "okay";
++	#address-cells = <1>;
++	#size-cells = <0>;
++
++	at25@0 {
++		compatible = "microchip,25aa010a", "atmel,at25";
++		reg = <0>;
++		spi-max-frequency = <5000000>;
++
++		at25,byte-len = <128>;
++		at25,addr-mode = <1>;
++		at25,page-size = <16>;
++	};
++};
+diff --git a/arch/arm/boot/dts/nxp/imx/imx6qdl-dhcom-pdk2-overlay-560-200-x12.dtso b/arch/arm/boot/dts/nxp/imx/imx6qdl-dhcom-pdk2-overlay-560-200-x12.dtso
+new file mode 100644
+index 0000000000000..aeadc7382458b
+--- /dev/null
++++ b/arch/arm/boot/dts/nxp/imx/imx6qdl-dhcom-pdk2-overlay-560-200-x12.dtso
+@@ -0,0 +1,39 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
++/*
++ * Copyright (C) 2021 Marek Vasut <marex@denx.de>
++ */
++/dts-v1/;
++/plugin/;
++
++#include "imx6qdl-dhcom-overlay-panel-dpi.dtsi"
++
++&display_bl {
++	pwms = <&pwm1 0 50000 PWM_POLARITY_INVERTED>;
++};
++
++&ipu1_dpi0_out {
++	remote-endpoint = <&panel_in>;
++};
++
++&panel {
++	compatible = "edt,etm0700g0edh6";
++};
++
++&panel_in {
++	remote-endpoint = <&ipu1_dpi0_out>;
++};
++
++&i2c2 {
++	#address-cells = <1>;
++	#size-cells = <0>;
++
++	touchscreen@38 {
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_dhcom_e>;
++		compatible = "edt,edt-ft5406";
++		reg = <0x38>;
++		/* Touchscreen IRQ GPIO-E conflicts with LED5 GPIO */
++		interrupt-parent = <&gpio4>;
++		interrupts = <5 IRQ_TYPE_EDGE_FALLING>; /* GPIO E */
++	};
++};
+diff --git a/arch/arm/boot/dts/nxp/imx/imx6qdl-dhcom-picoitx-overlay-626-100-x2-ch101olhlwh.dtso b/arch/arm/boot/dts/nxp/imx/imx6qdl-dhcom-picoitx-overlay-626-100-x2-ch101olhlwh.dtso
+new file mode 100644
+index 0000000000000..0655b0ad66e64
+--- /dev/null
++++ b/arch/arm/boot/dts/nxp/imx/imx6qdl-dhcom-picoitx-overlay-626-100-x2-ch101olhlwh.dtso
+@@ -0,0 +1,8 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
++/*
++ * Copyright (C) 2023 Marek Vasut <marex@denx.de>
++ */
++/dts-v1/;
++/plugin/;
++
++#include "imx6qdl-dhcom-overlay-panel-dpi-ch101olhlwh.dtsi"
+-- 
+2.43.0
+
