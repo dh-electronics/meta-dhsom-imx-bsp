@@ -49,3 +49,4 @@ patch 0056-arm64-dts-imx8mp-Add-support-for-DH-electronics-i.MX.patch
 patch 0057-drm-bridge-tc358767-Fix-odd-pixel-alignment.patch
 patch 0059-drm-bridge-tc358767-Improve-DPI-output-pixel-clock-a.patch
 patch 0060-arm64-dts-imx8mp-Add-DT-overlays-for-i.MX8MP-DHCOM.patch
+patch 0061-arm64-dts-imx8mp-Fix-missing-microSD-slot-vqmmc-on-D.patch
