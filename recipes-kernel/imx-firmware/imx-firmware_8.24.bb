@@ -10,7 +10,7 @@ LICENSE:${PN}-vpu-imx6q = "Firmware-nxp-imx-firmware"
 LIC_FILES_CHKSUM = "file://COPYING;md5=10c0fda810c63b052409b15a5445671a"
 
 EXTRA_HASH = "fbe0a4c"
-SRC_URI = "http://www.freescale.com/lgfiles/NMG/MAD/YOCTO/firmware-imx-${PV}-${EXTRA_HASH}.bin"
+SRC_URI = "https://www.nxp.com/lgfiles/NMG/MAD/YOCTO/firmware-imx-${PV}-${EXTRA_HASH}.bin"
 SRC_URI[md5sum] = "440b125e897614d77fac663d90bcffc8"
 SRC_URI[sha256sum] = "2e27962332197ebebbb30138f6dfb365361d48d7efa565df97c4f79285b1ca50"
 
