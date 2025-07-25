@@ -4,14 +4,6 @@ require u-boot-dhsom-common.inc
 
 SRC_URI:append:dh-imx-dhsom = " \
 	file://default-device-tree.cfg \
-	file://0001-scripts-setlocalversion-Reinstate-.scmversion-suppor.patch \
-	file://0002-env-Switch-the-callback-static-list-to-Kconfig.patch \
-	file://0003-arm64-dts-imx8mp-Add-aliases-for-the-access-to-the-E.patch \
-	file://0004-arm64-imx8mp-Read-values-from-M24C32-D-write-lockabl.patch \
-	file://0005-lib-hashtable-Prevent-recursive-calling-of-callback-.patch \
-	file://0006-board-dhelectronics-Sync-env-variable-dh_som_serial_.patch \
-	file://0007-mmc-Fix-size-calculation-for-sector-addressed-MMC-ve.patch \
-	file://0008-ARM-dts-imx-Drop-bogus-regulator-extras-on-DH-i.MX6-.patch \
 	"
 
 EXTRA_OEMAKE:append:dh-imx8mp-dhsom = " ATF_LOAD_ADDR=0x970000"
@@ -28,4 +20,4 @@ do_compile:prepend:dh-imx8mp-dhsom () {
 # format is -${MACHINE}-date.extraversion. The date is in the
 # format YYYYMMDD, the extraversion is used in case there are
 # multiple releases during a single day, which is unlikely.
-UBOOT_LOCALVERSION:dh-imx-dhsom ?= "-${MACHINE}-20250311.01"
+UBOOT_LOCALVERSION:dh-imx-dhsom ?= "-${MACHINE}-20251028.01"
