@@ -26,6 +26,8 @@ UBOOT_DTBO_LOADADDRESS = "0x5c080000"
 
 WKS_FILE = "sdimage-imx8mp.wks"
 
+IMAGE_INSTALL:append = " trusted-firmware-a"
+
 # Add any optional config files that might be present e.g. in other layers
 include conf/machine/include/dh-imx8mp-common-extra.inc
 include conf/machine/${MACHINE}-extra.conf
