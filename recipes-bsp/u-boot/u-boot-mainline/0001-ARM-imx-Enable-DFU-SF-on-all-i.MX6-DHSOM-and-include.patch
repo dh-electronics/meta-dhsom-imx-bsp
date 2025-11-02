@@ -1,0 +1,56 @@
+From 976032b364233959e1450f5d421de13bf08f046a Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@nabladev.com>
+Date: Sun, 2 Nov 2025 22:31:41 +0100
+Subject: [PATCH] ARM: imx: Enable DFU SF on all i.MX6 DHSOM and include
+ dfu_alt_info in env
+
+Enable DFU SF on all i.MX6 DHSOM so the SPI NOR can be exposed via
+DFU, and include dfu_alt_info which exposes the full SPI NOR via DFU.
+To install new bootloader into the SPI NOR using DFU, it is necessary
+to pad the u-boot-with-spl.imx to 0x400 Bytes offset first and then
+send it to the board as follows:
+
+"
+u-boot=> dfu 0 sf
+"
+
+"
+host$ dd if=/dev/zero of=pad.bin bs=1024 count=1
+host$ cat pad.bin u-boot-with-spl.imx > flash.bin
+host$ dfu-util -w -a 0 -D flash.bin
+"
+
+Upstream-Status: Submitted [https://lore.kernel.org/u-boot/20251102214614.307069-1-marek.vasut@mailbox.org/]
+Signed-off-by: Marek Vasut <marex@nabladev.com>
+---
+ configs/dh_imx6.config    | 1 +
+ include/configs/dh_imx6.h | 1 +
+ 2 files changed, 2 insertions(+)
+
+diff --git a/configs/dh_imx6.config b/configs/dh_imx6.config
+index 01db41be2a0..b1eeb8901f4 100644
+--- a/configs/dh_imx6.config
++++ b/configs/dh_imx6.config
+@@ -60,6 +60,7 @@ CONFIG_MISC=y
+ 
+ CONFIG_PINCTRL_IMX6=y
+ 
++CONFIG_DFU_SF=y
+ CONFIG_SDP_LOADADDR=0x17ffffc0
+ CONFIG_SPL_FIT=y
+ CONFIG_SPL_SPI=y
+diff --git a/include/configs/dh_imx6.h b/include/configs/dh_imx6.h
+index 09354936d73..d849cb544be 100644
+--- a/include/configs/dh_imx6.h
++++ b/include/configs/dh_imx6.h
+@@ -38,6 +38,7 @@
+ #define CFG_EXTRA_ENV_SETTINGS	\
+ 	"bootm_size=0x10000000\0"	\
+ 	"console=ttymxc0,115200\0"	\
++	"dfu_alt_info=sf 0:0=flash-bin raw 0 0x200000\0"	\
+ 	"fdt_addr=0x18000000\0"		\
+ 	"kernel_addr_r=0x10008000\0"	\
+ 	"fdt_addr_r=0x13000000\0"	\
+-- 
+2.51.0
+
