@@ -1,0 +1,48 @@
+From 2f28ac28b5593bfd238dac8b6b2fc40daf83851e Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@nabladev.com>
+Date: Tue, 4 Nov 2025 02:46:34 +0100
+Subject: [PATCH] arm64: dts: imx8mp: Add missing LED enumerators for DH
+ electronics i.MX8M Plus DHCOM on PDK2
+
+The LED enumerators are missing, which prevents the LEDs from being
+accurately told apart by label. Fill in the enumerators the same way
+they are already present on PDK3. Put this into local DT extras until
+matching kernel patch lands in Linux.
+
+Upstream-Status: Submitted [https://lore.kernel.org/u-boot/20251104015212.220542-1-marek.vasut@mailbox.org/]
+Signed-off-by: Marek Vasut <marex@nabladev.com>
+---
+ arch/arm/dts/imx8mp-dhcom-pdk2-u-boot.dtsi | 20 ++++++++++++++++++++
+ 1 file changed, 20 insertions(+)
+
+diff --git a/arch/arm/dts/imx8mp-dhcom-pdk2-u-boot.dtsi b/arch/arm/dts/imx8mp-dhcom-pdk2-u-boot.dtsi
+index be2d4fb184a..b8b3abd0f03 100644
+--- a/arch/arm/dts/imx8mp-dhcom-pdk2-u-boot.dtsi
++++ b/arch/arm/dts/imx8mp-dhcom-pdk2-u-boot.dtsi
+@@ -4,3 +4,23 @@
+  */
+ 
+ #include "imx8mp-dhcom-u-boot.dtsi"
++
++/ {
++	led {
++		led-0 {
++			function-enumerator = <0>;
++		};
++
++		led-1 {
++			function-enumerator = <1>;
++		};
++
++		led-2 {
++			function-enumerator = <2>;
++		};
++
++		led-3 {
++			function-enumerator = <3>;
++		};
++	};
++};
+-- 
+2.51.0
+
