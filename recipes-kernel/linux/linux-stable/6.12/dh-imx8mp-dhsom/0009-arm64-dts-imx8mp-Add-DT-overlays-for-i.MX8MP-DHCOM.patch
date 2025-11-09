@@ -14,10 +14,10 @@ Add DT overlays to support:
   - DH 531-200 SPI/I2C board in header X22
   - DH 560-200 Display board in edge connector X12
 - PDK3:
-  - DH 505-200 Display board in edge connector X12 via direct LVDS
-  - DH 531-100 SPI/I2C board in header X21
-  - DH 531-200 SPI/I2C board in header X22
-  - DH 560-300 Display board in edge connector X12
+  - DH 505-200 Display board in edge connector X36 via direct LVDS
+  - DH 531-100 SPI/I2C board in header X40
+  - DH 531-200 SPI/I2C board in header X41
+  - DH 560-300 Display board in edge connector X36
   - EA muRata 2AE M.2 A/E-Key card in connector X20
   - NXP SPF-29853-C1 MINISASTOCSI with OV5640 sensor in connector X31
   - NXP SPF-29853-C1 MINISASTOCSI with OV5640 sensor in connector X29
