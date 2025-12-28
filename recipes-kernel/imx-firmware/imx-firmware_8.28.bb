@@ -7,12 +7,11 @@ LICENSE:${PN}-sdma-imx7d = "Firmware-nxp-imx-firmware"
 LICENSE:${PN}-vpu-imx6d = "Firmware-nxp-imx-firmware"
 LICENSE:${PN}-vpu-imx6q = "Firmware-nxp-imx-firmware"
 
-LIC_FILES_CHKSUM = "file://COPYING;md5=10c0fda810c63b052409b15a5445671a"
+LIC_FILES_CHKSUM = "file://COPYING;md5=a93b654673e1bc8398ed1f30e0813359"
 
-EXTRA_HASH = "fbe0a4c"
+EXTRA_HASH = "994fa14"
 SRC_URI = "https://www.nxp.com/lgfiles/NMG/MAD/YOCTO/firmware-imx-${PV}-${EXTRA_HASH}.bin"
-SRC_URI[md5sum] = "440b125e897614d77fac663d90bcffc8"
-SRC_URI[sha256sum] = "2e27962332197ebebbb30138f6dfb365361d48d7efa565df97c4f79285b1ca50"
+SRC_URI[sha256sum] = "55996f340e87825685a00cd309901189066ec9545ee607734f942c3cde4d69dc"
 
 S = "${WORKDIR}/firmware-imx-${PV}-${EXTRA_HASH}"
 
