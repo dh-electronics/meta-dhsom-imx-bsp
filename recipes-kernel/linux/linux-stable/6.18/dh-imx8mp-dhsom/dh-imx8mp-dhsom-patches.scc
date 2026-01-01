@@ -1,0 +1,7 @@
+patch 0001-media-v4l2-subdev-Enable-the-streams-API.patch
+patch 0002-drm-bridge-samsung-dsim-Initialize-bridge-on-attach.patch
+patch 0003-drm-bridge-tc358767-Reset-chip-again-on-attach.patch
+patch 0004-drm-bridge-tc358767-Fix-odd-pixel-alignment.patch
+patch 0005-drm-bridge-tc358767-Improve-DPI-output-pixel-clock-a.patch
+patch 0006-arm64-dts-imx8mp-Add-DT-overlays-for-i.MX8MP-DHCOM.patch
+patch 9000-FIXME-patch-out-transitional-Kconfig-keyword.patch
