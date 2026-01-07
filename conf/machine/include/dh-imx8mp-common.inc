@@ -1,6 +1,5 @@
 MACHINEOVERRIDES =. "dh-imx8m-dhsom:dh-imx8mp-dhsom:"
 
-require conf/machine/include/dh-imx-mainline.inc
 require conf/machine/include/dh-imx-common.inc
 
 DEFAULTTUNE ?= "cortexa53-crypto"
@@ -27,6 +26,10 @@ UBOOT_DTBO_LOADADDRESS = "0x5c080000"
 WKS_FILE = "sdimage-imx8mp.wks"
 
 IMAGE_INSTALL:append = " trusted-firmware-a"
+
+MACHINE_ESSENTIAL_EXTRA_RDEPENDS += " \
+	imx-firmware-sdma-imx7d \
+	"
 
 # Add any optional config files that might be present e.g. in other layers
 include conf/machine/include/dh-imx8mp-common-extra.inc

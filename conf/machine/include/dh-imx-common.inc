@@ -2,6 +2,8 @@ MACHINEOVERRIDES =. "dh-dhsom:dh-imx-dhsom:"
 
 MACHINE_FEATURES ?= "apm alsa ext2 keyboard screen serial touchscreen usbgadget usbhost"
 
+MACHINE_FEATURES += " mainline"
+
 # U-Boot bootloader
 UBOOT_ENV = "boot"
 UBOOT_ENV_SUFFIX = "scr"
@@ -24,11 +26,27 @@ PREFERRED_VERSION_u-boot-mainline-tools-native ?= "2026.01%"
 # Linux kernel
 KERNEL_IMAGETYPE = "fitImage"
 KERNEL_CLASSES += " kernel-fitimage "
+PREFERRED_PROVIDER_virtual/kernel ?= "linux-stable"
+
+# Mesa
+PREFERRED_PROVIDER_virtual/egl ?= "mesa-mainline"
+PREFERRED_PROVIDER_virtual/libgl ?= "mesa-mainline"
+PREFERRED_PROVIDER_virtual/libgles1 ?= "mesa-mainline"
+PREFERRED_PROVIDER_virtual/libgles2 ?= "mesa-mainline"
+PREFERRED_PROVIDER_virtual/libgles3 ?= "mesa-mainline"
+PREFERRED_PROVIDER_virtual/mesa ?= "mesa-mainline"
+PREFERRED_PROVIDER_drm ?= "libdrm-mainline"
+PREFERRED_PROVIDER_libdrm ?= "libdrm-mainline"
+PREFERRED_PROVIDER_nativesdk-libdrm ?= "nativesdk-libdrm-mainline"
+PREFERRED_PROVIDER_wayland-protocols ?= "wayland-protocols-mainline"
+PREFERRED_PROVIDER_nativesdk-wayland-protocols ?= "nativesdk-wayland-protocols-mainline"
+
+KERNEL_MODULES_AUTOLOAD += " etnaviv "
 
 # WPE (from meta-webkit)
 PREFERRED_RPROVIDER_virtual/wpebackend ?= "wpebackend-fdo"
 
-# Ship kernel modules
+# Ship essential components
 MACHINE_ESSENTIAL_EXTRA_RDEPENDS += " \
 	kernel-modules kernel-devicetree \
 	u-boot-default-env \
