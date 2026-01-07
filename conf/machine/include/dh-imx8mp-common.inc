@@ -5,8 +5,8 @@ require conf/machine/include/dh-imx-common.inc
 DEFAULTTUNE ?= "cortexa53-crypto"
 SOC_FAMILY ?= "imx8mp"
 
-require conf/machine/include/arm/armv8a/tune-cortexa53.inc
 require conf/machine/include/soc-family.inc
+require conf/machine/include/arm/armv8a/tune-cortexa53.inc
 
 SERIAL_CONSOLES = "115200;ttymxc0"
 
