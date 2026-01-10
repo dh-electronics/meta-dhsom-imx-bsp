@@ -43,9 +43,8 @@ do_install() {
 	install -m 0644 firmware/sdma/sdma-imx7d.bin ${D}${nonarch_base_libdir}/firmware/imx/sdma/
 
 	# CnM Coda VPU firmware
-	install -d ${D}${nonarch_base_libdir}/firmware/vpu/
-	install -m 0644 firmware/vpu/vpu_fw_imx6d.bin ${D}${nonarch_base_libdir}/firmware/vpu/
-	install -m 0644 firmware/vpu/vpu_fw_imx6q.bin ${D}${nonarch_base_libdir}/firmware/vpu/
+	install -m 0644 firmware/vpu/vpu_fw_imx6d.bin ${D}${nonarch_base_libdir}/firmware/
+	install -m 0644 firmware/vpu/vpu_fw_imx6q.bin ${D}${nonarch_base_libdir}/firmware/
 }
 
 do_deploy() {
@@ -66,8 +65,8 @@ PACKAGES = " \
 FILES:${PN}-nxp-imx-license = "${nonarch_base_libdir}/firmware/imx/COPYING"
 FILES:${PN}-sdma-imx6q = " ${nonarch_base_libdir}/firmware/imx/sdma/sdma-imx6q.bin "
 FILES:${PN}-sdma-imx7d = " ${nonarch_base_libdir}/firmware/imx/sdma/sdma-imx7d.bin "
-FILES:${PN}-vpu-imx6d = " ${nonarch_base_libdir}/firmware/vpu/vpu_fw_imx6d.bin "
-FILES:${PN}-vpu-imx6q = " ${nonarch_base_libdir}/firmware/vpu/vpu_fw_imx6q.bin "
+FILES:${PN}-vpu-imx6d = " ${nonarch_base_libdir}/firmware/vpu_fw_imx6d.bin "
+FILES:${PN}-vpu-imx6q = " ${nonarch_base_libdir}/firmware/vpu_fw_imx6q.bin "
 
 RREPLACES:${PN}-sdma-imx6q = "linux-firmware-imx-sdma-imx6q"
 RREPLACES:${PN}-sdma-imx7d = "linux-firmware-imx-sdma-imx7d"
