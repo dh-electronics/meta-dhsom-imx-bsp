@@ -23,7 +23,7 @@ diff --git a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-som.dtsi b/arch/arm64/bo
 index c2fd6b4c2a6e1..6744cea7bf2a9 100644
 --- a/arch/arm64/boot/dts/freescale/imx8mp-dhcom-som.dtsi
 +++ b/arch/arm64/boot/dts/freescale/imx8mp-dhcom-som.dtsi
-@@ -105,14 +105,14 @@ mdio {
+@@ -105,7 +105,7 @@ mdio {
  		#size-cells = <0>;
  
  		/* Up to one of these two PHYs may be populated. */
@@ -31,7 +31,8 @@ index c2fd6b4c2a6e1..6744cea7bf2a9 100644
 +		ethphy0f: ethernet-phy@1 { /* SMSC LAN8740Ai */
  			compatible = "ethernet-phy-id0007.c110",
  				     "ethernet-phy-ieee802.3-c22";
- 			interrupt-parent = <&gpio3>;
+ 			clocks = <&clk IMX8MP_CLK_ENET_QOS>;
+@@ -113,7 +113,7 @@ ethphy0f: ethernet-phy@0 { /* SMSC LAN8740Ai */
  			interrupts = <19 IRQ_TYPE_LEVEL_LOW>;
  			pinctrl-0 = <&pinctrl_ethphy0>;
  			pinctrl-names = "default";
@@ -40,7 +41,7 @@ index c2fd6b4c2a6e1..6744cea7bf2a9 100644
  			reset-assert-us = <1000>;
  			reset-deassert-us = <1000>;
  			reset-gpios = <&ioexp 4 GPIO_ACTIVE_LOW>;
-@@ -151,14 +151,14 @@ mdio {
+@@ -152,14 +152,14 @@ mdio {
  		#size-cells = <0>;
  
  		/* Up to one PHY may be populated. */
