@@ -1,4 +1,3 @@
 patch 0001-ARM-dts-imx-Add-DT-overlays-for-i.MX6-DHSOM-boards.patch
-patch 0002-drm-panel-simple-fix-connector-type-for-DataImage-SC.patch
 patch 0003-drm-imx-parallel-display-Prefer-bus-format-set-via-l.patch
 patch 9000-FIXME-patch-out-transitional-Kconfig-keyword.patch
