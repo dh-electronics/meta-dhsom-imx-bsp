@@ -17,5 +17,5 @@ SRC_URI = "\
 
 # We use the revision in order to avoid having to fetch it from the
 # repo during parse
-SRCREV = "30ca44e9c81552098548ad902f8e1ab5ffdab97e"
-SRCREV:dh-imx6ull-dhsom = "7e1b0c796401a276f568ef96428e34f6cfade180"
+SRCREV = "2ac5fef63c95f503eb0231976ca3709d44de7bb0"
+SRCREV:dh-imx6ull-dhsom = "9725d01f823432179428350dd412e15525f44404"
