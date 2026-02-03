@@ -2,30 +2,48 @@ do_install:append:dh-imx6ull-dhcom-drc02 () {
 	# Symlink the firmware name to match board type
 	ln -s CYW43430A1.1DX.hcd \
 	      ${D}${nonarch_base_libdir}/firmware/brcm/BCM43430A1.dh,imx6ull-dhcom-drc02.hcd
+	ln -s CYW4343A2.1YN.hcd \
+	      ${D}${nonarch_base_libdir}/firmware/brcm/BCM4343A2.dh,imx6ull-dhcom-drc02.hcd
 }
 
 FILES:${PN}-bcm4343a1:append:dh-imx6ull-dhcom-drc02 = " \
 	${nonarch_base_libdir}/firmware/brcm/BCM43430A1.dh,imx6ull-dhcom-drc02.hcd \
 	"
 
+FILES:${PN}-bcm4343a2:append:dh-imx6ull-dhcom-drc02 = " \
+	${nonarch_base_libdir}/firmware/brcm/BCM4343A2.dh,imx6ull-dhcom-drc02.hcd \
+	"
+
 do_install:append:dh-imx6ull-dhcom-pdk2 () {
 	# Symlink the firmware name to match board type
 	ln -s CYW43430A1.1DX.hcd \
 	      ${D}${nonarch_base_libdir}/firmware/brcm/BCM43430A1.dh,imx6ull-dhcom-pdk2.hcd
+	ln -s CYW4343A2.1YN.hcd \
+	      ${D}${nonarch_base_libdir}/firmware/brcm/BCM4343A2.dh,imx6ull-dhcom-pdk2.hcd
 }
 
 FILES:${PN}-bcm4343a1:append:dh-imx6ull-dhcom-pdk2 = " \
 	${nonarch_base_libdir}/firmware/brcm/BCM43430A1.dh,imx6ull-dhcom-pdk2.hcd \
 	"
 
+FILES:${PN}-bcm4343a2:append:dh-imx6ull-dhcom-pdk2 = " \
+	${nonarch_base_libdir}/firmware/brcm/BCM4343A2.dh,imx6ull-dhcom-pdk2.hcd \
+	"
+
 do_install:append:dh-imx6ull-dhcom-picoitx () {
 	# Symlink the firmware name to match board type
 	ln -s CYW43430A1.1DX.hcd \
 	      ${D}${nonarch_base_libdir}/firmware/brcm/BCM43430A1.dh,imx6ull-dhcom-picoitx.hcd
+	ln -s CYW4343A2.1YN.hcd \
+	      ${D}${nonarch_base_libdir}/firmware/brcm/BCM4343A2.dh,imx6ull-dhcom-picoitx.hcd
 }
 
 FILES:${PN}-bcm4343a1:append:dh-imx6ull-dhcom-picoitx = " \
 	${nonarch_base_libdir}/firmware/brcm/BCM43430A1.dh,imx6ull-dhcom-picoitx.hcd \
+	"
+
+FILES:${PN}-bcm4343a2:append:dh-imx6ull-dhcom-picoitx = " \
+	${nonarch_base_libdir}/firmware/brcm/BCM4343A2.dh,imx6ull-dhcom-picoitx.hcd \
 	"
 
 do_install:append:dh-imx8mp-dhcom-pdk2 () {
