@@ -1,0 +1,44 @@
+From 3e263e63cc52d06ab910619b383d0160cbbc336c Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@nabladev.com>
+Date: Thu, 5 Feb 2026 12:18:39 +0100
+Subject: [PATCH] ARM: dts: imx6ull-dhcor: Handle both 1DX and 1YN WiFi on
+ i.MX6ULL DHCOR
+
+The muRata 1DX WiFi/BT chip is mounted on the DHCOM i.MX6ULL. This chip
+has been discontinued and replaced by the muRata 1YN chip. The new chip
+is a drop-in replacement of the old chip. To support both chips for the
+i.MX6ULL DHCOR, drop the more specific compatible string and let the
+driver auto-detect the chip type. Currently, there are no known quirks
+that would apply only to one or the other chip.
+
+Upstream-Status: Submitted [https://lore.kernel.org/linux-arm-kernel/20260209170739.22379-1-marex@nabladev.com/]
+Signed-off-by: Marek Vasut <marex@nabladev.com>
+---
+ arch/arm/boot/dts/imx6ull-dhcor-som.dtsi | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/arch/arm/boot/dts/imx6ull-dhcor-som.dtsi b/arch/arm/boot/dts/imx6ull-dhcor-som.dtsi
+index 32a6022625d97..b94cfbad9c0e4 100644
+--- a/arch/arm/boot/dts/imx6ull-dhcor-som.dtsi
++++ b/arch/arm/boot/dts/imx6ull-dhcor-som.dtsi
+@@ -193,7 +193,7 @@ &uart2 {
+ 	 * the speed can be increased accordingly.
+ 	 */
+ 	bluetooth: bluetooth {
+-		compatible = "brcm,bcm43430a1-bt"; /* muRata 1DX */
++		compatible = "brcm,bcm4329-bt"; /* muRata 1DX or 1YN */
+ 		max-speed = <3000000>;
+ 		vbat-supply = <&vcc_3v3>;
+ 		vddio-supply = <&vcc_3v3>;
+@@ -222,7 +222,7 @@ &usdhc1 {
+ 	status = "okay";
+ 
+ 	brcmf: wifi@1 {
+-		compatible = "brcm,bcm43430a1-fmac", "brcm,bcm4329-fmac"; /* muRata 1DX */
++		compatible = "brcm,bcm4329-fmac"; /* muRata 1DX or 1YN */
+ 		reg = <1>;
+ 	};
+ };
+-- 
+2.51.0
+
