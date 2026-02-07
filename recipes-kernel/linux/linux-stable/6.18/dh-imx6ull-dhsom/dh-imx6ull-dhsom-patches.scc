@@ -1,2 +1,3 @@
 patch 0001-ARM-dts-imx6ull-dhcor-Handle-both-1DX-and-1YN-WiFi-o.patch
+patch 0002-Bluetooth-btbcm-Add-entry-for-BCM4343A2-UART-Bluetoo.patch
 patch 9000-FIXME-patch-out-transitional-Kconfig-keyword.patch

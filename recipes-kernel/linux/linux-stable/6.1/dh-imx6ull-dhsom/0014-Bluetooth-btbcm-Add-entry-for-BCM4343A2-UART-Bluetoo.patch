@@ -1,0 +1,30 @@
+From 6a48e8856bb9f4b03be3f3fc6b1ae6ee4a3c970a Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@nabladev.com>
+Date: Sat, 7 Feb 2026 01:21:17 +0100
+Subject: [PATCH] Bluetooth: btbcm: Add entry for BCM4343A2 UART Bluetooth
+
+This patch adds the device ID for the BCM4343A2 module, found e.g.
+in the muRata 1YN WiFi+BT combined device. The required firmware
+file is named 'BCM4343A2.hcd'.
+
+Upstream-Status: Submitted [https://lore.kernel.org/linux-bluetooth/20260209171158.22641-1-marex@nabladev.com/]
+Signed-off-by: Marek Vasut <marex@nabladev.com>
+---
+ drivers/bluetooth/btbcm.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/bluetooth/btbcm.c b/drivers/bluetooth/btbcm.c
+index 3a3a56ddbb06d..93368ef56ddc5 100644
+--- a/drivers/bluetooth/btbcm.c
++++ b/drivers/bluetooth/btbcm.c
+@@ -507,6 +507,7 @@ static const struct bcm_subver_table bcm_uart_subver_table[] = {
+ 	{ 0x6119, "BCM4345C0"	},	/* 003.001.025 */
+ 	{ 0x6606, "BCM4345C5"	},	/* 003.006.006 */
+ 	{ 0x230f, "BCM4356A2"	},	/* 001.003.015 */
++	{ 0x2310, "BCM4343A2"	},	/* 001.003.016 */
+ 	{ 0x220e, "BCM20702A1"  },	/* 001.002.014 */
+ 	{ 0x420d, "BCM4349B1"	},	/* 002.002.013 */
+ 	{ 0x420e, "BCM4349B1"	},	/* 002.002.014 */
+-- 
+2.51.0
+
