@@ -43,8 +43,6 @@ PREFERRED_PROVIDER_wayland-protocols ?= "wayland-protocols-mainline"
 PREFERRED_PROVIDER_wayland-protocols-native ?= "wayland-protocols-native"
 PREFERRED_PROVIDER_nativesdk-wayland-protocols ?= "nativesdk-wayland-protocols-mainline"
 
-KERNEL_MODULES_AUTOLOAD += " etnaviv "
-
 # WPE (from meta-webkit)
 PREFERRED_RPROVIDER_virtual/wpebackend ?= "wpebackend-fdo"
 
