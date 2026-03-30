@@ -4,6 +4,10 @@ require u-boot-dhsom-common.inc
 
 SRC_URI:append:dh-imx-dhsom = " \
 	file://default-device-tree.cfg \
+	file://0001-arm64-imx8mp-Fold-inline-ECC-into-spl.c-on-DH-i.MX8M.patch \
+	file://0002-arm64-imx8mp-Deduplicate-DRAM-size-tables-on-DH-i.MX.patch \
+	file://0003-arm64-imx8mp-Deduplicate-2G-and-4G-2r-DRAM-timings-o.patch \
+	file://0004-arm64-imx8mp-Add-4G-1r-DRAM-timings-on-DH-i.MX8MP-DH.patch \
 	"
 
 EXTRA_OEMAKE:append:dh-imx8mp-dhsom = " ATF_LOAD_ADDR=0x970000"
@@ -20,4 +24,4 @@ do_compile:prepend:dh-imx8mp-dhsom () {
 # format is -${MACHINE}-date.extraversion. The date is in the
 # format YYYYMMDD, the extraversion is used in case there are
 # multiple releases during a single day, which is unlikely.
-UBOOT_LOCALVERSION:dh-imx-dhsom ?= "-${MACHINE}-20260111.01"
+UBOOT_LOCALVERSION:dh-imx-dhsom ?= "-${MACHINE}-20260401.01"

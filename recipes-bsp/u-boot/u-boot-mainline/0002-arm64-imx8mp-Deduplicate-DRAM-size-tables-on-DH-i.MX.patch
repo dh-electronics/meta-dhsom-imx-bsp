@@ -1,0 +1,70 @@
+From dbb018914756b070a377e7ad79016825604e1c29 Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@nabladev.com>
+Date: Mon, 30 Mar 2026 22:44:02 +0200
+Subject: [PATCH 2/4] arm64: imx8mp: Deduplicate DRAM size tables on DH i.MX8MP
+ DHCOM SoM
+
+The DRAM size tables are shared by SPL and U-Boot proper, deduplicate
+those tables into lpddr4_timing.h . No functional change.
+
+Upstream-Status: Submitted [https://lore.kernel.org/u-boot/20260401210238.60010-2-marex@nabladev.com/]
+Signed-off-by: Marek Vasut <marex@nabladev.com>
+---
+ board/dhelectronics/dh_imx8mp/imx8mp_dhcom_pdk2.c | 3 +--
+ board/dhelectronics/dh_imx8mp/lpddr4_timing.h     | 4 ++++
+ board/dhelectronics/dh_imx8mp/spl.c               | 3 +--
+ 3 files changed, 6 insertions(+), 4 deletions(-)
+
+diff --git a/board/dhelectronics/dh_imx8mp/imx8mp_dhcom_pdk2.c b/board/dhelectronics/dh_imx8mp/imx8mp_dhcom_pdk2.c
+index 5c35a5bf447..5ab169f400d 100644
+--- a/board/dhelectronics/dh_imx8mp/imx8mp_dhcom_pdk2.c
++++ b/board/dhelectronics/dh_imx8mp/imx8mp_dhcom_pdk2.c
+@@ -30,12 +30,11 @@ int mach_cpu_init(void)
+ 
+ int board_phys_sdram_size(phys_size_t *size)
+ {
+-	const u16 memsz[] = { 512, 1024, 1536, 2048, 3072, 4096, 6144, 8192 };
+ 	const u8 ecc = readl(DDRC_ECCCFG0(0)) & DDRC_ECCCFG0_ECC_MODE_MASK;
+ 	u8 memcfg = dh_get_memcfg();
+ 
+ 	/* 896 kiB, i.e. 1 MiB without 12.5% reserved for in-band ECC */
+-	*size = (u64)memsz[memcfg] * (SZ_1M - (ecc ? (SZ_1M / 8) : 0));
++	*size = (u64)dh_imx8mp_dhcom_dram_size[memcfg] * (SZ_1M - (ecc ? (SZ_1M / 8) : 0));
+ 
+ 	return 0;
+ }
+diff --git a/board/dhelectronics/dh_imx8mp/lpddr4_timing.h b/board/dhelectronics/dh_imx8mp/lpddr4_timing.h
+index f8078051f2f..0f9f47bbe11 100644
+--- a/board/dhelectronics/dh_imx8mp/lpddr4_timing.h
++++ b/board/dhelectronics/dh_imx8mp/lpddr4_timing.h
+@@ -6,6 +6,10 @@
+ #ifndef __LPDDR4_TIMING_H__
+ #define __LPDDR4_TIMING_H__
+ 
++static const u16 dh_imx8mp_dhcom_dram_size[] = {
++	512, 1024, 1536, 2048, 3072, 4096, 6144, 8192
++};
++
+ extern struct dram_timing_info dh_imx8mp_dhcom_dram_timing_16g_x32;
+ extern struct dram_timing_info dh_imx8mp_dhcom_dram_timing_32g_x32;
+ 
+diff --git a/board/dhelectronics/dh_imx8mp/spl.c b/board/dhelectronics/dh_imx8mp/spl.c
+index 4496269a69b..c6877a66da4 100644
+--- a/board/dhelectronics/dh_imx8mp/spl.c
++++ b/board/dhelectronics/dh_imx8mp/spl.c
+@@ -119,11 +119,10 @@ static struct dram_timing_info *dram_timing_info[8] = {
+ 
+ static void spl_dram_init(void)
+ {
+-	const u16 size[] = { 512, 1024, 1536, 2048, 3072, 4096, 6144, 8192 };
+ 	u8 memcfg = dh_get_memcfg();
+ 	int i;
+ 
+-	printf("DDR:   %d MiB [0x%x]\n", size[memcfg], memcfg);
++	printf("DDR:   %d MiB [0x%x]\n", dh_imx8mp_dhcom_dram_size[memcfg], memcfg);
+ 
+ 	if (!dram_timing_info[memcfg]) {
+ 		printf("Unsupported DRAM strapping, trying lowest supported. MEMCFG=0x%x\n",
+-- 
+2.53.0
+

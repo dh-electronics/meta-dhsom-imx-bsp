@@ -1,0 +1,119 @@
+From 7eae58d765ab4e1d91ac46e0200f2b0b62e6e1ef Mon Sep 17 00:00:00 2001
+From: Marek Vasut <marex@nabladev.com>
+Date: Mon, 30 Mar 2026 20:55:17 +0200
+Subject: [PATCH 1/4] arm64: imx8mp: Fold inline ECC into spl.c on DH i.MX8MP
+ DHCOM SoM
+
+The inline ECC configuration is identical for 2 GiB DRAM variants
+and 4 GiB DRAM variants of the SoM, no matter the rank count. Fold
+the ECC configuration directly into spl.c to simplify the upcoming
+deduplication. No functional change.
+
+Upstream-Status: Submitted [https://lore.kernel.org/u-boot/20260401191617.20141-1-marex@nabladev.com/]
+Signed-off-by: Marek Vasut <marex@nabladev.com>
+---
+ board/dhelectronics/dh_imx8mp/lpddr4_timing.h |  4 ---
+ .../dh_imx8mp/lpddr4_timing_2G_32.c           | 14 ----------
+ .../dh_imx8mp/lpddr4_timing_4G_32.c           | 14 ----------
+ board/dhelectronics/dh_imx8mp/spl.c           | 26 +++++++++++++++++++
+ 4 files changed, 26 insertions(+), 32 deletions(-)
+
+diff --git a/board/dhelectronics/dh_imx8mp/lpddr4_timing.h b/board/dhelectronics/dh_imx8mp/lpddr4_timing.h
+index c4d51174a33..f8078051f2f 100644
+--- a/board/dhelectronics/dh_imx8mp/lpddr4_timing.h
++++ b/board/dhelectronics/dh_imx8mp/lpddr4_timing.h
+@@ -9,10 +9,6 @@
+ extern struct dram_timing_info dh_imx8mp_dhcom_dram_timing_16g_x32;
+ extern struct dram_timing_info dh_imx8mp_dhcom_dram_timing_32g_x32;
+ 
+-typedef void (*scrub_func_t)(void);
+-extern void dh_imx8mp_dhcom_dram_scrub_16g_x32(void);
+-extern void dh_imx8mp_dhcom_dram_scrub_32g_x32(void);
+-
+ u8 dh_get_memcfg(void);
+ 
+ #define DDRC_ECCCFG0_ECC_MODE_MASK	0x7
+diff --git a/board/dhelectronics/dh_imx8mp/lpddr4_timing_2G_32.c b/board/dhelectronics/dh_imx8mp/lpddr4_timing_2G_32.c
+index add7a0bf23b..3cb868311f3 100644
+--- a/board/dhelectronics/dh_imx8mp/lpddr4_timing_2G_32.c
++++ b/board/dhelectronics/dh_imx8mp/lpddr4_timing_2G_32.c
+@@ -1853,17 +1853,3 @@ struct dram_timing_info dh_imx8mp_dhcom_dram_timing_16g_x32 = {
+ 	.ddrphy_pie_num = ARRAY_SIZE(ddr_phy_pie),
+ 	.fsp_table = { 3600, 400, 100, },
+ };
+-
+-#if IS_ENABLED(CONFIG_IMX8M_DRAM_INLINE_ECC)
+-void dh_imx8mp_dhcom_dram_scrub_16g_x32(void)
+-{
+-	ddrc_inline_ecc_scrub(0x0,0x3ffffff);
+-	ddrc_inline_ecc_scrub(0x4000000,0x7ffffff);
+-	ddrc_inline_ecc_scrub(0x8000000,0xbffffff);
+-	ddrc_inline_ecc_scrub(0xc000000,0xfffffff);
+-	ddrc_inline_ecc_scrub(0x10000000,0x13ffffff);
+-	ddrc_inline_ecc_scrub(0x14000000,0x17ffffff);
+-	ddrc_inline_ecc_scrub(0x18000000,0x1bffffff);
+-	ddrc_inline_ecc_scrub_end(0x0,0x1fffffff);
+-}
+-#endif
+diff --git a/board/dhelectronics/dh_imx8mp/lpddr4_timing_4G_32.c b/board/dhelectronics/dh_imx8mp/lpddr4_timing_4G_32.c
+index 41b078f6e9f..3a475076e75 100644
+--- a/board/dhelectronics/dh_imx8mp/lpddr4_timing_4G_32.c
++++ b/board/dhelectronics/dh_imx8mp/lpddr4_timing_4G_32.c
+@@ -1857,17 +1857,3 @@ struct dram_timing_info dh_imx8mp_dhcom_dram_timing_32g_x32 = {
+ 	.ddrphy_pie_num = ARRAY_SIZE(ddr_phy_pie),
+ 	.fsp_table = { 3600, 400, 100, },
+ };
+-
+-#if IS_ENABLED(CONFIG_IMX8M_DRAM_INLINE_ECC)
+-void dh_imx8mp_dhcom_dram_scrub_32g_x32(void)
+-{
+-	ddrc_inline_ecc_scrub(0x0,0x7ffffff);
+-	ddrc_inline_ecc_scrub(0x8000000,0xfffffff);
+-	ddrc_inline_ecc_scrub(0x10000000,0x17ffffff);
+-	ddrc_inline_ecc_scrub(0x18000000,0x1fffffff);
+-	ddrc_inline_ecc_scrub(0x20000000,0x27ffffff);
+-	ddrc_inline_ecc_scrub(0x28000000,0x2fffffff);
+-	ddrc_inline_ecc_scrub(0x30000000,0x37ffffff);
+-	ddrc_inline_ecc_scrub_end(0x0,0x3fffffff);
+-}
+-#endif
+diff --git a/board/dhelectronics/dh_imx8mp/spl.c b/board/dhelectronics/dh_imx8mp/spl.c
+index 714f846521e..4496269a69b 100644
+--- a/board/dhelectronics/dh_imx8mp/spl.c
++++ b/board/dhelectronics/dh_imx8mp/spl.c
+@@ -141,6 +141,32 @@ static void spl_dram_init(void)
+ }
+ 
+ #if IS_ENABLED(CONFIG_IMX8M_DRAM_INLINE_ECC)
++static void dh_imx8mp_dhcom_dram_scrub_16g_x32(void)
++{
++	ddrc_inline_ecc_scrub(0x0,0x3ffffff);
++	ddrc_inline_ecc_scrub(0x4000000,0x7ffffff);
++	ddrc_inline_ecc_scrub(0x8000000,0xbffffff);
++	ddrc_inline_ecc_scrub(0xc000000,0xfffffff);
++	ddrc_inline_ecc_scrub(0x10000000,0x13ffffff);
++	ddrc_inline_ecc_scrub(0x14000000,0x17ffffff);
++	ddrc_inline_ecc_scrub(0x18000000,0x1bffffff);
++	ddrc_inline_ecc_scrub_end(0x0,0x1fffffff);
++}
++
++static void dh_imx8mp_dhcom_dram_scrub_32g_x32(void)
++{
++	ddrc_inline_ecc_scrub(0x0,0x7ffffff);
++	ddrc_inline_ecc_scrub(0x8000000,0xfffffff);
++	ddrc_inline_ecc_scrub(0x10000000,0x17ffffff);
++	ddrc_inline_ecc_scrub(0x18000000,0x1fffffff);
++	ddrc_inline_ecc_scrub(0x20000000,0x27ffffff);
++	ddrc_inline_ecc_scrub(0x28000000,0x2fffffff);
++	ddrc_inline_ecc_scrub(0x30000000,0x37ffffff);
++	ddrc_inline_ecc_scrub_end(0x0,0x3fffffff);
++}
++
++typedef void (*scrub_func_t)(void);
++
+ static const scrub_func_t dram_scrub_fn[8] = {
+ 	NULL,					/* 512 MiB */
+ 	NULL,					/* 1024 MiB */
+-- 
+2.53.0
+
