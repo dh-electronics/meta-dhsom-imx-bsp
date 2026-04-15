@@ -23,6 +23,7 @@ UBOOT_SUFFIX ?= "bin"
 UBOOT_DTB_LOADADDRESS = "0x5c000000"
 UBOOT_DTBO_LOADADDRESS = "0x5c080000"
 
+WKS_SEARCH_PATH .= "${@':'.join('%s/files/wic' % p for p in '${BBPATH}'.split(':'))}"
 WKS_FILE = "sdimage-imx8mp.wks"
 
 IMAGE_INSTALL:append = " trusted-firmware-a"
