@@ -9,6 +9,7 @@ PREFERRED_VERSION_linux-stable ?= "6.18%"
 KERNEL_DEVICETREE_PATH_PREFIX = "${@'nxp/imx/' if bb.utils.vercmp_string_op(d.getVar('PREFERRED_VERSION_linux-stable'), '6.6', '>=') else ''}"
 KERNEL_DTBVENDORED = "0"
 KERNEL_DTC_FLAGS += "-@"
+KERNEL_IMAGETYPE = "${@'fitImage' if (d.getVar('LAYERSERIES_CORENAMES') in ['scarthgap']) else 'zImage'}"
 
 # U-Boot bootloader
 UBOOT_MAKE_TARGET := "u-boot-with-spl.imx"

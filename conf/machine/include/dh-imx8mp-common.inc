@@ -14,6 +14,7 @@ SERIAL_CONSOLES = "115200;ttymxc0"
 PREFERRED_VERSION_linux-stable ?= "6.18%"
 KERNEL_DTBVENDORED = "1"
 KERNEL_DTC_FLAGS += "-@"
+KERNEL_IMAGETYPE = "${@'fitImage' if (d.getVar('LAYERSERIES_CORENAMES') in ['scarthgap']) else 'Image'}"
 
 # U-Boot bootloader
 UBOOT_ENTRYPOINT := "0x40200000"

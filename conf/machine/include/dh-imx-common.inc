@@ -24,8 +24,7 @@ PREFERRED_VERSION_u-boot-mainline-tools ?= "2026.07%"
 PREFERRED_VERSION_u-boot-mainline-tools-native ?= "2026.07%"
 
 # Linux kernel
-KERNEL_IMAGETYPE = "fitImage"
-KERNEL_CLASSES += " kernel-fitimage "
+KERNEL_CLASSES += "${@'kernel-fitimage' if (d.getVar('LAYERSERIES_CORENAMES') in ['scarthgap']) else 'kernel-fit-extra-artifacts'}"
 PREFERRED_PROVIDER_virtual/kernel ?= "linux-stable"
 
 # Mesa
@@ -59,7 +58,7 @@ INITRAMFS_FSTYPES ?= "cpio.zst"
 DH_UBOOT_RECIPE ?= "u-boot-mainline"
 EXTRA_IMAGEDEPENDS += "${DH_UBOOT_RECIPE}"
 IMAGE_BOOT_FILES ?= "${KERNEL_IMAGETYPE}"
-IMAGE_INSTALL:append = " kernel-devicetree kernel-image-fitimage ${DH_UBOOT_RECIPE} "
+IMAGE_INSTALL:append = " kernel-devicetree ${DH_UBOOT_RECIPE} ${@'kernel-image-fitimage' if (d.getVar('LAYERSERIES_CORENAMES') in ['scarthgap']) else 'linux-yocto-fitimage'} "
 do_image_wic[depends] += "mtools-native:do_populate_sysroot dosfstools-native:do_populate_sysroot ${DH_UBOOT_RECIPE}:do_deploy"
 
 # Add any optional config files that might be present e.g. in other layers
