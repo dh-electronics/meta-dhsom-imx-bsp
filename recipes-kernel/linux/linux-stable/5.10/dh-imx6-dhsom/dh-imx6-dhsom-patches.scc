@@ -2,3 +2,6 @@ patch 0001-kbuild-Add-support-for-building-.dts-into-.dtbo.patch
 patch 0002-drm-bridge-lvds-codec-Add-support-for-pixel-data-sam.patch
 patch 0003-ARM-dts-imx6-Add-DT-overlays-for-iMX6QDL-DHCOM-PDK2.patch
 patch 0004-ARM-dts-imx6q-dhcom-Use-1G-ethernet-on-the-PDK2-boar.patch
+patch 0005-tools-lib-api-Add-install-target.patch
+patch 0006-tools-lib-subcmd-Add-install-target.patch
+patch 0007-tool-lib-symbol-Add-Makefile-Build.patch
