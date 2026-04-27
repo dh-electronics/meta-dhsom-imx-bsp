@@ -13,18 +13,20 @@ EXTRA_HASH = "994fa14"
 SRC_URI = "https://www.nxp.com/lgfiles/NMG/MAD/YOCTO/firmware-imx-${PV}-${EXTRA_HASH}.bin"
 SRC_URI[sha256sum] = "55996f340e87825685a00cd309901189066ec9545ee607734f942c3cde4d69dc"
 
-S = "${WORKDIR}/firmware-imx-${PV}-${EXTRA_HASH}"
+S = "${@d.getVar('WORKDIR') if (d.getVar('LAYERSERIES_CORENAMES') in ['scarthgap']) else d.getVar('UNPACKDIR')}/firmware-imx-${PV}-${EXTRA_HASH}"
 
 inherit allarch deploy
 
 do_extra_unpack() {
-	dd if=${WORKDIR}/firmware-imx-${PV}-${EXTRA_HASH}.bin of=${WORKDIR}/firmware-imx-${PV}-${EXTRA_HASH}.tar.bz2 \
-		bs=$(grep -boam 1 'BZh' ${WORKDIR}/firmware-imx-${PV}-${EXTRA_HASH}.bin | cut -d ":" -f 1) \
+	dd if=${UNPACKDIR}/firmware-imx-${PV}-${EXTRA_HASH}.bin of=${UNPACKDIR}/firmware-imx-${PV}-${EXTRA_HASH}.tar.bz2 \
+		bs=$(grep -boam 1 'BZh' ${UNPACKDIR}/firmware-imx-${PV}-${EXTRA_HASH}.bin | cut -d ":" -f 1) \
 		skip=1
-	tar -C ${WORKDIR} -xf ${WORKDIR}/firmware-imx-${PV}-${EXTRA_HASH}.tar.bz2
+	tar -C ${UNPACKDIR} -xf ${UNPACKDIR}/firmware-imx-${PV}-${EXTRA_HASH}.tar.bz2
 }
 
-do_unpack:append() {
+python do_unpack:append() {
+    if (d.getVar('LAYERSERIES_CORENAMES') in ["scarthgap"]):
+        d.setVar('UNPACKDIR', d.getVar("WORKDIR"))
     bb.build.exec_func('do_extra_unpack', d)
 }
 
