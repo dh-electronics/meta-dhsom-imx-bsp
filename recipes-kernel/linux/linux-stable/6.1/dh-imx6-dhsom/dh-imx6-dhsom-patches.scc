@@ -1,1 +1,4 @@
 patch 0001-ARM-dts-imx-Add-DT-overlays-for-i.MX6-DHSOM-boards.patch
+patch 0002-tools-lib-api-Add-install-target.patch
+patch 0003-tool-lib-symbol-Add-Makefile-Build.patch
+patch 0004-libbpf-Fix-Wdiscarded-qualifiers-under-C23.patch
