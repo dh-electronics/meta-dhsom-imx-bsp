@@ -6,5 +6,5 @@ PACKAGECONFIG:append:dh-imx-dhsom = " \
 	${@bb.utils.contains('DISTRO_FEATURES', 'wayland', 'wayland', '', d)} \
 	"
 
-EXTRA_OEMESON:append:dh-imx8mp-dhsom = " ${@'' if d.getVar('LAYERSERIES_CORENAMES') in ["kirkstone"] else '-Dteflon=true'}"
+EXTRA_OEMESON:append:dh-imx8mp-dhsom = " -Dteflon=true"
 FILES:mesa-megadriver:append:dh-imx8mp-dhsom = " ${libdir}/libteflon.so"
