@@ -1,1 +1,1 @@
-LTTNGMODULES:dh-imx8mp-dhsom = ""
+LTTNGMODULES:dh-imx-dhsom = ""
