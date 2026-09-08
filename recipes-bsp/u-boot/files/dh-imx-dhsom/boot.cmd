@@ -41,13 +41,6 @@ if test $? != 0 ; then
   exit 2
 fi
 
-# Assure that initrd relocation to the end of DRAM will not interfere
-# with application of relocated DT and DTOs at %UBOOT_DTB_LOADADDRESS% , clamp the
-# initrd relocation address below UBOOT_DTB_LOADADDRESS = %UBOOT_DTB_LOADADDRESS%.
-if test -z "${initrd_high}" ; then
-  setenv initrd_high %UBOOT_DTB_LOADADDRESS%
-fi
-
 # If the user did not override the DTOs to be loaded from the fitImage,
 # apply DTOs which may be required to operate specific SoM variant or
 # board variant.
@@ -109,6 +102,13 @@ if test -z "${loaddtos}" ; then
 fi
 
 bootm start ${loadaddr}${loaddtos}
+
+# Assure that initrd relocation to the end of DRAM will not interfere
+# with application of relocated DT and DTOs at ${fdtaddr} , clamp the
+# initrd relocation address below ${fdtaddr} .
+if test -z "${initrd_high}" ; then
+  setexpr initrd_high ${fdtaddr} \& 0xffffffffffff0000
+fi
 
 # Run the custom DTO loader script
 #
