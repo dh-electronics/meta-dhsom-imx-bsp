@@ -21,8 +21,6 @@ UBOOT_ENTRYPOINT := "0x40200000"
 UBOOT_MAKE_TARGET := "flash.bin"
 UBOOT_BINARY := "flash.bin"
 UBOOT_SUFFIX ?= "bin"
-UBOOT_DTB_LOADADDRESS = "0x5c000000"
-UBOOT_DTBO_LOADADDRESS = "0x5c080000"
 
 WKS_SEARCH_PATH .= "${@':'.join('%s/files/wic' % p for p in '${BBPATH}'.split(':'))}"
 WKS_FILE = "sdimage-imx8mp.wks"

@@ -7,8 +7,6 @@ SOC_FAMILY ?= "imx6ull"
 
 # U-Boot bootloader
 UBOOT_ENTRYPOINT := "0x80008000"
-UBOOT_DTB_LOADADDRESS = "0x87f00000"
-UBOOT_DTBO_LOADADDRESS = "0x87f80000"
 
 PREFERRED_PROVIDER_virtual/bootloader := "u-boot-dhsom"
 PREFERRED_PROVIDER_u-boot := "u-boot-dhsom"
