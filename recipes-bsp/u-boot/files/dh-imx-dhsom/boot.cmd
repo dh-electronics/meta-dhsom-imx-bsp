@@ -108,11 +108,6 @@ if test -z "${loaddtos}" ; then
   fi
 fi
 
-# Add KASLR seed into DT chosen node, this requires DTOs to be applied manually
-if test "${board}" = "dh_imx8mp" ; then
-	setenv loaddtoscustom "kaslrseed ; ${loaddtoscustom}"
-fi
-
 # A custom script exists to load DTOs
 if test -n "${loaddtoscustom}" ; then
   if test -z "${loaddtos}" ; then
