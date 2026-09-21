@@ -23,7 +23,3 @@ MACHINE_ESSENTIAL_EXTRA_RDEPENDS += " \
 
 WKS_SEARCH_PATH .= "${@':'.join('%s/files/wic' % p for p in '${BBPATH}'.split(':'))}"
 WKS_FILE ?= "sdimage-imx6.wks"
-
-# Add any optional config files that might be present e.g. in other layers
-include conf/machine/include/dh-imx6-common-extra.inc
-include conf/machine/${MACHINE}-extra.conf

@@ -60,6 +60,3 @@ EXTRA_IMAGEDEPENDS += "${DH_UBOOT_RECIPE}"
 IMAGE_BOOT_FILES ?= "${KERNEL_IMAGETYPE}"
 IMAGE_INSTALL:append = " kernel-devicetree ${DH_UBOOT_RECIPE} ${@'kernel-image-fitimage' if (d.getVar('LAYERSERIES_CORENAMES') in ['scarthgap']) else 'linux-yocto-fitimage'} "
 do_image_wic[depends] += "mtools-native:do_populate_sysroot dosfstools-native:do_populate_sysroot ${DH_UBOOT_RECIPE}:do_deploy"
-
-# Add any optional config files that might be present e.g. in other layers
-include conf/machine/${MACHINE}-extra.conf

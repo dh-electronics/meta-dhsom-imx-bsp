@@ -16,3 +16,7 @@ MACHINE_ESSENTIAL_EXTRA_RDEPENDS += " \
 
 require conf/machine/include/dh-imx6-common.inc
 require conf/machine/include/arm/armv7a/tune-cortexa9.inc
+
+# Add any optional config files that might be present e.g. in other layers
+include conf/machine/include/dh-imx6-common-extra.inc
+include conf/machine/${MACHINE}-extra.conf

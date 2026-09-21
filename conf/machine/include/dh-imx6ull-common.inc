@@ -15,3 +15,7 @@ PREFERRED_VERSION_u-boot-dhsom := "2018.05%"
 DH_UBOOT_RECIPE = "u-boot-dhsom"
 require conf/machine/include/dh-imx6-common.inc
 require conf/machine/include/arm/armv7a/tune-cortexa7.inc
+
+# Add any optional config files that might be present e.g. in other layers
+include conf/machine/include/dh-imx6-common-extra.inc
+include conf/machine/${MACHINE}-extra.conf
