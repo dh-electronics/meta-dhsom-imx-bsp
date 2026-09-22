@@ -24,7 +24,9 @@ PREFERRED_VERSION_u-boot-mainline-tools ?= "2026.07%"
 PREFERRED_VERSION_u-boot-mainline-tools-native ?= "2026.07%"
 
 # Linux kernel
-KERNEL_CLASSES += "${@'kernel-fitimage' if (d.getVar('LAYERSERIES_CORENAMES') in ['scarthgap']) else 'kernel-fit-extra-artifacts'}"
+DH_KERNEL_FITIMAGE_CLASSES ?= "${@'kernel-fitimage' if (d.getVar('LAYERSERIES_CORENAMES') in ['scarthgap']) else 'kernel-fit-extra-artifacts'}"
+DH_KERNEL_IMAGE_CLASSES ?= "${@d.getVar('DH_KERNEL_FITIMAGE_CLASSES') if (d.getVar('KERNEL_IMAGETYPE') in ['fitImage']) else ''}"
+KERNEL_CLASSES += "${DH_KERNEL_IMAGE_CLASSES}"
 PREFERRED_PROVIDER_virtual/kernel ?= "linux-stable"
 
 # Mesa
@@ -56,7 +58,9 @@ IMAGE_FSTYPES ?= "tar.zst wic.zst wic.gz wic.bmap"
 INITRAMFS_FSTYPES ?= "cpio.zst"
 
 DH_UBOOT_RECIPE ?= "u-boot-mainline"
+DH_KERNEL_FITIMAGE_RECIPE ?= "${@'kernel-image-fitimage' if (d.getVar('LAYERSERIES_CORENAMES') in ['scarthgap']) else 'linux-yocto-fitimage'}"
+DH_KERNEL_IMAGE_RECIPE ?= "${@d.getVar('DH_KERNEL_FITIMAGE_RECIPE') if (d.getVar('KERNEL_IMAGETYPE') in ['fitImage']) else ''}"
 EXTRA_IMAGEDEPENDS += "${DH_UBOOT_RECIPE}"
 IMAGE_BOOT_FILES ?= "${KERNEL_IMAGETYPE}"
-IMAGE_INSTALL:append = " kernel-devicetree ${DH_UBOOT_RECIPE} ${@'kernel-image-fitimage' if (d.getVar('LAYERSERIES_CORENAMES') in ['scarthgap']) else 'linux-yocto-fitimage'} "
+IMAGE_INSTALL:append = " kernel-devicetree ${DH_UBOOT_RECIPE} ${DH_KERNEL_IMAGE_RECIPE} "
 do_image_wic[depends] += "mtools-native:do_populate_sysroot dosfstools-native:do_populate_sysroot ${DH_UBOOT_RECIPE}:do_deploy"
